@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: prod
+
+mybatis-plus:
+  mapper-locations: classpath*:com/iuaenasong/oj/mapper/xml/**Mapper.xml
+  type-aliases-package: code.onlinejduge.oj.pojo.entity
+  configuration:
+    cache-enabled: false
+  # 关闭打印 mybatis-plus 的 LOGO
+  global-config:
+    banner: false
+
+# 消费者将要去访问的微服务名称（注册成功进入nacos的微服务提供者）
+service-url:
+  name: oj-judgeserver # 服务名

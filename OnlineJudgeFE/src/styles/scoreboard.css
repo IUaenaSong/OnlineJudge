@@ -1,0 +1,90 @@
+.contest-username {
+  display: block;
+  overflow: hidden;
+  color: black;
+  font-size: 13.5px;
+  font-weight: 550;
+}
+.contest-school {
+  font-size: 12px;
+  font-weight: normal;
+  color: dimgrey;
+}
+.contest-rank-flag {
+  margin-right: 20px !important;
+  background-color: rgb(255, 193, 10);
+  border-radius: 4px;
+  color: rgb(73, 36, 0);
+  padding: 1px 3px !important;
+}
+
+.bg-female {
+  background-color: rgb(255, 153, 203);
+}
+.bg-star {
+  background-color: #ffffcc;
+}
+.bg-concerned {
+  background-color: lightyellow;
+}
+.contest-rank-balloon {
+  vertical-align: top;
+  margin-left: -10px !important;
+  margin-right: -7px !important;
+}
+
+.oi-100 {
+  background-color: #19be6b;
+  color: #fff;
+  font-weight: 700;
+}
+
+.oi-0 {
+  color: #a94442;
+  background-color: #f2dede;
+}
+
+.oi-between {
+  background-color: #2d8cf0;
+  color: #fff;
+}
+
+.first-ac {
+  background-color: #1daa1d;
+}
+.ac {
+  background-color: #60e760;
+}
+.wa {
+  background-color: #e87272;
+}
+.try {
+  background-color: #ff9800;
+}
+
+.status-green {
+  background-color: #19be6b !important;
+  color: #fff !important;
+}
+.status-red {
+  background-color: #ed3f14 !important;
+  color: #fff !important;
+}
+.status-yellow {
+  background-color: #f90 !important;
+  color: #fff !important;
+}
+.status-blue {
+  background-color: #2d8cf0 !important;
+  color: #fff !important;
+}
+.status-gray {
+  background-color: #909399 !important;
+  color: #fff !important;
+}
+.own-submit-row {
+  background: rgb(230, 255, 223) !important;
+}
+.submission-hover:hover {
+  cursor: pointer;
+}

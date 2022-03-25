@@ -102,7 +102,9 @@ export default {
       }
       var formdata = new FormData();
       formdata.append('image', $file);
-      formdata.append('gid', this.$route.params.groupID);
+      if (this.$route.params.groupID) {
+        formdata.append('gid', this.$route.params.groupID);
+      }
       //将下面上传接口替换为你自己的服务器接口
       this.$http({
         url: '/api/file/upload-md-img',

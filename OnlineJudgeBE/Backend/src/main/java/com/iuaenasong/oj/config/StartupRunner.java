@@ -91,31 +91,31 @@ public class StartupRunner implements CommandLineRunner {
     private String judgeToken;
 
     // 邮箱配置
-    @Value("${EMAIL_USERNAME}")
+    @Value("${EMAIL_USERNAME:}")
     private String emailUsername;
 
-    @Value("${EMAIL_PASSWORD}")
+    @Value("${EMAIL_PASSWORD:}")
     private String emailPassword;
 
-    @Value("${EMAIL_SERVER_HOST}")
+    @Value("${EMAIL_SERVER_HOST:}")
     private String emailHost;
 
-    @Value("${EMAIL_SERVER_PORT}")
+    @Value("${EMAIL_SERVER_PORT:}")
     private Integer emailPort;
 
-    @Value("${MOBILE_DOMAIN}")
+    @Value("${MOBILE_DOMAIN:}")
     private String mobileDomain;
 
-    @Value("${MOBILE_REGION_ID}")
+    @Value("${MOBILE_REGION_ID:}")
     private String mobileRegionId;
 
-    @Value("${MOBILE_ACCESS_KEY_ID}")
+    @Value("${MOBILE_ACCESS_KEY_ID:}")
     private String mobileAccessKeyId;
 
-    @Value("${MOBILE_SECRET}")
+    @Value("${MOBILE_SECRET:}")
     private String mobileSecret;
 
-    @Value("${MOBILE_TEMPLATE_CODE}")
+    @Value("${MOBILE_TEMPLATE_CODE:}")
     private String mobileTemplateCode;
 
     @Value("${HDU_ACCOUNT_USERNAME_LIST:}")

@@ -6,6 +6,7 @@
 
 package com.iuaenasong.oj.manager.oj;
 
+import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -96,6 +97,9 @@ public class ContestManager {
 
     @Autowired
     private GroupValidator groupValidator;
+
+    @Autowired
+    private GroupMemberManager groupMemberManager;
 
     public IPage<ContestVo> getContestList(Integer limit, Integer currentPage, Integer status, Integer type, String keyword) {
         // 页数，每页题数若为空，设置默认值
@@ -324,6 +328,9 @@ public class ContestManager {
         // 筛去 比赛管理员和超级管理员的提交
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());
+
+        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
+        superAdminUidList.addAll(groupRootUidList);
 
         // 获取题目的提交记录
         ProblemCountVo problemCount = judgeEntityService.getContestProblemCount(contestProblem.getPid(), contestProblem.getId(),

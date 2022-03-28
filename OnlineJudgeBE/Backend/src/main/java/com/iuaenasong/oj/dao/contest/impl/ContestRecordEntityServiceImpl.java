@@ -8,6 +8,8 @@ package com.iuaenasong.oj.dao.contest.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.iuaenasong.oj.dao.contest.ContestEntityService;
+import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.iuaenasong.oj.pojo.entity.contest.Contest;
 import com.iuaenasong.oj.pojo.entity.contest.ContestRecord;
@@ -34,6 +36,12 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private ContestEntityService contestEntityService;
+
+    @Autowired
+    private GroupMemberManager groupMemberManager;
+
     @Override
     public IPage<ContestRecord> getACInfo(Integer currentPage, Integer limit, Integer status, Long cid, String contestCreatorId) {
 
@@ -43,13 +51,17 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
         HashMap<String, Long> UidAndPidMapTime = new HashMap<>(12);
 
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
+        superAdminUidList.add(contestCreatorId);
+
+        Contest contest = contestEntityService.getById(cid);
+        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
+        superAdminUidList.addAll(groupRootUidList);
 
         List<ContestRecord> userACInfo = new LinkedList<>();
 
         for (ContestRecord contestRecord : acInfo) {
 
-            if (contestRecord.getUid().equals(contestCreatorId)
-                    || superAdminUidList.contains(contestRecord.getUid())) { // 超级管理员和比赛创建者的提交跳过
+            if (superAdminUidList.contains(contestRecord.getUid())) { // 超级管理员和比赛创建者的提交跳过
                 continue;
             }
 

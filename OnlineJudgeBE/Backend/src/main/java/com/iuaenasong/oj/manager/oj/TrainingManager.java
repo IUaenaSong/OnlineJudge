@@ -7,6 +7,7 @@
 package com.iuaenasong.oj.manager.oj;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.iuaenasong.oj.validator.TrainingValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.iuaenasong.oj.common.exception.StatusAccessDeniedException;
 import com.iuaenasong.oj.common.exception.StatusFailException;
 import com.iuaenasong.oj.common.exception.StatusForbiddenException;
@@ -64,6 +64,8 @@ public class TrainingManager {
     @Resource
     private TrainingValidator trainingValidator;
 
+    @Autowired
+    private GroupMemberManager groupMemberManager;
     
     public IPage<TrainingVo> getTrainingList(Integer limit, Integer currentPage, String keyword, Long categoryId, String auth) {
 
@@ -232,16 +234,18 @@ public class TrainingManager {
 
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
 
+        Training training = trainingEntityService.getById(tid);
+        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(training.getGid());
+        superAdminUidList.addAll(groupRootUidList);
+
         List<TrainingRankVo> result = new ArrayList<>();
 
         HashMap<String, Integer> uidMapIndex = new HashMap<>();
         int pos = 0;
-        Training training = trainingEntityService.getById(tid);
+
         for (TrainingRecordVo trainingRecordVo : trainingRecordVoList) {
             // 超级管理员和训练创建者的提交不入排行榜
-            if (username.equals(trainingRecordVo.getUsername())
-                    || superAdminUidList.contains(trainingRecordVo.getUid())
-            || groupValidator.isGroupRoot(trainingRecordVo.getUid(), training.getGid())) {
+            if (username.equals(trainingRecordVo.getUsername()) || superAdminUidList.contains(trainingRecordVo.getUid())) {
                 continue;
             }
 

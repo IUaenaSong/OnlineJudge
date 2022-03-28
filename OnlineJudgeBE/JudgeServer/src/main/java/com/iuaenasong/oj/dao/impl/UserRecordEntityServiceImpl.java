@@ -9,6 +9,8 @@ package com.iuaenasong.oj.dao.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.iuaenasong.oj.dao.ProblemEntityService;
+import com.iuaenasong.oj.pojo.entity.problem.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class UserRecordEntityServiceImpl extends ServiceImpl<UserRecordMapper, U
     @Autowired
     private JudgeEntityService judgeEntityService;
 
+    @Autowired
+    private ProblemEntityService problemEntityService;
     
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
     @Async
@@ -47,16 +51,21 @@ public class UserRecordEntityServiceImpl extends ServiceImpl<UserRecordMapper, U
         Judge lastHighScoreJudge = judgeEntityService.getOne(judgeQueryWrapper);
         // 之前没有提交过，那么就需要修改
         boolean result = true;
+        Problem problem = problemEntityService.getById(pid);
         if (lastHighScoreJudge == null) {
-            UpdateWrapper<UserRecord> userRecordUpdateWrapper = new UpdateWrapper<>();
-            userRecordUpdateWrapper.setSql("total_score=total_score+" + score).eq("uid", uid);
-            result = userRecordMapper.update(null, userRecordUpdateWrapper) == 1;
+            if (problem.getIsPublic()) {
+                UpdateWrapper<UserRecord> userRecordUpdateWrapper = new UpdateWrapper<>();
+                userRecordUpdateWrapper.setSql("total_score=total_score+" + score).eq("uid", uid);
+                result = userRecordMapper.update(null, userRecordUpdateWrapper) == 1;
+            }
         } else if (lastHighScoreJudge.getScore() < score) {
             //如果之前该题目最高得分的提交比现在得分低,也需要修改
-            int addValue = score - lastHighScoreJudge.getScore();
-            UpdateWrapper<UserRecord> userRecordUpdateWrapper = new UpdateWrapper<>();
-            userRecordUpdateWrapper.setSql("total_score=total_score+" + addValue).eq("uid", uid);
-            result = userRecordMapper.update(null, userRecordUpdateWrapper) == 1;
+            if (problem.getIsPublic()) {
+                int addValue = score - lastHighScoreJudge.getScore();
+                UpdateWrapper<UserRecord> userRecordUpdateWrapper = new UpdateWrapper<>();
+                userRecordUpdateWrapper.setSql("total_score=total_score+" + addValue).eq("uid", uid);
+                result = userRecordMapper.update(null, userRecordUpdateWrapper) == 1;
+            }
         }
         if (result) {
             return;

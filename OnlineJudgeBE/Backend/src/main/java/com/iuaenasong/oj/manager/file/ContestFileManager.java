@@ -12,6 +12,7 @@ import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.json.JSONUtil;
+import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -80,6 +81,9 @@ public class ContestFileManager {
 
     @Autowired
     private GroupValidator groupValidator;
+
+    @Autowired
+    private GroupMemberManager groupMemberManager;
 
     public void downloadContestRank(Long cid, Boolean forceRefresh, Boolean removeStar, HttpServletResponse response) throws IOException, StatusFailException, StatusForbiddenException {
         // 获取当前登录的用户
@@ -170,13 +174,16 @@ public class ContestFileManager {
         List<ContestProblem> contestProblemList = contestProblemEntityService.list(contestProblemQueryWrapper);
 
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
+        superAdminUidList.add(contest.getUid());
+
+        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(gid);
+        superAdminUidList.addAll(groupRootUidList);
 
         QueryWrapper<Judge> judgeQueryWrapper = new QueryWrapper<>();
         judgeQueryWrapper.eq("cid", cid)
                 .eq(isACM, "status", Constants.Judge.STATUS_ACCEPTED.getStatus())
                 .isNotNull(!isACM, "score") // OI模式取得分不为null的
                 .between("submit_time", contest.getStartTime(), contest.getEndTime())
-                .ne(excludeAdmin, "uid", contest.getUid()) // 排除比赛创建者和root
                 .notIn(excludeAdmin && superAdminUidList.size() > 0, "uid", superAdminUidList)
                 .orderByDesc("submit_time");
 

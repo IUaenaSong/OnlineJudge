@@ -7,12 +7,14 @@
 package com.iuaenasong.oj.dao.contest.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.iuaenasong.oj.dao.contest.ContestEntityService;
+import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.pojo.entity.contest.Contest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import com.iuaenasong.oj.pojo.entity.contest.ContestProblem;
 import com.iuaenasong.oj.mapper.ContestProblemMapper;
 import com.iuaenasong.oj.pojo.entity.contest.ContestRecord;
-import com.iuaenasong.oj.pojo.entity.user.UserInfo;
 import com.iuaenasong.oj.pojo.vo.ContestProblemVo;
 import com.iuaenasong.oj.dao.contest.ContestProblemEntityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,11 +38,21 @@ public class ContestProblemEntityServiceImpl extends ServiceImpl<ContestProblemM
     @Autowired
     private ContestRecordEntityService contestRecordEntityService;
 
+    @Autowired
+    private GroupMemberManager groupMemberManager;
+
+    @Autowired
+    private ContestEntityService contestEntityService;
+
     @Override
     public List<ContestProblemVo> getContestProblemList(Long cid, Date startTime, Date endTime, Date sealTime, Boolean isAdmin, String contestAuthorUid) {
         // 筛去 比赛管理员和超级管理员的提交
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
         superAdminUidList.add(contestAuthorUid);
+
+        Contest contest = contestEntityService.getById(cid);
+        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
+        superAdminUidList.addAll(groupRootUidList);
 
         return contestProblemMapper.getContestProblemList(cid, startTime, endTime, sealTime, isAdmin, superAdminUidList);
     }

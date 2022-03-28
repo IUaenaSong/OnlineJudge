@@ -66,7 +66,11 @@ public class ContestValidator {
             if (contest.getStatus().intValue() != Constants.Contest.STATUS_RUNNING.getCode() &&
                     contest.getStatus().intValue() != Constants.Contest.STATUS_ENDED.getCode()) {
                 throw new StatusForbiddenException("比赛还未开始，您无权访问该比赛！");
-            } else { // 如果是处于比赛正在进行阶段，需要判断该场比赛是否为私有赛，私有赛需要判断该用户是否已注册
+            } else {
+                if (!contest.getIsPublic() && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+                    throw new StatusForbiddenException("对不起，您并非团队内的成员无法参加该团队内的比赛！");
+                }
+                // 如果是处于比赛正在进行阶段，需要判断该场比赛是否为私有赛，私有赛需要判断该用户是否已注册
                 if (contest.getAuth().intValue() == Constants.Contest.AUTH_PRIVATE.getCode()) {
                     QueryWrapper<ContestRegister> registerQueryWrapper = new QueryWrapper<>();
                     registerQueryWrapper.eq("cid", contest.getId()).eq("uid", userRolesVo.getUid());

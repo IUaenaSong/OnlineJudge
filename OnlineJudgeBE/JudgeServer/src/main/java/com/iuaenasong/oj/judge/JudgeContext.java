@@ -6,6 +6,7 @@
 
 package com.iuaenasong.oj.judge;
 
+import com.iuaenasong.oj.dao.JudgeEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.iuaenasong.oj.common.exception.SystemError;
@@ -29,6 +30,9 @@ public class JudgeContext {
 
     @Autowired
     private ContestRecordEntityService contestRecordEntityService;
+
+    @Autowired
+    private JudgeEntityService judgeEntityService;
 
     public Judge Judge(Problem problem, Judge judge) {
 
@@ -77,7 +81,8 @@ public class JudgeContext {
 
         if (cid == 0) { // 非比赛提交
             // 如果是AC,就更新user_acproblem表,
-            if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus()) {
+            Judge judge = judgeEntityService.getById(submitId);
+            if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus() && judge.getIsPublic()) {
                 userAcproblemEntityService.saveOrUpdate(new UserAcproblem()
                         .setPid(pid)
                         .setUid(uid)

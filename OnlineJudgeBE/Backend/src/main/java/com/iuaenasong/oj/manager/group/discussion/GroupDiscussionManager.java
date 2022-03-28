@@ -54,7 +54,7 @@ public class GroupDiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -85,7 +85,7 @@ public class GroupDiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -115,9 +115,9 @@ public class GroupDiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
         Long gid = discussion.getGid();
 
@@ -186,7 +186,7 @@ public class GroupDiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Long gid = discussion.getGid();
 
@@ -210,7 +210,7 @@ public class GroupDiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Discussion discussion = discussionEntityService.getById(did);
 

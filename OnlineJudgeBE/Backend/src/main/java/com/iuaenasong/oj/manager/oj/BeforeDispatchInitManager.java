@@ -90,7 +90,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
@@ -147,7 +147,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
@@ -203,7 +203,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {

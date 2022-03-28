@@ -7,7 +7,7 @@
 package com.iuaenasong.oj.manager.oj;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.iuaenasong.oj.validator.TrainingValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,6 +18,7 @@ import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.common.exception.StatusAccessDeniedException;
 import com.iuaenasong.oj.common.exception.StatusFailException;
@@ -65,7 +66,7 @@ public class TrainingManager {
     private TrainingValidator trainingValidator;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
     
     public IPage<TrainingVo> getTrainingList(Integer limit, Integer currentPage, String keyword, Long categoryId, String auth) {
 
@@ -80,7 +81,7 @@ public class TrainingManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Training training = trainingEntityService.getById(tid);
         if (training == null || !training.getStatus()) {
@@ -116,7 +117,7 @@ public class TrainingManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Training training = trainingEntityService.getById(tid);
         if (training == null || !training.getStatus()) {
@@ -149,7 +150,7 @@ public class TrainingManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Training training = trainingEntityService.getById(tid);
 
@@ -235,8 +236,10 @@ public class TrainingManager {
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
 
         Training training = trainingEntityService.getById(tid);
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(training.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(training.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         List<TrainingRankVo> result = new ArrayList<>();
 

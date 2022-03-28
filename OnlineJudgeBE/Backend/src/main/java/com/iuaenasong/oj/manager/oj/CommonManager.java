@@ -104,7 +104,7 @@ public class CommonManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid()) && !userRolesVo.getUid().equals(problem.getAuthor()) && !isRoot) {
@@ -147,7 +147,7 @@ public class CommonManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid()) && !isRoot) {
@@ -169,7 +169,7 @@ public class CommonManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
             if (!groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid()) && !isRoot) {

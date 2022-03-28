@@ -12,7 +12,7 @@ import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.json.JSONUtil;
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,6 +40,7 @@ import com.iuaenasong.oj.dao.judge.JudgeEntityService;
 import com.iuaenasong.oj.dao.user.UserInfoEntityService;
 import com.iuaenasong.oj.utils.Constants;
 import com.iuaenasong.oj.validator.ContestValidator;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -83,7 +84,7 @@ public class ContestFileManager {
     private GroupValidator groupValidator;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
 
     public void downloadContestRank(Long cid, Boolean forceRefresh, Boolean removeStar, HttpServletResponse response) throws IOException, StatusFailException, StatusForbiddenException {
         // 获取当前登录的用户
@@ -176,8 +177,10 @@ public class ContestFileManager {
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());
 
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(gid);
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(gid);
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         QueryWrapper<Judge> judgeQueryWrapper = new QueryWrapper<>();
         judgeQueryWrapper.eq("cid", cid)

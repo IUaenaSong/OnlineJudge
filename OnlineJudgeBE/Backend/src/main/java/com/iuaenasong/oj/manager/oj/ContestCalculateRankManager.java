@@ -9,7 +9,7 @@ package com.iuaenasong.oj.manager.oj;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -40,7 +40,7 @@ public class ContestCalculateRankManager {
     private ContestRecordEntityService contestRecordEntityService;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
 
     public List<ACMContestRankVo> calcACMRank(boolean isOpenSealRank,
                                               boolean removeStar,
@@ -155,8 +155,10 @@ public class ContestCalculateRankManager {
         List<String> superAdminUidList = getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());
 
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(contest.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         List<ACMContestRankVo> result = new ArrayList<>();
 
@@ -355,8 +357,10 @@ public class ContestCalculateRankManager {
         List<String> superAdminUidList = getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());
 
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(contest.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         List<OIContestRankVo> result = new ArrayList<>();
 

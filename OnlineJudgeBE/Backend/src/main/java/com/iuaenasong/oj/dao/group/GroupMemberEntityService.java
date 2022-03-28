@@ -11,8 +11,10 @@ import com.iuaenasong.oj.pojo.vo.GroupMemberVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 public interface GroupMemberEntityService extends IService<GroupMember> {
     IPage<GroupMemberVo> getMemberList(int limit, int currentPage, String keyword, Integer auth, Long gid);
     IPage<GroupMemberVo> getApplyList(int limit, int currentPage, String keyword, Integer auth, Long gid);
-
+    List<String> getGroupRootUidList(Long gid);
 }

@@ -15,6 +15,7 @@
           :cell-class-name="cellClassName"
           :seq-config="{ startIndex: (this.page - 1) * this.limit }"
           ref="TraningtRank"
+          @cell-click="getUserProblemSubmission"
         >
           <vxe-table-column
             field="rank"
@@ -206,6 +207,7 @@ export default {
       this.getTrainingProblemList();
     }
     this.trainingID = this.$route.params.trainingID;
+    this.groupID = this.$route.params.groupID;
     this.getTrainingRankData();
   },
   methods: {
@@ -257,7 +259,7 @@ export default {
       ) {
         this.$router.push({
           name: 'SubmissionList',
-          query: { username: row.username, problemID: column.property },
+          query: { username: row.username, problemID: column.property, gid: this.gid },
         });
       }
     },
@@ -280,6 +282,7 @@ export default {
   },
   computed: {
     ...mapState({
+      gid: (state) => state.training.training.gid,
       trainingProblemList: (state) => state.training.trainingProblemList,
     }),
     ...mapGetters(['isTrainingAdmin']),

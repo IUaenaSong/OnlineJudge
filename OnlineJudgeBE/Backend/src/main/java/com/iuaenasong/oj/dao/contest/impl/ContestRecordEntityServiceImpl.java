@@ -9,7 +9,7 @@ package com.iuaenasong.oj.dao.contest.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iuaenasong.oj.dao.contest.ContestEntityService;
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.iuaenasong.oj.pojo.entity.contest.Contest;
 import com.iuaenasong.oj.pojo.entity.contest.ContestRecord;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.dao.user.UserInfoEntityService;
 import com.iuaenasong.oj.utils.Constants;
 import com.iuaenasong.oj.utils.RedisUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
     private ContestEntityService contestEntityService;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
 
     @Override
     public IPage<ContestRecord> getACInfo(Integer currentPage, Integer limit, Integer status, Long cid, String contestCreatorId) {
@@ -54,8 +55,10 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
         superAdminUidList.add(contestCreatorId);
 
         Contest contest = contestEntityService.getById(cid);
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(contest.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         List<ContestRecord> userACInfo = new LinkedList<>();
 

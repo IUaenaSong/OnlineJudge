@@ -63,7 +63,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Contest contest = contestEntityService.getById(cid);
 
@@ -90,7 +90,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Long gid = problemDto.getProblem().getGid();
 
@@ -144,7 +144,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Contest contest = contestEntityService.getById(cid);
 
@@ -178,7 +178,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Long cid = contestProblem.getCid();
 
@@ -212,7 +212,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Contest contest = contestEntityService.getById(cid);
 
@@ -248,7 +248,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Long pid = contestProblemDto.getPid();
 
@@ -305,7 +305,7 @@ public class GroupContestProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Contest contest = contestEntityService.getById(cid);
 

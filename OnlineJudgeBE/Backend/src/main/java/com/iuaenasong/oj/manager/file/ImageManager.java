@@ -122,7 +122,7 @@ public class ImageManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
         if (!groupValidator.isGroupRoot(userRolesVo.getUid(), gid) && !isRoot) {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }

@@ -751,6 +751,7 @@ export default {
       userExtraFile: null,
       fileContent: '',
       fileName: '',
+      groupID: null,
     };
   },
   // 获取缓存中的该题的做题代码，代码语言，代码风格
@@ -805,6 +806,7 @@ export default {
         problemID: this.problemID,
         contestID: this.contestID,
         limit: this.mySubmission_limit,
+        gid: this.groupID
       };
       if (this.contestID) {
         if (this.contestStatus == CONTEST_STATUS.SCHEDULED) {
@@ -995,6 +997,12 @@ export default {
           }
 
           this.problemData = result;
+
+          if (this.$route.params.groupID) {
+            this.groupID = this.$route.params.groupID;
+          } else {
+            this.groupID = this.problemData.problem.gid;
+          }
 
           this.loading = false;
 

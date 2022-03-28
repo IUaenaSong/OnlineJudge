@@ -75,7 +75,7 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
 
@@ -132,7 +132,7 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Discussion discussion = discussionEntityService.getById(did);
 
@@ -173,9 +173,9 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
         String problemId = discussion.getPid();
         if (problemId != null) {
@@ -241,7 +241,7 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupAdmin(userRolesVo.getUid(), discussion.getGid())) {
             throw new StatusForbiddenException("对不起，您无权限操作！");
@@ -258,7 +258,7 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Discussion discussion = discussionEntityService.getById(did);
 
@@ -286,7 +286,7 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Discussion discussion = discussionEntityService.getById(did);
         if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupAdmin(userRolesVo.getUid(), discussion.getGid())) {
@@ -307,13 +307,13 @@ public class DiscussionManager {
             }
             // 点赞+1
             Discussion discussion1 = discussionEntityService.getById(did);
-            if (discussion1 != null) {
-                discussion1.setLikeNum(discussion1.getLikeNum() + 1);
-                discussionEntityService.updateById(discussion1);
-                // 当前帖子要不是点赞者的 才发送点赞消息
-                if(!userRolesVo.getUsername().equals(discussion.getAuthor())) {
-                    discussionEntityService.updatePostLikeMsg(discussion.getUid(), userRolesVo.getUid(), did);
-                }
+            UpdateWrapper<Discussion> discussionUpdateWrapper = new UpdateWrapper<>();
+            discussionUpdateWrapper.eq("id", discussion.getId())
+                    .setSql("like_num=like_num+1");
+            discussionEntityService.update(discussionUpdateWrapper);
+            // 当前帖子要不是点赞者的 才发送点赞消息
+            if (!userRolesVo.getUsername().equals(discussion.getAuthor())) {
+                discussionEntityService.updatePostLikeMsg(discussion.getUid(), userRolesVo.getUid(), did);
             }
         } else { // 取消点赞
             if (discussionLike != null) { // 如果存在就删除

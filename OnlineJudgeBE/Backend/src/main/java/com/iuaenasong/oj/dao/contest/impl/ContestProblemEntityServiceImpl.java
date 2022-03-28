@@ -8,7 +8,7 @@ package com.iuaenasong.oj.dao.contest.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.iuaenasong.oj.dao.contest.ContestEntityService;
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import com.iuaenasong.oj.pojo.entity.contest.Contest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.dao.contest.ContestRecordEntityService;
 import com.iuaenasong.oj.dao.user.UserInfoEntityService;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ContestProblemEntityServiceImpl extends ServiceImpl<ContestProblemM
     private ContestRecordEntityService contestRecordEntityService;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
 
     @Autowired
     private ContestEntityService contestEntityService;
@@ -51,8 +52,10 @@ public class ContestProblemEntityServiceImpl extends ServiceImpl<ContestProblemM
         superAdminUidList.add(contestAuthorUid);
 
         Contest contest = contestEntityService.getById(cid);
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(contest.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         return contestProblemMapper.getContestProblemList(cid, startTime, endTime, sealTime, isAdmin, superAdminUidList);
     }

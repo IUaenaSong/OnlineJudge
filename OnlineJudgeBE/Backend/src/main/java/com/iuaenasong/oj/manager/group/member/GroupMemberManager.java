@@ -27,9 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 public class GroupMemberManager {
 
@@ -49,7 +46,7 @@ public class GroupMemberManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -76,7 +73,7 @@ public class GroupMemberManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -103,7 +100,7 @@ public class GroupMemberManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -161,7 +158,7 @@ public class GroupMemberManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Long gid = groupMemberDto.getGid();
 
@@ -205,7 +202,7 @@ public class GroupMemberManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Group group = groupEntityService.getById(gid);
 
@@ -250,20 +247,5 @@ public class GroupMemberManager {
         if (userInfo.getUsername().equals(group.getOwner())) {
             groupEntityService.removeById(gid);
         }
-    }
-
-    public List<String> getGroupRootUidList(Long gid) {
-        List<String> groupRootUidList = new ArrayList<>();
-        if (gid == null) {
-            return groupRootUidList;
-        }
-        QueryWrapper<GroupMember> groupMemberQueryWrapper = new QueryWrapper<>();
-        groupMemberQueryWrapper.eq("auth", 5).eq("gid", gid);
-        List<GroupMember> groupMembers = groupMemberEntityService.list(groupMemberQueryWrapper);
-
-        for (GroupMember groupMember: groupMembers) {
-            groupRootUidList.add(groupMember.getUid());
-        }
-        return groupRootUidList;
     }
 }

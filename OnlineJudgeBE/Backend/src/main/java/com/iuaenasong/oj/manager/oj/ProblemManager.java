@@ -200,7 +200,7 @@ public class ProblemManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         QueryWrapper<Problem> wrapper = new QueryWrapper<Problem>().eq("problem_id", problemId);
         //查询题目详情，题目标签，题目语言，题目做题情况

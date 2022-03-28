@@ -6,7 +6,7 @@
 
 package com.iuaenasong.oj.manager.oj;
 
-import com.iuaenasong.oj.manager.group.member.GroupMemberManager;
+import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -14,6 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.common.exception.StatusFailException;
 import com.iuaenasong.oj.common.exception.StatusForbiddenException;
@@ -99,7 +100,7 @@ public class ContestManager {
     private GroupValidator groupValidator;
 
     @Autowired
-    private GroupMemberManager groupMemberManager;
+    private GroupMemberEntityService groupMemberEntityService;
 
     public IPage<ContestVo> getContestList(Integer limit, Integer currentPage, Integer status, Integer type, String keyword) {
         // 页数，每页题数若为空，设置默认值
@@ -112,7 +113,7 @@ public class ContestManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         ContestVo contestInfo = contestEntityService.getContestInfoById(cid);
         if (contestInfo == null) {
@@ -145,7 +146,7 @@ public class ContestManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Contest contest = contestEntityService.getById(cid);
 
@@ -262,12 +263,6 @@ public class ContestManager {
         // 需要对该比赛做判断，是否处于开始或结束状态才可以获取题目，同时若是私有赛需要判断是否已注册（比赛管理员包括超级管理员可以直接获取）
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
 
-        if (!contest.getIsPublic()) {
-            if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-        }
-
         // 根据cid和displayId获取pid
         QueryWrapper<ContestProblem> contestProblemQueryWrapper = new QueryWrapper<>();
         contestProblemQueryWrapper.eq("cid", cid).eq("display_id", displayId);
@@ -329,8 +324,10 @@ public class ContestManager {
         List<String> superAdminUidList = userInfoEntityService.getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());
 
-        List<String> groupRootUidList = groupMemberManager.getGroupRootUidList(contest.getGid());
-        superAdminUidList.addAll(groupRootUidList);
+        List<String> groupRootUidList = groupMemberEntityService.getGroupRootUidList(contest.getGid());
+        if (!CollectionUtils.isEmpty(groupRootUidList)) {
+            superAdminUidList.addAll(groupRootUidList);
+        }
 
         // 获取题目的提交记录
         ProblemCountVo problemCount = judgeEntityService.getContestProblemCount(contestProblem.getPid(), contestProblem.getId(),
@@ -370,12 +367,6 @@ public class ContestManager {
 
         // 需要对该比赛做判断，是否处于开始或结束状态才可以获取题目，同时若是私有赛需要判断是否已注册（比赛管理员包括超级管理员可以直接获取）
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
-
-        if (!contest.getIsPublic()) {
-            if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-        }
 
         // 页数，每页题数若为空，设置默认值
         if (currentPage == null || currentPage < 1) currentPage = 1;
@@ -468,12 +459,6 @@ public class ContestManager {
         // 需要对该比赛做判断，是否处于开始或结束状态才可以获取题目，同时若是私有赛需要判断是否已注册（比赛管理员包括超级管理员可以直接获取）
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
 
-        if (!contest.getIsPublic()) {
-            if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-        }
-
         // 校验该比赛是否开启了封榜模式，超级管理员和比赛创建者可以直接看到实际榜单
         boolean isOpenSealRank = contestValidator.isSealRank(userRolesVo.getUid(), contest, forceRefresh, isRoot);
 
@@ -514,12 +499,6 @@ public class ContestManager {
 
         // 需要对该比赛做判断，是否处于开始或结束状态才可以获取题目，同时若是私有赛需要判断是否已注册（比赛管理员包括超级管理员可以直接获取）
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
-
-        if (!contest.getIsPublic()) {
-            if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-        }
 
         if (currentPage == null || currentPage < 1) currentPage = 1;
         if (limit == null || limit < 1) limit = 10;
@@ -567,12 +546,6 @@ public class ContestManager {
 
         // 需要对该比赛做判断，是否处于开始或结束状态才可以获取题目，同时若是私有赛需要判断是否已注册（比赛管理员包括超级管理员可以直接获取）
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
-
-        if (!contest.getIsPublic()) {
-            if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-        }
 
         String lockKey = Constants.Account.CONTEST_ADD_PRINT_LOCK.getCode() + userRolesVo.getUid();
         if (redisUtils.hasKey(lockKey)) {

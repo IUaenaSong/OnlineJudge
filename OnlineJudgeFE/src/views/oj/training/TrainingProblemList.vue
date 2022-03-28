@@ -171,6 +171,7 @@ export default {
         params: {
           trainingID: this.$route.params.trainingID,
           problemID: event.row.problemId,
+          groupID: this.gid,
         },
       });
     },
@@ -197,6 +198,7 @@ export default {
   },
   computed: {
     ...mapState({
+      gid: (state) => state.training.training.gid,
       problemList: (state) => state.training.trainingProblemList,
     }),
     ...mapGetters(['isAuthenticated']),

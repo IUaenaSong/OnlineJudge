@@ -155,7 +155,7 @@ public class JudgeManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Judge judge = judgeEntityService.getById(submitId);
         if (judge == null) {
@@ -272,9 +272,7 @@ public class JudgeManager {
                 }
             }
         } else {
-            boolean admin = SecurityUtils.getSubject().hasRole("problem_admin");// 是否为题目管理员
             Problem problem = problemEntityService.getById(judge.getPid());
-
             if (!judge.getIsPublic()) {
                 if (userRolesVo == null) {
                     throw new StatusAccessDeniedException("请先登录！");
@@ -283,7 +281,8 @@ public class JudgeManager {
                     throw new StatusForbiddenException("对不起，您无权限操作！");
                 }
             }
-            if (!judge.getShare() && !isRoot && !admin) {
+            boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");// 是否为题目管理员
+            if (!judge.getShare() && !isRoot && !isProblemAdmin) {
                 if (userRolesVo != null) { // 当前是登陆状态
                     // 需要判断是否为当前登陆用户自己的提交代码
                     if (!judge.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid())) {
@@ -317,7 +316,7 @@ public class JudgeManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Problem problem = problemEntityService.getById(judge.getPid());
 
@@ -347,7 +346,7 @@ public class JudgeManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
         // 页数，每页题数若为空，设置默认值
         if (currentPage == null || currentPage < 1) currentPage = 1;
         if (limit == null || limit < 1) limit = 30;

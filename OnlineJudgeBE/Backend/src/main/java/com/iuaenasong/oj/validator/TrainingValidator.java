@@ -37,11 +37,19 @@ public class TrainingValidator {
     }
 
     public void validateTrainingAuth(Training training, UserRolesVo userRolesVo) throws StatusAccessDeniedException, StatusForbiddenException {
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+
+        if (!training.getIsPublic()) {
+            if (!groupValidator.isGroupMember(userRolesVo.getUid(), training.getGid()) && !isRoot) {
+                throw new StatusForbiddenException("对不起，您并非该团队内的成员，无权操作！");
+            }
+        }
+
         if (Constants.Training.AUTH_PRIVATE.getValue().equals(training.getAuth())) {
             if (userRolesVo == null) {
                 throw new StatusAccessDeniedException("该训练属于私有题单，请先登录以校验权限！");
             }
-            boolean isRoot = SecurityUtils.getSubject().hasRole("root"); // 是否为超级管理员
+
             boolean isAuthor = training.getAuthor().equals(userRolesVo.getUsername()); // 是否为该私有训练的创建者
 
             if (!isRoot && !isAuthor && !groupValidator.isGroupRoot(userRolesVo.getUid(), training.getGid())) { // 如果两者都不是，需要做注册权限校验

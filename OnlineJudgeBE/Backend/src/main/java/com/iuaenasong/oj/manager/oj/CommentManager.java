@@ -13,6 +13,7 @@ import com.iuaenasong.oj.dao.contest.ContestRegisterEntityService;
 import com.iuaenasong.oj.pojo.entity.contest.Contest;
 import com.iuaenasong.oj.pojo.entity.contest.ContestRegister;
 import com.iuaenasong.oj.pojo.vo.ReplyVo;
+import com.iuaenasong.oj.validator.ContestValidator;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -70,6 +71,9 @@ public class CommentManager {
 
     @Autowired
     private GroupValidator groupValidator;
+
+    @Autowired
+    private ContestValidator contestValidator;
 
     public CommentListVo getComments(Long cid, Integer did, Integer limit, Integer currentPage) throws StatusForbiddenException {
 
@@ -134,9 +138,9 @@ public class CommentManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
         Long cid = comment.getCid();
 
@@ -162,22 +166,7 @@ public class CommentManager {
             }
         } else {
             Contest contest = contestEntityService.getById(cid);
-            Long gid = contest.getGid();
-            if (contest.getAuth() != 0) {
-                QueryWrapper<ContestRegister> contestRegisterQueryWrapper = new QueryWrapper<>();
-                contestRegisterQueryWrapper.eq("cid", cid).eq("uid", userRolesVo.getUid());
-                ContestRegister contestRegister = contestRegisterEntityService.getOne(contestRegisterQueryWrapper);
-
-                if (!groupValidator.isGroupRoot(userRolesVo.getUid(), gid) && !isRoot && contestRegister == null && !contest.getUid().equals(userRolesVo.getUid())) {
-                    throw new StatusForbiddenException("对不起，您无权限操作！");
-                }
-            } else {
-                if (!contest.getIsPublic()) {
-                    if (!groupValidator.isGroupMember(userRolesVo.getUid(), gid) && !isRoot && !contest.getUid().equals(userRolesVo.getUid())) {
-                        throw new StatusForbiddenException("对不起，您无权限操作！");
-                    }
-                }
-            }
+            contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
         }
 
         comment.setFromAvatar(userRolesVo.getAvatar())
@@ -235,9 +224,9 @@ public class CommentManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
         // 如果不是评论本人 或者不是管理员 无权限删除该评论
 
         Long cid = comment.getCid();
@@ -363,9 +352,9 @@ public class CommentManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
         Reply reply = replyDto.getReply();
 
@@ -393,22 +382,7 @@ public class CommentManager {
             }
         } else {
             Contest contest = contestEntityService.getById(cid);
-            Long gid = contest.getGid();
-            if (contest.getAuth() != 0) {
-                QueryWrapper<ContestRegister> contestRegisterQueryWrapper = new QueryWrapper<>();
-                contestRegisterQueryWrapper.eq("cid", cid).eq("uid", userRolesVo.getUid());
-                ContestRegister contestRegister = contestRegisterEntityService.getOne(contestRegisterQueryWrapper);
-
-                if (!groupValidator.isGroupRoot(userRolesVo.getUid(), gid) && !isRoot && contestRegister == null && !contest.getUid().equals(userRolesVo.getUid())) {
-                    throw new StatusForbiddenException("对不起，您无权限操作！");
-                }
-            } else {
-                if (!contest.getIsPublic()) {
-                    if (!groupValidator.isGroupMember(userRolesVo.getUid(), gid) && !isRoot && !contest.getUid().equals(userRolesVo.getUid())) {
-                        throw new StatusForbiddenException("对不起，您无权限操作！");
-                    }
-                }
-            }
+            contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
         }
         reply.setFromAvatar(userRolesVo.getAvatar())
                 .setFromName(userRolesVo.getUsername())
@@ -459,9 +433,9 @@ public class CommentManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        Boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-        Boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
         Reply reply = replyDto.getReply();
 

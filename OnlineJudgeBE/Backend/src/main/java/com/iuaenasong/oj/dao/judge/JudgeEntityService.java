@@ -23,9 +23,8 @@ public interface JudgeEntityService extends IService<Judge> {
                                       Integer status,
                                       String username,
                                       String uid,
-                                      Boolean completeProblemID,
-                                      String myUid,
-                                      Boolean isRoot);
+                                      Long gid,
+                                      Boolean completeProblemID);
 
     IPage<JudgeVo> getContestJudgeList(Integer limit,
                                        Integer currentPage,

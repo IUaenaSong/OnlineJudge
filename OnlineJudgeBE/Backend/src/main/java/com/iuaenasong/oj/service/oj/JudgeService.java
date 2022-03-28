@@ -32,6 +32,7 @@ public interface JudgeService {
                                                      String searchPid,
                                                      Integer searchStatus,
                                                      String searchUsername,
+                                                     Long gid,
                                                      Boolean completeProblemID);
 
     public CommonResult<Void> updateSubmission(Judge judge);

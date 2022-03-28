@@ -102,6 +102,9 @@ public class Judge implements Serializable {
     @ApiModelProperty(value = "vjudge判题在其它oj的提交账号密码")
     private String vjudgePassword;
 
+    @ApiModelProperty(value = "是否公开")
+    private Boolean isPublic;
+
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 

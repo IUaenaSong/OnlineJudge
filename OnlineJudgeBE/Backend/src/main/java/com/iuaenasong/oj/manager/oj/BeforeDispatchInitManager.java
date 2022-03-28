@@ -78,7 +78,7 @@ public class BeforeDispatchInitManager {
     @Autowired
     private GroupValidator groupValidator;
 
-    public void initCommonSubmission(String problemId,  Judge judge) throws StatusForbiddenException {
+    public void initCommonSubmission(String problemId, Judge judge) throws StatusForbiddenException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -96,6 +96,7 @@ public class BeforeDispatchInitManager {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
+            judge.setIsPublic(false);
         }
 
         judge.setCpid(0L).setPid(problem.getId()).setDisplayPid(problem.getProblemId());
@@ -208,6 +209,7 @@ public class BeforeDispatchInitManager {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
+            judge.setIsPublic(false);
         }
 
         judge.setDisplayPid(problem.getProblemId());

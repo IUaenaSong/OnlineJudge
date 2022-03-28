@@ -363,6 +363,7 @@ export default {
         status: '',
         username: '',
         problemID: '',
+        gid: null,
       },
       loadingTable: false,
       submissions: [],
@@ -408,6 +409,7 @@ export default {
       this.formFilter.onlyMine = query.onlyMine + '' == 'true' ? true : false; // 统一换成字符串判断
       this.formFilter.status = query.status;
       this.formFilter.completeProblemID = query.completeProblemID || false;
+      this.formFilter.gid = query.gid || null;
       if (this.formFilter.onlyMine) {
         // 当前为搜索自己的提交 那么不可搜索别人的提交
         this.formFilter.username = '';
@@ -430,6 +432,7 @@ export default {
         status: this.formFilter.status,
         username: this.formFilter.username,
         problemID: this.formFilter.problemID,
+        gid: this.formFilter.gid,
         currentPage: this.currentPage,
         limit: this.limit,
         completeProblemID: this.formFilter.completeProblemID,

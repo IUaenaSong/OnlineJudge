@@ -275,15 +275,18 @@ public class JudgeManager {
             boolean admin = SecurityUtils.getSubject().hasRole("problem_admin");// 是否为题目管理员
             Problem problem = problemEntityService.getById(judge.getPid());
 
-            if (!problem.getIsPublic()) {
-                if (isRoot && !groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid())) {
+            if (!judge.getIsPublic()) {
+                if (userRolesVo == null) {
+                    throw new StatusAccessDeniedException("请先登录！");
+                }
+                if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                     throw new StatusForbiddenException("对不起，您无权限操作！");
                 }
             }
             if (!judge.getShare() && !isRoot && !admin) {
                 if (userRolesVo != null) { // 当前是登陆状态
                     // 需要判断是否为当前登陆用户自己的提交代码
-                    if (!judge.getUid().equals(userRolesVo.getUid())) {
+                    if (!judge.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid())) {
                         judge.setCode(null);
                     }
                 } else { // 不是登陆状态，就直接无权限查看代码
@@ -339,7 +342,12 @@ public class JudgeManager {
                                        String searchPid,
                                        Integer searchStatus,
                                        String searchUsername,
+                                       Long gid,
                                        Boolean completeProblemID) throws StatusAccessDeniedException {
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+
+        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
         // 页数，每页题数若为空，设置默认值
         if (currentPage == null || currentPage < 1) currentPage = 1;
         if (limit == null || limit < 1) limit = 30;
@@ -348,9 +356,6 @@ public class JudgeManager {
         // 只查看当前用户的提交
         if (onlyMine) {
             // 需要获取一下该token对应用户的数据（有token便能获取到）
-            Session session = SecurityUtils.getSubject().getSession();
-            UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
-
             if (userRolesVo == null) {
                 throw new StatusAccessDeniedException("当前用户数据为空，请您重新登陆！");
             }
@@ -363,15 +368,10 @@ public class JudgeManager {
             searchUsername = searchUsername.trim();
         }
 
-        Session session = SecurityUtils.getSubject().getSession();
-        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
-
-        Boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-
-        String myUid = "";
-
-        if (userRolesVo != null) {
-            myUid = userRolesVo.getUid();
+        if (gid != null) {
+            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+                gid = null;
+            }
         }
 
         return judgeEntityService.getCommonJudgeList(limit,
@@ -380,9 +380,8 @@ public class JudgeManager {
                 searchStatus,
                 searchUsername,
                 uid,
-                completeProblemID,
-                myUid,
-                isRoot);
+                gid,
+                completeProblemID);
     }
 
     

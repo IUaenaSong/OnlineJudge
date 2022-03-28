@@ -30,6 +30,9 @@ public class GroupValidator {
     private UserInfoEntityService userInfoEntityService;
 
     public boolean isGroupMember(String uid, Long gid) {
+        if (uid == null || gid == null) {
+            return false;
+        }
         QueryWrapper<GroupMember> groupMemberQueryWrapper = new QueryWrapper<>();
         groupMemberQueryWrapper.eq("gid", gid).eq("uid", uid).in("auth", 3, 4, 5);
 
@@ -39,6 +42,9 @@ public class GroupValidator {
     }
 
     public boolean isGroupAdmin(String uid, Long gid) {
+        if (uid == null || gid == null) {
+            return false;
+        }
         QueryWrapper<GroupMember> groupMemberQueryWrapper = new QueryWrapper<>();
         groupMemberQueryWrapper.eq("gid", gid).eq("uid", uid).in("auth", 4, 5);
 
@@ -48,7 +54,9 @@ public class GroupValidator {
     }
 
     public boolean isGroupRoot(String uid, Long gid) {
-
+        if (uid == null || gid == null) {
+            return false;
+        }
         QueryWrapper<GroupMember> groupMemberQueryWrapper = new QueryWrapper<>();
         groupMemberQueryWrapper.eq("gid", gid).eq("uid", uid).in("auth", 5);
 
@@ -58,6 +66,9 @@ public class GroupValidator {
     }
 
     public boolean isGroupOwner(String uid, Long gid) {
+        if (uid == null || gid == null) {
+            return false;
+        }
         QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
         userInfoQueryWrapper.eq("uuid", uid);
 

@@ -1102,7 +1102,7 @@ export default {
       } else {
         this.$router.push({
           name: 'SubmissionList',
-          query: { problemID: this.problemID, completeProblemID: true },
+          query: { problemID: this.problemID, completeProblemID: true, gid: this.problemData.problem.gid },
         });
       }
     },

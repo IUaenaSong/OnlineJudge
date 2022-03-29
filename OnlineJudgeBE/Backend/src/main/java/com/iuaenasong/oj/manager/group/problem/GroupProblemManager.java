@@ -222,6 +222,8 @@ public class GroupProblemManager {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }
 
+        problemDto.getProblem().setProblemId(group.getShortName() + problemDto.getProblem().getProblemId());
+
         String problemId = problemDto.getProblem().getProblemId().toUpperCase();
 
         QueryWrapper<Problem> problemQueryWrapper = new QueryWrapper<>();
@@ -229,7 +231,6 @@ public class GroupProblemManager {
 
         Problem problem1 = problemEntityService.getOne(problemQueryWrapper);
 
-        problemDto.getProblem().setProblemId(group.getShortName() + problemDto.getProblem().getProblemId());
         problemDto.getProblem().setModifiedUser(userRolesVo.getUsername());
 
         if (problem1 != null && problem1.getId().longValue() != pid) {

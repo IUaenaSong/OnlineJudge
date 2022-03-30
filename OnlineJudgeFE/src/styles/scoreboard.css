@@ -27,21 +27,15 @@
 .bg-concerned {
   background-color: lightyellow;
 }
-.contest-rank-balloon {
-  vertical-align: top;
-  margin-left: -10px !important;
-  margin-right: -7px !important;
-}
 
 .oi-100 {
   background-color: #19be6b;
   color: #fff;
-  font-weight: 700;
 }
 
 .oi-0 {
-  color: #a94442;
-  background-color: #f2dede;
+  color: #fff;
+  background-color: #e87272;
 }
 
 .oi-between {
@@ -59,7 +53,7 @@
   background-color: #e87272;
 }
 .try {
-  background-color: #ff9800;
+  background-color: #6666ff;
 }
 
 .status-green {

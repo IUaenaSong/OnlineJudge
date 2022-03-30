@@ -55,6 +55,7 @@ public class RemoteJudgeContext {
                 .serverIp(toJudge.getJudgeServerIp())
                 .serverPort(toJudge.getJudgeServerPort())
                 .submitId(toJudge.getJudge().getVjudgeSubmitId())
+                .isPublic(toJudge.getJudge().getIsPublic())
                 .build();
 
         initProblemId(remoteJudgeDTO);

@@ -736,20 +736,26 @@ const ojApi = {
   },
 
   addGroupMember(uid, gid, code, reason) {
-    return ajax("/api/group/member", 'post', {
+    return ajax('/api/group/member', 'post', {
       params: { uid, gid, code, reason }
     })
   },
 
   updateGroupMember(data) {
-    return ajax("/api/group/member", 'put', {
+    return ajax('/api/group/member', 'put', {
       data
     })
   },
 
   deleteGroupMember(uid, gid) {
-    return ajax("/api/group/member", 'delete', {
+    return ajax('/api/group/member', 'delete', {
       params: { uid, gid }
+    })
+  },
+
+  exitGroup(gid) {
+    return ajax('/api/group/exit', 'delete', {
+      params: { gid }
     })
   },
 
@@ -849,7 +855,7 @@ const ojApi = {
     })
   },
 
-  groupCompileSpj(data, gid) {
+  groupCompileInteractive(data, gid) {
     return ajax("/api/group/compile-interactive", 'post', {
       data: data,
       params: { gid }

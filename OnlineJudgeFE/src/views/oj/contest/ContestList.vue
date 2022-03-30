@@ -204,12 +204,12 @@
                         </el-tag>
                       </el-tooltip>
                     </li>
-                    <li v-if="contest.auth != CONTEST_TYPE.PUBLIC">
+                    <li v-if="contest.count">
                       <i
                         class="el-icon-user-solid"
                         style="color:rgb(48, 145, 242);"
                       ></i
-                      >x{{ contest.count != null ? contest.count : 0 }}
+                      >x{{ contest.count }}
                     </li>
                     <li v-if="contest.openRank">
                       <el-tooltip

@@ -9,7 +9,7 @@ Vue.use({
       bind: function (el, binding) {
         Array.from(el.querySelectorAll('pre code')).forEach((target) => {
           if (binding.value) {
-            target.textContent = binding.value
+            target.textContent = binding.value.replace(/\t/g,"    ");
           }
           hljs.highlightBlock(target)
         })
@@ -17,7 +17,7 @@ Vue.use({
       componentUpdated: function (el, binding) {
         Array.from(el.querySelectorAll('pre code')).forEach((target) => {
           if (binding.value) {
-            target.textContent = binding.value
+            target.textContent = binding.value.replace(/\t/g,"    ");
           }
           hljs.highlightBlock(target)
         })

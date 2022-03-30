@@ -75,8 +75,6 @@ public class DiscussionManager {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
-        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-
         QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
 
         IPage<Discussion> iPage = new Page<>(currentPage, limit);
@@ -105,7 +103,7 @@ public class DiscussionManager {
             problemQueryWrapper.eq("problem_id", pid);
             Problem problem = problemEntityService.getOne(problemQueryWrapper);
 
-            if (!problem.getIsPublic() && !isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
+            if (!problem.getIsPublic() && !isAdmin && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         } else if (!(admin && isAdmin)) {

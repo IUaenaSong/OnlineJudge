@@ -1120,11 +1120,11 @@ export default {
         extraFiles: this.judgeExtraFile,
       };
       this.loadingCompile = true;
-      let apiMethodName = 'compileGroupSPJ';
+      let apiMethodName = 'groupCompileSpj';
       if (this.problem.judgeMode == 'interactive') {
-        apiMethodName = 'compileGroupInteractive';
+        apiMethodName = 'groupCompileInteractive';
       }
-      api[apiMethodName](data).then(
+      api[apiMethodName](data, this.$route.params.groupID).then(
         (res) => {
           this.loadingCompile = false;
           this.problem.spjCompileOk = true;

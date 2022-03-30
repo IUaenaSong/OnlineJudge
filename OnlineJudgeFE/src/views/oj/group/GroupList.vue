@@ -70,7 +70,7 @@
         </section>
       </el-card>
     </el-col>
-    <el-col :span="24">
+    <el-col :span="24" v-loading="loading">
       <el-row :gutter="20">
         <el-col
           :xxl="4" :xl="6" :lg="8" :md="8" :sm="12" :xs="24"
@@ -399,7 +399,7 @@ export default {
       },
       backupGroup: null,
       groupList: [],
-      loading: true,
+      loading: false,
       defaultAvatar: require('@/assets/default.jpg'),
     };
   },

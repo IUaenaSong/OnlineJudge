@@ -34,11 +34,9 @@ public class ContestValidator {
     private GroupValidator groupValidator;
 
     public boolean isSealRank(String uid, Contest contest, Boolean forceRefresh, Boolean isRoot) {
-        Session session = SecurityUtils.getSubject().getSession();
-        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
         // 如果是管理员同时选择强制刷新榜单，则封榜无效
         Long gid = contest.getGid();
-        if (forceRefresh && (isRoot || contest.getUid().equals(uid) || groupValidator.isGroupRoot(userRolesVo.getUid(), gid))) {
+        if (forceRefresh && (isRoot || contest.getUid().equals(uid) || groupValidator.isGroupRoot(uid, gid))) {
             return false;
         } else if (contest.getSealRank() && contest.getSealRankTime() != null) { // 该比赛开启封榜模式
             Date now = new Date();

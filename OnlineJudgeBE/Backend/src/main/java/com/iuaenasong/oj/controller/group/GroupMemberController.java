@@ -63,4 +63,9 @@ public class GroupMemberController {
         return groupMemberService.deleteMember(uid, gid);
     }
 
+    @DeleteMapping("/exit")
+    @RequiresAuthentication
+    public CommonResult<Void> exitGroup(@RequestParam(value = "gid", required = true) Long gid) {
+        return groupMemberService.exitGroup(gid);
+    }
 }

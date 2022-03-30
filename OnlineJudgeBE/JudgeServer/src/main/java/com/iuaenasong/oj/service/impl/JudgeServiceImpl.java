@@ -63,6 +63,7 @@ public class JudgeServiceImpl implements JudgeService {
                     finalJudge.getCid(),
                     finalJudge.getUid(),
                     finalJudge.getPid(),
+                    finalJudge.getIsPublic(),
                     finalJudge.getScore(),
                     finalJudge.getTime());
         }

@@ -42,7 +42,7 @@
             v-model="row.auth"
             @change="updateGroupMember(row)"
             size="small"
-            :disabled="!isSuperAdmin && !isGroupOwner && row.auth >= userAuth"
+            :disabled="!isSuperAdmin && !isGroupOwner && row.auth >= userAuth || row.uid == group.uid || userInfo.uid == row.uid"
           >
             <el-option :label="$t('m.Applying')" :value="1" :disabled="!isSuperAdmin && !isGroupOwner && 1 >= userAuth"></el-option>
             <el-option :label="$t('m.Refused')" :value="2" :disabled="!isSuperAdmin && !isGroupOwner && 2 >= userAuth"></el-option>
@@ -72,7 +72,7 @@
             effect="dark"
             :content="$t('m.Delete_Member')"
             placement="top"
-            v-if="isGroupOwner || row.auth < userAuth || userInfo.uid == row.uid"
+            v-if="(isGroupOwner || row.auth < userAuth) && userInfo.uid != row.uid && row.uid != group.uid && row.auth >= 3"
           >
             <el-button
               icon="el-icon-delete-solid"
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Pagination from '@/components/oj/common/Pagination';
 import api from '@/common/api';
 import Editor from '@/components/admin/Editor.vue';
@@ -187,6 +187,9 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      group: (state) => state.group.group,
+    }),
     ...mapGetters(['userInfo', 'isSuperAdmin', 'userAuth', 'isGroupOwner']),
   },
 };

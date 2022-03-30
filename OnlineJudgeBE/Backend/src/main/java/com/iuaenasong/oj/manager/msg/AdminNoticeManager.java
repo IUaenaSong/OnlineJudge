@@ -17,6 +17,7 @@ import com.iuaenasong.oj.pojo.entity.msg.UserSysNotice;
 import com.iuaenasong.oj.pojo.vo.AdminSysNoticeVo;
 import com.iuaenasong.oj.dao.msg.AdminSysNoticeEntityService;
 import com.iuaenasong.oj.dao.msg.UserSysNoticeEntityService;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -105,6 +106,36 @@ public class AdminNoticeManager {
                     .setSysNoticeId(adminSysNotice.getId())
                     .setType(type);
             userSysNoticeEntityService.save(userSysNotice);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Async
+    public void addSingleNoticeToBatchUser(String adminId,
+                                           List<String> recipientIdList,
+                                           String title,
+                                           String content,
+                                           String type) {
+        if (CollectionUtils.isEmpty(recipientIdList)) {
+            return;
+        }
+        AdminSysNotice adminSysNotice = new AdminSysNotice();
+        adminSysNotice.setAdminId(adminId)
+                .setType("Single")
+                .setTitle(title)
+                .setContent(content)
+                .setState(true);
+        boolean isOk = adminSysNoticeEntityService.save(adminSysNotice);
+        if (isOk) {
+            List<UserSysNotice> userSysNoticeList = new ArrayList<>();
+            for (String recipientId : recipientIdList) {
+                UserSysNotice userSysNotice = new UserSysNotice();
+                userSysNotice.setRecipientId(recipientId)
+                        .setSysNoticeId(adminSysNotice.getId())
+                        .setType(type);
+                userSysNoticeList.add(userSysNotice);
+            }
+            userSysNoticeEntityService.saveBatch(userSysNoticeList);
         }
     }
 }

@@ -216,9 +216,11 @@ export default {
     }
     this.init();
   },
+  created() {
+    this.JUDGE_STATUS = Object.assign({}, JUDGE_STATUS);
+  },
   methods: {
     init() {
-      this.JUDGE_STATUS = Object.assign({}, JUDGE_STATUS);
       this.getGroupProblemList();
     },
     onPageSizeChange(pageSize) {

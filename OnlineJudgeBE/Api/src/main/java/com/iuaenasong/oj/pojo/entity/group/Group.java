@@ -46,7 +46,10 @@ public class Group implements Serializable  {
     @ApiModelProperty(value = "团队拥有者的用户名")
     private String owner;
 
-    @ApiModelProperty(value = "0为直接加入，1为输入申请加入，2为禁止加入")
+    @ApiModelProperty(value = "团队拥有者的uid")
+    private String uid;
+
+    @ApiModelProperty(value = "1为Public，2为Protected，3为Private")
     private Integer auth;
 
     @ApiModelProperty(value = "团队是否可见")

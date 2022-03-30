@@ -901,7 +901,8 @@ CREATE TABLE `group` (
   `brief` varchar(50) COMMENT '团队简介',
   `description` longtext COMMENT '团队介绍',
   `owner` varchar(255) NOT NULL COMMENT '团队拥有者用户名',
-  `auth` int(11) NOT NULL COMMENT '0为Public，1为Protected，2为Private',
+  `uid` varchar(255) NOT NULL,
+  `auth` int(11) NOT NULL COMMENT '1为Public，2为Protected，3为Private',
   `visible` tinyint(1) DEFAULT '1' COMMENT '是否可见',
   `status` tinyint(1) DEFAULT '0' COMMENT '是否封禁',
   `code` varchar(6) DEFAULT NULL COMMENT '邀请码',
@@ -909,7 +910,8 @@ CREATE TABLE `group` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `NAME_UNIQUE` (`name`),
-  UNIQUE KEY `short_name` (`short_name`)
+  UNIQUE KEY `short_name` (`short_name`),
+  CONSTRAINT `group_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `group_member`;
@@ -1009,7 +1011,7 @@ delete from `user_role`;
 
 delete from `user_info`;
 
-insert  into `auth`(`id`,`name`,`permission`,`status`,`gmt_create`,`gmt_modified`) values (1,'problem','problem_admin',0,NOW(),NOW()),(2,'submit','submit',0,NOW(),NOW()),(3,'contest','contest_admin',0,NOW(),NOW()),(4,'rejudge','rejudge',0,NOW(),NOW()),(5,'announcement','announcement_admin',0,NOW(),NOW()),(6,'user','user_admin',0,NOW(),NOW()),(7,'system_info','system_info_admin',0,NOW(),NOW()),(8,'dicussion','discussion_add',0,NOW(),NOW()),(9,'dicussion','discussion_del',0,NOW(),NOW()),(10,'dicussion','discussion_edit',0,NOW(),NOW()),(11,'comment','comment_add',0,NOW(),NOW()),(12,'reply','reply_add',0,NOW(),NOW()),(13,'group','group_add',0,NOW(),NOW());
+insert  into `auth`(`id`,`name`,`permission`,`status`,`gmt_create`,`gmt_modified`) values (1,'problem','problem_admin',0,NOW(),NOW()),(2,'submit','submit',0,NOW(),NOW()),(3,'contest','contest_admin',0,NOW(),NOW()),(4,'rejudge','rejudge',0,NOW(),NOW()),(5,'announcement','announcement_admin',0,NOW(),NOW()),(6,'user','user_admin',0,NOW(),NOW()),(7,'system_info','system_info_admin',0,NOW(),NOW()),(8,'dicussion','discussion_add',0,NOW(),NOW()),(9,'dicussion','discussion_del',0,NOW(),NOW()),(10,'dicussion','discussion_edit',0,NOW(),NOW()),(11,'comment','comment_add',0,NOW(),NOW()),(12,'reply','reply_add',0,NOW(),NOW()),(13,'group','group_add',0,NOW(),NOW()),(14,'group','group_del',0,NOW(),NOW());
 
 insert  into `category`(`id`,`name`,`gmt_create`,`gmt_modified`) values (1,'闲聊',NOW(),NOW()),(2,'题解',NOW(),NOW()),(3,'求助',NOW(),NOW()),(4,'建议',NOW(),NOW()),(5,'记录',NOW(),NOW());
 
@@ -1017,7 +1019,7 @@ insert  into `language`(`id`,`content_type`,`description`,`name`,`compile_comman
 
 insert  into `role`(`id`,`role`,`description`,`status`,`gmt_create`,`gmt_modified`) values (00000000000000001000,'root','超级管理员',0,NOW(),NOW()),(00000000000000001001,'admin','管理员',0,NOW(),NOW()),(00000000000000001002,'default_user','默认用户',0,NOW(),NOW()),(00000000000000001003,'no_subimit_user','禁止提交用户',0,NOW(),NOW()),(00000000000000001004,'no_discuss_user','禁止发贴讨论用户',0,NOW(),NOW()),(00000000000000001005,'mute_user','禁言包括回复讨论发帖用户',0,NOW(),NOW()),(00000000000000001006,'no_submit_no_discuss_user','禁止提交同时禁止发帖用户',0,NOW(),NOW()),(00000000000000001007,'no_submit_mute_user','禁言禁提交用户',0,NOW(),NOW()),(00000000000000001008,'problem_admin','题目管理员',0,NOW(),NOW());
 
-insert  into `role_auth`(`id`,`auth_id`,`role_id`,`gmt_create`,`gmt_modified`) values (1,1,1000,NOW(),NOW()),(2,2,1000,NOW(),NOW()),(3,3,1000,NOW(),NOW()),(4,4,1000,NOW(),NOW()),(5,5,1000,NOW(),NOW()),(6,6,1000,NOW(),NOW()),(7,7,1000,NOW(),NOW()),(8,8,1000,NOW(),NOW()),(9,9,1000,NOW(),NOW()),(10,10,1000,NOW(),NOW()),(11,11,1000,NOW(),NOW()),(12,12,1000,NOW(),NOW()),(13,1,1001,NOW(),NOW()),(14,2,1001,NOW(),NOW()),(15,3,1001,NOW(),NOW()),(16,8,1001,NOW(),NOW()),(17,9,1001,NOW(),NOW()),(18,10,1001,NOW(),NOW()),(19,11,1001,NOW(),NOW()),(20,12,1001,NOW(),NOW()),(21,2,1002,NOW(),NOW()),(22,8,1002,NOW(),NOW()),(23,9,1002,NOW(),NOW()),(24,10,1002,NOW(),NOW()),(25,11,1002,NOW(),NOW()),(26,12,1002,NOW(),NOW()),(27,8,1003,NOW(),NOW()),(28,9,1003,NOW(),NOW()),(29,10,1003,NOW(),NOW()),(30,11,1003,NOW(),NOW()),(31,12,1003,NOW(),NOW()),(32,2,1004,NOW(),NOW()),(33,9,1004,NOW(),NOW()),(34,10,1004,NOW(),NOW()),(35,11,1004,NOW(),NOW()),(36,12,1004,NOW(),NOW()),(37,2,1005,NOW(),NOW()),(38,9,1005,NOW(),NOW()),(39,10,1005,NOW(),NOW()),(40,9,1006,NOW(),NOW()),(41,10,1006,NOW(),NOW()),(42,11,1006,NOW(),NOW()),(43,12,1006,NOW(),NOW()),(44,9,1007,NOW(),NOW()),(45,10,1007,NOW(),NOW()),(46,1,1008,NOW(),NOW()),(47,2,1008,NOW(),NOW()),(48,3,1008,NOW(),NOW()),(49,8,1008,NOW(),NOW()),(50,9,1008,NOW(),NOW()),(51,10,1008,NOW(),NOW()),(52,11,1008,NOW(),NOW()),(53,12,1008,NOW(),NOW()),(54,13,1000,NOW(),NOW()),(55,13,1001,NOW(),NOW()),(56,13,1002,NOW(),NOW()),(57,13,1008,NOW(),NOW());
+insert  into `role_auth`(`id`,`auth_id`,`role_id`,`gmt_create`,`gmt_modified`) values (1,1,1000,NOW(),NOW()),(2,2,1000,NOW(),NOW()),(3,3,1000,NOW(),NOW()),(4,4,1000,NOW(),NOW()),(5,5,1000,NOW(),NOW()),(6,6,1000,NOW(),NOW()),(7,7,1000,NOW(),NOW()),(8,8,1000,NOW(),NOW()),(9,9,1000,NOW(),NOW()),(10,10,1000,NOW(),NOW()),(11,11,1000,NOW(),NOW()),(12,12,1000,NOW(),NOW()),(13,1,1001,NOW(),NOW()),(14,2,1001,NOW(),NOW()),(15,3,1001,NOW(),NOW()),(16,8,1001,NOW(),NOW()),(17,9,1001,NOW(),NOW()),(18,10,1001,NOW(),NOW()),(19,11,1001,NOW(),NOW()),(20,12,1001,NOW(),NOW()),(21,2,1002,NOW(),NOW()),(22,8,1002,NOW(),NOW()),(23,9,1002,NOW(),NOW()),(24,10,1002,NOW(),NOW()),(25,11,1002,NOW(),NOW()),(26,12,1002,NOW(),NOW()),(27,8,1003,NOW(),NOW()),(28,9,1003,NOW(),NOW()),(29,10,1003,NOW(),NOW()),(30,11,1003,NOW(),NOW()),(31,12,1003,NOW(),NOW()),(32,2,1004,NOW(),NOW()),(33,9,1004,NOW(),NOW()),(34,10,1004,NOW(),NOW()),(35,11,1004,NOW(),NOW()),(36,12,1004,NOW(),NOW()),(37,2,1005,NOW(),NOW()),(38,9,1005,NOW(),NOW()),(39,10,1005,NOW(),NOW()),(40,9,1006,NOW(),NOW()),(41,10,1006,NOW(),NOW()),(42,11,1006,NOW(),NOW()),(43,12,1006,NOW(),NOW()),(44,9,1007,NOW(),NOW()),(45,10,1007,NOW(),NOW()),(46,1,1008,NOW(),NOW()),(47,2,1008,NOW(),NOW()),(48,3,1008,NOW(),NOW()),(49,8,1008,NOW(),NOW()),(50,9,1008,NOW(),NOW()),(51,10,1008,NOW(),NOW()),(52,11,1008,NOW(),NOW()),(53,12,1008,NOW(),NOW()),(54,13,1000,NOW(),NOW()),(55,13,1001,NOW(),NOW()),(56,13,1002,NOW(),NOW()),(57,13,1008,NOW(),NOW()),(58,14,1000,NOW(),NOW()),(59,14,1001,NOW(),NOW()),(60,14,1002,NOW(),NOW()),(61,14,1008,NOW(),NOW());
 
 insert  into `user_info`(`uuid`,`username`,`password`,`gmt_create`,`gmt_modified`) values('1','root','f570bcc861d1b848d4a054716db9a748',NOW(),NOW());
 

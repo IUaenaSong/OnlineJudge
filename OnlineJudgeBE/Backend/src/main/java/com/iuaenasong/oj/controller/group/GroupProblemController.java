@@ -78,13 +78,13 @@ public class GroupProblemController {
 
     @PostMapping("/compile-spj")
     public CommonResult<Void> compileSpj(@RequestBody CompileDTO compileDTO,
-                                   @RequestParam("gid") Long gid) {
+                                         @RequestParam("gid") Long gid) {
         return groupProblemService.compileSpj(compileDTO, gid);
     }
 
     @PostMapping("/compile-interactive")
     public CommonResult<Void> compileInteractive(@RequestBody CompileDTO compileDTO,
-                                           @RequestParam("gid") Long gid) {
+                                                 @RequestParam("gid") Long gid) {
         return groupProblemService.compileInteractive(compileDTO, gid);
     }
 

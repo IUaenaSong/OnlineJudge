@@ -562,6 +562,7 @@ export const m = {
   Group_Number: 'Number',
   Group_Home: 'Home',
   Group_Problem: 'Problem',
+  Group_Question: 'Question',
   Group_Training: 'Training',
   Group_Contest: 'Contest',
   Group_Submission: 'Submission',
@@ -572,6 +573,24 @@ export const m = {
   Apply_Reason: 'Apply Reason',
   Apply_Reason_Check_Required: 'The apply reason is required.',
   Apply_Reason_Check_Min_Max: 'The length of apply reason is 5 to 100',
+  Disband_Group: 'Disband Group',
+  Disband_Group_Tips: 'Are you sure you want to disband the group? After disbanding, all the resoureces of the group will be delete too!',
+  Disband_Successfully: 'Disband Successfully',
+
+  // /views/oj/group/GroupOtherProblemList.vue
+  Question_Type: 'Question Type',
+  Choice_Question: 'Choice Question',
+  Blank_Question: 'Fill Blank Question',
+  Answer_Question: 'Brief Answer Question',
+  Create_Question: 'Create Question',
+  Question_ID: 'Question ID',
+  Question_Display_ID: 'Question Display ID',
+  Question_Description: 'Question Description',
+  Question_Answer: 'Question Answer',
+  Question_Choices: 'Question Choices',
+  Add_Choice: 'Add Choice',
+  Right_Answer: 'Right Answer',
+  Delete_Choice_Tips: 'Are you sure you want to delete the choice? After deleting, the content of the choice will disappear!',
 
   // /views/oj/group/GroupDiscussionList.vue
   No_Discussion: 'No Discussion',

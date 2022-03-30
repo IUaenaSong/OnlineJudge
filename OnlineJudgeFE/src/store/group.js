@@ -11,7 +11,7 @@ const state = {
 const getters = {
   group: state=> state.group || {},
   isGroupOwner: (state, getters, _, rootGetters) => {
-    return rootGetters.isAuthenticated && state.group.owner == getters.userInfo.username
+    return rootGetters.isAuthenticated && state.group.uid == getters.userInfo.uid
   },
   isGroupRoot: (state, getters, _, rootGetters) => {
     return rootGetters.isAuthenticated && (

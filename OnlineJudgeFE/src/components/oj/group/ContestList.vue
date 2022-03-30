@@ -297,7 +297,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['isGroupAdmin', 'userInfo']),
+    ...mapGetters(['isGroupRoot', 'userInfo']),
   },
 };
 </script>

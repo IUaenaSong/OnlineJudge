@@ -77,12 +77,12 @@ public class JudgeContext {
         return Compiler.compileInteractive(code, pid, interactiveLanguage, extraFiles);
     }
 
-    public void updateOtherTable(Long submitId, Integer status, Long cid, String uid, Long pid, Integer score, Integer useTime) {
+    public void updateOtherTable(Long submitId, Integer status, Long cid, String uid, Long pid, Boolean isPublic, Integer score, Integer useTime) {
 
         if (cid == 0) { // 非比赛提交
             // 如果是AC,就更新user_acproblem表,
             Judge judge = judgeEntityService.getById(submitId);
-            if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus() && judge.getIsPublic()) {
+            if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus() && isPublic) {
                 userAcproblemEntityService.saveOrUpdate(new UserAcproblem()
                         .setPid(pid)
                         .setUid(uid)

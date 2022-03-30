@@ -10,6 +10,7 @@
         <result column="brief" property="brief"></result>
         <result column="description" property="description"></result>
         <result column="owner" property="owner"></result>
+        <result column="uid" property="uid"></result>
         <result column="auth" property="auth"></result>
         <result column="visible" property="visible"></result>
         <result column="member_count" property="memberCount"></result>

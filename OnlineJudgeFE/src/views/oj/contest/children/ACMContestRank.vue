@@ -78,7 +78,7 @@
               field="username"
               fixed="left"
               v-if="!isMobileView"
-              min-width="300"
+              min-width="280"
               :title="$t('m.User')"
               header-align="center"
               align="left"
@@ -134,7 +134,7 @@
             <vxe-table-column
               field="username"
               v-else
-              min-width="300"
+              min-width="280"
               :title="$t('m.User')"
               header-align="center"
               align="left"
@@ -189,13 +189,13 @@
             </vxe-table-column>
             <vxe-table-column
               field="realname"
-              min-width="96"
+              width="96"
               :title="$t('m.RealName')"
               show-overflow
               v-if="isContestAdmin"
             >
             </vxe-table-column>
-            <vxe-table-column field="rating" :title="$t('m.AC')" min-width="60">
+            <vxe-table-column field="rating" :title="$t('m.AC')" width="50">
               <template v-slot="{ row }">
                 <span>
                   <a
@@ -209,64 +209,63 @@
             <vxe-table-column
               field="totalTime"
               :title="$t('m.TotalTime')"
-              min-width="60"
+              width="70"
             >
               <template v-slot="{ row }">
                 <el-tooltip effect="dark" placement="top">
                   <div slot="content">
                     {{ parseTimeToSpecific(row.totalTime) }}
                   </div>
-                  <span>{{ parseInt(row.totalTime / 60) }}</span>
+                  <span style="font-size: 14px">{{ parseInt(row.totalTime / 60) }}</span>
                 </el-tooltip>
               </template>
             </vxe-table-column>
             <vxe-table-column
-              min-width="74"
+              width="64"
               v-for="problem in contestProblems"
               :key="problem.displayId"
               :field="problem.displayId"
             >
-              <template v-slot:header>
-                <span class="contest-rank-balloon" v-if="problem.color">
-                  <svg
-                    t="1633685184463"
-                    class="icon"
-                    viewBox="0 0 1088 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="5840"
-                    width="25"
-                    height="25"
-                  >
-                    <path
-                      d="M575.872 849.408c-104.576 0-117.632-26.56-119.232-31.808-6.528-22.528 32.896-70.592 63.744-96.768l-1.728-2.624c137.6-42.688 243.648-290.112 243.648-433.472A284.544 284.544 0 0 0 478.016 0a284.544 284.544 0 0 0-284.288 284.736c0 150.4 116.352 415.104 263.744 438.336-25.152 29.568-50.368 70.784-39.104 108.928 12.608 43.136 62.72 63.232 157.632 63.232 7.872 0 11.52 9.408 4.352 19.52-21.248 29.248-77.888 63.424-167.68 63.424V1024c138.944 0 215.936-74.816 215.936-126.528a46.72 46.72 0 0 0-16.32-36.608 56.32 56.32 0 0 0-36.416-11.456zM297.152 297.472c0 44.032-38.144 25.344-38.144-38.656 0-108.032 85.248-195.712 190.592-195.712 62.592 0 81.216 39.232 38.08 39.232-105.152 0.064-190.528 87.04-190.528 195.136z"
-                      :fill="problem.color"
-                      p-id="5841"
-                    ></path>
-                  </svg>
-                </span>
-                <span>
-                  <a
-                    @click="getContestProblemById(problem.displayId)"
-                    class="emphasis"
-                    style="color:#495060;"
-                  >
-                    {{ problem.displayId }}
-                  </a>
-                </span>
-                <br />
-                <span>
-                  <el-tooltip effect="dark" placement="top">
-                    <div slot="content">
-                      {{ problem.displayId + '. ' + problem.displayTitle }}
+              <template slot="header">
+                <el-tooltip effect="dark" placement="top">
+                  <div slot="content">
+                    {{ problem.displayId + '. ' + problem.displayTitle }}
+                    <br />
+                    {{ 'Accepted: ' + problem.ac }}
+                    <br />
+                    {{ 'Rejected: ' + (problem.total - problem.ac) }}
+                  </div>
+                  <div>
+                    <span style="vertical-align: middle;" v-if="problem.color">
+                      <svg
+                        t="1633685184463"
+                        class="icon"
+                        viewBox="0 0 1088 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="5840"
+                        width="25"
+                        height="25"
+                      >
+                        <path
+                          d="M575.872 849.408c-104.576 0-117.632-26.56-119.232-31.808-6.528-22.528 32.896-70.592 63.744-96.768l-1.728-2.624c137.6-42.688 243.648-290.112 243.648-433.472A284.544 284.544 0 0 0 478.016 0a284.544 284.544 0 0 0-284.288 284.736c0 150.4 116.352 415.104 263.744 438.336-25.152 29.568-50.368 70.784-39.104 108.928 12.608 43.136 62.72 63.232 157.632 63.232 7.872 0 11.52 9.408 4.352 19.52-21.248 29.248-77.888 63.424-167.68 63.424V1024c138.944 0 215.936-74.816 215.936-126.528a46.72 46.72 0 0 0-16.32-36.608 56.32 56.32 0 0 0-36.416-11.456zM297.152 297.472c0 44.032-38.144 25.344-38.144-38.656 0-108.032 85.248-195.712 190.592-195.712 62.592 0 81.216 39.232 38.08 39.232-105.152 0.064-190.528 87.04-190.528 195.136z"
+                          :fill="problem.color"
+                          p-id="5841"
+                        ></path>
+                      </svg>
+                    </span>
+                    <span>
+                      <a
+                        @click="getContestProblemById(problem.displayId)"
+                        class="emphasis"
+                        style="color:#495060;"
+                        >{{ problem.displayId }}
+                      </a>
                       <br />
-                      {{ 'Accepted: ' + problem.ac }}
-                      <br />
-                      {{ 'Rejected: ' + (problem.total - problem.ac) }}
-                    </div>
-                    <span>({{ problem.ac }}/{{ problem.total }}) </span>
-                  </el-tooltip>
-                </span>
+                      <span>{{ problem.ac }}</span>
+                    </span>
+                  </div>
+                </el-tooltip>
               </template>
               <template v-slot="{ row }">
                 <span
@@ -467,7 +466,8 @@ export default {
         column.property != 'rating' &&
         column.property != 'totalTime' &&
         column.property != 'username' &&
-        column.property != 'realname'
+        column.property != 'realname' &&
+        row[column.property]
       ) {
         this.$router.push({
           name: 'ContestSubmissionList',

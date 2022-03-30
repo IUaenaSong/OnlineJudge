@@ -22,6 +22,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class GroupAnnouncementManager {
@@ -82,6 +83,7 @@ public class GroupAnnouncementManager {
         return groupAnnouncementEntityService.getAdminAnnouncementList(limit, currentPage, gid);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addAnnouncement(Announcement announcement) throws StatusForbiddenException, StatusNotFoundException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");

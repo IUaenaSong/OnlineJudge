@@ -26,6 +26,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -145,6 +146,7 @@ public class GroupTrainingProblemManager {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addProblemFromPublic(TrainingProblemDto trainingProblemDto) throws StatusNotFoundException, StatusForbiddenException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
@@ -209,6 +211,7 @@ public class GroupTrainingProblemManager {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addProblemFromGroup(String problemId, Long tid) throws StatusNotFoundException, StatusForbiddenException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
@@ -245,8 +248,8 @@ public class GroupTrainingProblemManager {
         QueryWrapper<TrainingProblem> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("tid", tid)
                 .and(wrapper -> wrapper.eq("pid", problem.getId())
-                .or()
-                .eq("display_id", problem.getProblemId()));
+                    .or()
+                    .eq("display_id", problem.getProblemId()));
 
         TrainingProblem trainingProblem = trainingProblemEntityService.getOne(queryWrapper);
 

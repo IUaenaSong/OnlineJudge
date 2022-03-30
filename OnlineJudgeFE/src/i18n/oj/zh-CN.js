@@ -563,6 +563,7 @@ export const m = {
   Group_Number: '团队编号',
   Group_Home: '主页 ',
   Group_Problem: '题目',
+  Group_Question: '问题',
   Group_Training: '训练',
   Group_Contest: '比赛',
   Group_Submission: '评测',
@@ -573,6 +574,24 @@ export const m = {
   Apply_Reason: '申请理由',
   Apply_Reason_Check_Required: '申请理由不能为空',
   Apply_Reason_Check_Min_Max: '申请理由的长度应为 5 到 100',
+  Disband_Group: '解散团队',
+  Disband_Group_Tips: '你想要解散团队吗？解散之后，团队的所有资源也将被删除！',
+  Disband_Successfully: '解散成功',
+
+  // /views/oj/group/GroupOtherProblemList.vue
+  Question_Type: '问题类型',
+  Choice_Question: '选择题',
+  Blank_Question: '填空题',
+  Answer_Question: '简答题',
+  Create_Question: '创建问题',
+  Question_ID: '问题ID',
+  Question_Display_ID: '问题展示ID',
+  Question_Description: '问题描述',
+  Question_Answer: '问题答案',
+  Question_Choices: '问题选项',
+  Add_Choice: '添加选项',
+  Right_Answer: '正确答案',
+  Delete_Choice_Tips: '你确定要删除该选项吗？删除之后选项的内容将会消失！',
 
   // /views/oj/group/GroupDiscussionList.vue
   No_Discussion: '暂无讨论',

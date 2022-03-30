@@ -32,6 +32,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -119,7 +120,7 @@ public class GroupContestProblemManager {
 
         List<Tag> tagList = new LinkedList<>();
         for (Tag tag : problemDto.getTags()) {
-            if (tag.getGid() != null && tag.getGid() != gid) {
+            if (tag.getGid() != null && tag.getGid().longValue() != gid) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
 
@@ -244,6 +245,7 @@ public class GroupContestProblemManager {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addProblemFromPublic(ContestProblemDto contestProblemDto) throws StatusNotFoundException, StatusForbiddenException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
@@ -301,6 +303,7 @@ public class GroupContestProblemManager {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addProblemFromGroup(String problemId, Long cid, String displayId) throws StatusNotFoundException, StatusForbiddenException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
@@ -310,7 +313,7 @@ public class GroupContestProblemManager {
         Contest contest = contestEntityService.getById(cid);
 
         if (contest == null) {
-            throw new StatusNotFoundException("该训练不存在！");
+            throw new StatusNotFoundException("该比赛不存在！");
         }
 
         Long gid = contest.getGid();

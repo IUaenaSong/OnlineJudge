@@ -94,7 +94,7 @@ public class Problem implements Serializable {
     @TableField(value="spj_language",updateStrategy = FieldStrategy.IGNORED)
     private String spjLanguage;
 
-    @ApiModelProperty(value = "特判程序或交互程序的额外文件 json key:name value:content")
+    @ApiModelProperty(value = "用户的额外文件 json key:name value:content")
     @TableField(value="user_extra_file",updateStrategy = FieldStrategy.IGNORED)
     private String userExtraFile;
 

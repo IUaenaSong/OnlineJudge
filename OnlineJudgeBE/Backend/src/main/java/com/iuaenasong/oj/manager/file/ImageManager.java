@@ -174,6 +174,7 @@ public class ImageManager {
                 .put("brief", group.getBrief())
                 .put("description", group.getDescription())
                 .put("owner", group.getOwner())
+                .put("uid", group.getUid())
                 .put("auth", group.getAuth())
                 .put("visible", group.getVisible())
                 .put("status", group.getStatus())

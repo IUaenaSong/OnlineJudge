@@ -27,7 +27,7 @@
             field="username"
             fixed="left"
             v-if="!isMobileView"
-            min-width="300"
+            min-width="280"
             :title="$t('m.User')"
             header-align="center"
             align="left"
@@ -59,7 +59,7 @@
           <vxe-table-column
             field="username"
             v-else
-            min-width="300"
+            min-width="280"
             :title="$t('m.User')"
             header-align="center"
             align="left"
@@ -90,7 +90,7 @@
           </vxe-table-column>
           <vxe-table-column
             field="realname"
-            min-width="96"
+            width="96"
             :title="$t('m.RealName')"
             show-overflow
             v-if="isTrainingAdmin"
@@ -99,13 +99,13 @@
           <vxe-table-column
             field="rating"
             :title="$t('m.Total_AC')"
-            min-width="90"
+            width="120"
           >
             <template v-slot="{ row }">
-              <span
+              <span style="font-size: 14px"
                 ><a
                   @click="getUserACSubmit(row.username)"
-                  style="color:rgb(87, 163, 243);font-size:16px"
+                  style="color:rgb(87, 163, 243)"
                   >{{ row.ac }}</a
                 >
                 <br />
@@ -114,7 +114,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column
-            min-width="70"
+            width="64"
             v-for="(problem, index) in trainingProblemList"
             :key="index"
             :field="problem.problemId"
@@ -255,7 +255,8 @@ export default {
         column.property !== 'totalScore' &&
         column.property !== 'username' &&
         column.property !== 'realname' &&
-        column.property !== 'rating'
+        column.property !== 'rating' &&
+        row.submissionInfo[column.property]
       ) {
         this.$router.push({
           name: 'SubmissionList',
@@ -344,7 +345,7 @@ a.emphasis:hover {
   padding-right: 5px !important;
 }
 .judge-status {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 .judge-time {

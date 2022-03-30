@@ -268,11 +268,6 @@ a:hover {
   cursor: pointer;
   background-color: #ebf7ff !important;
 }
-.vxe-table .vxe-body--column:not(.col--ellipsis),
-.vxe-table .vxe-footer--column:not(.col--ellipsis),
-.vxe-table .vxe-header--column:not(.col--ellipsis) {
-  padding: 9px 0 !important;
-}
 #nprogress .bar {
   background: #66b1ff !important;
 }

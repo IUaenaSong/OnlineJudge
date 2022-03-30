@@ -97,6 +97,8 @@ public class BeforeDispatchInitManager {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
             judge.setIsPublic(false);
+        } else {
+            judge.setIsPublic(true);
         }
 
         judge.setCpid(0L).setPid(problem.getId()).setDisplayPid(problem.getProblemId());
@@ -153,6 +155,9 @@ public class BeforeDispatchInitManager {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
+            judge.setIsPublic(false);
+        } else {
+            judge.setIsPublic(true);
         }
 
         judge.setDisplayPid(problem.getProblemId());
@@ -210,6 +215,8 @@ public class BeforeDispatchInitManager {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
             judge.setIsPublic(false);
+        } else {
+            judge.setIsPublic(true);
         }
 
         judge.setDisplayPid(problem.getProblemId());

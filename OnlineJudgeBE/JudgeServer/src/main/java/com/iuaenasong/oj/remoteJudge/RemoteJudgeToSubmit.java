@@ -52,7 +52,7 @@ public class RemoteJudgeToSubmit {
 
         Long submitId = remoteJudgeDTO.getSubmitId();
         // 提交失败 前端手动按按钮再次提交 修改状态 STATUS_SUBMITTED_FAILED
-        if (submitId == null ||submitId == -1L) {
+        if (submitId == null || submitId == -1L) {
             // 将使用的账号放回对应列表
             log.error("[{}] Submit Failed! Begin to return the account to other task!", remoteJudgeDTO.getOj());
             remoteJudgeService.changeAccountStatus(remoteJudgeDTO.getOj(),
@@ -76,6 +76,7 @@ public class RemoteJudgeToSubmit {
                     remoteJudgeDTO.getCid(),
                     remoteJudgeDTO.getUid(),
                     remoteJudgeDTO.getPid(),
+                    remoteJudgeDTO.getIsPublic(),
                     null,
                     null);
             return false;

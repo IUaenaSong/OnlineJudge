@@ -157,15 +157,25 @@
               </span>
             </div>
           </div>
-          <div style="text-align: center">
+          <div class="group-button">
             <span v-if="!isGroupMember && isAuthenticated && userAuth != 1">
               <el-button type="primary" size="small" @click="handleApply">
                 {{ $t('m.Apply_Group') }}
               </el-button>
             </span>
+            <span v-if="userAuth == 1">
+              <el-button size="small">
+                {{ $t('m.Applying') }}
+              </el-button>
+            </span>
             <span v-if="isGroupMember">
-              <el-button type="danger" size="small" @click="deleteGroupMember">
+              <el-button type="warning" size="small" @click="exitGroup" :loading="loading">
                 {{ $t('m.Exit_Group') }}
+              </el-button>
+            </span>
+            <span v-if="isGroupOwner">
+              <el-button type="danger" size="small" @click="deleteGroup" :loading="loading">
+                {{ $t('m.Disband_Group') }}
               </el-button>
             </span>
           </div>
@@ -222,7 +232,7 @@
           @click.native="showApplyDialog = false"
           >{{ $t('m.Cancel') }}</el-button
         >
-        <el-button type="primary" @click.native="submitApply">{{
+        <el-button type="primary" @click.native="submitApply" :loading="loading">{{
           $t('m.OK')
         }}</el-button>
       </span>
@@ -266,6 +276,7 @@ export default {
     return {
       route_name: 'GroupDetails',
       defaultAvatar: require('@/assets/default.jpg'),
+      loading: false,
       showApplyDialog: false,
       appliaction: {
         code: '',
@@ -325,7 +336,7 @@ export default {
       }).catch(() => {
       });
     },
-    deleteGroupMember() {
+    exitGroup() {
       this.$confirm(this.$i18n.t('m.Exit_Group_Tips'), this.$i18n.t('m.Warning'), {
         confirmButtonText: this.$i18n.t('m.OK'),
         cancelButtonText: this.$i18n.t('m.Cancel'),
@@ -333,15 +344,36 @@ export default {
       })
         .then(() => {
           this.loading = true;
-          api.deleteGroupMember(this.userInfo.uid, this.$route.params.groupID).then((res) => {
+          api.exitGroup(this.$route.params.groupID).then((res) => {
             this.loading = false;
             this.$msg.success(this.$i18n.t('m.Exit_Successfully'));
-            this.$store.dispatch('getGroup');
+            this.$store.commit('clearGroup');
+            this.$router.push('/group');
           }).catch(() => {
+            this.loading = false;
           });
         })
         .catch(() => {
-          this.loading = false;
+        });
+    },
+    deleteGroup() {
+      this.$confirm(this.$i18n.t('m.Disband_Group_Tips'), this.$i18n.t('m.Warning'), {
+        confirmButtonText: this.$i18n.t('m.OK'),
+        cancelButtonText: this.$i18n.t('m.Cancel'),
+        type: 'warning',
+      })
+        .then(() => {
+          this.loading = true;
+          api.deleteGroup(this.$route.params.groupID).then((res) => {
+            this.loading = false;
+            this.$msg.success(this.$i18n.t('m.Disband_Successfully'));
+            this.$store.commit('clearGroup');
+            this.$router.push('/group');
+          }).catch(() => {
+            this.loading = false;
+          });
+        })
+        .catch(() => {
         });
     },
     toUserHome(username) {
@@ -360,6 +392,8 @@ export default {
       'isAuthenticated',
       'isGroupAdmin',
       'isGroupRoot',
+      'isSuperAdmin',
+      'isGroupOwner',
       'groupMenuDisabled',
       'isGroupMember',
       'userAuth',
@@ -375,15 +409,6 @@ export default {
   watch: {
     $route(newVal) {
       this.route_name = newVal.name;
-      if (newVal.name == 'GroupEditProblem' || newVal.name == 'GroupCreateProblem') {
-        this.route_name = 'GroupProblemList';
-      }
-      if (newVal.name == 'GroupEditTraining' || newVal.name == 'GroupCreateTraining' || newVal.name == 'GroupTrainingProblemList') {
-        this.route_name = 'GroupTrainingList';
-      }
-      if (newVal.name == 'GroupEditContest' || newVal.name == 'GroupCreateContest' || newVal.name == 'GroupContestProblemList' || newVal.name == 'GroupContestAnnouncementList') {
-        this.route_name = 'GroupContestList';
-      }
       this.changeDomTitle({ title: this.group.name });
     },
   },
@@ -451,5 +476,12 @@ export default {
 }
 .info-rows > :last-child {
   margin-bottom: 0;
+}
+.group-button {
+  text-align: center;
+}
+.group-button span {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>

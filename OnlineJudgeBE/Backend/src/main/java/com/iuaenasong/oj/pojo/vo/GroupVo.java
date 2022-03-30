@@ -24,6 +24,9 @@ public class GroupVo {
     @ApiModelProperty(value = "团队拥有者的用户名")
     private String owner;
 
+    @ApiModelProperty(value = "团队拥有者的ID")
+    private String uid;
+
     @ApiModelProperty(value = "团队名称")
     private String name;
 

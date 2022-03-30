@@ -27,6 +27,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -141,6 +142,7 @@ public class GroupTrainingManager {
         return trainingDto;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addTraining(TrainingDto trainingDto) throws StatusForbiddenException, StatusNotFoundException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
@@ -188,6 +190,7 @@ public class GroupTrainingManager {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateTraining(TrainingDto trainingDto) throws StatusForbiddenException, StatusNotFoundException, StatusFailException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");

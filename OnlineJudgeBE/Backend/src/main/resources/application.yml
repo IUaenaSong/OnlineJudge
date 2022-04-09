@@ -6,7 +6,7 @@ mybatis-plus:
   mapper-locations: classpath*:com/iuaenasong/oj/mapper/xml/**Mapper.xml
   type-aliases-package: code.onlinejduge.oj.pojo.entity
   configuration:
-    cache-enabled: false
+    cache-enabled: true
   # 关闭打印 mybatis-plus 的 LOGO
   global-config:
     banner: false

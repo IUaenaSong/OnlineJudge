@@ -222,7 +222,6 @@
                 auto-resize
                 align="center"
                 :data="recentUserACRecord"
-                max-height="500px"
                 :loading="loading.recent7ACRankLoading"
               >
                 <vxe-table-column type="seq" min-width="50">
@@ -354,7 +353,7 @@ export default {
           url: 'http://acm.hdu.edu.cn',
           name: 'HDU',
           logo: require('@/assets/hdu-logo.png'),
-          status: false,
+          status: true,
         },
         {
           url: 'http://poj.org',

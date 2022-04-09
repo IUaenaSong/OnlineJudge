@@ -36,6 +36,8 @@ import GroupList from '@/views/oj/group/GroupList.vue'
 import GroupDetails from '@/views/oj/group/GroupDetails.vue'
 import GroupAnnouncementList from '@/views/oj/group/children/GroupAnnouncementList.vue'
 import GroupProblemList from '@/views/oj/group/children/GroupProblemList.vue'
+import GroupQuestionList from '@/views/oj/group/children/GroupQuestionList.vue'
+import GroupQuestionDetails from '@/views/oj/question/QuestionDetails.vue'
 import GroupTrainingList from '@/views/oj/group/children/GroupTrainingList.vue'
 import GroupContestList from '@/views/oj/group/children/GroupContestList.vue'
 import GroupDiscussionList from '@/views/oj/group/children/GroupDiscussionList.vue'
@@ -282,6 +284,18 @@ const ojRoutes = [
         name: 'GroupProblemList',
         component: GroupProblemList,
         meta: { title: 'Group Problem' },
+      },
+      {
+        path: 'question',
+        name: 'GroupQuestionList',
+        component: GroupQuestionList,
+        meta: { title: 'Group Question' },
+      },
+      {
+        path: 'question/:questionId',
+        name: 'GroupQuestionDetails',
+        component: GroupQuestionDetails,
+        meta: { title: 'Group Question Details' },
       },
       {
         path: 'training',

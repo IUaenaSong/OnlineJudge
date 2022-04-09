@@ -24,6 +24,7 @@ CREATE TABLE `announcement` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
+  KEY `gid` (`gid`),
   CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -140,6 +141,7 @@ CREATE TABLE `contest` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`uid`),
   KEY `uid` (`uid`),
+  KEY `gid` (`gid`),
   CONSTRAINT `contest_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
@@ -153,8 +155,8 @@ CREATE TABLE `contest_announcement` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `contest_announcement_ibfk_1` (`cid`),
-  KEY `contest_announcement_ibfk_2` (`aid`),
+  KEY `cid` (`cid`),
+  KEY `aid` (`aid`),
   CONSTRAINT `contest_announcement_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_announcement_ibfk_2` FOREIGN KEY (`aid`) REFERENCES `announcement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -170,7 +172,7 @@ CREATE TABLE `contest_explanation` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
-  KEY `contest_explanation_ibfk_1` (`cid`),
+  KEY `cid` (`cid`),
   CONSTRAINT `contest_explanation_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_explanation_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -205,9 +207,9 @@ CREATE TABLE `contest_problem` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`cid`,`pid`),
-  UNIQUE KEY `display_id` (`display_id`,`cid`,`pid`),
-  KEY `contest_problem_ibfk_1` (`cid`),
-  KEY `contest_problem_ibfk_2` (`pid`),
+  UNIQUE KEY `display_id_cid_pid_unique` (`display_id`,`cid`,`pid`),
+  KEY `cid` (`cid`),
+  KEY `pid` (`pid`),
   CONSTRAINT `contest_problem_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_problem_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -238,8 +240,8 @@ CREATE TABLE `contest_record` (
   KEY `pid` (`pid`),
   KEY `cpid` (`cpid`),
   KEY `submit_id` (`submit_id`),
-  KEY `index_cid` (`cid`),
-  KEY `index_time` (`time`),
+  KEY `cid` (`cid`),
+  KEY `time` (`time`),
   CONSTRAINT `contest_record_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_record_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_record_ibfk_3` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -258,7 +260,7 @@ CREATE TABLE `contest_register` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`cid`,`uid`),
   UNIQUE KEY `cid_uid_unique` (`cid`,`uid`),
-  KEY `contest_register_ibfk_2` (`uid`),
+  KEY `uid` (`uid`),
   CONSTRAINT `contest_register_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contest_register_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -274,7 +276,7 @@ CREATE TABLE `contest_score` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`cid`),
-  KEY `contest_score_ibfk_1` (`cid`),
+  KEY `cid` (`cid`),
   CONSTRAINT `contest_score_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -301,9 +303,10 @@ CREATE TABLE `discussion` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
-  KEY `discussion_ibfk_4` (`avatar`),
-  KEY `discussion_ibfk_1` (`uid`),
+  KEY `avatar` (`avatar`),
+  KEY `uid` (`uid`),
   KEY `pid` (`pid`),
+  KEY `gid` (`gid`),
   CONSTRAINT `discussion_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `discussion_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `discussion_ibfk_3` FOREIGN KEY (`avatar`) REFERENCES `user_info` (`avatar`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -359,6 +362,7 @@ CREATE TABLE `file` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
+  KEY `gid` (`gid`),
   CONSTRAINT `file_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `file_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -391,15 +395,18 @@ CREATE TABLE `judge` (
   `vjudge_username` varchar(255) NULL  COMMENT 'vjudge判题在其它oj的提交用户名',
   `vjudge_password` varchar(255) NULL  COMMENT 'vjudge判题在其它oj的提交账号密码',
   `is_public` tinyint(1) DEFAULT '1',
+  `gid` bigint(20) unsigned DEFAULT NULL,
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`submit_id`,`pid`,`display_pid`,`uid`,`cid`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`),
+  KEY `gid` (`gid`),
   KEY `username` (`username`),
   CONSTRAINT `judge_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `judge_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `judge_ibfk_3` FOREIGN KEY (`username`) REFERENCES `user_info` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `judge_ibfk_3` FOREIGN KEY (`username`) REFERENCES `user_info` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `judge_ibfk_4` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `judge_case`;
@@ -421,9 +428,9 @@ CREATE TABLE `judge_case` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`submit_id`,`uid`,`pid`),
   KEY `case_id` (`case_id`),
-  KEY `judge_case_ibfk_1` (`uid`),
-  KEY `judge_case_ibfk_2` (`pid`),
-  KEY `judge_case_ibfk_3` (`submit_id`),
+  KEY `uid` (`uid`),
+  KEY `pid` (`pid`),
+  KEY `submit_id` (`submit_id`),
   CONSTRAINT `judge_case_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `judge_case_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `judge_case_ibfk_3` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -446,8 +453,8 @@ CREATE TABLE `judge_server` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `index_judge_remote` (`is_remote`),
-  KEY `index_judge_url` (`url`)
+  KEY `is_remote` (`is_remote`),
+  KEY `url` (`url`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `language`;
@@ -506,6 +513,7 @@ CREATE TABLE `problem` (
   PRIMARY KEY (`id`),
   KEY `author` (`author`),
   KEY `problem_id` (`problem_id`),
+  KEY `gid` (`gid`),
   CONSTRAINT `problem_ibfk_1` FOREIGN KEY (`author`) REFERENCES `user_info` (`username`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `problem_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
@@ -633,7 +641,8 @@ CREATE TABLE `tag` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`,`oj`, `gid`),
+  UNIQUE KEY `name_oj_gid_unique` (`name`,`oj`, `gid`),
+  KEY `gid` (`gid`),
   CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -650,8 +659,8 @@ CREATE TABLE `user_acproblem` (
   KEY `submit_id` (`submit_id`),
   KEY `uid` (`uid`),
   KEY `pid` (`pid`),
-  CONSTRAINT `user_acproblem_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_acproblem_ibfk_3` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `user_acproblem_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_acproblem_ibfk_2` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_info`;
@@ -679,9 +688,9 @@ CREATE TABLE `user_info` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`uuid`),
-  UNIQUE KEY `USERNAME_UNIQUE` (`username`),
-  UNIQUE KEY `EMAIL_UNIQUE` (`email`),
-  UNIQUE KEY `avatar` (`avatar`)
+  UNIQUE KEY `username_unique` (`username`),
+  UNIQUE KEY `email_unique` (`email`),
+  UNIQUE KEY `avatar_unique` (`avatar`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_record`;
@@ -801,6 +810,7 @@ CREATE TABLE `training` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `gid` (`gid`),
   CONSTRAINT `training_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -814,6 +824,7 @@ CREATE TABLE `training_category` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `gid` (`gid`),
   CONSTRAINT `training_category_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -909,8 +920,8 @@ CREATE TABLE `group` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `NAME_UNIQUE` (`name`),
-  UNIQUE KEY `short_name` (`short_name`),
+  UNIQUE KEY `name_unique` (`name`),
+  UNIQUE KEY `short_name_unique` (`short_name`),
   CONSTRAINT `group_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 
@@ -931,6 +942,34 @@ CREATE TABLE `group_member` (
   CONSTRAINT `group_member_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `group_member_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `question`;
+
+CREATE TABLE `question` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `question_id` varchar(255) NOT NULL COMMENT '问题的自定义ID 例如（OJ-1000）',
+  `author` varchar(255) DEFAULT '未知' COMMENT '作者',
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '1选择题，2填空题，3简答题',
+  `auth` int(11) DEFAULT '1' COMMENT '默认为1公开，2为私有，3为考试题目',
+  `single` tinyint(1) DEFAULT '1',
+  `description` longtext COMMENT '描述',
+  `answer` longtext COMMENT '答案',
+  `choices` longtext COMMENT '选项',
+  `radio` int(11) DEFAULT NULL,
+  `judge` tinyint(1) DEFAULT '1',
+  `share` tinyint(1) DEFAULT '0',
+  `modified_user` varchar(255) DEFAULT NULL COMMENT '修改问题的管理员用户名',
+  `is_public` tinyint(1) DEFAULT '1',
+  `gid` bigint(20) unsigned DEFAULT NULL,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `author` (`author`),
+  KEY `question_id` (`question_id`),
+  KEY `gid` (`gid`),
+  CONSTRAINT `question_ibfk_1` FOREIGN KEY (`author`) REFERENCES `user_info` (`username`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `question_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 
 DELIMITER $$
 

@@ -2,8 +2,8 @@
   <div id="app">
     <el-backtop :right="10"></el-backtop>
     <div v-if="!isAdminView">
-      <nav-bar></nav-bar>
-      <div id="oj-content">
+      <nav-bar @handleMobileNav="handleMobileNav"></nav-bar>
+      <div :id="mobileNav ? 'mobile-oj-content' : 'oj-content'">
         <transition name="el-fade-in-linear">
           <router-view></router-view>
         </transition>
@@ -113,6 +113,7 @@ export default {
   data() {
     return {
       isAdminView: false,
+      mobileNav: false,
     };
   },
   methods: {
@@ -130,6 +131,9 @@ export default {
     changeLanguage(language) {
       this.$store.commit('changeWebLanguage', { language: language });
     },
+    handleMobileNav(mobileNav) {
+      this.mobileNav = mobileNav;
+    },
   },
   watch: {
     $route(newVal, oldVal) {
@@ -143,12 +147,15 @@ export default {
     websiteConfig() {
       this.changeDomTitle();
     },
+    mobileNav() {
+      this.mobileNav;
+    },
   },
   computed: {
     ...mapState(['websiteConfig']),
     ...mapGetters(['webLanguage']),
   },
-  created: function() {
+  created() {
     this.$nextTick(function() {
       try {
         document.body.removeChild(document.getElementById('app-loader'));
@@ -271,9 +278,81 @@ a:hover {
 #nprogress .bar {
   background: #66b1ff !important;
 }
-@media screen and (min-width: 1050px) {
+@media screen and (min-width: 1313px) {
   #oj-content {
     margin-top: 70px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 1228px) and (max-width: 1313px) {
+  #oj-content {
+    margin-top: 107.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 1105px) and (max-width: 1228px) {
+  #oj-content {
+    margin-top: 121.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 660px) and (max-width: 1105px) {
+  #oj-content {
+    margin-top: 130px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 654px) and (max-width: 660px) {
+  #oj-content {
+    margin-top: 166.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 559px) and (max-width: 654px) {
+  #oj-content {
+    margin-top: 181.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 456px) and (max-width: 559px) {
+  #oj-content {
+    margin-top: 191px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 439.5px) and (max-width: 456px) {
+  #oj-content {
+    margin-top: 226.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 416px) and (max-width: 439.5px) {
+  #oj-content {
+    margin-top: 241.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 356px) and (max-width: 416px) {
+  #oj-content {
+    margin-top: 250px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 343px) and (max-width: 356px) {
+  #oj-content {
+    margin-top: 286.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 343px) {
+  #oj-content {
+    margin-top: 301.5px;
+    padding: 0 3%;
+  }
+}
+@media screen and (max-width: 320px) {
+  #oj-content {
+    margin-top: 347.5px;
     padding: 0 3%;
   }
 }
@@ -283,14 +362,12 @@ a:hover {
 .contest-description img {
   max-width: 100%;
 }
-@media screen and (max-width: 1050px) {
-  #oj-content {
-    margin-top: 70px;
-    padding: 0 5px;
-  }
-  .el-message-box {
-    width: 70% !important;
-  }
+#mobile-oj-content {
+  margin-top: 65px;
+  padding: 0 3%;
+}
+#mobile-oj-content .el-message-box {
+  width: 70% !important;
 }
 #problem-content .sample pre {
   -ms-flex: 1 1 auto;

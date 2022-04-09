@@ -348,10 +348,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isGroupRoot']),
-    isContest() {
-      return !(!this.contestId);
-    },
+    ...mapGetters(['userInfo', 'isGroupRoot'])
   },
 };
 </script>

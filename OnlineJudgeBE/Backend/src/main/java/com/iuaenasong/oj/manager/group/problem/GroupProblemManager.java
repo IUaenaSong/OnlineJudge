@@ -210,7 +210,7 @@ public class GroupProblemManager {
             throw new StatusNotFoundException("该题目不存在！");
         }
 
-        Long gid = problem.getGid();
+        Long gid = problemDto.getProblem().getGid();
 
         Group group = groupEntityService.getById(gid);
 

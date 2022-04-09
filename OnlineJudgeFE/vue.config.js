@@ -1,9 +1,4 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
-
-const isProduction = process.env.NODE_ENV === 'production';
-
-module.exports={
+module.exports = {
   publicPath: '/',
   assetsDir: "assets",
   devServer: {
@@ -19,6 +14,5 @@ module.exports={
     },
     disableHostCheck: true,
   },
-
   productionSourceMap: false
 }

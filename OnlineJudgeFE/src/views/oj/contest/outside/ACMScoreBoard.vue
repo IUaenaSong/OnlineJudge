@@ -254,20 +254,14 @@
           >
             <template v-slot:header>
               <el-tooltip effect="dark" placement="top">
-              <div slot="content">
+                <div slot="content">
                   {{ problem.displayId + '. ' + problem.displayTitle }}
                   <br />
-                  {{
-                  'Accepted: ' +
-                      getProblemCount(problemACCountMap[problem.displayId])
-                  }}
+                  {{ 'Accepted: ' + problem.ac }}
                   <br />
-                  {{
-                  'Rejected: ' +
-                      getProblemCount(problemErrorCountMap[problem.displayId])
-                  }}
-              </div>
-              <div>
+                  {{ 'Rejected: ' + problem.error }}
+                </div>
+                <div>
                   <span style="vertical-align: middle;" v-if="problem.color">
                   <svg
                       t="1633685184463"
@@ -289,9 +283,9 @@
                   <span class="emphasis" style="color:#495060;"
                   >{{ problem.displayId }}
                   <br />
-                  <span>{{ getProblemCount(problemACCountMap[problem.displayId]) }}</span>
+                  <span>{{ problem.ac }}</span>
                   </span>
-              </div>
+                </div>
               </el-tooltip>
             </template>
             <template v-slot="{ row }">
@@ -347,6 +341,7 @@
 <script>
 import Avatar from 'vue-avatar';
 import time from '@/common/time';
+import { mapActions } from 'vuex';
 import ScoreBoardMixin from './scoreBoardMixin';
 export default {
   name: 'ACMScoreBoard',
@@ -369,8 +364,6 @@ export default {
       CONTEST_STATUS_REVERSE: {},
       CONTEST_TYPE_REVERSE: {},
       RULE_TYPE: {},
-      problemACCountMap: {},
-      problemErrorCountMap: {},
     };
   },
   created() {
@@ -380,6 +373,7 @@ export default {
     this.getContestOutsideScoreboard();
   },
   methods: {
+    ...mapActions(['getContestProblems']),
     getUserHomeByUsername(uid, username) {
       this.$router.push({
         name: 'UserHome',
@@ -406,8 +400,6 @@ export default {
       }
     },
     applyToTable(dataRank) {
-      let acCountMap = {};
-      let errorCountMap = {};
       dataRank.forEach((rank, i) => {
         let info = rank.submissionInfo;
         let cellClass = {};
@@ -416,16 +408,6 @@ export default {
         }
         Object.keys(info).forEach((problemID) => {
           dataRank[i][problemID] = info[problemID];
-
-          if (!acCountMap[problemID]) {
-            acCountMap[problemID] = 0;
-          }
-          if (!errorCountMap[problemID]) {
-            errorCountMap[problemID] = 0;
-          }
-
-          errorCountMap[problemID] += info[problemID].errorNum;
-
           if (dataRank[i][problemID].ACTime != null) {
             dataRank[i][problemID].errorNum += 1;
             dataRank[i][problemID].specificTime = this.parseTimeToSpecific(
@@ -438,10 +420,8 @@ export default {
           let status = info[problemID];
           if (status.isFirstAC) {
             cellClass[problemID] = 'first-ac';
-            acCountMap[problemID] += 1;
           } else if (status.isAC) {
             cellClass[problemID] = 'ac';
-            acCountMap[problemID] += 1;
           } else if (status.tryNum != null && status.tryNum > 0) {
             cellClass[problemID] = 'try';
           } else if (status.errorNum != 0) {
@@ -457,8 +437,6 @@ export default {
         }
       });
       this.dataRank = dataRank;
-      this.problemACCountMap = acCountMap;
-      this.problemErrorCountMap = errorCountMap;
     },
     parseTimeToSpecific(totalTime) {
       return time.secondFormat(totalTime);

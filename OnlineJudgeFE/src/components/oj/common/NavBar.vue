@@ -59,7 +59,7 @@
         >
 
         <el-menu-item index="/group"
-          ><i class="el-icon-s-custom"></i
+          ><i class="fa fa-group" style="margin-right: 5px;width: 24px;text-align: center;"></i
           >{{ $t('m.NavBar_Group') }}</el-menu-item
         >
 
@@ -427,10 +427,7 @@
             </mu-list-item-action>
             <mu-list-item-title>{{ $t('m.NavBar_Rank') }}</mu-list-item-title>
             <mu-list-item-action>
-              <mu-icon
-                size="24"
-                value=":fa fa-arrow-down"
-              ></mu-icon>
+              <i class="el-icon-arrow-down"></i>
             </mu-list-item-action>
             <mu-list-item
               button
@@ -498,11 +495,7 @@
             </mu-list-item-action>
             <mu-list-item-title>{{ $t('m.NavBar_About') }}</mu-list-item-title>
             <mu-list-item-action>
-              <mu-icon
-                class="toggle-icon"
-                size="24"
-                value=":fa fa-arrow-down"
-              ></mu-icon>
+              <i class="el-icon-arrow-down"></i>
             </mu-list-item-action>
             <mu-list-item
               button
@@ -598,6 +591,7 @@ export default {
       } else {
         this.mobileNar = false;
       }
+      this.$emit("handleMobileNav", this.mobileNar);
     },
     handleBtnClick(mode) {
       this.changeModalStatus({

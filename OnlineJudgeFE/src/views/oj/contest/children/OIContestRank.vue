@@ -234,7 +234,7 @@
                     <br />
                     {{ 'Accepted: ' + problem.ac }}
                     <br />
-                    {{ 'Rejected: ' + (problem.total - problem.ac) }}
+                    {{ 'Rejected: ' + problem.error }}
                   </div>
                   <div>
                     <span style="vertical-align: middle;" v-if="problem.color">

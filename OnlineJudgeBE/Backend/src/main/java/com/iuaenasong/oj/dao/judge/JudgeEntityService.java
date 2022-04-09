@@ -33,7 +33,7 @@ public interface JudgeEntityService extends IService<Judge> {
                                        Integer status,
                                        String username,
                                        String uid,
-                                       Boolean beforeContestSubmit,
+                                       Boolean isAdmin,
                                        String rule,
                                        Date startTime,
                                        Date sealRankTime,

@@ -58,8 +58,8 @@ export default {
   computed: {
     ...mapGetters(['isContestAdmin','userInfo']),
     ...mapState({
-      'contest': state => state.contest.contest,
-      'contestProblems': state => state.contest.contestProblems
+      contest: state => state.contest.contest,
+      contestProblems: state => state.contest.contestProblems
     }),
     showChart: {
       get () {

@@ -25,6 +25,7 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
     private ContestRecordMapper contestRecordMapper;
 
     private static List<Integer> penaltyStatus = Arrays.asList(
+            Constants.Judge.STATUS_PARTIAL_ACCEPTED.getStatus(),
             Constants.Judge.STATUS_PRESENTATION_ERROR.getStatus(),
             Constants.Judge.STATUS_WRONG_ANSWER.getStatus(),
             Constants.Judge.STATUS_TIME_LIMIT_EXCEEDED.getStatus(),
@@ -37,8 +38,8 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
         // 如果是AC
         if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus()) {
             updateWrapper.set("status", Constants.Contest.RECORD_AC.getCode());
-            // 部分通过
-        } else if (status.intValue() == Constants.Judge.STATUS_PARTIAL_ACCEPTED.getStatus()) {
+            // 编译错误
+        } else if (status.intValue() == Constants.Judge.STATUS_COMPILE_ERROR.getStatus()) {
             updateWrapper.set("status", Constants.Contest.RECORD_NOT_AC_NOT_PENALTY.getCode());
             // 需要被罚时的状态
         } else if (penaltyStatus.contains(status)) {

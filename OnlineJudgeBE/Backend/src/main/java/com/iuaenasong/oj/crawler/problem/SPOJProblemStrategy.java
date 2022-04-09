@@ -68,6 +68,7 @@ public class SPOJProblemStrategy extends ProblemStrategy {
                 .setAuth(1)
                 .setOpenCaseResult(false)
                 .setIsRemoveEndBlank(false)
+                .setIsPublic(true)
                 .setDifficulty(1); // 默认为中等
 
         List<Tag> tagList = new ArrayList<>();

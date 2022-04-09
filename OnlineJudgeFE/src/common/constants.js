@@ -264,6 +264,25 @@ export const GROUP_TYPE_REVERSE = {
   }
 }
 
+export const QUESTION_TYPE_REVERSE = {
+  '1': {
+    name: 'Choice',
+    color: 'success',
+  },
+  '2': {
+    name: 'Judge',
+    color: 'warning',
+  },
+  '3':{
+    name: 'Blank',
+    color: 'danger',
+  },
+  '4':{
+    name: 'Answer',
+    color: 'info',
+  }
+}
+
 export const RULE_TYPE = {
   ACM: 0,
   OI: 1

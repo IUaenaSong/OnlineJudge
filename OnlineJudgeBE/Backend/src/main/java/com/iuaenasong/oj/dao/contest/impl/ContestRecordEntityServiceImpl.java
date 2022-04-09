@@ -112,7 +112,7 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
 
         String oiRankScoreType = contest.getOiRankScoreType();
         Long cid = contest.getId();
-        String contestAuthor = contest.getAuthor();
+        String contestAuthorUid = contest.getUid();
         Date sealTime = contest.getSealRankTime();
         Date startTime = contest.getStartTime();
         Date endTime = contest.getEndTime();
@@ -122,14 +122,14 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
             // 获取每个用户每道题最近一次提交
             if (Objects.equals(Constants.Contest.OI_RANK_RECENT_SCORE.getName(), oiRankScoreType)) {
                 return contestRecordMapper.getOIContestRecordByRecentSubmission(cid,
-                        contestAuthor,
+                        contestAuthorUid,
                         false,
                         sealTime,
                         startTime,
                         endTime);
             } else {
                 return contestRecordMapper.getOIContestRecordByHighestSubmission(cid,
-                        contestAuthor,
+                        contestAuthorUid,
                         false,
                         sealTime,
                         startTime,
@@ -142,14 +142,14 @@ public class ContestRecordEntityServiceImpl extends ServiceImpl<ContestRecordMap
             if (oiContestRecordList == null) {
                 if (Objects.equals(Constants.Contest.OI_RANK_RECENT_SCORE.getName(), oiRankScoreType)) {
                     oiContestRecordList = contestRecordMapper.getOIContestRecordByRecentSubmission(cid,
-                            contestAuthor,
+                            contestAuthorUid,
                             true,
                             sealTime,
                             startTime,
                             endTime);
                 } else {
                     oiContestRecordList = contestRecordMapper.getOIContestRecordByHighestSubmission(cid,
-                            contestAuthor,
+                            contestAuthorUid,
                             true,
                             sealTime,
                             startTime,

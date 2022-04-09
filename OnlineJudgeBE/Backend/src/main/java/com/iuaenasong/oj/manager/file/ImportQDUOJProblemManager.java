@@ -172,7 +172,7 @@ public class ImportQDUOJProblemManager {
             ProblemDto problemDto = new ProblemDto();
 
             String mode = Constants.JudgeMode.DEFAULT.getMode();
-            if (qdojProblemDto.getIsSpj()){
+            if (qdojProblemDto.getIsSpj()) {
                 mode = Constants.JudgeMode.SPJ.getMode();
             }
 

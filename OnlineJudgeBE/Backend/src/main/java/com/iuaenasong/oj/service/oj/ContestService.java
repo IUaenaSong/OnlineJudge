@@ -38,7 +38,6 @@ public interface ContestService {
                                                                  Integer searchStatus,
                                                                  String searchUsername,
                                                                  Long searchCid,
-                                                                 Boolean beforeContestSubmit,
                                                                  Boolean completeProblemID);
 
     public CommonResult<IPage> getContestRank(ContestRankDto contestRankDto);

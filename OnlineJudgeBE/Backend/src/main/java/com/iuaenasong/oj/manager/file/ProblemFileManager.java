@@ -188,6 +188,7 @@ public class ProblemFileManager {
             if (problem.getAuthor() == null) {
                 problem.setAuthor(userRolesVo.getUsername());
             }
+            problem.setIsPublic(true);
             List<ProblemCase> problemCaseList = new LinkedList<>();
             for (Map<String, Object> tmp : importProblemVo.getSamples()) {
                 problemCaseList.add(BeanUtil.mapToBean(tmp, ProblemCase.class, true));

@@ -124,7 +124,7 @@
                 ></i>
               </span>
               <span v-else>
-                {{ row.total }}
+                {{ (row.ac + row.error) }}
               </span>
             </template>
           </vxe-table-column>
@@ -133,13 +133,13 @@
               <span>
                 <el-tooltip
                   effect="dark"
-                  :content="row.ac + '/' + row.total"
+                  :content="row.ac + '/' + (row.ac + row.error)"
                   placement="top"
                 >
                   <el-progress
                     :text-inside="true"
                     :stroke-width="20"
-                    :percentage="getPassingRate(row.ac, row.total)"
+                    :percentage="getPassingRate(row.ac, row.ac + row.error)"
                   ></el-progress>
                 </el-tooltip>
               </span>

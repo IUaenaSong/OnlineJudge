@@ -68,7 +68,9 @@ public class GroupManager {
             uid = userRolesVo.getUid();
         }
 
-        return groupEntityService.getGroupList(limit, currentPage, keyword, auth, uid, onlyMine);
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+
+        return groupEntityService.getGroupList(limit, currentPage, keyword, auth, uid, onlyMine, isRoot);
     }
 
     public Group getGroup(Long gid) throws StatusNotFoundException, StatusForbiddenException {
@@ -129,6 +131,10 @@ public class GroupManager {
         if (groupMember != null) {
             auth = groupMember.getAuth();
         }
+
+        if (groupValidator.isGroupOwner(userRolesVo.getUid(), gid)) {
+            auth = 5;
+        }
         return auth;
     }
 
@@ -164,24 +170,30 @@ public class GroupManager {
         group.setOwner(userRolesVo.getUsername());
         group.setUid(userRolesVo.getUid());
 
-        if (!StringUtils.isEmpty(group.getName()) && (group.getName().length() < 5 || group.getName().length() > 25)) {
-            throw new StatusFailException("团队名称的长度应为 5 到 25！");
+        if (StringUtils.isEmpty(group.getName()) || group.getName().length() < 5 || group.getName().length() > 25) {
+            throw new StatusFailException("团队名称不能为空且长度应为 5 到 25！");
         }
 
-        if (!StringUtils.isEmpty(group.getShortName()) && (group.getShortName().length() < 5 || group.getShortName().length() > 10)) {
-            throw new StatusFailException("团队简称的长度应为 5 到 10！");
+        if (StringUtils.isEmpty(group.getShortName()) || group.getShortName().length() < 5 || group.getShortName().length() > 10) {
+            throw new StatusFailException("团队简称不能为空且长度应为 5 到 10！");
         }
 
-        if (!StringUtils.isEmpty(group.getBrief()) && (group.getBrief().length() < 5 || group.getBrief().length() > 50)) {
-            throw new StatusFailException("团队简介的长度应为 5 到 50！");
+        if (StringUtils.isEmpty(group.getBrief()) || group.getBrief().length() < 5 || group.getBrief().length() > 50) {
+            throw new StatusFailException("团队简介不能为空且长度应为 5 到 50！");
         }
 
-        if (!StringUtils.isEmpty(group.getCode()) && group.getCode().length() != 6) {
-            throw new StatusFailException("团队邀请码的长度应为 6！");
+        if (group.getAuth() == null || group.getAuth() < 1 || group.getAuth() > 3) {
+            throw new StatusFailException("团队权限不能为空且应为1~3！");
         }
 
-        if (!StringUtils.isEmpty(group.getDescription()) && (group.getDescription().length() < 5 || group.getDescription().length() > 1000)) {
-            throw new StatusFailException("团队描述的长度应为 5 到 1000！");
+        if (group.getAuth() == 2 || group.getAuth() == 3) {
+            if (StringUtils.isEmpty(group.getCode()) || group.getCode().length() != 6) {
+                throw new StatusFailException("团队邀请码不能为空且长度应为 6！");
+            }
+        }
+
+        if (StringUtils.isEmpty(group.getDescription()) || group.getDescription().length() < 5 || group.getDescription().length() > 1000) {
+            throw new StatusFailException("团队描述不能为空且长度应为 5 到 1000！");
         }
 
         QueryWrapper<Group> groupQueryWrapper = new QueryWrapper<>();
@@ -223,24 +235,30 @@ public class GroupManager {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }
 
-        if (!StringUtils.isEmpty(group.getName()) && (group.getName().length() < 5 || group.getName().length() > 25)) {
-            throw new StatusFailException("团队名称的长度应为 5 到 25！");
+        if (StringUtils.isEmpty(group.getName()) || group.getName().length() < 5 || group.getName().length() > 25) {
+            throw new StatusFailException("团队名称不能为空且长度应为 5 到 25！");
         }
 
-        if (!StringUtils.isEmpty(group.getShortName()) && (group.getShortName().length() < 5 || group.getShortName().length() > 10)) {
-            throw new StatusFailException("团队简称的长度应为 5 到 10！");
+        if (StringUtils.isEmpty(group.getShortName()) || group.getShortName().length() < 5 || group.getShortName().length() > 10) {
+            throw new StatusFailException("团队简称不能为空且长度应为 5 到 10！");
         }
 
-        if (!StringUtils.isEmpty(group.getBrief()) && (group.getBrief().length() < 5 || group.getBrief().length() > 50)) {
-            throw new StatusFailException("团队简介的长度应为 5 到 50！");
+        if (StringUtils.isEmpty(group.getBrief()) || group.getBrief().length() < 5 || group.getBrief().length() > 50) {
+            throw new StatusFailException("团队简介不能为空且长度应为 5 到 50！");
         }
 
-        if (!StringUtils.isEmpty(group.getCode()) && group.getCode().length() != 6) {
-            throw new StatusFailException("团队邀请码的长度应为 6！");
+        if (group.getAuth() == null || group.getAuth() < 1 || group.getAuth() > 3) {
+            throw new StatusFailException("团队权限不能为空且应为1~3！");
         }
 
-        if (!StringUtils.isEmpty(group.getDescription()) && (group.getDescription().length() < 5 || group.getDescription().length() > 1000)) {
-            throw new StatusFailException("团队描述的长度应为 5 到 1000！");
+        if (group.getAuth() == 2 || group.getAuth() == 3) {
+            if (StringUtils.isEmpty(group.getCode()) || group.getCode().length() != 6) {
+                throw new StatusFailException("团队邀请码不能为空且长度应为 6！");
+            }
+        }
+
+        if (StringUtils.isEmpty(group.getDescription()) || group.getDescription().length() < 5 || group.getDescription().length() > 1000) {
+            throw new StatusFailException("团队描述不能为空且长度应为 5 到 1000！");
         }
 
         QueryWrapper<Group> groupQueryWrapper = new QueryWrapper<>();

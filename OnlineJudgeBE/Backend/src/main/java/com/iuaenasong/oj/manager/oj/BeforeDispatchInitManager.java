@@ -92,6 +92,8 @@ public class BeforeDispatchInitManager {
 
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
+        judge.setGid(problem.getGid());
+
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
@@ -151,6 +153,8 @@ public class BeforeDispatchInitManager {
 
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
+        judge.setGid(problem.getGid());
+
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
@@ -209,6 +213,8 @@ public class BeforeDispatchInitManager {
         }
 
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+
+        judge.setGid(problem.getGid());
 
         if (!problem.getIsPublic()) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {

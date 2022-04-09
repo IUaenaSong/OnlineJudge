@@ -7,8 +7,10 @@
 package com.iuaenasong.oj.manager.oj;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.iuaenasong.oj.validator.GroupValidator;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.iuaenasong.oj.common.exception.StatusFailException;
 import com.iuaenasong.oj.common.exception.StatusForbiddenException;
@@ -41,7 +43,16 @@ public class ContestScoreboardManager {
     @Resource
     private ContestRankManager contestRankManager;
 
+    @Autowired
+    private GroupValidator groupValidator;
+
     public ContestOutsideInfo getContestOutsideInfo(Long cid) throws StatusNotFoundException, StatusForbiddenException {
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+
+        Contest contest = contestEntityService.getById(cid);
+
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         ContestVo contestInfo = contestEntityService.getContestInfoById(cid);
 
@@ -62,9 +73,17 @@ public class ContestScoreboardManager {
         ContestOutsideInfo contestOutsideInfo = new ContestOutsideInfo();
         contestOutsideInfo.setContest(contestInfo);
 
-        QueryWrapper<ContestProblem> contestProblemQueryWrapper = new QueryWrapper<>();
-        contestProblemQueryWrapper.eq("cid", cid).orderByAsc("display_id");
-        List<ContestProblem> contestProblemList = contestProblemEntityService.list(contestProblemQueryWrapper);
+        List<ContestProblemVo> contestProblemList;
+
+        boolean isAdmin = isRoot || contest.getUid().equals(userRolesVo.getUid()) || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid());
+        // 如果比赛开启封榜
+        if (contestValidator.isSealRank(userRolesVo.getUid(), contest, true, isRoot)) {
+            contestProblemList = contestProblemEntityService.getContestProblemList(cid, contest.getStartTime(), contest.getEndTime(),
+                    contest.getSealRankTime(), isAdmin, contest.getUid());
+        } else {
+            contestProblemList = contestProblemEntityService.getContestProblemList(cid, contest.getStartTime(), contest.getEndTime(),
+                    null, isAdmin, contest.getUid());
+        }
         contestOutsideInfo.setProblemList(contestProblemList);
 
         return contestOutsideInfo;

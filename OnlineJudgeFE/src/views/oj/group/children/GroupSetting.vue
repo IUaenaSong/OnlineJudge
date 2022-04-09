@@ -194,7 +194,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :md="8" :xs="24">
+        <el-col :md="8" :xs="24" v-if="group.auth == 2 || group.auth == 3">
           <el-form-item :label="$t('m.Group_Code')" required prop="code">
             <el-input
               v-model="group.code"
@@ -237,7 +237,7 @@
 
 <script>
 import api from '@/common/api';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import utils from '@/common/utils';
 import { VueCropper } from 'vue-cropper';
 import Avatar from 'vue-avatar';

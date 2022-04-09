@@ -201,7 +201,8 @@
       v-if="
         (submission.code && submission.share && codeShare) ||
           isMeSubmisson ||
-          isAdminRole
+          isAdminRole ||
+          isGroupRoot
       "
     >
       <el-col :span="24" v-if="submission.code" style="margin-top: 10px; margin-bottom: 10px;">
@@ -283,6 +284,7 @@ export default {
       loadingTable: false,
       JUDGE_STATUS: '',
       JUDGE_STATUS_RESERVE: '',
+      auth: 0,
     };
   },
   mounted() {
@@ -353,8 +355,12 @@ export default {
       this.loadingTable = true;
       api.getSubmission(this.$route.params.submitID).then(
         (res) => {
-          this.loadingTable = false;
           let data = res.data.data;
+          if (data.gid) {
+            api.getGroupAuth(data.gid).then((res) => {
+              this.auth = res.data.data;
+            }).catch()
+          }
           if (
             data.submission.memory &&
             data.submission.score &&
@@ -381,6 +387,7 @@ export default {
           this.$nextTick((_) => {
             addCodeBtn();
           });
+          this.loadingTable = false;
         },
         () => {
           this.loadingTable = false;
@@ -448,6 +455,9 @@ export default {
     },
     isMeSubmisson() {
       return this.$store.getters.userInfo.uid === this.submission.uid;
+    },
+    isGroupRoot() {
+      return this.auth == 5;
     },
   },
 };

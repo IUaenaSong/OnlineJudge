@@ -33,8 +33,8 @@
         (SELECT uid,pid,cpid,MAX(time) AS time FROM contest_record
         <where>
             cid=#{cid} AND status IS NOT NULL
-            <if test="contestAuthor!=null">
-                AND username!=#{contestAuthor}
+            <if test="contestAuthorUid!=null">
+                AND uid!=#{contestAuthorUid}
             </if>
             <choose>
                 <when test="isOpenSealRank">
@@ -58,8 +58,8 @@
         (SELECT uid,pid,cpid,MAX(score) AS score FROM contest_record
         <where>
             cid=#{cid} AND status IS NOT NULL
-            <if test="contestAuthor!=null">
-                AND username!=#{contestAuthor}
+            <if test="contestAuthorUid!=null">
+                AND uid!=#{contestAuthorUid}
             </if>
             <choose>
                 <when test="isOpenSealRank">

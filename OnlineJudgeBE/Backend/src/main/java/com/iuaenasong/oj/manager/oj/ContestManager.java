@@ -229,7 +229,7 @@ public class ContestManager {
         contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
 
         List<ContestProblemVo> contestProblemList;
-        boolean isAdmin = isRoot || contest.getAuthor().equals(userRolesVo.getUsername()) || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid());
+        boolean isAdmin = isRoot || contest.getUid().equals(userRolesVo.getUid()) || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid());
 
         if (!contest.getIsPublic()) {
             if (!isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), contest.getGid())) {
@@ -239,10 +239,10 @@ public class ContestManager {
         // 如果比赛开启封榜
         if (contestValidator.isSealRank(userRolesVo.getUid(), contest, true, isRoot)) {
             contestProblemList = contestProblemEntityService.getContestProblemList(cid, contest.getStartTime(), contest.getEndTime(),
-                    contest.getSealRankTime(), isAdmin, contest.getAuthor());
+                    contest.getSealRankTime(), isAdmin, contest.getUid());
         } else {
             contestProblemList = contestProblemEntityService.getContestProblemList(cid, contest.getStartTime(), contest.getEndTime(),
-                    null, isAdmin, contest.getAuthor());
+                    null, isAdmin, contest.getUid());
         }
 
         return contestProblemList;
@@ -354,7 +354,6 @@ public class ContestManager {
                                                    Integer searchStatus,
                                                    String searchUsername,
                                                    Long searchCid,
-                                                   Boolean beforeContestSubmit,
                                                    Boolean completeProblemID) throws StatusFailException, StatusForbiddenException {
 
         Session session = SecurityUtils.getSubject().getSession();
@@ -391,6 +390,8 @@ public class ContestManager {
         if (contestValidator.isSealRank(userRolesVo.getUid(), contest, true, isRoot)) {
             sealRankTime = contest.getSealRankTime();
         }
+
+        boolean isAdmin = contest.getUid().equals(userRolesVo.getUid()) || isRoot || groupValidator.isGroupRoot(contest.getUid(), contest.getGid());
         // OI比赛封榜期间不更新，ACM比赛封榜期间可看到自己的提交，但是其它人的不可见
         IPage<JudgeVo> contestJudgeList = judgeEntityService.getContestJudgeList(limit,
                 currentPage,
@@ -399,7 +400,7 @@ public class ContestManager {
                 searchStatus,
                 searchUsername,
                 uid,
-                beforeContestSubmit,
+                isAdmin,
                 rule,
                 contest.getStartTime(),
                 sealRankTime,

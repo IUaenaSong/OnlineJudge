@@ -1,5 +1,5 @@
 <template>
-  <div class="mavonEditor">
+  <div>
     <mavon-editor
       ref="md"
       @imgAdd="$imgAdd"
@@ -10,6 +10,8 @@
       :toolbars="toolbars"
       v-model="currentValue"
       codeStyle="arduino-light"
+      :toolbarsFlag="toolbarsFlag"
+      :style="height != 0 ? 'min-height:' + height + 'px' : ''"
     >
       <template v-slot:left-toolbar-after v-if="isAdminRole">
         <button
@@ -47,6 +49,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    toolbarsFlag: {
+      type: Boolean,
+      default: true,
+    },
+    height: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -137,8 +147,9 @@ export default {
       // 创建form格式的数据，将文件放入form中
       const formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('gid', this.$route.params.groupID);
-
+      if (this.$route.params.groupID) {
+        formdata.append('gid', this.$route.params.groupID);
+      }
       this.$http({
         url: '/api/file/upload-md-file',
         method: 'post',

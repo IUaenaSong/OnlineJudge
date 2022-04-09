@@ -52,12 +52,12 @@ public class JudgeEntityServiceImpl extends ServiceImpl<JudgeMapper, Judge> impl
 
     @Override
     public IPage<JudgeVo> getContestJudgeList(Integer limit, Integer currentPage, String displayId, Long cid, Integer status,
-                                              String username, String uid, Boolean beforeContestSubmit, String rule,
+                                              String username, String uid, Boolean isAdmin, String rule,
                                               Date startTime, Date sealRankTime, String sealTimeUid, Boolean completeProblemID) {
         //新建分页
         Page<JudgeVo> page = new Page<>(currentPage, limit);
 
-        return judgeMapper.getContestJudgeList(page, displayId, cid, status, username, uid, beforeContestSubmit,
+        return judgeMapper.getContestJudgeList(page, displayId, cid, status, username, uid, isAdmin,
                 rule, startTime, sealRankTime, sealTimeUid, completeProblemID);
     }
 

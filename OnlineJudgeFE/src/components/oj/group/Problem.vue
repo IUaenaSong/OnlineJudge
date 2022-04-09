@@ -968,9 +968,6 @@ export default {
         : restaurants;
       cb(results);
     },
-    changeContent(newVal) {
-      this.announcement.content = newVal;
-    },
     getLevelName(difficulty) {
       return utils.getLevelName(difficulty);
     },

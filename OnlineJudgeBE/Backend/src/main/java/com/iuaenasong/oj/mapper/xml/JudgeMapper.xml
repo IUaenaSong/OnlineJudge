@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iuaenasong.oj.mapper.JudgeMapper">
-    <select id="getCommonJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="false">
-        select j.uid,j.submit_id,j.submit_time,j.uid,j.username,j.uid,j.pid,j.status,j.share,
-        j.time,j.memory,j.score,j.oi_rank_score,j.length,j.language,j.cid,j.cpid,j.judger,p.problem_id as display_pid,p.title
-        from judge j,problem p
+    <select id="getCommonJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="true">
+        select j1.*,p.problem_id AS display_pid,p.title from (
+        select j.submit_id,j.submit_time,j.username,j.uid,j.pid,j.status,j.share,
+        j.time,j.memory,j.score,j.oi_rank_score,j.length,j.language,j.cid,j.cpid,j.judger,j.is_public
+        from judge j
         <where>
-            p.id = j.pid AND j.cid = 0 AND j.cpid = 0 AND p.auth = 1 AND (
-            j.is_public = true
+            j.cid = 0 AND j.cpid = 0
+            <if test="username!='' and username!=null">
+                AND j.username like concat('%',#{username},'%')
+            </if>
+            <if test="status!=null">
+                AND j.status = #{status}
+            </if>
+            <if test="uid!=null and uid!=''">
+                AND j.uid = #{uid}
+            </if>
+        </where>
+        ) j1
+        left join problem p
+        on j1.pid = p.id
+        <where>
+            p.auth = 1 AND (
+            j1.is_public
                 <if test="gid != null">
                     or p.gid = #{gid}
                 </if>
@@ -20,35 +36,31 @@
                     AND p.problem_id = #{searchPid}
                 </if>
             </if>
-            <if test="username!='' and username!=null">
-                AND j.username like concat('%',#{username},'%')
-            </if>
-            <if test="status!=null">
-                AND j.status = #{status}
-            </if>
-            <if test="uid!=null and uid!=''">
-                AND j.uid = #{uid}
-            </if>
         </where>
-        order by j.submit_time DESC,j.submit_id DESC
+        order by submit_time DESC,j.submit_id DESC
     </select>
 
-    <select id="getContestJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="false">
-        select j.uid,j.submit_id,j.submit_time,j.uid,j.username,j.uid,cp.display_id,cp.display_title as title,
+    <select id="getContestJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="true">
+        select j.submit_id,j.submit_time,j.uid,j.username,j.uid,cp.display_id,cp.display_title as title,
         j.status,j.share,j.time,j.memory,j.score,j.length,j.language,j.cid,j.cpid,j.judger
-        from judge j,contest_problem cp
+        from judge j right join
+        (
+        select display_title,display_id,cid,pid from contest_problem
         <where>
-            j.pid=cp.pid AND j.cid = cp.cid
-            <if test="cid!=null">
-               AND j.cid = #{cid}
-            </if>
             <if test="displayId!=null and displayId!=''">
                 <if test="completeProblemID != true">
-                    AND cp.display_id like concat('%',#{displayId},'%')
+                    AND display_id like concat('%',#{displayId},'%')
                 </if>
                 <if test="completeProblemID">
-                    AND cp.display_id = #{displayId}
+                    AND display_id = #{displayId}
                 </if>
+            </if>
+        </where>
+        ) cp
+        on j.pid = cp.pid AND j.cid = cp.cid
+        <where>
+            <if test="cid!=null">
+                AND j.cid = #{cid}
             </if>
             <if test="username!='' and username!=null">
                 AND j.username like concat('%',#{username},'%')
@@ -59,10 +71,7 @@
             <if test="uid!=null and uid!=''">
                 AND j.uid = #{uid}
             </if>
-            <if test="beforeContestSubmit!=null and beforeContestSubmit==true">
-                AND #{startTime} > j.submit_time
-            </if>
-            <if test="beforeContestSubmit!=null and beforeContestSubmit==false">
+            <if test="!isAdmin">
                 AND j.submit_time >= #{startTime}
             </if>
             <choose>

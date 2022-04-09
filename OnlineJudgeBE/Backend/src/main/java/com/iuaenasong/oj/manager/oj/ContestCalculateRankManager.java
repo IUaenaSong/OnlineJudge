@@ -150,7 +150,7 @@ public class ContestCalculateRankManager {
 
     private List<ACMContestRankVo> getACMOrderRank(Contest contest, Boolean isOpenSealRank) {
 
-        List<ContestRecordVo> contestRecordList = contestRecordEntityService.getACMContestRecord(contest.getAuthor(), contest.getId());
+        List<ContestRecordVo> contestRecordList = contestRecordEntityService.getACMContestRecord(contest.getUid(), contest.getId());
 
         List<String> superAdminUidList = getSuperAdminUidList();
         superAdminUidList.add(contest.getUid());

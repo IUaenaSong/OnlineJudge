@@ -9,7 +9,6 @@ package com.iuaenasong.oj.pojo.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import com.iuaenasong.oj.pojo.entity.contest.ContestProblem;
 
 import java.util.List;
 
@@ -21,5 +20,5 @@ public class ContestOutsideInfo {
     private ContestVo contest;
 
     @ApiModelProperty(value = "比赛题目信息列表")
-    private List<ContestProblem> problemList;
+    private List<ContestProblemVo> problemList;
 }

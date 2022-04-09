@@ -3,16 +3,17 @@
 <mapper namespace="com.iuaenasong.oj.mapper.ContestProblemMapper">
     <select id="getContestProblemList" resultType="com.iuaenasong.oj.pojo.vo.ContestProblemVo">
         select cp.id,cp.display_id,cp.cid,cp.pid,cp.display_title,cp.color,
-        (select count(*) from judge
+        (select count(*) from contest_record
         <where>
-            cpid=cp.id and cid=cp.cid and pid=cp.pid
-            <if test="adminList!=null and adminList.size>0">
+            cpid=cp.id and cid=cp.cid and pid=cp.pid and status != 1
+            <if test="adminList != null and adminList.size > 0">
                 and uid NOT IN
                 <foreach collection="adminList" index="index" item="item"
                          open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
+
             <choose>
                 <when test="isAdmin">
                     AND submit_time >= #{startTime} AND #{endTime}>submit_time
@@ -25,11 +26,11 @@
                 </otherwise>
             </choose>
         </where>
-        ) as total,
-        (select count(*) from judge
+        ) as error,
+        (select count(distinct uid, cpid) from contest_record
         <where>
-             cpid=cp.id and cid=cp.cid and pid =cp.pid and status=0
-            <if test="adminList!=null and adminList.size>0">
+             cpid=cp.id and cid=cp.cid and pid =cp.pid and status = 1
+            <if test="adminList != null and adminList.size > 0">
                 and uid NOT IN
                 <foreach collection="adminList" index="index" item="item"
                          open="(" separator="," close=")">

@@ -161,8 +161,6 @@
       mode="add"
       :title="title"
       :apiMethod="apiMethod"
-      :contestID="contestID"
-      :pid="pid"
       @handleCreatePage="handleCreatePage"
       @currentChange="currentChange"
     ></Problem>
@@ -190,8 +188,6 @@ export default {
       currentPage: 1,
       limit: 10,
       problemList: [],
-      contestID: null,
-      pid: null,
       title: '',
       apiMethod: '',
       JUDGE_STATUS: {},
@@ -244,6 +240,7 @@ export default {
               for (let index = 0; index < this.problemList.length; index++) {
                 pidList.push(this.problemList[index].pid);
               }
+              this.isGetStatusOk = false;
               api.getUserProblemStatus(pidList, false).then((res) => {
                 let result = res.data.data;
                 for (let index = 0; index < this.problemList.length; index++) {
@@ -303,9 +300,6 @@ export default {
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
-    isContest() {
-      return !(this.routeName == 'GroupProblemList' && !this.contestId);
-    },
   },
 };
 </script>

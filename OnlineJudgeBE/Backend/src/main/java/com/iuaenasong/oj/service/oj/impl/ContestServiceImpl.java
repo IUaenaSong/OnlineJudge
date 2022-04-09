@@ -100,7 +100,6 @@ public class ContestServiceImpl implements ContestService {
                                                                  Integer searchStatus,
                                                                  String searchUsername,
                                                                  Long searchCid,
-                                                                 Boolean beforeContestSubmit,
                                                                  Boolean completeProblemID) {
         try {
             return CommonResult.successResponse(contestManager.getContestSubmissionList(limit,
@@ -110,7 +109,6 @@ public class ContestServiceImpl implements ContestService {
                     searchStatus,
                     searchUsername,
                     searchCid,
-                    beforeContestSubmit,
                     completeProblemID));
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());

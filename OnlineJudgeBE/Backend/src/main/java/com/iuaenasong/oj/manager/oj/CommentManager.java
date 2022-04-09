@@ -83,7 +83,9 @@ public class CommentManager {
 
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
-        Discussion discussion = discussionEntityService.getById(did);
+        QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+        discussionQueryWrapper.select("gid").eq("id", did);
+        Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
         Long gid = null;
         if (discussion != null) {
             gid = discussion.getGid();
@@ -156,7 +158,9 @@ public class CommentManager {
                 }
             }
 
-            Discussion discussion = discussionEntityService.getById(comment.getDid());
+            QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
             if (gid != null) {
@@ -232,7 +236,9 @@ public class CommentManager {
         Long cid = comment.getCid();
 
         if (cid == null) {
-            Discussion discussion = discussionEntityService.getById(comment.getDid());
+            QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
             if (gid == null) {
@@ -329,7 +335,10 @@ public class CommentManager {
 
         Comment comment = commentEntityService.getById(commentId);
 
-        Discussion discussion = discussionEntityService.getById(comment.getDid());
+        QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+        discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+
+        Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
         Long gid = discussion.getGid();
         if (gid != null) {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
@@ -372,7 +381,9 @@ public class CommentManager {
                     throw new StatusForbiddenException("对不起，您暂时不能回复！请先去绑定手机号或提交题目通过10道以上!");
                 }
             }
-            Discussion discussion = discussionEntityService.getById(comment.getDid());
+            QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
             if (gid != null) {

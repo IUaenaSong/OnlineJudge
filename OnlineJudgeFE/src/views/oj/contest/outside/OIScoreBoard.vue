@@ -266,17 +266,11 @@
             <template v-slot:header>
               <el-tooltip effect="dark" placement="top">
                 <div slot="content">
-                    {{ problem.displayId + '. ' + problem.displayTitle }}
-                    <br />
-                    {{
-                    'Accepted: ' +
-                        getProblemCount(problemACCountMap[problem.displayId])
-                    }}
-                    <br />
-                    {{
-                    'Rejected: ' +
-                        getProblemCount(problemErrorCountMap[problem.displayId])
-                    }}
+                  {{ problem.displayId + '. ' + problem.displayTitle }}
+                  <br />
+                  {{ 'Accepted: ' + problem.ac }}
+                  <br />
+                  {{ 'Rejected: ' + problem.error }}
                 </div>
                 <div>
                     <span style="vertical-align: middle;" v-if="problem.color">
@@ -300,7 +294,7 @@
                     <span class="emphasis" style="color:#495060;"
                     >{{ problem.displayId }}
                     <br />
-                    <span>{{ getProblemCount(problemACCountMap[problem.displayId]) }}</span>
+                    <span>{{ problem.ac }}</span>
                     </span>
                 </div>
               </el-tooltip>
@@ -345,8 +339,6 @@ export default {
       CONTEST_STATUS_REVERSE: {},
       CONTEST_TYPE_REVERSE: {},
       RULE_TYPE: {},
-      problemACCountMap: {},
-      problemErrorCountMap: {},
     };
   },
   created() {
@@ -387,8 +379,6 @@ export default {
       });
     },
     applyToTable(dataRank) {
-      let acCountMap = {};
-      let errorCountMap = {};
       dataRank.forEach((rank, i) => {
         let submissionInfo = rank.submissionInfo;
         let timeInfo = rank.timeInfo;
@@ -398,23 +388,13 @@ export default {
         }
         Object.keys(submissionInfo).forEach((problemID) => {
           dataRank[i][problemID] = submissionInfo[problemID];
-          if (!acCountMap[problemID]) {
-            acCountMap[problemID] = 0;
-          }
-          if (!errorCountMap[problemID]) {
-            errorCountMap[problemID] = 0;
-          }
-
           let score = submissionInfo[problemID];
           if (timeInfo != null && timeInfo[problemID] != undefined) {
             cellClass[problemID] = 'oi-100';
-            acCountMap[problemID] += 1;
           } else if (score == 0) {
             cellClass[problemID] = 'oi-0';
-            errorCountMap[problemID] += 1;
           } else if (score != null) {
             cellClass[problemID] = 'oi-between';
-            errorCountMap[problemID] += 1;
           }
         });
         dataRank[i].cellClassName = cellClass;
@@ -426,8 +406,6 @@ export default {
         }
       });
       this.dataRank = dataRank;
-      this.problemACCountMap = acCountMap;
-      this.problemErrorCountMap = errorCountMap;
     },
   },
 };

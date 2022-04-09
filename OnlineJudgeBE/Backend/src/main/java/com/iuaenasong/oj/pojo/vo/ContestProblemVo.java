@@ -39,6 +39,6 @@ public class ContestProblemVo implements Serializable {
     @ApiModelProperty(value = "该题目的ac通过数")
     private Integer ac;
 
-    @ApiModelProperty(value = "该题目的总提交数")
-    private Integer total;
+    @ApiModelProperty(value = "该题目的错误提交数")
+    private Integer error;
 }

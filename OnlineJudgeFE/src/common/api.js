@@ -286,11 +286,17 @@ const ojApi = {
     })
   },
 
-  submissionRejudge (submitId) {
+  submissionRejudge(submitId) {
     return ajax('/api/admin/judge/rejudge', 'get', {
       params: {
         submitId
       }
+    })
+  },
+
+  getQuestion(questionId) {
+    return ajax("/api/get-question-detail", 'get', {
+      params: { questionId }
     })
   },
 
@@ -865,6 +871,49 @@ const ojApi = {
   changeGroupProblemAuth(pid, auth) {
     return ajax("/api/group/change-problem-auth", 'put', {
       params: { pid, auth }
+    })
+  },
+
+  // Group Question
+  getGroupQuestionList(currentPage, limit, type, gid) {
+    return ajax('/api/group/get-question-list', 'get', {
+      params: { currentPage, limit, type, gid }
+    })
+  },
+
+  getGroupAdminQuestionList(currentPage, limit, type, gid){
+    return ajax('/api/group/get-admin-question-list', 'get', {
+      params: { currentPage, limit, type, gid }
+    })
+  },
+
+  getGroupQuestion(qid) {
+    return ajax("/api/group/question", 'get', {
+      params: { qid }
+    })
+  },
+
+  addGroupQuestion(data) {
+    return ajax("/api/group/question", 'post', {
+      data: data
+    })
+  },
+
+  updateGroupQuestion(data) {
+    return ajax("/api/group/question", 'put', {
+      data
+    })
+  },
+
+  deleteGroupQuestion(qid) {
+    return ajax("/api/group/question", 'delete', {
+      params: { qid }
+    })
+  },
+
+  changeGroupQuestionAuth(qid, auth) {
+    return ajax("/api/group/change-question-auth", 'put', {
+      params: { qid, auth }
     })
   },
 

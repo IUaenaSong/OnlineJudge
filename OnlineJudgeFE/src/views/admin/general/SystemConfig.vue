@@ -332,7 +332,7 @@
               >
                 <el-input
                   type="number"
-                  v-model="databaseConfig.dbPost"
+                  v-model="databaseConfig.Port"
                   :placeholder="'MySQL ' + $t('m.Port')"
                 ></el-input>
               </el-form-item>

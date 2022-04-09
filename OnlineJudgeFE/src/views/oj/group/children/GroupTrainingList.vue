@@ -19,7 +19,7 @@
             size="small"
             @click="handleEditPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+          >{{ $t('m.Back') }}</el-button>
           <el-button
             :type="adminPage ? 'warning' : 'success'"
             size="small"

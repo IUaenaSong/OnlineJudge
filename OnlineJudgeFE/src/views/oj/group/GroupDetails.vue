@@ -14,6 +14,11 @@
                 <i class="fa fa-list"></i>&nbsp;{{ $t('m.Group_Problem') }}
               </span>
             </el-tab-pane>
+            <el-tab-pane lazy name="GroupQuestionList" :disabled="groupMenuDisabled">
+              <span slot="label">
+                <i class="el-icon-s-order"></i>&nbsp;{{ $t('m.Group_Question') }}
+              </span>
+            </el-tab-pane>
             <el-tab-pane lazy name="GroupTrainingList" :disabled="groupMenuDisabled">
               <span slot="label">
                 <i class="el-icon-s-flag"></i>&nbsp;{{ $t('m.Group_Training') }}
@@ -93,9 +98,16 @@
               <span>
                 <span>{{ $t('m.Group_Name') }}</span>
               </span>
-              <span>
-                <span>{{ group.name }}</span>
-              </span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="group.name"
+                placement="top"
+              >
+                <span class="group-name">
+                  <span>{{ group.name }}</span>
+                </span>
+              </el-tooltip>
             </div>
             <div>
               <span>
@@ -116,6 +128,7 @@
               </span>
               <span>
                 <el-tooltip
+                  v-if="group.auth != null && group.auth != undefined"
                   :content="$t('m.' + GROUP_TYPE_REVERSE[group.auth].tips)"
                 >
                   <el-tag
@@ -300,6 +313,9 @@ export default {
   },
   created() {
     this.route_name = this.$route.name;
+    if (this.route_name === 'GroupQuestionDetails') {
+      this.route_name = 'GroupQuestionList'
+    }
     this.GROUP_TYPE = Object.assign({}, GROUP_TYPE);
     this.GROUP_TYPE_REVERSE = Object.assign({}, GROUP_TYPE_REVERSE);
     this.$store.dispatch('getGroup').then((res) => {
@@ -409,6 +425,9 @@ export default {
   watch: {
     $route(newVal) {
       this.route_name = newVal.name;
+      if (this.route_name === 'GroupQuestionDetails') {
+        this.route_name = 'GroupQuestionList'
+      }
       this.changeDomTitle({ title: this.group.name });
     },
   },
@@ -476,6 +495,12 @@ export default {
 }
 .info-rows > :last-child {
   margin-bottom: 0;
+}
+.group-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 15px;
 }
 .group-button {
   text-align: center;

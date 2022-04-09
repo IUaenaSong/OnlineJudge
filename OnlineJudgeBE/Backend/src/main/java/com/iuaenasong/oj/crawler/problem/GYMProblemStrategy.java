@@ -96,6 +96,7 @@ public class GYMProblemStrategy extends CFProblemStrategy {
                 .setAuthor(author)
                 .setOpenCaseResult(false)
                 .setIsRemoveEndBlank(false)
+                .setIsPublic(true)
                 .setDifficulty(1); // 默认为中等
         return new RemoteProblemInfo()
                 .setProblem(problem)

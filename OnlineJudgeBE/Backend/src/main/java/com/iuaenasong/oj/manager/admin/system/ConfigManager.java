@@ -8,7 +8,6 @@ package com.iuaenasong.oj.manager.admin.system;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Validator;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.UnicodeUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -16,6 +15,7 @@ import cn.hutool.system.oshi.OshiUtil;
 import com.iuaenasong.oj.manager.mobile.MobileManager;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.iuaenasong.oj.pojo.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -127,16 +127,19 @@ public class ConfigManager {
         return serviceInfoList;
     }
 
-    public Map<Object, Object> getWebConfig() {
-        return MapUtil.builder().put("baseUrl", UnicodeUtil.toString(configVo.getBaseUrl()))
-                .put("name", UnicodeUtil.toString(configVo.getName()))
-                .put("shortName", UnicodeUtil.toString(configVo.getShortName()))
-                .put("description", UnicodeUtil.toString(configVo.getDescription()))
-                .put("register", configVo.getRegister())
-                .put("recordName", UnicodeUtil.toString(configVo.getRecordName()))
-                .put("recordUrl", UnicodeUtil.toString(configVo.getRecordUrl()))
-                .put("projectName", UnicodeUtil.toString(configVo.getProjectName()))
-                .put("projectUrl", UnicodeUtil.toString(configVo.getProjectUrl())).map();
+    public WebConfigDto getWebConfig() {
+
+        return WebConfigDto.builder()
+                .baseUrl(UnicodeUtil.toString(configVo.getBaseUrl()))
+                .name(UnicodeUtil.toString(configVo.getName()))
+                .shortName(UnicodeUtil.toString(configVo.getShortName()))
+                .description(UnicodeUtil.toString(configVo.getDescription()))
+                .register(configVo.getRegister())
+                .recordName(UnicodeUtil.toString(configVo.getRecordName()))
+                .recordUrl(UnicodeUtil.toString(configVo.getRecordUrl()))
+                .projectName(UnicodeUtil.toString(configVo.getProjectName()))
+                .projectUrl(UnicodeUtil.toString(configVo.getProjectUrl()))
+                .build();
     }
 
     public void deleteHomeCarousel(Long id) throws StatusFailException {
@@ -153,34 +156,34 @@ public class ConfigManager {
         }
     }
 
-    public void setWebConfig(HashMap<String, Object> params) throws StatusFailException {
+    public void setWebConfig(WebConfigDto webConfigDto) throws StatusFailException {
 
-        if (!StringUtils.isEmpty(params.get("baseUrl"))) {
-            configVo.setBaseUrl((String) params.get("baseUrl"));
+        if (!StringUtils.isEmpty(webConfigDto.getBaseUrl())) {
+            configVo.setBaseUrl(webConfigDto.getBaseUrl());
         }
-        if (!StringUtils.isEmpty(params.get("name"))) {
-            configVo.setName((String) params.get("name"));
+        if (!StringUtils.isEmpty(webConfigDto.getName())) {
+            configVo.setName(webConfigDto.getName());
         }
-        if (!StringUtils.isEmpty(params.get("shortName"))) {
-            configVo.setShortName((String) params.get("shortName"));
+        if (!StringUtils.isEmpty(webConfigDto.getShortName())) {
+            configVo.setShortName(webConfigDto.getShortName());
         }
-        if (!StringUtils.isEmpty(params.get("description"))) {
-            configVo.setDescription((String) params.get("description"));
+        if (!StringUtils.isEmpty(webConfigDto.getDescription())) {
+            configVo.setDescription(webConfigDto.getDescription());
         }
-        if (params.get("register") != null) {
-            configVo.setRegister((Boolean) params.get("register"));
+        if (webConfigDto.getRegister() != null) {
+            configVo.setRegister(webConfigDto.getRegister());
         }
-        if (!StringUtils.isEmpty(params.get("recordName"))) {
-            configVo.setRecordName((String) params.get("recordName"));
+        if (!StringUtils.isEmpty(webConfigDto.getRecordName())) {
+            configVo.setRecordName(webConfigDto.getRecordName());
         }
-        if (!StringUtils.isEmpty(params.get("recordUrl"))) {
-            configVo.setRecordUrl((String) params.get("recordUrl"));
+        if (!StringUtils.isEmpty(webConfigDto.getRecordUrl())) {
+            configVo.setRecordUrl(webConfigDto.getRecordUrl());
         }
-        if (!StringUtils.isEmpty(params.get("projectName"))) {
-            configVo.setProjectName((String) params.get("projectName"));
+        if (!StringUtils.isEmpty(webConfigDto.getProjectName())) {
+            configVo.setProjectName(webConfigDto.getProjectName());
         }
-        if (!StringUtils.isEmpty(params.get("projectUrl"))) {
-            configVo.setProjectUrl((String) params.get("projectUrl"));
+        if (!StringUtils.isEmpty(webConfigDto.getProjectUrl())) {
+            configVo.setProjectUrl(webConfigDto.getProjectUrl());
         }
         boolean isOk = sendNewConfigToNacos();
         if (!isOk) {
@@ -188,37 +191,36 @@ public class ConfigManager {
         }
     }
 
-    public Map<Object, Object> getEmailConfig() {
-        return MapUtil.builder().put("emailUsername", configVo.getEmailUsername())
-                .put("emailPassword", configVo.getEmailPassword())
-                .put("emailHost", configVo.getEmailHost())
-                .put("emailPort", configVo.getEmailPort())
-                .put("emailBGImg", configVo.getEmailBGImg())
-                .put("emailSsl", configVo.getEmailSsl()).map();
+    public EmailConfigDto getEmailConfig() {
+        return EmailConfigDto.builder()
+                .emailUsername(configVo.getEmailUsername())
+                .emailPassword(configVo.getEmailPassword())
+                .emailHost(configVo.getEmailHost())
+                .emailPort(configVo.getEmailPort())
+                .emailBGImg(configVo.getEmailBGImg())
+                .emailSsl(configVo.getEmailSsl())
+                .build();
     }
 
-    public void setEmailConfig(HashMap<String, Object> params) throws StatusFailException {
+    public void setEmailConfig(EmailConfigDto emailConfigDto) throws StatusFailException {
 
-        if (!StringUtils.isEmpty(params.get("emailHost"))) {
-            configVo.setEmailHost((String) params.get("emailHost"));
+        if (!StringUtils.isEmpty(emailConfigDto.getEmailHost())) {
+            configVo.setEmailHost(emailConfigDto.getEmailHost());
         }
-        if (!StringUtils.isEmpty(params.get("emailPassword"))) {
-            configVo.setEmailPassword((String) params.get("emailPassword"));
+        if (!StringUtils.isEmpty(emailConfigDto.getEmailPassword())) {
+            configVo.setEmailPassword(emailConfigDto.getEmailPassword());
         }
-        if (!StringUtils.isEmpty(params.get("emailPort"))) {
-            configVo.setEmailPort((Integer) params.get("emailPort"));
+        if (emailConfigDto.getEmailPort() != null) {
+            configVo.setEmailPort(emailConfigDto.getEmailPort());
         }
-
-        if (!StringUtils.isEmpty(params.get("emailUsername"))) {
-            configVo.setEmailUsername((String) params.get("emailUsername"));
+        if (!StringUtils.isEmpty(emailConfigDto.getEmailUsername())) {
+            configVo.setEmailUsername(emailConfigDto.getEmailUsername());
         }
-
-        if (!StringUtils.isEmpty(params.get("emailBGImg"))) {
-            configVo.setEmailBGImg((String) params.get("emailBGImg"));
+        if (!StringUtils.isEmpty(emailConfigDto.getEmailBGImg())) {
+            configVo.setEmailBGImg(emailConfigDto.getEmailBGImg());
         }
-
-        if (params.get("emailSsl") != null) {
-            configVo.setEmailSsl((Boolean) params.get("emailSsl"));
+        if (emailConfigDto.getEmailSsl() != null) {
+            configVo.setEmailSsl(emailConfigDto.getEmailSsl());
         }
         boolean isOk = sendNewConfigToNacos();
         if (!isOk) {
@@ -226,8 +228,11 @@ public class ConfigManager {
         }
     }
 
-    public void testEmail(HashMap<String, Object> params) throws StatusFailException {
-        String email = (String) params.get("email");
+    public void testEmail(TestEmailDto testEmailDto) throws StatusFailException {
+        String email = testEmailDto.getEmail();
+        if (StringUtils.isEmpty(email)) {
+            throw new StatusFailException("测试的邮箱不能为空！");
+        }
         boolean isEmail = Validator.isEmail(email);
         if (isEmail) {
             emailManager.testEmail(email);
@@ -236,37 +241,36 @@ public class ConfigManager {
         }
     }
 
-        public Map<Object, Object> getMobileConfig() {
-        return MapUtil.builder().put("mobileDomain", configVo.getMobileDomain())
-                .put("mobileRegionId", configVo.getMobileRegionId())
-                .put("mobileAccessKeyId", configVo.getMobileAccessKeyId())
-                .put("mobileSecret", configVo.getMobileSecret())
-                .put("mobileSignName", configVo.getMobileSignName())
-                .put("mobileTemplateCode", configVo.getMobileTemplateCode()).map();
+    public MobileConfigDto getMobileConfig() {
+        return MobileConfigDto.builder()
+                .mobileDomain(configVo.getMobileDomain())
+                .mobileRegionId(configVo.getMobileRegionId())
+                .mobileAccessKeyId(configVo.getMobileAccessKeyId())
+                .mobileSecret(configVo.getMobileSecret())
+                .mobileSignName(configVo.getMobileSignName())
+                .mobileTemplateCode(configVo.getMobileTemplateCode())
+                .build();
     }
 
-    public void setMobileConfig(HashMap<String, Object> params) throws StatusFailException {
+    public void setMobileConfig(MobileConfigDto mobileConfigDto) throws StatusFailException {
 
-        if (!StringUtils.isEmpty(params.get("mobileDomain"))) {
-            configVo.setMobileDomain((String) params.get("mobileDomain"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileDomain())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileDomain());
         }
-        if (!StringUtils.isEmpty(params.get("mobileRegionId"))) {
-            configVo.setMobileRegionId((String) params.get("mobileRegionId"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileRegionId())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileRegionId());
         }
-        if (!StringUtils.isEmpty(params.get("mobileAccessKeyId"))) {
-            configVo.setMobileAccessKeyId((String) params.get("mobileAccessKeyId"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileAccessKeyId())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileAccessKeyId());
         }
-
-        if (!StringUtils.isEmpty(params.get("mobileSecret"))) {
-            configVo.setMobileSecret((String) params.get("mobileSecret"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileSecret())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileSecret());
         }
-
-        if (!StringUtils.isEmpty(params.get("mobileSignName"))) {
-            configVo.setMobileSignName((String) params.get("mobileSignName"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileSignName())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileSignName());
         }
-
-        if (!StringUtils.isEmpty(params.get("mobileTemplateCode"))) {
-            configVo.setMobileTemplateCode((String) params.get("mobileTemplateCode"));
+        if (!StringUtils.isEmpty(mobileConfigDto.getMobileTemplateCode())) {
+            configVo.setMobileDomain(mobileConfigDto.getMobileTemplateCode());
         }
         boolean isOk = sendNewConfigToNacos();
         if (!isOk) {
@@ -274,8 +278,11 @@ public class ConfigManager {
         }
     }
 
-    public void testMobile(HashMap<String, Object> params) throws StatusFailException {
-        String mobile = (String) params.get("mobile");
+    public void testMobile(TestMobileDto testMobileDto) throws StatusFailException {
+        String mobile = testMobileDto.getMobile();
+        if (StringUtils.isEmpty(mobile)) {
+            throw new StatusFailException("测试的手机号不能为空！");
+        }
         boolean isMobile = Validator.isMobile(mobile);
         if (isMobile) {
             mobileManager.testMobile(mobile);
@@ -284,46 +291,45 @@ public class ConfigManager {
         }
     }
 
-    public Map<Object, Object> getDBAndRedisConfig() {
-        return MapUtil.builder().put("dbName", configVo.getMysqlDBName())
-                .put("dbHost", configVo.getMysqlHost())
-                .put("dbPost", configVo.getMysqlPort())
-                .put("dbUsername", configVo.getMysqlUsername())
-                .put("dbPassword", configVo.getMysqlPassword())
-                .put("redisHost", configVo.getRedisHost())
-                .put("redisPort", configVo.getRedisPort())
-                .put("redisPassword", configVo.getRedisPassword())
-                .map();
+    public DBAndRedisConfigDto getDBAndRedisConfig() {
+        return DBAndRedisConfigDto.builder()
+                .dbName(configVo.getMysqlDBName())
+                .dbHost(configVo.getMysqlHost())
+                .dbPort(configVo.getMysqlPort())
+                .dbUsername(configVo.getMysqlUsername())
+                .dbPassword(configVo.getMysqlPassword())
+                .redisHost(configVo.getRedisHost())
+                .redisPort(configVo.getRedisPort())
+                .redisPassword(configVo.getRedisPassword())
+                .build();
     }
 
-    public void setDBAndRedisConfig(HashMap<String, Object> params) throws StatusFailException {
-
-        if (!StringUtils.isEmpty(params.get("dbName"))) {
-            configVo.setMysqlDBName((String) params.get("dbName"));
+    public void setDBAndRedisConfig(DBAndRedisConfigDto dbAndRedisConfigDto) throws StatusFailException {
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getDbName())) {
+            configVo.setMysqlDBName(dbAndRedisConfigDto.getDbName());
         }
-        if (!StringUtils.isEmpty(params.get("dbName"))) {
-            configVo.setMysqlHost((String) params.get("dbHost"));
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getDbHost())) {
+            configVo.setMysqlHost(dbAndRedisConfigDto.getDbHost());
         }
-        if (params.get("dbPort") != null) {
-            configVo.setMysqlPort((Integer) params.get("dbPort"));
+        if (dbAndRedisConfigDto.getDbPort() != null) {
+            configVo.setMysqlPort(dbAndRedisConfigDto.getDbPort());
         }
-        if (!StringUtils.isEmpty(params.get("dbUsername"))) {
-            configVo.setMysqlUsername((String) params.get("dbUsername"));
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getDbUsername())) {
+            configVo.setMysqlUsername(dbAndRedisConfigDto.getDbUsername());
         }
-        if (!StringUtils.isEmpty(params.get("dbPassword"))) {
-            configVo.setMysqlPassword((String) params.get("dbPassword"));
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getDbPassword())) {
+            configVo.setMysqlPassword(dbAndRedisConfigDto.getDbPassword());
         }
-        if (!StringUtils.isEmpty(params.get("redisHost"))) {
-            configVo.setRedisHost((String) params.get("redisHost"));
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getRedisHost())) {
+            configVo.setRedisHost(dbAndRedisConfigDto.getRedisHost());
         }
-        if (params.get("redisPort") != null) {
-            configVo.setRedisPort((Integer) params.get("redisPort"));
+        if (dbAndRedisConfigDto.getRedisPort() != null) {
+            configVo.setRedisPort(dbAndRedisConfigDto.getRedisPort());
         }
-        if (params.get("redisPassword") != null) {
-            configVo.setRedisPassword((String) params.get("redisPassword"));
+        if (!StringUtils.isEmpty(dbAndRedisConfigDto.getRedisPassword())) {
+            configVo.setRedisPassword(dbAndRedisConfigDto.getRedisPassword());
         }
         boolean isOk = sendNewConfigToNacos();
-
         if (!isOk) {
             throw new StatusFailException("修改失败");
         }

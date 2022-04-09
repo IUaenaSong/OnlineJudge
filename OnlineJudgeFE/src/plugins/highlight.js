@@ -11,7 +11,7 @@ Vue.use({
           if (binding.value) {
             target.textContent = binding.value.replace(/\t/g,"    ");
           }
-          hljs.highlightBlock(target)
+          hljs.highlightElement(target)
         })
       },
       componentUpdated: function (el, binding) {
@@ -19,7 +19,7 @@ Vue.use({
           if (binding.value) {
             target.textContent = binding.value.replace(/\t/g,"    ");
           }
-          hljs.highlightBlock(target)
+          hljs.highlightElement(target)
         })
       }
     })

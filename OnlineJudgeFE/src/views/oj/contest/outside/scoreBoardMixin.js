@@ -74,9 +74,6 @@ export default {
         return time.secondFormat(this.contest.duration);
       }
     },
-    getProblemCount(num){
-      return num == undefined? 0 : num
-    },
     updateConcernedList(uid,isConcerned){
       if(isConcerned){
         this.concernedList.push(uid);

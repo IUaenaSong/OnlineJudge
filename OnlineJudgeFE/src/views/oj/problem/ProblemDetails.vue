@@ -1,8 +1,8 @@
 <template>
-  <div :class="bodyClass">
+  <div>
     <el-row class="problem-box">
       <el-col :sm="24" :md="24" :lg="12" class="problem-left" style="margin-top: 10px; margin-bottom: 10px;">
-        <el-card body-style="padding: 0" shadow>
+        <el-card :body-style="{ padding: 0 }" shadow>
           <el-tabs
             v-model="activeName"
             type="border-card"
@@ -747,7 +747,6 @@ export default {
       mySubmission_currentPage: 1,
       mySubmissions: [],
       loading: false,
-      bodyClass: '',
       userExtraFile: null,
       fileContent: '',
       fileName: '',
@@ -784,9 +783,6 @@ export default {
     this.JUDGE_STATUS = Object.assign({}, JUDGE_STATUS);
     this.PROBLEM_LEVEL = Object.assign({}, PROBLEM_LEVEL);
     this.RULE_TYPE = Object.assign({}, RULE_TYPE);
-    if (this.$route.name === 'ProblemDetails') {
-      this.bodyClass = 'problem-body';
-    }
   },
   mounted() {
     this.init();
@@ -808,13 +804,6 @@ export default {
         limit: this.mySubmission_limit,
         gid: this.groupID
       };
-      if (this.contestID) {
-        if (this.contestStatus == CONTEST_STATUS.SCHEDULED) {
-          params.beforeContestSubmit = true;
-        } else {
-          params.beforeContestSubmit = false;
-        }
-      }
       let func = this.contestID
         ? 'getContestSubmissionList'
         : 'getSubmissionList';
@@ -1438,13 +1427,11 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
 .katex .katex-mathml {
   display: none;
 }
-</style>
-
-<style scoped>
 .problem-menu {
   float: left;
 }
@@ -1462,7 +1449,6 @@ a {
   color: #909399 !important;
 }
 .question-intr {
-  margin-top: 30px;
   border-radius: 4px;
   border: 1px solid #ddd;
   border-left: 2px solid #3498db;
@@ -1698,7 +1684,6 @@ p.content {
   height: 350px;
 }
 #pieChart-detail {
-  
   height: 350px;
 }
 </style>

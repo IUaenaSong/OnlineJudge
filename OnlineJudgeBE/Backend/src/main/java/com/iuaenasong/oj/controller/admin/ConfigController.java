@@ -7,6 +7,7 @@
 package com.iuaenasong.oj.controller.admin;
 
 import cn.hutool.json.JSONObject;
+import com.iuaenasong.oj.pojo.dto.*;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -16,9 +17,7 @@ import com.iuaenasong.oj.common.result.CommonResult;
 import com.iuaenasong.oj.service.admin.system.ConfigService;
 
 import javax.mail.MessagingException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/config")
@@ -42,7 +41,7 @@ public class ConfigController {
 
     @RequiresPermissions("system_info_admin")
     @RequestMapping("/get-web-config")
-    public CommonResult<Map<Object,Object>> getWebConfig() {
+    public CommonResult<WebConfigDto> getWebConfig() {
         return configService.getWebConfig();
     }
 
@@ -55,64 +54,64 @@ public class ConfigController {
 
     @RequiresPermissions("system_info_admin")
     @RequestMapping(value = "/set-web-config", method = RequestMethod.PUT)
-    public CommonResult<Void> setWebConfig(@RequestBody HashMap<String, Object> params) {
+    public CommonResult<Void> setWebConfig(@RequestBody WebConfigDto webConfigDto) {
 
-        return configService.setWebConfig(params);
+        return configService.setWebConfig(webConfigDto);
     }
 
     @RequiresPermissions("system_info_admin")
     @RequestMapping("/get-email-config")
-    public CommonResult<Map<Object,Object>> getEmailConfig() {
+    public CommonResult<EmailConfigDto> getEmailConfig() {
 
         return configService.getEmailConfig();
     }
 
     @RequiresPermissions("system_info_admin")
     @PutMapping("/set-email-config")
-    public CommonResult<Void> setEmailConfig(@RequestBody HashMap<String, Object> params) {
+    public CommonResult<Void> setEmailConfig(@RequestBody EmailConfigDto emailConfigDto) {
 
-        return configService.setEmailConfig(params);
+        return configService.setEmailConfig(emailConfigDto);
     }
 
     @RequiresPermissions("system_info_admin")
     @PostMapping("/test-email")
-    public CommonResult<Void> testEmail(@RequestBody HashMap<String, Object> params) throws MessagingException {
+    public CommonResult<Void> testEmail(@RequestBody TestEmailDto testEmailDto) throws MessagingException {
 
-        return configService.testEmail(params);
+        return configService.testEmail(testEmailDto);
     }
 
     @RequiresPermissions("system_info_admin")
     @RequestMapping("/get-mobile-config")
-    public CommonResult<Map<Object,Object>> getMobileConfig() {
+    public CommonResult<MobileConfigDto> getMobileConfig() {
 
         return configService.getMobileConfig();
     }
 
     @RequiresPermissions("system_info_admin")
     @PutMapping("/set-mobile-config")
-    public CommonResult<Void> setMobileConfig(@RequestBody HashMap<String, Object> params) {
+    public CommonResult<Void> setMobileConfig(@RequestBody MobileConfigDto mobileConfigDto) {
 
-        return configService.setMobileConfig(params);
+        return configService.setMobileConfig(mobileConfigDto);
     }
 
     @RequiresPermissions("system_info_admin")
     @PostMapping("/test-mobile")
-    public CommonResult<Void> testMobile(@RequestBody HashMap<String, Object> params) throws MessagingException {
+    public CommonResult<Void> testMobile(@RequestBody TestMobileDto testMobileDto) throws MessagingException {
 
-        return configService.testMobile(params);
+        return configService.testMobile(testMobileDto);
     }
 
     @RequiresPermissions("system_info_admin")
     @RequestMapping("/get-db-and-redis-config")
-    public CommonResult<Map<Object,Object>> getDBAndRedisConfig() {
+    public CommonResult<DBAndRedisConfigDto> getDBAndRedisConfig() {
 
         return configService.getDBAndRedisConfig();
     }
 
     @RequiresPermissions("system_info_admin")
     @PutMapping("/set-db-and-redis-config")
-    public CommonResult<Void> setDBAndRedisConfig(@RequestBody HashMap<String, Object> params) {
-        return configService.setDBAndRedisConfig(params);
+    public CommonResult<Void> setDBAndRedisConfig(@RequestBody DBAndRedisConfigDto dbAndRedisConfigDto) {
+        return configService.setDBAndRedisConfig(dbAndRedisConfigDto);
     }
 
 }

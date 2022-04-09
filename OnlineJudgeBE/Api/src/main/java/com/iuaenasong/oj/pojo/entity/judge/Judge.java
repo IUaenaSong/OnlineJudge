@@ -105,6 +105,9 @@ public class Judge implements Serializable {
     @ApiModelProperty(value = "是否公开")
     private Boolean isPublic;
 
+    @ApiModelProperty(value = "团队id")
+    private Long gid;
+
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 

@@ -111,12 +111,12 @@
                 
               >
                 <div slot="header" style="height: 24px">
-                  <a class="group-name" @click="toGroup(group.id)">{{
-                    group.name
-                  }}</a>
+                  <a class="group-name" @click="toGroup(group.id)">
+                    <Marquee :val="group.name" :id="group.id"></Marquee>
+                  </a>
                 </div>
-                <div style="height: 86px">
-                  <span style="font-size: 14px; padding: 10px">{{ group.brief }}</span>
+                <div class="group-brief">
+                  <span>{{ group.brief }}</span>
                 </div>
                 <el-divider></el-divider>
                 <div style="font-size: 16px; padding: 3.5px">
@@ -244,7 +244,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :md="8" :xs="24">
+          <el-col :md="8" :xs="24" v-if="group.auth == 2 || group.auth == 3">
             <el-form-item :label="$t('m.Group_Code')" required prop="code">
               <el-input
                 v-model="group.code"
@@ -284,7 +284,7 @@
           $t('m.OK')
         }}</el-button>
       </span>
-      </el-dialog>
+    </el-dialog>
   </el-row>
 </template>
 
@@ -294,13 +294,15 @@ import api from '@/common/api';
 import Avatar from 'vue-avatar';
 import { mapGetters } from 'vuex';
 import Pagination from '@/components/oj/common/Pagination';
-import Editor from '@/components/admin/Editor.vue';
+import Editor from '@/components/admin/Editor';
+import Marquee from '@/components/oj/common/Marquee'
 export default {
   name: 'GroupList',
   components: {
     Avatar,
     Pagination,
-    Editor
+    Editor,
+    Marquee
   },
   data() {
     return {
@@ -447,9 +449,9 @@ export default {
         query: this.query,
       });
     },
-    getGroupList(page = 1) {
+    getGroupList() {
       this.loading = true;
-      api.getGroupList(page, this.limit, this.query).then(
+      api.getGroupList(this.currentPage, this.limit, this.query).then(
         (res) => {
           this.groupList = res.data.data.records;
           this.total = res.data.data.total;
@@ -616,7 +618,15 @@ section {
 .Private .group-name {
   color: rgb(245,108,108);
 }
-
+.group-brief {
+  height: 86px;
+  font-size: 14px;
+  padding: 0 10px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
 .group-auth {
   margin-left: 3px;
   margin-top: -1px;

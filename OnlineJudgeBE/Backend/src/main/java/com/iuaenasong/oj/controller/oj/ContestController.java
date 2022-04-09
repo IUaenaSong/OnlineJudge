@@ -86,7 +86,6 @@ public class ContestController {
                                                                  @RequestParam(value = "status", required = false) Integer searchStatus,
                                                                  @RequestParam(value = "username", required = false) String searchUsername,
                                                                  @RequestParam(value = "contestID", required = true) Long searchCid,
-                                                                 @RequestParam(value = "beforeContestSubmit", required = true) Boolean beforeContestSubmit,
                                                                  @RequestParam(value = "completeProblemID", defaultValue = "false") Boolean completeProblemID) {
 
         return contestService.getContestSubmissionList(limit,
@@ -96,7 +95,6 @@ public class ContestController {
                 searchStatus,
                 searchUsername,
                 searchCid,
-                beforeContestSubmit,
                 completeProblemID);
     }
 

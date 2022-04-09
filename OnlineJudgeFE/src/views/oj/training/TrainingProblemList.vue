@@ -153,6 +153,7 @@ export default {
             for (let index = 0; index < this.problemList.length; index++) {
               pidList.push(this.problemList[index].pid);
             }
+            this.isGetStatusOk = false;
             api.getUserProblemStatus(pidList, false).then((res) => {
               let result = res.data.data;
               for (let index = 0; index < this.problemList.length; index++) {

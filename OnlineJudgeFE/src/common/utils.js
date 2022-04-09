@@ -169,6 +169,28 @@ function getLevelName(difficulty) {
   }
 }
 
+function stringToChoices(value){
+  let reg = "<content>([\\s\\S]*?)</content><status>([\\s\\S]*?)</status>";
+  let re = RegExp(reg,"g");
+  let objList = []
+  let tmp;
+  while(tmp=re.exec(value)){
+    objList.push({ content: tmp[1], status:tmp[2] == "true" ? true : false })
+  }
+  return objList
+}
+
+function choicesToString(objList){
+  if(objList.length == 0){
+    return "";
+  }
+  let result=""
+  for(let obj of objList){
+    result+= "<content>"+obj.content+"</content><status>"+obj.status+"</status>"
+  }
+  return result
+}
+
 export default {
   submissionMemoryFormat: submissionMemoryFormat,
   submissionTimeFormat: submissionTimeFormat,
@@ -182,5 +204,7 @@ export default {
   stringToExamples:stringToExamples,
   examplesToString:examplesToString,
   getLevelColor:getLevelColor,
-  getLevelName:getLevelName
+  getLevelName:getLevelName,
+  stringToChoices:stringToChoices,
+  choicesToString:choicesToString
 }

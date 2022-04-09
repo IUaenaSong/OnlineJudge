@@ -7,6 +7,7 @@
 package com.iuaenasong.oj.service.file.impl;
 
 import com.iuaenasong.oj.common.exception.StatusForbiddenException;
+import com.iuaenasong.oj.pojo.entity.group.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.iuaenasong.oj.common.exception.StatusFailException;
@@ -37,7 +38,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public CommonResult<Map<Object, Object>> uploadGroupAvatar(MultipartFile image, Long gid) {
+    public CommonResult<Group> uploadGroupAvatar(MultipartFile image, Long gid) {
         try {
             return CommonResult.successResponse(imageManager.uploadGroupAvatar(image, gid));
         } catch (StatusFailException e) {

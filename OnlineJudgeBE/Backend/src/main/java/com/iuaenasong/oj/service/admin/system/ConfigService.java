@@ -8,10 +8,9 @@ package com.iuaenasong.oj.service.admin.system;
 
 import cn.hutool.json.JSONObject;
 import com.iuaenasong.oj.common.result.CommonResult;
+import com.iuaenasong.oj.pojo.dto.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public interface ConfigService {
 
@@ -21,24 +20,24 @@ public interface ConfigService {
 
     public CommonResult<Void> deleteHomeCarousel(Long id);
 
-    public CommonResult<Map<Object,Object>> getWebConfig();
+    public CommonResult<WebConfigDto> getWebConfig();
 
-    public CommonResult<Void> setWebConfig(HashMap<String, Object> params);
+    public CommonResult<Void> setWebConfig(WebConfigDto webConfigDto);
 
-    public CommonResult<Map<Object,Object>> getEmailConfig();
+    public CommonResult<EmailConfigDto> getEmailConfig();
 
-    public CommonResult<Void> setEmailConfig(HashMap<String, Object> params);
+    public CommonResult<Void> setEmailConfig(EmailConfigDto emailConfigDto);
 
-    public CommonResult<Void> testEmail(HashMap<String, Object> params);
+    public CommonResult<Void> testEmail(TestEmailDto testEmailDto);
 
-    public CommonResult<Map<Object,Object>> getMobileConfig();
+    public CommonResult<MobileConfigDto> getMobileConfig();
 
-    public CommonResult<Void> setMobileConfig(HashMap<String, Object> params);
+    public CommonResult<Void> setMobileConfig(MobileConfigDto mobileConfigDto);
 
-    public CommonResult<Void> testMobile(HashMap<String, Object> params);
+    public CommonResult<Void> testMobile(TestMobileDto testMobileDto);
 
-    public CommonResult<Map<Object,Object>> getDBAndRedisConfig();
+    public CommonResult<DBAndRedisConfigDto> getDBAndRedisConfig();
 
-    public CommonResult<Void> setDBAndRedisConfig(HashMap<String, Object> params);
+    public CommonResult<Void> setDBAndRedisConfig(DBAndRedisConfigDto dbAndRedisConfigDto);
 
 }

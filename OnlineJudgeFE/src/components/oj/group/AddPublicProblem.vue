@@ -60,11 +60,11 @@ export default {
       type: String,
       default: 'getGroupTrainingProblemList'
     },
-    trainingId: {
+    trainingID: {
       type: Number,
       default: null
     },
-    contestId: {
+    contestID: {
       type: Number,
       default: null
     },
@@ -81,13 +81,13 @@ export default {
     };
   },
   mounted() {
-    if (this.contestId) {
-      api.getGroupContest(this.contestId).then((res) => {
+    if (this.contestID) {
+      api.getGroupContest(this.contestID).then((res) => {
           this.contest = res.data.data;
           this.init();
         })
         .catch(() => {});
-    } else if (this.trainingId) {
+    } else if (this.trainingID) {
       this.init();
     }
   },
@@ -109,7 +109,7 @@ export default {
         keyword: this.keyword,
         problemType: this.contest.type,
         cid: this.contest.id,
-        tid: this.trainingId,
+        tid: this.trainingID,
         queryExisted: false,
       };
       api[this.apiMethod](this.currentPage, this.limit, params)
@@ -123,7 +123,7 @@ export default {
         });
     },
     addPublicProblem(id, problemId) {
-      if (this.contestId) {
+      if (this.contestID) {
         this.$prompt(
           this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Contest'),
           'Tips'
@@ -131,7 +131,7 @@ export default {
           ({ value }) => {
             let data = {
               pid: id,
-              cid: this.contestId,
+              cid: this.contestID,
               displayId: value,
             };
             api.addGroupContestProblemFromPublic(data).then(
@@ -148,7 +148,7 @@ export default {
       } else {
         let data = {
           pid: id,
-          tid: this.trainingId,
+          tid: this.trainingID,
           displayId: problemId,
         };
         api.addGroupTrainingProblemFromPublic(data).then(

@@ -160,7 +160,7 @@
     ></TrainingList>
     <TrainingProblemList
       v-if="problemPage"
-      :trainingId="trainingId"
+      :trainingID="trainingID"
       @currentChangeProblem="currentChangeProblem"
       @handleEditProblemPage="handleEditProblemPage"
       ref="trainingProblemList"
@@ -182,7 +182,7 @@
     >
       <AddPublicProblem
         v-if="publicPage"
-        :trainingId="trainingId"
+        :trainingID="trainingID"
         apiMethod="getGroupTrainingProblemList"
         @currentChangeProblem="currentChangeProblem"
         ref="addPublicProblem"
@@ -195,7 +195,7 @@
       :close-on-click-modal="false"
     >
       <AddGroupProblem
-        :trainingId="trainingId"
+        :trainingID="trainingID"
         @currentChangeProblem="currentChangeProblem"
         @handleGroupPage="handleGroupPage"
       ></AddGroupProblem>
@@ -238,7 +238,7 @@ export default {
       publicPage: false,
       groupPage: false,
       editProblemPage: false,
-      trainingId: null,
+      trainingID: null,
     };
   },
   mounted() {
@@ -293,8 +293,8 @@ export default {
       this.createPage = false;
       this.editPage = false;
     },
-    handleProblemPage(trainingId) {
-      this.trainingId = trainingId;
+    handleProblemPage(trainingID) {
+      this.trainingID = trainingID;
       this.problemPage = !this.problemPage;
     },
     handleGroupPage() {

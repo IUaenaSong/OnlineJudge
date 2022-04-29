@@ -77,6 +77,8 @@ public class CommentServiceImpl implements CommentService {
             return CommonResult.successResponse(commentManager.getAllReply(commentId, cid));
         } catch (StatusForbiddenException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
+        } catch (StatusFailException e) {
+            return CommonResult.errorResponse(e.getMessage(), ResultStatus.FAIL);
         }
     }
 

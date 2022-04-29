@@ -84,7 +84,7 @@ public class CommentManager {
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
-        discussionQueryWrapper.select("gid").eq("id", did);
+        discussionQueryWrapper.select("id", "gid").eq("id", did);
         Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
         Long gid = null;
         if (discussion != null) {
@@ -159,7 +159,7 @@ public class CommentManager {
             }
 
             QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
-            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            discussionQueryWrapper.select("id", "gid").eq("id", comment.getDid());
             Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
@@ -237,7 +237,7 @@ public class CommentManager {
 
         if (cid == null) {
             QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
-            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            discussionQueryWrapper.select("id", "gid").eq("id", comment.getDid());
             Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
@@ -326,7 +326,7 @@ public class CommentManager {
 
     }
 
-    public List<ReplyVo> getAllReply(Integer commentId, Long cid) throws StatusForbiddenException {
+    public List<ReplyVo> getAllReply(Integer commentId, Long cid) throws StatusForbiddenException, StatusFailException {
 
         // 如果有登录，则获取当前登录的用户
         Session session = SecurityUtils.getSubject().getSession();
@@ -335,13 +335,22 @@ public class CommentManager {
 
         Comment comment = commentEntityService.getById(commentId);
 
-        QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
-        discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+        if (cid == null) {
+            QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
+            discussionQueryWrapper.select("id", "gid").eq("id", comment.getDid());
 
-        Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
-        Long gid = discussion.getGid();
-        if (gid != null) {
-            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+            Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
+            Long gid = discussion.getGid();
+            if (gid != null) {
+                if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+                    throw new StatusForbiddenException("对不起，您无权限操作！");
+                }
+            }
+        } else {
+            Contest contest = contestEntityService.getById(cid);
+            contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
+            Long gid = contest.getGid();
+            if (!comment.getFromUid().equals(userRolesVo.getUid()) && !isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), gid)) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }
@@ -382,7 +391,7 @@ public class CommentManager {
                 }
             }
             QueryWrapper<Discussion> discussionQueryWrapper = new QueryWrapper<>();
-            discussionQueryWrapper.select("gid").eq("id", comment.getDid());
+            discussionQueryWrapper.select("id", "gid").eq("id", comment.getDid());
             Discussion discussion = discussionEntityService.getOne(discussionQueryWrapper);
 
             Long gid = discussion.getGid();
@@ -394,6 +403,10 @@ public class CommentManager {
         } else {
             Contest contest = contestEntityService.getById(cid);
             contestValidator.validateContestAuth(contest, userRolesVo, isRoot);
+            Long gid = contest.getGid();
+            if (!comment.getFromUid().equals(userRolesVo.getUid()) && !isRoot && !contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), gid)) {
+                throw new StatusForbiddenException("对不起，您无权限操作！");
+            }
         }
         reply.setFromAvatar(userRolesVo.getAvatar())
                 .setFromName(userRolesVo.getUsername())

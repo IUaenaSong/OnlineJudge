@@ -14,7 +14,7 @@
         min-width="100"
         field="problemId"
         :title="$t('m.Display_ID')"
-        v-if="!contestId"
+        v-if="!contestID"
       >
       </vxe-table-column>
       <vxe-table-column
@@ -24,10 +24,10 @@
         align="left"
       >
         <template v-slot="{ row }">
-          <p v-if="contestId">
+          <p v-if="contestID">
             {{ $t('m.Display_ID') }}：{{ row.problemId }}
           </p>
-          <p v-if="contestId">{{ $t('m.Title') }}：{{ row.title }}</p>
+          <p v-if="contestID">{{ $t('m.Title') }}：{{ row.title }}</p>
           <span v-else>{{ row.problemId }}</span>
         </template>
       </vxe-table-column>
@@ -36,7 +36,7 @@
         min-width="150"
         :title="$t('m.Title')"
         show-overflow
-        v-if="!contestId"
+        v-if="!contestID"
       >
       </vxe-table-column>
       <vxe-table-column
@@ -112,7 +112,7 @@
             <el-option
               :label="$t('m.Contest_Problem')"
               :value="3"
-              :disabled="!contestId"
+              :disabled="!contestID"
             ></el-option>
           </el-select>
         </template>
@@ -147,12 +147,12 @@
             >
             </el-button>
           </el-tooltip>
-          <p v-if="contestId"></p>
+          <p v-if="contestID"></p>
           <el-tooltip
             effect="dark"
             :content="$t('m.Remove')"
             placement="top"
-            v-if="contestId"
+            v-if="contestID"
           >
             <el-button
               icon="el-icon-close"
@@ -194,7 +194,7 @@
       :title="$t('m.Edit_Problem')"
       apiMethod="updateGroupProblem"
       :pid="pid"
-      :contestId="contestId"
+      :contestID="contestID"
       @handleEditPage="handleEditPage"
       @currentChange="currentChange"
     ></Problem>
@@ -214,7 +214,7 @@ export default {
     Problem
   },
   props: {
-    contestId: {
+    contestID: {
       type: Number,
       default: null
     },
@@ -252,7 +252,7 @@ export default {
     },
     getAdminProblemList() {
       this.loading = true;
-      if (!this.contestId) {
+      if (!this.contestID) {
         api.getGroupAdminProblemList(this.currentPage, this.limit, this.$route.params.groupID).then(
           (res) => {
             this.problemList = res.data.data.records;
@@ -265,7 +265,7 @@ export default {
         );
       } else {
         let params = {
-          cid: this.contestId,
+          cid: this.contestID,
         };
         api.getGroupContestProblemList(this.currentPage, this.limit, params).then(
           (res) => {
@@ -283,7 +283,7 @@ export default {
     handleEditPage() {
       this.editPage = false;
       this.$emit("currentChange", 1);
-      if (this.contestId) {
+      if (this.contestID) {
         this.$emit("handleEditProblemPage");
       } else {
         this.$emit("handleEditPage");
@@ -292,7 +292,7 @@ export default {
     goEditProblem(id) {
       this.pid = id;
       this.editPage = !this.editPage;
-      if (this.contestId) {
+      if (this.contestID) {
         this.$emit("handleEditProblemPage");
       } else {
         this.$emit("handleEditPage");
@@ -315,7 +315,7 @@ export default {
       }).then(
         () => {
           api
-            .deleteGroupContestProblem(pid, this.contestId)
+            .deleteGroupContestProblem(pid, this.contestID)
             .then((res) => {
               this.$msg.success('success');
               this.$emit("currentChangeProblem");

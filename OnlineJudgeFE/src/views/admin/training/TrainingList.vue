@@ -186,32 +186,32 @@ export default {
         }
       );
     },
-    goEdit(trainingId) {
+    goEdit(trainingID) {
       this.$router.push({
         name: 'admin-edit-training',
-        params: { trainingId },
+        params: { trainingID },
       });
     },
-    goTrainingProblemList(trainingId) {
+    goTrainingProblemList(trainingID) {
       this.$router.push({
         name: 'admin-training-problem-list',
-        params: { trainingId },
+        params: { trainingID },
       });
     },
-    deleteTraining(trainingId) {
+    deleteTraining(trainingID) {
       this.$confirm(this.$i18n.t('m.Delete_Training_Tips'), this.$i18n.t('m.Warning'), {
         confirmButtonText: this.$i18n.t('m.OK'),
         cancelButtonText: this.$i18n.t('m.Cancel'),
         type: 'warning',
       }).then(() => {
-        api.admin_deleteTraining(trainingId).then((res) => {
+        api.admin_deleteTraining(trainingID).then((res) => {
           this.$msg.success(this.$i18n.t('m.Delete_successfully'));
           this.currentChange(1);
         });
       });
     },
-    changeTrainingStatus(trainingId, status, author) {
-      api.admin_changeTrainingStatus(trainingId, status, author).then((res) => {
+    changeTrainingStatus(trainingID, status, author) {
+      api.admin_changeTrainingStatus(trainingID, status, author).then((res) => {
         this.$msg.success(this.$i18n.t('m.Update_Successfully'));
       });
     },

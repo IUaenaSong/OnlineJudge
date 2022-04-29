@@ -227,6 +227,27 @@ export const CONTEST_STATUS_REVERSE = {
   }
 }
 
+export const EXAM_STATUS = {
+  'SCHEDULED': -1,
+  'RUNNING': 0,
+  'ENDED': 1
+}
+
+export const EXAM_STATUS_REVERSE = {
+  '-1': {
+    name: 'Scheduled',
+    color: '#f90'
+  },
+  '0': {
+    name: 'Running',
+    color: '#19be6b'
+  },
+  '1': {
+    name: 'Ended',
+    color: '#ed3f14'
+  }
+}
+
 export const TRAINING_TYPE = {
   'Public':{
     name:'Public',
@@ -318,6 +339,36 @@ export const CONTEST_TYPE = {
   PROTECTED: 2
 }
 
+export const EXAM_TYPE_REVERSE = {
+  '0': {
+    name:'Public',
+    color:'success',
+    tips:'Exam_Public_Tips',
+    submit:true,
+    look:true,
+  },
+  '1':{
+    name:'Private',
+    color:'danger',
+    tips:'Exam_Private_Tips',
+    submit:false,
+    look:false,
+  },
+  '2':{
+    name:'Protected',
+    color:'warning',
+    tips:'Exam_Protected_Tips',
+    submit:false,
+    look:true,
+  }
+}
+
+export const EXAM_TYPE = {
+  PUBLIC: 0,
+  PRIVATE: 1,
+  PROTECTED: 2
+}
+
 export const USER_TYPE = {
   REGULAR_USER: 'user',
   ADMIN: 'admin',
@@ -330,6 +381,7 @@ export const STORAGE_KEY = {
   PROBLEM_CODE: 'ojProblemCode',
   languages: 'languages',
   CONTEST_ANNOUNCE:'ojContestAnnounce',
+  EXAM_ANNOUNCE:'ojExamAnnounce',
   individualLanguageAndTheme:'ojIndividualLanguageAndTheme',
   CONTEST_RANK_CONCERNED:'ojContestRankConcerned'
 }
@@ -351,5 +403,9 @@ export function buildContestAnnounceKey (uid, contestID) {
 
 export function buildContestRankConcernedKey(contestID) {
   return `${STORAGE_KEY.CONTEST_RANK_CONCERNED}_${contestID}`
+}
+
+export function buildExamAnnounceKey (uid, examID) {
+  return `${STORAGE_KEY.EXAM_ANNOUNCE}_${uid}_${examID}`
 }
 

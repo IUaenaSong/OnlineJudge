@@ -262,7 +262,7 @@ public class GroupManager {
         }
 
         QueryWrapper<Group> groupQueryWrapper = new QueryWrapper<>();
-        groupQueryWrapper.eq("name", group.getName());
+        groupQueryWrapper.eq("name", group.getName()).ne("id", group.getId());;
 
         Group group1 = groupEntityService.getOne(groupQueryWrapper);
 
@@ -271,7 +271,7 @@ public class GroupManager {
         }
 
         groupQueryWrapper = new QueryWrapper<>();
-        groupQueryWrapper.eq("short_name", group.getShortName());
+        groupQueryWrapper.eq("short_name", group.getShortName()).ne("id", group.getId());;
 
         group1 = groupEntityService.getOne(groupQueryWrapper);
 

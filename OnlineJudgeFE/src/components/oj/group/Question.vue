@@ -76,7 +76,7 @@
                       <el-option
                         :label="$t('m.Exam_Question')"
                         :value="3"
-                        :disabled="!examId"
+                        :disabled="!examID"
                       ></el-option>
                     </el-select>
                   </el-form-item>
@@ -230,7 +230,7 @@ export default {
       type: String,
       default: 'Create Question'
     },
-    examId: {
+    examID: {
       type: Number,
       default: null
     },
@@ -280,7 +280,7 @@ export default {
       share: false,
       choices: [],
     }
-    if (this.examId) {
+    if (this.examID) {
       this.question.auth = this.reQuestion.auth = 3;
     }
     this.init();
@@ -363,10 +363,10 @@ export default {
       );
       api[this.apiMethod](this.question)
         .then((res) => {
-          if (this.examId) {
+          if (this.examID) {
             if (res.data.data) {
               this.examQuestion['qid'] = res.data.data.pid;
-              this.examQuestion['eid'] = this.examId;
+              this.examQuestion['eid'] = this.examID;
             }
             api.updateGroupExamQuestion(this.examQuestion).then((res) => {
             });
@@ -376,7 +376,7 @@ export default {
             this.$emit("handleEditPage");
           } else {
             this.$msg.success(this.$t('m.Create_Successfully'));
-            if (this.examId) {
+            if (this.examID) {
               this.$emit("handleCreateQuestionPage");
             } else {
               this.$emit("handleCreatePage");

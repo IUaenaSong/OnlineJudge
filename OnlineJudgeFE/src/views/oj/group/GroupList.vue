@@ -160,9 +160,9 @@
     </el-col>
     <Pagination
       :total="total"
-      :page-size="limit"
+      :page-size="query.limit"
       @on-change="currentChange"
-      :current.sync="currentPage"
+      :current.sync="query.currentPage"
       @on-page-size-change="onPageSizeChange"
       style="margin-top: 10px; margin-bottom: 30px;"
       :layout="'prev, pager, next, sizes'"
@@ -307,12 +307,12 @@ export default {
   data() {
     return {
       showEditGroupDialog: false,
-      currentPage: 1,
-      limit: 9,
       query: {
         keyword: '',
         auth: 0,
-        onlyMine: false
+        onlyMine: false,
+        currentPage: 1,
+        limit: 9,
       },
       total: 0,
       group: {
@@ -417,29 +417,35 @@ export default {
       this.query.auth = route.auth;
       this.query.keyword = route.keyword || '';
       this.query.onlyMine = route.onlyMine + '' == 'true' ? true : false;
+      this.query.currentPage = route.currentPage || 1;
+      this.query.limit = route.limit || 9;
       this.getGroupList();
     },
     onPageSizeChange(pageSize) {
-      this.limit = pageSize;
-      this.init();
+      this.query.currentPage = 1;
+      this.query.limit = pageSize;
+      this.handleRouter();
     },
     currentChange(page) {
-      this.currentPage = page;
-      this.init();
+      this.query.currentPage = page;
+      this.handleRouter();
     },
     filterByKeyword() {
-      this.currentPage = 1;
+      this.query.currentPage = 1;
       this.handleRouter();
     },
     filterByAuth(auth) {
+      this.query.currentPage = 1;
       this.query.auth = auth;
       this.handleRouter();
     },
     handleOnlyMine(onlyMine) {
+      this.query.currentPage = 1;
       this.query.onlyMine = onlyMine
       this.handleRouter();
     },
     handleAuth(auth) {
+      this.query.currentPage = 1;
       this.query.auth = auth;
       this.handleRouter();
     },
@@ -451,7 +457,7 @@ export default {
     },
     getGroupList() {
       this.loading = true;
-      api.getGroupList(this.currentPage, this.limit, this.query).then(
+      api.getGroupList(this.query).then(
         (res) => {
           this.groupList = res.data.data.records;
           this.total = res.data.data.total;

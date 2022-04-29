@@ -205,14 +205,20 @@ public class ProblemFileManager {
             }
 
             ProblemDto problemDto = new ProblemDto();
-            problemDto.setJudgeMode(importProblemVo.getJudgeMode())
-                    .setProblem(problem)
+            problemDto.setProblem(problem)
                     .setCodeTemplates(codeTemplates)
                     .setTags(tags)
                     .setLanguages(languages)
                     .setUploadTestcaseDir(fileDir + File.separator + key)
                     .setIsUploadTestCase(true)
                     .setSamples(problemCaseList);
+
+            Constants.JudgeMode judgeMode = Constants.JudgeMode.getJudgeMode(importProblemVo.getJudgeMode());
+            if (judgeMode == null) {
+                problemDto.setJudgeMode(Constants.JudgeMode.DEFAULT.getMode());
+            } else {
+                problemDto.setJudgeMode(judgeMode.getMode());
+            }
 
             problemDtos.add(problemDto);
         }

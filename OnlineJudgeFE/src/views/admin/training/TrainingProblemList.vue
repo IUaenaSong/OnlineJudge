@@ -192,7 +192,7 @@
       :close-on-click-modal="false"
     >
       <AddPublicProblem
-        :trainingID="trainingId"
+        :trainingID="trainingID"
         @on-change="getProblemList"
       ></AddPublicProblem>
     </el-dialog>
@@ -255,7 +255,7 @@ export default {
       loading: false,
       currentPage: 1,
       routeName: '',
-      trainingId: '',
+      trainingID: '',
       // for make public use
       currentProblemID: '',
       currentRow: {},
@@ -277,7 +277,7 @@ export default {
   methods: {
     init() {
       this.routeName = this.$route.name;
-      this.trainingId = this.$route.params.trainingId;
+      this.trainingID = this.$route.params.trainingID;
       this.getProblemList(this.currentPage);
       this.REMOTE_OJ = Object.assign({}, REMOTE_OJ);
     },
@@ -303,7 +303,7 @@ export default {
         limit: this.pageSize,
         currentPage: page,
         keyword: this.keyword,
-        tid: this.trainingId,
+        tid: this.trainingID,
         queryExisted: true,
       };
       if (this.problemListAuth != 0) {
@@ -355,7 +355,7 @@ export default {
       }).then(
         () => {
           api
-            .admin_deleteTrainingProblem(pid, this.trainingId)
+            .admin_deleteTrainingProblem(pid, this.trainingID)
             .then((res) => {
               this.$msg.success('success');
               this.getProblemList(this.currentPage);
@@ -384,7 +384,7 @@ export default {
         .admin_addTrainingRemoteOJProblem(
           this.otherOJName,
           this.otherOJProblemId,
-          this.trainingId
+          this.trainingID
         )
         .then(
           (res) => {
@@ -402,7 +402,7 @@ export default {
   watch: {
     $route(newVal, oldVal) {
       if (
-        newVal.params.trainingId != oldVal.params.trainingId ||
+        newVal.params.trainingID != oldVal.params.trainingID ||
         newVal.name != oldVal.name
       ) {
         this.init();

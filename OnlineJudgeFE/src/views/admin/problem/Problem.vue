@@ -191,7 +191,7 @@
             </el-col>
 
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Tags')" required>
+              <el-form-item :label="$t('m.Tags')">
                 <el-tag
                   v-for="tag in problemTags"
                   closable
@@ -751,7 +751,7 @@ export default {
   mounted() {
     this.PROBLEM_LEVEL = Object.assign({}, PROBLEM_LEVEL);
     this.routeName = this.$route.name;
-    let contestID = this.$route.params.contestId;
+    let contestID = this.$route.params.contestID;
     this.uploadFileUrl = '/api/file/upload-testcase-zip';
     if (
       this.routeName === 'admin-edit-problem' ||
@@ -1325,12 +1325,6 @@ export default {
           }
         }
       }
-      if (!this.problemTags.length) {
-        this.error.tags =
-          this.$i18n.t('m.Tags') + ' ' + this.$i18n.t('m.is_required');
-        this.$msg.error(this.error.tags);
-        return;
-      }
       let isChangeModeCode =
         this.spjRecord.spjLanguage != this.problem.spjLanguage ||
         this.spjRecord.spjCode != this.problem.spjCode;
@@ -1383,13 +1377,16 @@ export default {
         ojName = this.problem.problemId.split('-')[0];
       }
 
-      let problemTagList = Object.assign([], this.problemTags);
-      for (let i = 0; i < problemTagList.length; i++) {
-        //避免后台插入违反唯一性
-        for (let tag2 of this.allTags) {
-          if (problemTagList[i].name == tag2.name && tag2.oj == ojName) {
-            problemTagList[i] = tag2;
-            break;
+      let problemTagList = [];
+      if(this.problemTags.length>0){
+        problemTagList = Object.assign([], this.problemTags);
+        for (let i = 0; i < problemTagList.length; i++) {
+          //避免后台插入违反唯一性
+          for (let tag2 of this.allTags) {
+            if (problemTagList[i].name == tag2.name && tag2.oj == ojName) {
+              problemTagList[i] = tag2;
+              break;
+            }
           }
         }
       }
@@ -1472,13 +1469,13 @@ export default {
             if (res.data.data) {
               // 新增题目操作 需要使用返回来的pid
               this.contestProblem['pid'] = res.data.data.pid;
-              this.contestProblem['cid'] = this.$route.params.contestId;
+              this.contestProblem['cid'] = this.$route.params.contestID;
             }
             api.admin_setContestProblemInfo(this.contestProblem).then((res) => {
               this.$msg.success('success');
               this.$router.push({
                 name: 'admin-contest-problem-list',
-                params: { contestId: this.$route.params.contestId },
+                params: { contestID: this.$route.params.contestID },
               });
             });
           } else {

@@ -8,6 +8,8 @@ package com.iuaenasong.oj.dao.user.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.iuaenasong.oj.utils.Constants;
+import com.iuaenasong.oj.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.iuaenasong.oj.pojo.vo.ACMRankVo;
 import com.iuaenasong.oj.pojo.entity.user.UserRecord;
@@ -25,6 +27,12 @@ public class UserRecordEntityServiceImpl extends ServiceImpl<UserRecordMapper, U
 
     @Autowired
     private UserRecordMapper userRecordMapper;
+
+    @Autowired
+    private RedisUtils redisUtils;
+
+    // 排行榜缓存时间 10s
+    private static final long cacheRankSecond = 10;
 
     @Override
     public List<ACMRankVo> getRecent7ACRank() {
@@ -46,4 +54,19 @@ public class UserRecordEntityServiceImpl extends ServiceImpl<UserRecordMapper, U
         return userRecordMapper.getACMRankList(page, uidList);
     }
 
+    @Override
+    public IPage<OIRankVo> getGroupRankList(Page<OIRankVo> page, Long gid, List<String> uidList, String rankType, Boolean useCache) {
+        if (useCache) {
+            IPage<OIRankVo> data = null;
+            String key = Constants.Account.GROUP_RANK_CACHE.getCode() + "_" + gid + "_" + rankType + "_" + page.getCurrent() + "_" + page.getSize();
+            data = (IPage<OIRankVo>) redisUtils.get(key);
+            if (data == null) {
+                data = userRecordMapper.getGroupRankList(page, gid, uidList, rankType);
+                redisUtils.set(key, data, cacheRankSecond);
+            }
+            return data;
+        } else {
+            return userRecordMapper.getGroupRankList(page, gid, uidList, rankType);
+        }
+    }
 }

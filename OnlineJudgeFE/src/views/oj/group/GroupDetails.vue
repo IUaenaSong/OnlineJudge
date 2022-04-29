@@ -29,6 +29,16 @@
                 <i class="el-icon-s-data"></i>&nbsp;{{ $t('m.Group_Contest') }}
               </span>
             </el-tab-pane>
+            <!-- <el-tab-pane lazy name="GroupExamList" :disabled="groupMenuDisabled">
+              <span slot="label">
+                <i class="el-icon-s-data"></i>&nbsp;{{ $t('m.Group_Exam') }}
+              </span>
+            </el-tab-pane> -->
+            <el-tab-pane lazy name="GroupRank" :disabled="groupMenuDisabled">
+              <span slot="label">
+                <i class="el-icon-medal-1"></i>&nbsp;{{ $t('m.Group_Rank') }}
+              </span>
+            </el-tab-pane>
             <el-tab-pane lazy name="GroupDiscussionList" :disabled="groupMenuDisabled">
               <span slot="label">
                 <i class="el-icon-share"></i>&nbsp;{{ $t('m.Group_Discussion') }}
@@ -61,13 +71,13 @@
             <el-col :md="(isGroupMember || isSuperAdmin) ? 12 : 24" :sm="24" :xs="24">
               <div class="description-body">
                 <div
-                  class="markdown-body"
+                  class="content markdown-body"
                   v-html="descriptionHtml"
                   v-katex
                   v-highlight
                   v-if="descriptionHtml"
                 ></div>
-                <div class="markdown-body" v-else>
+                <div class="content markdown-body" v-else>
                   <p>{{ $t('m.Not_set_yet') }}</p>
                 </div>
               </div>

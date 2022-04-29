@@ -40,7 +40,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-if="contestId">
+          <el-row :gutter="20" v-if="contestID">
             <el-col :md="12" :xs="24">
               <el-form-item :label="$t('m.Contest_Display_Title')" required>
                 <el-input
@@ -184,7 +184,7 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Tags')" required>
+              <el-form-item :label="$t('m.Tags')">
                 <el-tag
                   v-for="tag in problemTags"
                   closable
@@ -649,7 +649,7 @@ export default {
       type: Number,
       default: null
     },
-    contestId: {
+    contestID: {
       type: Number,
       default: null
     }
@@ -748,7 +748,7 @@ export default {
   },
   mounted() {
     this.PROBLEM_LEVEL = Object.assign({}, PROBLEM_LEVEL);
-    this.uploadFileUrl = '/api/file/upload-testcase-zip';
+    this.uploadFileUrl = '/api/file/upload-testcase-zip?gid=this.$route.params.groupID';
     api.getGroupProblemTagList(this.$route.params.groupID).then((res) => {
         this.allTags = res.data.data;
         for (let tag of res.data.data) {
@@ -793,11 +793,11 @@ export default {
         userExtraFile: null,
         judgeExtraFile: null,
       };
-      if (this.contestId) {
-        this.problem.cid = this.reProblem.cid = this.contestId;
+      if (this.contestID) {
+        this.problem.cid = this.reProblem.cid = this.contestID;
         this.problem.auth = this.reProblem.auth = 3;
         this.disableRuleType = true;
-        api.getGroupContest(this.contestId).then((res) => {
+        api.getGroupContest(this.contestID).then((res) => {
           this.problem.type = this.reProblem.type = res.data.data.type;
           this.contest = res.data.data;
         });
@@ -897,8 +897,8 @@ export default {
               }
             });
         });
-        if (this.contestId) {
-          api.getGroupContestProblem(this.pid, this.contestId).then((res) => {
+        if (this.contestID) {
+          api.getGroupContestProblem(this.pid, this.contestID).then((res) => {
               this.contestProblem = res.data.data;
             });
         }
@@ -1152,7 +1152,7 @@ export default {
         );
         return;
       }
-      if (this.contestId) {
+      if (this.contestID) {
         if (!this.contestProblem.displayId) {
           this.$msg.error(
             this.$i18n.t('m.Contest_Display_ID') +
@@ -1257,12 +1257,6 @@ export default {
           }
         }
       }
-      if (!this.problemTags.length) {
-        this.error.tags =
-          this.$i18n.t('m.Tags') + ' ' + this.$i18n.t('m.is_required');
-        this.$msg.error(this.error.tags);
-        return;
-      }
       let isChangeModeCode =
         this.spjRecord.spjLanguage != this.problem.spjLanguage ||
         this.spjRecord.spjCode != this.problem.spjCode;
@@ -1307,12 +1301,15 @@ export default {
       if (this.problem.isRemote) {
         ojName = this.problem.problemId.split('-')[0];
       }
-      let problemTagList = Object.assign([], this.problemTags);
-      for (let i = 0; i < problemTagList.length; i++) {
-        for (let tag2 of this.allTags) {
-          if (problemTagList[i].name == tag2.name && tag2.oj == ojName) {
-            problemTagList[i] = tag2;
-            break;
+      let problemTagList = [];
+      if(this.problemTags.length > 0){
+        problemTagList = Object.assign([], this.problemTags);
+        for (let i = 0; i < problemTagList.length; i++) {
+          for (let tag2 of this.allTags) {
+            if (problemTagList[i].name == tag2.name && tag2.oj == ojName) {
+              problemTagList[i] = tag2;
+              break;
+            }
           }
         }
       }
@@ -1378,10 +1375,10 @@ export default {
       }
       api[this.apiMethod](problemDto)
         .then((res) => {
-          if (this.contestId) {
+          if (this.contestID) {
             if (res.data.data) {
               this.contestProblem['pid'] = res.data.data.pid;
-              this.contestProblem['cid'] = this.contestId;
+              this.contestProblem['cid'] = this.contestID;
             }
             api.updateGroupContestProblem(this.contestProblem).then((res) => {
             });
@@ -1391,7 +1388,7 @@ export default {
             this.$emit("handleEditPage");
           } else {
             this.$msg.success(this.$t('m.Create_Successfully'));
-            if (this.contestId) {
+            if (this.contestID) {
               this.$emit("handleCreateProblemPage");
             } else {
               this.$emit("handleCreatePage");

@@ -14,7 +14,7 @@
         min-width="100"
         field="questionId"
         :title="$t('m.Display_ID')"
-        v-if="!examId"
+        v-if="!examID"
       >
       </vxe-table-column>
       <vxe-table-column
@@ -40,7 +40,7 @@
         min-width="150"
         :title="$t('m.Question_Description')"
         show-overflow
-        v-if="!examId"
+        v-if="!examID"
       >
       </vxe-table-column>
       <vxe-table-column
@@ -81,7 +81,7 @@
             <el-option
               :label="$t('m.Exam_Question')"
               :value="3"
-              :disabled="!examId"
+              :disabled="!examID"
             ></el-option>
           </el-select>
         </template>
@@ -106,7 +106,7 @@
             effect="dark"
             :content="$t('m.Remove')"
             placement="top"
-            v-if="examId"
+            v-if="examID"
           >
             <el-button
               icon="el-icon-close"
@@ -116,7 +116,7 @@
             >
             </el-button>
           </el-tooltip>
-          <p v-if="examId"></p>
+          <p v-if="examID"></p>
           <el-tooltip
             effect="dark"
             :content="$t('m.Delete')"
@@ -149,7 +149,7 @@
       :title="$t('m.Edit_Question')"
       apiMethod="updateGroupQuestion"
       :qid="qid"
-      :examId="examId"
+      :examID="examID"
       @handleEditPage="handleEditPage"
       @currentChange="currentChange"
     ></Question>
@@ -168,7 +168,7 @@ export default {
     Question
   },
   props: {
-    examId: {
+    examID: {
       type: Number,
       default: null
     },
@@ -214,7 +214,7 @@ export default {
     },
     getAdminQuestionList() {
       this.loading = true;
-      if (!this.examId) {
+      if (!this.examID) {
         api.getGroupAdminQuestionList(this.currentPage, this.limit, this.type, this.$route.params.groupID).then(
           (res) => {
             this.questionList = res.data.data.records;
@@ -227,7 +227,7 @@ export default {
         );
       } else {
         let params = {
-          cid: this.examId,
+          cid: this.examID,
         };
         api.getGroupExamQuestionList(this.currentPage, this.limit, params).then(
           (res) => {
@@ -245,7 +245,7 @@ export default {
     handleEditPage() {
       this.editPage = false;
       this.$emit("currentChange", 1);
-      if (this.examId) {
+      if (this.examID) {
         this.$emit("handleEditQuestionPage");
       } else {
         this.$emit("handleEditPage");
@@ -254,7 +254,7 @@ export default {
     goEditQuestion(id) {
       this.qid = id;
       this.editPage = !this.editPage;
-      if (this.examId) {
+      if (this.examID) {
         this.$emit("handleEditQuestionPage");
       } else {
         this.$emit("handleEditPage");
@@ -272,7 +272,7 @@ export default {
       }).then(
         () => {
           api
-            .deleteGroupExamQuestion(qid, this.examId)
+            .deleteGroupExamQuestion(qid, this.examID)
             .then((res) => {
               this.$msg.success('success');
               this.$emit("currentChangeQuestion");

@@ -12,7 +12,6 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeRes;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
@@ -143,9 +142,10 @@ public class POJJudge extends RemoteJudgeStrategy {
 
     @Override
     public void login() {
+        // 清除当前线程的cookies缓存
+        HttpRequest.getCookieManager().getCookieStore().removeAll();
 
         RemoteJudgeDTO remoteJudgeDTO = getRemoteJudgeDTO();
-
         HttpRequest request = HttpUtil.createPost(HOST + LOGIN_URL);
         HttpResponse response = request.form(MapUtil.builder(new HashMap<String, Object>())
                 .put("user_id1", remoteJudgeDTO.getUsername())

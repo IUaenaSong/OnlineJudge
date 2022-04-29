@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import user from '@/store/user'
 import contest from "@/store/contest"
+import exam from "@/store/exam"
 import training from "@/store/training"
 import group from "@/store/group"
 import api from '@/common/api'
@@ -163,6 +164,7 @@ export default new Vuex.Store({
   modules: {
     user,
     contest,
+    exam,
     training,
     group
   },

@@ -253,25 +253,25 @@ export default {
         }
       );
     },
-    openDownloadOptions(contestId) {
+    openDownloadOptions(contestID) {
       this.downloadDialogVisible = true;
-      this.currentId = contestId;
+      this.currentId = contestID;
     },
     downloadSubmissions() {
       let url = `/api/file/download-contest-ac-submission?cid=${this.currentId}&excludeAdmin=${this.excludeAdmin}&splitType=${this.splitType}`;
       utils.downloadFile(url);
       this.downloadDialogVisible = false;
     },
-    goEditContest(contestId) {
+    goEditContest(contestID) {
       this.editPage = true;
-      this.cid = contestId;
+      this.cid = contestID;
       this.$emit("handleEditPage");
     },
-    goContestProblemList(contestId) {
-      this.$emit("handleProblemPage", contestId);
+    goContestProblemList(contestID) {
+      this.$emit("handleProblemPage", contestID);
     },
-    goContestAnnouncementList(contestId) {
-      this.$emit("handleAnnouncementPage", contestId);
+    goContestAnnouncementList(contestID) {
+      this.$emit("handleAnnouncementPage", contestID);
     },
     changeContestVisible(cid, visible) {
       api.changeGroupContestVisible(cid, visible).then((res) => {

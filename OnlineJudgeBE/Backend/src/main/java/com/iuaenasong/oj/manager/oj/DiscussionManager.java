@@ -178,7 +178,7 @@ public class DiscussionManager {
         String problemId = discussion.getPid();
         if (problemId != null) {
             QueryWrapper<Problem> problemQueryWrapper = new QueryWrapper<>();
-            problemQueryWrapper.eq("problemId", problemId);
+            problemQueryWrapper.eq("problem_id", problemId);
             Problem problem = problemEntityService.getOne(problemQueryWrapper);
 
             if (problem == null) {
@@ -189,7 +189,7 @@ public class DiscussionManager {
         }
 
         if (discussion.getGid() != null) {
-            if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), discussion.getGid())) {
+            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), discussion.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }

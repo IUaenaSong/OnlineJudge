@@ -226,7 +226,10 @@ public class ProblemManager {
             tidList.add(problemTag.getTid());
         });
 
-        List<Tag> tags = (List<Tag>) tagEntityService.listByIds(tidList);
+        List<Tag> tags = new ArrayList<>();
+        if (tidList.size() > 0) {
+            tags = (List<Tag>) tagEntityService.listByIds(tidList);
+        }
 
         // 记录 languageId对应的name
         HashMap<Long, String> tmpMap = new HashMap<>();

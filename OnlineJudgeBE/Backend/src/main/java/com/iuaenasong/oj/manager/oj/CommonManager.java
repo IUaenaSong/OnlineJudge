@@ -12,7 +12,6 @@ import com.iuaenasong.oj.pojo.vo.UserRolesVo;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wf.captcha.ArithmeticCaptcha;
-import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -24,11 +23,9 @@ import com.iuaenasong.oj.pojo.vo.CaptchaVo;
 import com.iuaenasong.oj.dao.problem.*;
 import com.iuaenasong.oj.dao.training.TrainingCategoryEntityService;
 import com.iuaenasong.oj.utils.RedisUtils;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -118,6 +115,10 @@ public class CommonManager {
                 .stream()
                 .map(ProblemTag::getTid)
                 .collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(tidList)) {
+            return new ArrayList<>();
+        }
         return tagEntityService.listByIds(tidList);
     }
 

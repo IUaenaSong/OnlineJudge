@@ -6,7 +6,6 @@
 
 package com.iuaenasong.oj.judge.task;
 
-import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -19,6 +18,8 @@ import com.iuaenasong.oj.judge.entity.JudgeDTO;
 import com.iuaenasong.oj.judge.entity.JudgeGlobalDTO;
 import com.iuaenasong.oj.judge.entity.SandBoxRes;
 import com.iuaenasong.oj.util.Constants;
+
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class DefaultJudge extends AbstractJudge {
@@ -99,18 +100,18 @@ public class DefaultJudge extends AbstractJudge {
 
         // 如果当前题目选择默认去掉字符串末位空格
         if (isRemoveEOLBlank) {
-            String userOutputMd5 = DigestUtils.md5DigestAsHex(rtrim(userOutput).getBytes());
+            String userOutputMd5 = DigestUtils.md5DigestAsHex(rtrim(userOutput).getBytes(StandardCharsets.UTF_8));
             if (userOutputMd5.equals(testcaseInfo.getStr("EOFStrippedOutputMd5"))) {
                 return Constants.Judge.STATUS_ACCEPTED.getStatus();
             }
         } else { // 不选择默认去掉文末空格 与原数据进行对比
-            String userOutputMd5 = DigestUtils.md5DigestAsHex(userOutput.getBytes());
+            String userOutputMd5 = DigestUtils.md5DigestAsHex(userOutput.getBytes(StandardCharsets.UTF_8));
             if (userOutputMd5.equals(testcaseInfo.getStr("outputMd5"))) {
                 return Constants.Judge.STATUS_ACCEPTED.getStatus();
             }
         }
         // 如果不AC,进行PE判断，否则为WA
-        String userOutputMd5 = DigestUtils.md5DigestAsHex(userOutput.replaceAll("\\s+", "").getBytes());
+        String userOutputMd5 = DigestUtils.md5DigestAsHex(userOutput.replaceAll("\\s+", "").getBytes(StandardCharsets.UTF_8));
         if (userOutputMd5.equals(testcaseInfo.getStr("allStrippedOutputMd5"))) {
             return Constants.Judge.STATUS_PRESENTATION_ERROR.getStatus();
         } else {

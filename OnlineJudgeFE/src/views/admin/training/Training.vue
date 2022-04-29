@@ -159,7 +159,7 @@ export default {
 
     getTraining() {
       api
-        .admin_getTraining(this.$route.params.trainingId)
+        .admin_getTraining(this.$route.params.trainingID)
         .then((res) => {
           let data = res.data.data;
           this.training = data.training || {};

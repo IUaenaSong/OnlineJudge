@@ -91,7 +91,7 @@ public class JudgeContext {
             }
 
         } else { //如果是比赛提交
-            contestRecordEntityService.UpdateContestRecord(uid, score, status, submitId, cid, useTime);
+            contestRecordEntityService.UpdateContestRecord(score, status, submitId, useTime);
         }
     }
 }

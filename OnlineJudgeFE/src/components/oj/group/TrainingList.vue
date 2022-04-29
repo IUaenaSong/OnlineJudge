@@ -169,13 +169,13 @@ export default {
         }
       );
     },
-    goEditTraining(trainingId) {
+    goEditTraining(trainingID) {
       this.$emit("handleEditPage");
       this.editPage = true;
-      this.tid = trainingId;
+      this.tid = trainingID;
     },
-    goTrainingProblemList(trainingId) {
-      this.$emit("handleProblemPage", trainingId);
+    goTrainingProblemList(trainingID) {
+      this.$emit("handleProblemPage", trainingID);
     },
     changeTrainingStatus(tid, status) {
       api.changeGroupTrainingStatus(tid, status).then((res) => {

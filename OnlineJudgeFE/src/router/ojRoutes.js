@@ -8,9 +8,11 @@ import SubmissionList from "@/views/oj/status/SubmissionList.vue"
 import SubmissionDetails from "@/views/oj/status/SubmissionDetails.vue"
 import ContestList from "@/views/oj/contest/ContestList.vue"
 import ProblemDetails from "@/views/oj/problem/ProblemDetails.vue"
+import QuestionDetails from '@/views/oj/question/QuestionDetails.vue'
 import ACMRank from "@/views/oj/rank/ACMRank.vue"
 import OIRank from "@/views/oj/rank/OIRank.vue"
 import ContestDetails from "@/views/oj/contest/ContestDetails.vue"
+import ExamDetails from '@/views/oj/exam/ExamDetails.vue'
 import ACMScoreBoard from "@/views/oj/contest/outside/ACMScoreBoard.vue"
 import OIScoreBoard from "@/views/oj/contest/outside/OIScoreBoard.vue"
 import ContestProblemList from "@/views/oj/contest/children/ContestProblemList.vue"
@@ -40,6 +42,8 @@ import GroupQuestionList from '@/views/oj/group/children/GroupQuestionList.vue'
 import GroupQuestionDetails from '@/views/oj/question/QuestionDetails.vue'
 import GroupTrainingList from '@/views/oj/group/children/GroupTrainingList.vue'
 import GroupContestList from '@/views/oj/group/children/GroupContestList.vue'
+import GroupExamList from '@/views/oj/group/children/GroupExamList.vue'
+import GroupRank from '@/views/oj/group/children/GroupRank.vue'
 import GroupDiscussionList from '@/views/oj/group/children/GroupDiscussionList.vue'
 import GroupMemberList from '@/views/oj/group/children/GroupMemberList.vue'
 import GroupSetting from '@/views/oj/group/children/GroupSetting.vue'
@@ -202,6 +206,50 @@ const ojRoutes = [
     ]
   },
   {
+    path: '/exam/:examID/',
+    name: 'ExamDetails',
+    component: ExamDetails,
+    meta: { title: 'Exam Details', requireAuth: true },
+    children: [
+      {
+        path: 'submission',
+        name: 'ExamSubmissionList',
+        component: SubmissionList,
+        meta: { title: 'Exam Submission' }
+      },
+      {
+        path: 'submission/:submitID',
+        name: 'ExamSubmissionDetails',
+        component: SubmissionDetails,
+        meta: { title: 'Exam Submission Details' }
+      },
+      {
+        path: 'question',
+        name: 'ExamQutstionList',
+        component: ContestProblemList,
+        meta: { title: 'Exam Qutstion' }
+      },
+      {
+        path: 'question/:questionID',
+        name: 'ExamQutstionDetails',
+        component: QuestionDetails,
+        meta: { title: 'Exam Qutstion Details' }
+      },
+      {
+        path: 'problem',
+        name: 'ExamProblemList',
+        component: ContestProblemList,
+        meta: { title: 'Exam Problem' }
+      },
+      {
+        path: 'problem/:problemId',
+        name: 'ExamProblemDetails',
+        component: ProblemDetails,
+        meta: { title: 'Exam Problem Details' }
+      },
+    ]
+  },
+  {
     path: '/status',
     name: 'SubmissionList',
     component: SubmissionList,
@@ -308,6 +356,18 @@ const ojRoutes = [
         name: 'GroupContestList',
         component: GroupContestList,
         meta: { title: 'Group Contest' }
+      },
+      {
+        path: 'exam',
+        name: 'GroupExamList',
+        component: GroupExamList,
+        meta: { title: 'Group Exam' }
+      },
+      {
+        path: 'rank',
+        name: 'GroupRank',
+        component: GroupRank,
+        meta: { title: 'Group Rank' }
       },
       {
         path: 'discussion',

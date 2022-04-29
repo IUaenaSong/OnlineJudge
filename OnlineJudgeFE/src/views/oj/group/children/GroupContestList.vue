@@ -87,7 +87,7 @@
     </div>
     <div v-if="!adminPage && !createPage && !problemPage">
       <p id="no-contest" v-show="contestList.length == 0">
-        <el-empty :description="$t('m.No_contest')"></el-empty>
+        <el-empty :description="$t('m.No_Contest')"></el-empty>
       </p>
       <ol id="contest-list">
         <li
@@ -277,7 +277,7 @@
     ></ContestList>
     <ProblemList
       v-if="problemPage && !createProblemPage"
-      :contestId="contestId"
+      :contestID="contestID"
       @currentChangeProblem="currentChangeProblem"
       @handleEditProblemPage="handleEditProblemPage"
       ref="contestProblemList"
@@ -285,7 +285,7 @@
     </ProblemList>
     <AnnouncementList
       v-if="announcementPage"
-      :contestId="contestId"
+      :contestID="contestID"
       ref="contestAnnouncementList"
     >
     </AnnouncementList>
@@ -300,7 +300,7 @@
     <Problem
       v-if="createProblemPage"
       mode="add"
-      :contestId="contestId"
+      :contestID="contestID"
       :title="$t('m.Create_Problem')"
       apiMethod="addGroupContestProblem"
       @handleCreateProblemPage="handleCreateProblemPage"
@@ -314,7 +314,7 @@
     >
       <AddPublicProblem
         v-if="publicPage"
-        :contestId="contestId"
+        :contestID="contestID"
         apiMethod="getGroupContestProblemList"
         @currentChangeProblem="currentChangeProblem"
         ref="addPublicProblem"
@@ -327,7 +327,7 @@
       :close-on-click-modal="false"
     >
       <AddGroupProblem
-        :contestId="contestId"
+        :contestID="contestID"
         @currentChangeProblem="currentChangeProblem"
         @handleGroupPage="handleGroupPage"
       ></AddGroupProblem>
@@ -381,7 +381,7 @@ export default {
       editProblemPage: false,
       createProblemPage: false,
       announcementPage: false,
-      contestId: null,
+      contestID: null,
       acmSrc: require('@/assets/acm.jpg'),
       oiSrc: require('@/assets/oi.jpg'),
     };
@@ -421,11 +421,11 @@ export default {
         }
       );
     },
-    goGroupContest(contestId) {
+    goGroupContest(contestID) {
       this.$router.push({
         name: 'ContestDetails',
         params: {
-          contestID: contestId,
+          contestID: contestID,
         },
       });
     },
@@ -463,12 +463,12 @@ export default {
       this.createPage = false;
       this.editPage = false;
     },
-    handleProblemPage(contestId) {
-      this.contestId = contestId;
+    handleProblemPage(contestID) {
+      this.contestID = contestID;
       this.problemPage = !this.problemPage;
     },
-    handleAnnouncementPage(contestId) {
-      this.contestId = contestId;
+    handleAnnouncementPage(contestID) {
+      this.contestID = contestID;
       this.announcementPage = !this.announcementPage;
     },
     handleGroupPage() {

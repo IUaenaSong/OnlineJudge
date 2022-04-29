@@ -136,6 +136,36 @@ public class Constants {
         }
     }
 
+    public enum Exam {
+
+        STATUS_SCHEDULED(-1, "Scheduled"),
+        STATUS_RUNNING(0, "Running"),
+        STATUS_ENDED(1, "Ended"),
+
+        AUTH_PUBLIC(0, "Public"),
+        AUTH_PRIVATE(1, "Private"),
+        AUTH_PROTECT(2, "Protect"),
+
+        RANK_RECENT_SCORE(null,"Recent"),
+        RANK_HIGHEST_SCORE(null,"Highest");
+
+        private final Integer code;
+        private final String name;
+
+        Exam(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     public enum Account {
         CODE_CHANGE_PASSWORD_FAIL("change-password-fail:"),
         CODE_CHANGE_PASSWORD_LOCK("change-password-lock:"),
@@ -149,6 +179,7 @@ public class Constants {
 
         ACM_RANK_CACHE("acm_rank_cache"),
         OI_RANK_CACHE("oi_rank_cache"),
+        GROUP_RANK_CACHE("group_rank_cache"),
 
         SUPER_ADMIN_UID_LIST_CACHE("super_admin_uid_list_case"),
 

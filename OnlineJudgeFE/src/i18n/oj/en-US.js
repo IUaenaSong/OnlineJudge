@@ -325,7 +325,7 @@ export const m = {
   Running: 'Running',
   Scheduled: 'Scheduled',
   Ended: 'Ended',
-  No_contest: 'No contest',
+  No_Contest: 'No Contest',
   Contests: 'Contests',
   Public: 'Public',
   Private: 'Private',
@@ -565,6 +565,8 @@ export const m = {
   Group_Question: 'Question',
   Group_Training: 'Training',
   Group_Contest: 'Contest',
+  Group_Exam: 'Group Exam',
+  Group_Rank: 'Rank',
   Group_Submission: 'Submission',
   Group_Discussion: 'Discussion',
   Group_Setting: 'Setting',
@@ -606,6 +608,10 @@ export const m = {
   Exam_Question: 'Exam Question',
   Question_No_Choice: 'The question has no choice',
   Question_No_Right_Answer: 'The question has no right answer',
+
+  // /views/oj/group/GroupRank.vue
+  Group_ACM_Rank_Type: 'ACM Rank',
+  Group_OI_Rank_Type: 'OI Rank',
 
   // /views/oj/group/GroupDiscussionList.vue
   No_Discussion: 'No Discussion',

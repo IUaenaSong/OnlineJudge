@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iuaenasong.oj.mapper.GroupExamMapper">
+    <select id="getExamList" resultType="com.iuaenasong.oj.pojo.vo.ExamVo" useCache="true">
+        SELECT e.id,e.author,e.title,e.description,e.status,e.source,e.auth,e.start_time,
+        e.end_time,e.duration,e.rank_score_type
+        FROM exam e
+        WHERE e.visible = true AND e.gid = #{gid}
+        ORDER BY e.start_time DESC
+    </select>
+
+    <select id="getAdminExamList" resultType="com.iuaenasong.oj.pojo.entity.exam.Exam" useCache="true">
+        SELECT e.*
+        FROM exam e
+        WHERE e.gid = #{gid}
+        ORDER BY e.id DESC
+    </select>
+</mapper>

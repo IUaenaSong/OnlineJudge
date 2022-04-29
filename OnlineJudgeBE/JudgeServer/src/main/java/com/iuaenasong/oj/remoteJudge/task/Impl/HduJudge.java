@@ -133,6 +133,9 @@ public class HduJudge extends RemoteJudgeStrategy {
 
     @Override
     public void login() {
+        // 清除当前线程的cookies缓存
+        HttpRequest.getCookieManager().getCookieStore().removeAll();
+
         RemoteJudgeDTO remoteJudgeDTO = getRemoteJudgeDTO();
         HttpRequest homeRequest = HttpUtil.createGet(HOST);
         HttpResponse homeResponse = homeRequest.execute();

@@ -16,8 +16,8 @@ DROP TABLE IF EXISTS `announcement`;
 CREATE TABLE `announcement` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `content` longtext,
-  `uid` varchar(255) DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `uid` varchar(32) NOT NULL,
   `status` int(11) DEFAULT '0' COMMENT '0可见，1不可见',
   `gid` bigint(20) unsigned DEFAULT NULL,
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -35,7 +35,7 @@ CREATE TABLE `auth` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL COMMENT '权限名称',
   `permission` varchar(100) DEFAULT NULL COMMENT '权限字符串',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0可用，1不可用',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0可用，1不可用',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -84,20 +84,20 @@ CREATE TABLE `comment` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `uid` (`from_uid`),
+  KEY `from_uid` (`from_uid`),
   KEY `from_avatar` (`from_avatar`),
-  KEY `comment_ibfk_7` (`did`),
+  KEY `did` (`did`),
   KEY `cid` (`cid`),
-  CONSTRAINT `comment_ibfk_6` FOREIGN KEY (`from_avatar`) REFERENCES `user_info` (`avatar`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `comment_ibfk_7` FOREIGN KEY (`did`) REFERENCES `discussion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `comment_ibfk_8` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`from_avatar`) REFERENCES `user_info` (`avatar`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`did`) REFERENCES `discussion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `comment_like`;
 
 CREATE TABLE `comment_like` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) NOT NULL,
+  `uid` varchar(32) NOT NULL,
   `cid` int(11) NOT NULL,
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -270,6 +270,7 @@ DROP TABLE IF EXISTS `contest_score`;
 CREATE TABLE `contest_score` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `cid` bigint(20) unsigned NOT NULL,
+  `uid` varchar(32) NOT NULL COMMENT '用户id',
   `last` int(11) DEFAULT NULL COMMENT '比赛前的score得分',
   `change` int(11) DEFAULT NULL COMMENT 'Score比分变化',
   `now` int(11) DEFAULT NULL COMMENT '现在的score',
@@ -277,7 +278,9 @@ CREATE TABLE `contest_score` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`cid`),
   KEY `cid` (`cid`),
-  CONSTRAINT `contest_score_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `uid` (`uid`),
+  CONSTRAINT `contest_score_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `contest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `contest_score_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `discussion`;
@@ -318,7 +321,7 @@ DROP TABLE IF EXISTS `discussion_like`;
 
 CREATE TABLE `discussion_like` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) NOT NULL,
+  `uid` varchar(32) NOT NULL,
   `did` int(11) NOT NULL,
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -569,12 +572,12 @@ DROP TABLE IF EXISTS `reply`;
 CREATE TABLE `reply` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comment_id` int(11) NOT NULL COMMENT '被回复的评论id',
-  `from_uid` varchar(255) NOT NULL COMMENT '发起回复的用户id',
+  `from_uid` varchar(32) NOT NULL COMMENT '发起回复的用户id',
   `from_name` varchar(255) NOT NULL COMMENT '发起回复的用户名',
   `from_avatar` varchar(255) DEFAULT NULL COMMENT '发起回复的用户头像地址',
   `from_role` varchar(255) DEFAULT NULL COMMENT '发起回复的用户角色',
   `to_uid` varchar(255) NOT NULL COMMENT '被回复的用户id',
-  `to_name` varchar(255) NOT NULL COMMENT '被回复的用户名',
+  `to_name` varchar(32) NOT NULL COMMENT '被回复的用户名',
   `to_avatar` varchar(255) DEFAULT NULL COMMENT '被回复的用户头像地址',
   `content` longtext COMMENT '回复的内容',
   `status` int(11) DEFAULT '0' COMMENT '是否封禁或逻辑删除该回复',
@@ -595,7 +598,7 @@ CREATE TABLE `role` (
   `id` bigint(20) unsigned zerofill NOT NULL,
   `role` varchar(50) NOT NULL COMMENT '角色',
   `description` varchar(100) DEFAULT NULL COMMENT '描述',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '默认0可用，1不可用',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认0可用，1不可用',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
@@ -641,7 +644,7 @@ CREATE TABLE `tag` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name_oj_gid_unique` (`name`,`oj`, `gid`),
+  UNIQUE KEY `name_oj_gid_unique` (`name`, `oj`, `gid`),
   KEY `gid` (`gid`),
   CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -659,8 +662,9 @@ CREATE TABLE `user_acproblem` (
   KEY `submit_id` (`submit_id`),
   KEY `uid` (`uid`),
   KEY `pid` (`pid`),
-  CONSTRAINT `user_acproblem_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_acproblem_ibfk_2` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `user_acproblem_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_acproblem_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_acproblem_ibfk_3` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_info`;
@@ -740,7 +744,7 @@ DROP TABLE IF EXISTS `admin_sys_notice`;
 CREATE TABLE `admin_sys_notice` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` longtext COMMENT '内容',
+  `content` longtext NOT NULL COMMENT '内容',
   `type` varchar(255) DEFAULT NULL COMMENT '发给哪些用户类型',
   `state` tinyint(1) DEFAULT '0' COMMENT '是否已拉取给用户',
   `recipient_id` varchar(32) DEFAULT NULL COMMENT '接受通知的用户id',
@@ -854,7 +858,7 @@ CREATE TABLE `training_record` (
   `tid` bigint unsigned NOT NULL,
   `tpid` bigint unsigned NOT NULL,
   `pid` bigint unsigned NOT NULL,
-  `uid` varchar(255) NOT NULL,
+  `uid` varchar(32) NOT NULL,
   `submit_id` bigint unsigned NOT NULL,
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -912,7 +916,7 @@ CREATE TABLE `group` (
   `brief` varchar(50) COMMENT '团队简介',
   `description` longtext COMMENT '团队介绍',
   `owner` varchar(255) NOT NULL COMMENT '团队拥有者用户名',
-  `uid` varchar(255) NOT NULL,
+  `uid` varchar(32) NOT NULL,
   `auth` int(11) NOT NULL COMMENT '1为Public，2为Protected，3为Private',
   `visible` tinyint(1) DEFAULT '1' COMMENT '是否可见',
   `status` tinyint(1) DEFAULT '0' COMMENT '是否封禁',
@@ -971,6 +975,153 @@ CREATE TABLE `question` (
   CONSTRAINT `question_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `exam`;
+
+CREATE TABLE `exam` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(32) NOT NULL COMMENT '考试创建者id',
+  `author` varchar(255) DEFAULT NULL COMMENT '考试创建者的用户名',
+  `title` varchar(255) DEFAULT NULL COMMENT '考试标题',
+  `description` longtext COMMENT '考试说明',
+  `source` int(11) DEFAULT '0' COMMENT '考试来源，原创为0，克隆考试为考试id',
+  `auth` int(11) NOT NULL COMMENT '0为公开考试，1为私有考试（访问有密码），2为保护考试（提交有密码）',
+  `pwd` varchar(255) DEFAULT NULL COMMENT '考试密码',
+  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `duration` bigint(20) DEFAULT NULL COMMENT '考试时长(s)',
+  `real_score` tinyint(1) DEFAULT '1' COMMENT '编程题是否实时出分',
+  `auto_real_score` tinyint(1) DEFAULT '1' COMMENT '考试结束是否自动公开成绩以及小题分',
+  `status` int(11) DEFAULT NULL COMMENT '-1为未开始，0为进行中，1为已结束',
+  `visible` tinyint(1) DEFAULT '1' COMMENT '是否可见',
+  `open_account_limit` tinyint(1) DEFAULT '0' COMMENT '是否开启账号限制',
+  `account_limit_rule` mediumtext COMMENT '账号限制规则',
+  `rank_show_name` varchar(20) DEFAULT 'username' COMMENT '排行榜显示（username、nickname、realname）',
+  `rank_score_type` varchar(255) DEFAULT 'Recent' COMMENT '编程题目得分方式，Recent、Highest',
+  `is_public` tinyint(1) DEFAULT '1',
+  `gid` bigint(20) unsigned DEFAULT NULL,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`uid`),
+  KEY `uid` (`uid`),
+  KEY `gid` (`gid`),
+  CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_ibfk_2` FOREIGN KEY (`gid`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `exam_question`;
+
+CREATE TABLE `exam_question` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `display_id` varchar(255) NOT NULL COMMENT '该问题在考试中的顺序id',
+  `eid` bigint(20) unsigned NOT NULL COMMENT '考试id',
+  `qid` bigint(20) unsigned NOT NULL COMMENT '问题id',
+  `score` int(11) NOT NULL COMMENT '问题分数',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`eid`,`qid`),
+  UNIQUE KEY `display_id_eid_qid_unique` (`display_id`,`eid`,`qid`),
+  KEY `eid` (`eid`),
+  KEY `qid` (`qid`),
+  CONSTRAINT `exam_question_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_question_ibfk_2` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `exam_problem`;
+
+CREATE TABLE `exam_problem` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `display_id` varchar(255) NOT NULL COMMENT '该题目在考试中的顺序id',
+  `eid` bigint(20) unsigned NOT NULL COMMENT '考试id',
+  `pid` bigint(20) unsigned NOT NULL COMMENT '题目id',
+  `display_title` varchar(255) NOT NULL COMMENT '该题目在考试中的标题，默认为原名字',
+  `score` int(11) NOT NULL COMMENT '题目分数',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`eid`,`pid`),
+  UNIQUE KEY `display_id_eid_pid_unique` (`display_id`,`eid`,`pid`),
+  KEY `eid` (`eid`),
+  KEY `pid` (`pid`),
+  CONSTRAINT `exam_problem_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_problem_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `exam_record`;
+
+CREATE TABLE `exam_record` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `eid` bigint(20) unsigned DEFAULT NULL COMMENT '考试id',
+  `uid` varchar(255) NOT NULL COMMENT '用户id',
+  `pid` bigint(20) unsigned DEFAULT NULL COMMENT '题目id',
+  `epid` bigint(20) unsigned DEFAULT NULL COMMENT '考试中的题目的id',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `realname` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+  `display_id` varchar(255) DEFAULT NULL COMMENT '考试中展示的id',
+  `submit_id` bigint(20) unsigned NOT NULL COMMENT '提交id，用于可重判',
+  `submit_time` datetime NOT NULL COMMENT '具体提交时间',
+  `time` bigint(20) unsigned DEFAULT NULL COMMENT '提交时间，为提交时间减去比赛时间',
+  `score` int(11) DEFAULT NULL COMMENT '得分',
+  `use_time` int(11) DEFAULT NULL COMMENT '运行耗时',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`submit_id`),
+  KEY `uid` (`uid`),
+  KEY `pid` (`pid`),
+  KEY `epid` (`epid`),
+  KEY `submit_id` (`submit_id`),
+  KEY `eid` (`eid`),
+  KEY `time` (`time`),
+  CONSTRAINT `exam_record_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_record_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_record_ibfk_3` FOREIGN KEY (`pid`) REFERENCES `problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_record_ibfk_4` FOREIGN KEY (`epid`) REFERENCES `exam_problem` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_record_ibfk_5` FOREIGN KEY (`submit_id`) REFERENCES `judge` (`submit_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `exam_question_record`;
+
+CREATE TABLE `exam_question_record` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `eid` bigint(20) unsigned DEFAULT NULL COMMENT '考试id',
+  `uid` varchar(255) NOT NULL COMMENT '用户id',
+  `qid` bigint(20) unsigned DEFAULT NULL COMMENT '问题id',
+  `eqid` bigint(20) unsigned DEFAULT NULL COMMENT '考试中的问题的id',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `realname` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+  `display_id` varchar(255) DEFAULT NULL COMMENT '考试中展示的id',
+  `submit_answer` longtext COMMENT '提交的答案',
+  `submit_time` datetime NOT NULL COMMENT '具体提交时间',
+  `time` bigint(20) unsigned DEFAULT NULL COMMENT '提交时间，为提交时间减去考试时间',
+  `score` int(11) DEFAULT NULL COMMENT '得分',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `qid` (`qid`),
+  KEY `eqid` (`eqid`),
+  KEY `eid` (`eid`),
+  KEY `time` (`time`),
+  CONSTRAINT `exam_question_record_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_question_record_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_question_record_ibfk_3` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_question_record_ibfk_4` FOREIGN KEY (`eqid`) REFERENCES `exam_question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `exam_register`;
+
+CREATE TABLE `exam_register` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `eid` bigint(20) unsigned NOT NULL COMMENT '考试id',
+  `uid` varchar(32) NOT NULL COMMENT '用户id',
+  `status` int(11) DEFAULT '0' COMMENT '默认为0表示正常，1为失效。',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`eid`,`uid`),
+  UNIQUE KEY `eid_uid_unique` (`eid`,`uid`),
+  KEY `uid` (`uid`),
+  CONSTRAINT `exam_register_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `exam_register_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user_info` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DELIMITER $$
 
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `contest_trigger` */$$
@@ -983,7 +1134,6 @@ set new.status=(
 	  WHEN NOW() >= new.end_time THEN 1
 	END);
 END */$$
-
 
 DELIMITER ;
 
@@ -1007,6 +1157,48 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `contest_status`()
 BEGIN
       UPDATE contest 
+	SET STATUS = (
+	CASE 
+	  WHEN NOW() < start_time THEN -1 
+	  WHEN NOW() >= start_time AND NOW()<end_time THEN  0
+	  WHEN NOW() >= end_time THEN 1
+	END);
+    END */$$
+DELIMITER ;
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `exam_trigger` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `exam_trigger` BEFORE INSERT ON `exam` FOR EACH ROW BEGIN
+set new.status=(
+	CASE 
+	  WHEN NOW() < new.start_time THEN -1 
+	  WHEN NOW() >= new.start_time AND NOW()<new.end_time THEN  0
+	  WHEN NOW() >= new.end_time THEN 1
+	END);
+END */$$
+
+DELIMITER ;
+
+/* Event structure for event `exam_event` */
+
+/*!50106 DROP EVENT IF EXISTS `exam_event`*/;
+
+DELIMITER $$
+
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `exam_event` ON SCHEDULE EVERY 1 SECOND STARTS '2022-04-16 21:51:08' ON COMPLETION PRESERVE ENABLE DO CALL exam_status() */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `exam_status` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `exam_status` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `exam_status`()
+BEGIN
+      UPDATE exam 
 	SET STATUS = (
 	CASE 
 	  WHEN NOW() < start_time THEN -1 

@@ -12,20 +12,16 @@ import cn.hutool.http.HtmlUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.http.cookie.ThreadLocalCookieStore;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.statement.select.Wait;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeRes;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
 import com.iuaenasong.oj.util.Constants;
 
-import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j(topic = "oj")

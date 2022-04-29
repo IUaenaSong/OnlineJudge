@@ -326,7 +326,7 @@ export const m = {
   Running: '进行中',
   Scheduled: '筹备中',
   Ended: '已结束',
-  No_contest: '暂无比赛',
+  No_Contest: '暂无比赛',
   Contests: '比赛',
   Public: '公开赛',
   Private: '私有赛',
@@ -566,6 +566,8 @@ export const m = {
   Group_Question: '问题',
   Group_Training: '训练',
   Group_Contest: '比赛',
+  Group_Exam: '考试',
+  Group_Rank: '排名',
   Group_Submission: '评测',
   Group_Discussion: '讨论',
   Group_Setting: '设置',
@@ -607,6 +609,10 @@ export const m = {
   Exam_Question: '考试问题',
   Question_No_Choice: '该问题没有设置选项',
   Question_No_Right_Answer: '该问题未设置正确答案',
+
+  // /views/oj/group/GroupRank.vue
+  Group_ACM_Rank_Type: 'ACM 排名',
+  Group_OI_Rank_Type: 'OI 排名',
 
   // /views/oj/group/GroupDiscussionList.vue
   No_Discussion: '暂无讨论',

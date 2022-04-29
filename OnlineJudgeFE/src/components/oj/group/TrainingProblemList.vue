@@ -161,7 +161,7 @@ export default {
     Problem
   },
   props: {
-    trainingId: {
+    trainingID: {
       type: Number,
       default: null
     },
@@ -204,7 +204,7 @@ export default {
     getProblemList(page = 1) {
       this.loading = true;
       let params = {
-        tid: this.trainingId,
+        tid: this.trainingID,
       }
       api.getGroupTrainingProblemList(page, this.limit, params).then(
         (res) => {
@@ -260,7 +260,7 @@ export default {
       }).then(
         () => {
           api
-            .deleteGroupTrainingProblem(pid, this.trainingId)
+            .deleteGroupTrainingProblem(pid, this.trainingID)
             .then((res) => {
               this.$msg.success('success');
               this.$emit("currentChangeProblem");
@@ -280,7 +280,7 @@ export default {
   watch: {
     $route(newVal, oldVal) {
       if (
-        newVal.params.trainingId != oldVal.params.trainingId ||
+        newVal.params.trainingID != oldVal.params.trainingID ||
         newVal.name != oldVal.name
       ) {
         this.init();

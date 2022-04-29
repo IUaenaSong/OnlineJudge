@@ -35,7 +35,7 @@ public class RemoteJudgeDispatcher {
     @Value("${oj.judge.token}")
     private String judgeToken;
 
-    public void sendTask(Judge judge,String remoteJudgeProblem, Boolean isContest, Boolean isHasSubmitIdRemoteReJudge) {
+    public void sendTask(Judge judge, String remoteJudgeProblem, Boolean isContest, Boolean isHasSubmitIdRemoteReJudge) {
         JSONObject task = new JSONObject();
         task.set("judge", judge);
         task.set("remoteJudgeProblem", remoteJudgeProblem);

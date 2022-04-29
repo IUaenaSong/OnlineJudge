@@ -81,7 +81,7 @@
         </div>
         <div v-loading="loading">
           <p id="no-contest" v-show="contests.length == 0">
-            <el-empty :description="$t('m.No_contest')"></el-empty>
+            <el-empty :description="$t('m.No_Contest')"></el-empty>
           </p>
           <ol id="contest-list">
             <li

@@ -116,13 +116,13 @@ const adminRoutes= [
         meta: { title: 'Training List' }
       },
       {
-        path: 'training/:trainingId/edit',
+        path: 'training/:trainingID/edit',
         name: 'admin-edit-training',
         component: Training,
         meta: { title: 'Edit Training' }
       },
       {
-        path: 'training/:trainingId/problems',
+        path: 'training/:trainingID/problems',
         name: 'admin-training-problem-list',
         component: TrainingProblemList,
         meta: { title: 'Training Problem List' }
@@ -146,31 +146,31 @@ const adminRoutes= [
         meta: { title: 'Contest List' }
       },
       {
-        path: 'contest/:contestId/edit',
+        path: 'contest/:contestID/edit',
         name: 'admin-edit-contest',
         component: Contest,
         meta: { title: 'Edit Contest' }
       },
       {
-        path: 'contest/:contestId/announcement',
+        path: 'contest/:contestID/announcement',
         name: 'admin-contest-announcement',
         component: Announcement,
         meta: { title: 'Contest Announcement' }
       },
       {
-        path: 'contest/:contestId/problems',
+        path: 'contest/:contestID/problems',
         name: 'admin-contest-problem-list',
         component: ProblemList,
         meta: { title: 'Contest Problem List' }
       },
       {
-        path: 'contest/:contestId/problem/create',
+        path: 'contest/:contestID/problem/create',
         name: 'admin-create-contest-problem',
         component: Problem,
         meta: { title: 'Create Problem' }
       },
       {
-        path: 'contest/:contestId/problem/:problemId/edit',
+        path: 'contest/:contestID/problem/:problemId/edit',
         name: 'admin-edit-contest-problem',
         component: Problem,
         meta: { title: 'Edit Problem' }

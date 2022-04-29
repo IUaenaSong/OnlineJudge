@@ -255,44 +255,44 @@ export default {
         }
       );
     },
-    openDownloadOptions(contestId) {
+    openDownloadOptions(contestID) {
       this.downloadDialogVisible = true;
-      this.currentId = contestId;
+      this.currentId = contestID;
     },
     downloadSubmissions() {
       let url = `/api/file/download-contest-ac-submission?cid=${this.currentId}&excludeAdmin=${this.excludeAdmin}&splitType=${this.splitType}`;
       utils.downloadFile(url);
       this.downloadDialogVisible = false;
     },
-    goEdit(contestId) {
-      this.$router.push({ name: 'admin-edit-contest', params: { contestId } });
+    goEdit(contestID) {
+      this.$router.push({ name: 'admin-edit-contest', params: { contestID } });
     },
-    goContestAnnouncement(contestId) {
+    goContestAnnouncement(contestID) {
       this.$router.push({
         name: 'admin-contest-announcement',
-        params: { contestId },
+        params: { contestID },
       });
     },
-    goContestProblemList(contestId) {
+    goContestProblemList(contestID) {
       this.$router.push({
         name: 'admin-contest-problem-list',
-        params: { contestId },
+        params: { contestID },
       });
     },
-    deleteContest(contestId) {
+    deleteContest(contestID) {
       this.$confirm(this.$i18n.t('m.Delete_Contest_Tips'), 'Tips', {
         confirmButtonText: this.$i18n.t('m.OK'),
         cancelButtonText: this.$i18n.t('m.Cancel'),
         type: 'warning',
       }).then(() => {
-        api.admin_deleteContest(contestId).then((res) => {
+        api.admin_deleteContest(contestID).then((res) => {
           this.$msg.success(this.$i18n.t('m.Delete_successfully'));
           this.currentChange(1);
         });
       });
     },
-    changeContestVisible(contestId, visible, uid) {
-      api.admin_changeContestVisible(contestId, visible, uid).then((res) => {
+    changeContestVisible(contestID, visible, uid) {
+      api.admin_changeContestVisible(contestID, visible, uid).then((res) => {
         this.$msg.success(this.$i18n.t('m.Update_Successfully'));
       });
     },

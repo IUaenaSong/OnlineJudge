@@ -159,7 +159,7 @@ export default {
     AnnouncementList
   },
   props: {
-    contestId: {
+    contestID: {
       type: Number,
       default: null
     },
@@ -189,7 +189,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.contestId) {
+      if (this.contestID) {
         this.getGroupContestAnnouncementList();
       } else {
         this.getGroupAdminAnnouncementList();
@@ -218,7 +218,7 @@ export default {
     },
     getGroupContestAnnouncementList() {
       this.loading = true;
-      api.getGroupContestAnnouncementList(this.currentPage, this.limit, this.contestId).then(
+      api.getGroupContestAnnouncementList(this.currentPage, this.limit, this.contestID).then(
         (res) => {
           this.adminAnnouncementList = res.data.data.records;
           this.adminTotal = res.data.data.total;
@@ -247,10 +247,10 @@ export default {
       }
       data.gid = this.$route.params.groupID;
       let requestData;
-      if (this.contestId) {
+      if (this.contestID) {
         let announcement = {
           announcement: data,
-          cid: this.contestId,
+          cid: this.contestID,
         };
         requestData = announcement;
         funcName =
@@ -280,8 +280,8 @@ export default {
       })
         .then(() => {
           this.loading = true;
-          if (this.contestId) {
-            api.deleteGroupContestAnnouncement(announcementId, this.contestId).then((res) => {
+          if (this.contestID) {
+            api.deleteGroupContestAnnouncement(announcementId, this.contestID).then((res) => {
               this.loading = true;
               this.$msg.success(this.$i18n.t('m.Delete_successfully'));
               this.init();

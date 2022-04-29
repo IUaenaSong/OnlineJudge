@@ -22,11 +22,11 @@ import api from '@/common/api';
 export default {
   name: 'AddProblemFromGroup',
   props: {
-    trainingId: {
+    trainingID: {
       type: Number,
       default: null
     },
-    contestId: {
+    contestID: {
       type: Number,
       default: null
     },
@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     addGroupProblem() {
-      if (this.contestId) {
+      if (this.contestID) {
         this.$prompt(
           this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Contest'),
           'Tips'
         ).then(
           ({ value }) => {
-            api.addGroupContestProblemFromGroup(this.problemId, this.contestId, value).then(
+            api.addGroupContestProblemFromGroup(this.problemId, this.contestID, value).then(
               (res) => {
                 this.$msg.success(this.$i18n.t('m.Add_Successfully'));
                 this.loading = false;
@@ -58,7 +58,7 @@ export default {
           () => {}
         );
       } else {
-        api.addGroupTrainingProblemFromGroup(this.problemId, this.trainingId).then(
+        api.addGroupTrainingProblemFromGroup(this.problemId, this.trainingID).then(
           (res) => {
             this.$msg.success(this.$i18n.t('m.Add_Successfully'));
             this.loading = false;

@@ -751,6 +751,7 @@ export default {
   width: 139px;
   height: 42px;
   margin-top: 5px;
+  cursor: pointer;
 }
 .el-dropdown-link {
   cursor: pointer;

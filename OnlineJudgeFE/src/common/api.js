@@ -515,6 +515,12 @@ const ojApi = {
       }
     })
   },
+  // Exam
+  getExam(eid) {
+    return ajax('/api/get-exam-info', 'get', {
+      params: { eid }
+    })
+  },
 
   // about页部分请求
   getAllLanguages(all){
@@ -680,8 +686,8 @@ const ojApi = {
   },
 
   // Group
-  getGroupList(currentPage, limit, query) {
-    let params = { currentPage, limit }
+  getGroupList(query) {
+    let params = {}
     Object.keys(query).forEach((element) => {
       if (query[element] !== '' && query[element] !== null && query[element] !== undefined) {
         params[element] = query[element]
@@ -1108,6 +1114,62 @@ const ojApi = {
   deleteGroupContestAnnouncement(aid, cid) {
     return ajax("/api/group/contest-announcement", 'delete', {
       params: { aid, cid }
+    })
+  },
+
+  //Group Exam
+  getGroupExamList(currentPage, limit, gid) {
+    return ajax('/api/group/get-exam-list', 'get', {
+      params: {currentPage, limit, gid}
+    })
+  },
+
+  getGroupAdminExamList(currentPage, limit, gid) {
+    return ajax('/api/group/get-admin-exam-list','get', {
+      params: {currentPage, limit, gid}
+    })
+  },
+
+  getGroupExam(eid) {
+    return ajax("/api/group/exam", 'get', {
+      params: { eid }
+    })
+  },
+
+  addGroupExam(data) {
+    return ajax("/api/group/exam", 'post', {
+      data
+    })
+  },
+
+  updateGroupExam(data) {
+    return ajax("/api/group/exam",'put',{
+      data
+    })
+  },
+
+  deleteGroupExam(eid) {
+    return ajax("/api/group/exam", 'delete', {
+      params:{ eid }
+    })
+  },
+
+  changeGroupExamVisible(eid, visible) {
+    return ajax("/api/group/change-exam-visible", 'put', {
+      params:{ eid, visible }
+    })
+  },
+
+  // Group Rank
+  getGroupRankList(currentPage, limit, gid, type, searchUser){
+    return ajax('/api/group/get-rank-list','get', {
+      params: {
+       currentPage,
+        limit,
+        gid,
+        type,
+        searchUser
+      }
     })
   },
 

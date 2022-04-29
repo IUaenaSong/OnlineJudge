@@ -4,7 +4,7 @@
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            query.contestId ? $t('m.Contest_Problem_List') : $t('m.Problem_List')
+            query.contestID ? $t('m.Contest_Problem_List') : $t('m.Problem_List')
           }}</span>
           <div class="filter-row">
             <span>
@@ -16,7 +16,7 @@
                 >{{ $t('m.Create') }}
               </el-button>
             </span>
-            <span v-if="query.contestId">
+            <span v-if="query.contestID">
               <el-button
                 type="primary"
                 size="small"
@@ -66,7 +66,7 @@
               </el-select>
             </span>
 
-            <span v-if="!query.contestId">
+            <span v-if="!query.contestID">
               <el-select
                 v-model="query.problemListAuth"
                 @change="ProblemListChangeFilter"
@@ -112,10 +112,10 @@
             align="left"
           >
             <template v-slot="{ row }">
-              <p v-if="query.contestId">
+              <p v-if="query.contestID">
                 {{ $t('m.Display_ID') }}：{{ row.problemId }}
               </p>
-              <p v-if="query.contestId">{{ $t('m.Title') }}：{{ row.title }}</p>
+              <p v-if="query.contestID">{{ $t('m.Title') }}：{{ row.title }}</p>
               <span v-else>{{ row.problemId }}</span>
             </template>
           </vxe-table-column>
@@ -189,7 +189,7 @@
                 v-model="row.auth"
                 @change="changeProblemAuth(row)"
                 size="small"
-                :disabled="!isSuperAdmin && !isProblemAdmin && !query.contestId"
+                :disabled="!isSuperAdmin && !isProblemAdmin && !query.contestID"
               >
                 <el-option
                   :label="$t('m.Public_Problem')"
@@ -203,7 +203,7 @@
                 <el-option
                   :label="$t('m.Contest_Problem')"
                   :value="3"
-                  :disabled="!query.contestId"
+                  :disabled="!query.contestID"
                 ></el-option>
               </el-select>
             </template>
@@ -248,7 +248,7 @@
                 effect="dark"
                 :content="$t('m.Remove')"
                 placement="top"
-                v-if="query.contestId"
+                v-if="query.contestID"
               >
                 <el-button
                   icon="el-icon-close"
@@ -295,13 +295,13 @@
     </el-col>
     <el-dialog
       :title="$t('m.Add_Contest_Problem')"
-      v-if="query.contestId"
+      v-if="query.contestID"
       width="90%"
       :visible.sync="addProblemDialogVisible"
       :close-on-click-modal="false"
     >
       <AddPublicProblem
-        :contestID="query.contestId"
+        :contestID="query.contestID"
         @on-change="getProblemList"
       ></AddPublicProblem>
     </el-dialog>
@@ -328,7 +328,7 @@
         </el-form-item>
 
         <el-form-item
-          v-if="query.contestId"
+          v-if="query.contestID"
           :label="$t('m.Enter_The_Problem_Display_ID_in_the_Contest')"
           required
         >
@@ -369,7 +369,7 @@ export default {
         pageSize: 10,
         keyword: '',
         currentPage: 1,
-        contestId: null,
+        contestID: null,
       },
       problemList: [],
       contestProblemMap: {},
@@ -403,7 +403,7 @@ export default {
   computed: {
     ...mapGetters(['userInfo', 'isSuperAdmin', 'isProblemAdmin']),
     isContest() {
-      return !(this.routeName == 'admin-problem-list' && !this.query.contestId);
+      return !(this.routeName == 'admin-problem-list' && !this.query.contestID);
     },
   },
   methods: {
@@ -417,7 +417,7 @@ export default {
         ? parseInt(query.problemListAuth)
         : 0;
       this.query.oj = query.oj || 'All';
-      this.query.contestId = this.$route.params.contestId;
+      this.query.contestID = this.$route.params.contestID;
       this.contestProblemMap = {};
       this.getProblemList();
       this.REMOTE_OJ = Object.assign({}, REMOTE_OJ);
@@ -435,7 +435,7 @@ export default {
       } else if (this.routeName === 'admin-contest-problem-list') {
         this.$router.push({
           name: 'admin-edit-contest-problem',
-          params: { problemId: problemId, contestId: this.query.contestId },
+          params: { problemId: problemId, contestID: this.query.contestID },
         });
       }
     },
@@ -450,18 +450,18 @@ export default {
       } else if (this.routeName === 'admin-contest-problem-list') {
         this.$router.push({
           name: 'admin-create-contest-problem',
-          params: { contestId: this.query.contestId },
+          params: { contestID: this.query.contestID },
         });
       }
     },
 
     pushRouter() {
-      if (this.query.contestId) {
+      if (this.query.contestID) {
         this.$router.push({
           name: 'admin-contest-problem-list',
           query: this.query,
           params: {
-            contestId: this.query.contestId,
+            contestID: this.query.contestID,
           },
         });
       } else {
@@ -486,7 +486,7 @@ export default {
         limit: this.query.pageSize,
         currentPage: this.query.currentPage,
         keyword: this.query.keyword,
-        cid: this.query.contestId,
+        cid: this.query.contestID,
         oj: this.query.oj,
       };
       if (this.problemListAuth != 0) {
@@ -554,7 +554,7 @@ export default {
       }).then(
         () => {
           api
-            .admin_deleteContestProblem(pid, this.query.contestId)
+            .admin_deleteContestProblem(pid, this.query.contestID)
             .then((res) => {
               this.$msg.success('success');
               this.getProblemList();
@@ -567,8 +567,8 @@ export default {
     updateProblem(row) {
       let data = Object.assign({}, row);
       let funcName = '';
-      if (this.query.contestId) {
-        data.contest_id = this.query.contestId;
+      if (this.query.contestID) {
+        data.contest_id = this.query.contestID;
         funcName = 'admin_editContestProblem';
       } else {
         funcName = 'admin_editProblem';
@@ -598,7 +598,7 @@ export default {
         return;
       }
 
-      if (!this.displayId && this.query.contestId) {
+      if (!this.displayId && this.query.contestID) {
         this.$msg.error(
           this.$i18n.t('m.The_Problem_Display_ID_in_the_Contest_is_required')
         );
@@ -607,7 +607,7 @@ export default {
 
       this.addRemoteOJproblemLoading = true;
       let funcName = '';
-      if (this.query.contestId) {
+      if (this.query.contestID) {
         funcName = 'admin_addContestRemoteOJProblem';
       } else {
         funcName = 'admin_addRemoteOJProblem';
@@ -615,7 +615,7 @@ export default {
       api[funcName](
         this.otherOJName,
         this.otherOJProblemId,
-        this.query.contestId,
+        this.query.contestID,
         this.displayId
       ).then(
         (res) => {

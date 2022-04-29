@@ -52,7 +52,7 @@
             </el-col>
           </el-row>
 
-          <el-row>
+          <el-row :gutter="20">
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Contest_Rule_Type')" required>
                 <el-radio
@@ -93,7 +93,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row :gutter="20">
             <el-col :md="8" :xs="24" v-if="contest.sealRank">
               <el-form-item :label="$t('m.Seal_Time_Rank')" required>
                 <el-switch
@@ -158,7 +158,7 @@
             </el-col>
           </el-row>
 
-          <el-row>
+          <el-row :gutter="20">
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Contest_Outside_ScoreBoard')" required>
                 <el-switch
@@ -181,7 +181,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
             <el-col :span="24">
               <el-form-item :label="$t('m.Rank_Show_Name')" required>
@@ -198,46 +197,47 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
+          </el-row>
 
-            <el-col>
-              <el-form-item :label="$t('m.Star_User_UserName')" required>
-                <el-tag
-                  v-for="username in contest.starAccount"
-                  closable
-                  :close-transition="false"
-                  :key="username"
-                  type="warning"
-                  size="medium"
-                  @close="removeStarUser(username)"
-                  style="margin-right: 7px;margin-top:4px"
-                  >{{ username }}</el-tag
-                >
-                <el-input
-                  v-if="inputVisible"
-                  size="medium"
-                  class="input-new-star-user"
-                  v-model="starUserInput"
-                  :trigger-on-focus="true"
-                  @keyup.enter.native="addStarUser"
-                  @blur="addStarUser"
-                >
-                </el-input>
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('m.Add')"
-                  placement="top"
-                  v-else
-                >
-                  <el-button
-                    class="button-new-tag"
-                    size="small"
-                    @click="inputVisible = true"
-                    icon="el-icon-plus"
-                  ></el-button>
-                </el-tooltip>
-              </el-form-item>
-            </el-col>
-
+          <el-col :span="24">
+            <el-form-item :label="$t('m.Star_User_UserName')" required>
+              <el-tag
+                v-for="username in contest.starAccount"
+                closable
+                :close-transition="false"
+                :key="username"
+                type="warning"
+                size="medium"
+                @close="removeStarUser(username)"
+                style="margin-right: 7px;margin-top:4px"
+                >{{ username }}</el-tag
+              >
+              <el-input
+                v-if="inputVisible"
+                size="medium"
+                class="input-new-star-user"
+                v-model="starUserInput"
+                :trigger-on-focus="true"
+                @keyup.enter.native="addStarUser"
+                @blur="addStarUser"
+              >
+              </el-input>
+              <el-tooltip
+                effect="dark"
+                :content="$t('m.Add')"
+                placement="top"
+                v-else
+              >
+                <el-button
+                  class="button-new-tag"
+                  size="small"
+                  @click="inputVisible = true"
+                  icon="el-icon-plus"
+                ></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </el-col>
+          <el-row :gutter="20">
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Contest_Auth')" required>
                 <el-select v-model="contest.auth">
@@ -268,7 +268,6 @@
                 <el-switch v-model="contest.openAccountLimit"> </el-switch>
               </el-form-item>
             </el-col>
-
             <template v-if="contest.openAccountLimit">
               <el-form :model="formRule">
                 <el-col :md="6" :xs="24">

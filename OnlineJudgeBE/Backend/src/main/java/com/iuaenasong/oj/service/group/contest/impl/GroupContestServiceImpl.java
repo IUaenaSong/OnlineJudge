@@ -49,9 +49,9 @@ public class GroupContestServiceImpl implements GroupContestService {
     }
 
     @Override
-    public CommonResult<AdminContestVo> getContest(Long tid) {
+    public CommonResult<AdminContestVo> getContest(Long cid) {
         try {
-            return CommonResult.successResponse(groupContestManager.getContest(tid));
+            return CommonResult.successResponse(groupContestManager.getContest(cid));
         } catch (StatusForbiddenException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         } catch (StatusNotFoundException e) {
@@ -90,9 +90,9 @@ public class GroupContestServiceImpl implements GroupContestService {
     }
 
     @Override
-    public CommonResult<Void> deleteContest(Long tid) {
+    public CommonResult<Void> deleteContest(Long cid) {
         try {
-            groupContestManager.deleteContest(tid);
+            groupContestManager.deleteContest(cid);
             return CommonResult.successResponse();
         } catch (StatusForbiddenException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
@@ -104,9 +104,9 @@ public class GroupContestServiceImpl implements GroupContestService {
     }
 
     @Override
-    public CommonResult<Void> changeContestVisible(Long tid, Boolean visible) {
+    public CommonResult<Void> changeContestVisible(Long cid, Boolean visible) {
         try {
-            groupContestManager.changeContestVisible(tid, visible);
+            groupContestManager.changeContestVisible(cid, visible);
             return CommonResult.successResponse();
         } catch (StatusForbiddenException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);

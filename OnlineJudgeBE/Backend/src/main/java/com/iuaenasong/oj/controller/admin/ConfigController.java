@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import com.iuaenasong.oj.common.result.CommonResult;
 import com.iuaenasong.oj.service.admin.system.ConfigService;
 
-import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -75,7 +74,7 @@ public class ConfigController {
 
     @RequiresPermissions("system_info_admin")
     @PostMapping("/test-email")
-    public CommonResult<Void> testEmail(@RequestBody TestEmailDto testEmailDto) throws MessagingException {
+    public CommonResult<Void> testEmail(@RequestBody TestEmailDto testEmailDto) {
 
         return configService.testEmail(testEmailDto);
     }
@@ -96,7 +95,7 @@ public class ConfigController {
 
     @RequiresPermissions("system_info_admin")
     @PostMapping("/test-mobile")
-    public CommonResult<Void> testMobile(@RequestBody TestMobileDto testMobileDto) throws MessagingException {
+    public CommonResult<Void> testMobile(@RequestBody TestMobileDto testMobileDto) {
 
         return configService.testMobile(testMobileDto);
     }

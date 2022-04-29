@@ -332,7 +332,7 @@
               >
                 <el-input
                   type="number"
-                  v-model="databaseConfig.Port"
+                  v-model="databaseConfig.dbPort"
                   :placeholder="'MySQL ' + $t('m.Port')"
                 ></el-input>
               </el-form-item>
@@ -537,7 +537,7 @@ export default {
         .catch(() => {});
     },
     saveMobileConfig() {
-      api.admin_editMobileConfig(this.smtp).then(
+      api.admin_editMobileConfig(this.mobile).then(
         (res) => {
           this.$msg.success(this.$i18n.t('m.Update_Successfully'));
           this.savedMobile = true;

@@ -7,6 +7,7 @@
 package com.iuaenasong.oj.pojo.dto;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @Builder
+@AllArgsConstructor
 @ApiModel(value="DBAndRedisConfig", description="")
 public class DBAndRedisConfigDto {
 

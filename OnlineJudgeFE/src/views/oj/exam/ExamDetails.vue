@@ -64,7 +64,7 @@
       <el-tabs @tab-click="tabClick" v-model="route_name">
         <el-tab-pane name="ExamDetails" lazy >
           <span slot="label"
-            ><i class="el-icon-s-home"></i>&nbsp;{{ $t('m.Overview') }}</span
+            ><i class="el-icon-s-home"></i>&nbsp;{{ $t('m.Exam_Description') }}</span
           >
           <el-row>
             <el-col :span="24" v-if="examPasswordFormVisible" style="margin-top: 10px; margin-bottom: 10px;">
@@ -109,6 +109,22 @@
               </el-card>
             </el-col>
           </el-row>
+        </el-tab-pane>
+        <el-tab-pane
+          name="ExamProblemList"
+          lazy
+          :disabled="examMenuDisabled"
+        >
+          <span slot="label"
+            ><i class="fa fa-list" aria-hidden="true"></i>&nbsp;{{
+              $t('m.Group_Question')
+            }}</span
+          >
+          <transition name="el-fade-in-linear">
+            <router-view
+              v-if="route_name === 'ExamProblemList'"
+            ></router-view>
+          </transition>
         </el-tab-pane>
         <el-tab-pane
           name="ExamProblemList"

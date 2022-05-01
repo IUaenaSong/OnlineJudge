@@ -609,6 +609,28 @@ export const m = {
   Question_No_Choice: 'The question has no choice',
   Question_No_Right_Answer: 'The question has no right answer',
 
+  // /views/oj/group/GroupExam.vue
+  Exam_Admin: 'Exam Admin',
+  No_Exam: 'No Exam',
+  Create_Exam: 'Create Exam',
+  Exam_Title: 'Exam Title',
+  Exam_Description: 'Exam Description',
+  Exam_Start_Time: 'Start Time',
+  Exam_End_Time: 'End Time',
+  Exam_Duration: 'Exam Duration',
+  Rank_Score_Type: 'Rank Score Type',
+  Rank_Score_Type_Recent: 'Use Recent Score',
+  Rank_Score_Type_Highest: 'Use Highest Score',
+  Real_Score: 'Real Score',
+  Auto_Real_Score: 'Auto Real Score',
+  Seal_Score_After_Exam: 'Seal Score After Exam',
+  Real_Score_After_Exam: 'Real Score After Exam',
+  Exam_Auth: 'Exam Auth',
+  Exam_Public: 'Public',
+  Exam_Protected: 'Protected',
+  Exam_Private: 'Private',
+  Exam_Password: 'Exam Password',
+
   // /views/oj/group/GroupRank.vue
   Group_ACM_Rank_Type: 'ACM Rank',
   Group_OI_Rank_Type: 'OI Rank',

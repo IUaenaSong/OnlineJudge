@@ -115,9 +115,9 @@
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Exam_Auth')" required>
                 <el-select v-model="exam.auth">
-                  <el-option :label="$t('m.Public')" :value="0"></el-option>
-                  <el-option :label="$t('m.Private')" :value="1"></el-option>
-                  <el-option :label="$t('m.Protected')" :value="2"></el-option>
+                  <el-option :label="$t('m.Exam_Public')" :value="0"></el-option>
+                  <el-option :label="$t('m.Exam_Private')" :value="1"></el-option>
+                  <el-option :label="$t('m.Exam_Protected')" :value="2"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>

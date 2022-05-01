@@ -164,7 +164,7 @@ public class CommentManager {
 
             Long gid = discussion.getGid();
             if (gid != null) {
-                if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+                if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
                     throw new StatusForbiddenException("对不起，您无权限操作！");
                 }
             }
@@ -396,7 +396,7 @@ public class CommentManager {
 
             Long gid = discussion.getGid();
             if (gid != null) {
-                if (!groupValidator.isGroupMember(userRolesVo.getUid(), gid) && !isRoot) {
+                if (!isRoot && !comment.getFromUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
                     throw new StatusForbiddenException("对不起，您无权限操作！");
                 }
             }

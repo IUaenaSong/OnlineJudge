@@ -26,7 +26,6 @@ public class ProblemController {
     @Autowired
     private ProblemService problemService;
 
-    
     @RequestMapping(value = "/get-problem-list", method = RequestMethod.GET)
     public CommonResult<Page<ProblemVo>> getProblemList(@RequestParam(value = "limit", required = false) Integer limit,
                                                         @RequestParam(value = "currentPage", required = false) Integer currentPage,

@@ -14,6 +14,7 @@ import com.iuaenasong.oj.pojo.vo.UserInfoVo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import com.iuaenasong.oj.common.exception.StatusAccessDeniedException;
@@ -46,6 +47,12 @@ public class AdminAccountManager {
     private UserRoleEntityService userRoleEntityService;
 
     public UserInfoVo login(LoginDto loginDto) throws StatusFailException, StatusAccessDeniedException {
+        loginDto.setPassword(loginDto.getPassword().trim());
+        loginDto.setUsername(loginDto.getUsername().trim());
+
+        if (StringUtils.isEmpty(loginDto.getUsername()) || StringUtils.isEmpty(loginDto.getPassword())) {
+            throw new StatusFailException("用户名或密码不能为空！");
+        }
 
         UserRolesVo userRolesVo = userRoleEntityService.getUserRoles(null, loginDto.getUsername());
 

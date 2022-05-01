@@ -610,6 +610,28 @@ export const m = {
   Question_No_Choice: '该问题没有设置选项',
   Question_No_Right_Answer: '该问题未设置正确答案',
 
+  // /views/oj/group/GroupExam.vue
+  Exam_Admin: '考试管理',
+  No_Exam: '暂无考试',
+  Create_Exam: '创建考试',
+  Exam_Title: '考试标题',
+  Exam_Description: '考试描述',
+  Exam_Start_Time: '开始时间',
+  Exam_End_Time: '结束时间',
+  Exam_Duration: '考试时长',
+  Rank_Score_Type: '编程题计分方式',
+  Rank_Score_Type_Recent: '使用最近得分',
+  Rank_Score_Type_Highest: '使用最高得分',
+  Real_Score: '编程题实时出分',
+  Auto_Real_Score: '自动公开小题分',
+  Seal_Score_After_Exam: '考试完隐藏小题分',
+  Real_Score_After_Exam: '考试完公开小题分',
+  Exam_Auth: '考试权限',
+  Exam_Public: '公开考试',
+  Exam_Protected: '保护考试',
+  Exam_Private: '私有考试',
+  Exam_Password: '考试密码',
+
   // /views/oj/group/GroupRank.vue
   Group_ACM_Rank_Type: 'ACM 排名',
   Group_OI_Rank_Type: 'OI 排名',

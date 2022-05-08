@@ -537,7 +537,7 @@ export default {
 
       api[funcName](data)
         .then((res) => {
-          this.$msg.success('success');
+          this.$msg.success(this.$t('m.Save_Successfully'));
           this.$router.push({
             name: 'admin-contest-list',
             query: { refresh: 'true' },

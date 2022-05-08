@@ -24,6 +24,11 @@
                       $t('m.Contest_Problem')
                     }}</el-tag></span
                   >
+                  <span v-else-if="examID && !examEnded"
+                    ><el-tag effect="plain" size="small">{{
+                      $t('m.Exam_Problem')
+                    }}</el-tag></span
+                  >
                   <div
                     v-else-if="problemData.tags.length > 0"
                     class="problem-tag"
@@ -61,7 +66,7 @@
                     }}</el-tag>
                   </div>
                   <div class="problem-menu">
-                    <span v-if="!contestID">
+                    <span v-if="!contestID && !examID">
                       <el-link
                         type="primary"
                         :underline="false"
@@ -106,7 +111,6 @@
                         {{ problemData.problem.memoryLimit * 2 }}MB</span
                       ><br />
                     </template>
-
                     <template v-else>
                       <span
                         >{{ $t('m.Time_Limit') }}：{{
@@ -132,11 +136,11 @@
                       >
                       <br />
                     </template>
-                    <template v-if="problemData.problem.type == 1">
+                    <template v-if="problemData.problem.type == 1 || examID">
                       <span
                         >{{ $t('m.Score') }}：{{ problemData.problem.ioScore }}
                       </span>
-                      <span v-if="!contestID" style="margin-left:5px;">
+                      <span v-if="!contestID && !examID" style="margin-left:5px;">
                         {{ $t('m.OI_Rank_Score') }}：{{
                           calcOIRankScore(
                             problemData.problem.ioScore,
@@ -146,7 +150,6 @@
                       </span>
                       <br />
                     </template>
-
                     <template v-if="problemData.problem.author">
                       <span
                         >{{ $t('m.Created') }}：<el-link
@@ -159,7 +162,6 @@
                     </template>
                   </div>
                 </div>
-
                 <div id="problem-content">
                   <template v-if="problemData.problem.description">
                     <p class="title">{{ $t('m.Description') }}</p>
@@ -170,7 +172,6 @@
                       v-highlight
                     ></p>
                   </template>
-
                   <template v-if="problemData.problem.input">
                     <p class="title">{{ $t('m.Input') }}</p>
                     <p
@@ -180,7 +181,6 @@
                       v-highlight
                     ></p>
                   </template>
-
                   <template v-if="problemData.problem.output">
                     <p class="title">{{ $t('m.Output') }}</p>
                     <p
@@ -190,7 +190,6 @@
                       v-highlight
                     ></p>
                   </template>
-
                   <template v-if="problemData.problem.examples">
                     <div
                       v-for="(example, index) of problemData.problem.examples"
@@ -228,7 +227,6 @@
                       </div>
                     </div>
                   </template>
-
                   <template v-if="problemData.problem.hint">
                     <p class="title">{{ $t('m.Hint') }}</p>
                     <el-card dis-hover>
@@ -240,8 +238,7 @@
                       ></p>
                     </el-card>
                   </template>
-
-                  <template v-if="problemData.problem.source && !contestID">
+                  <template v-if="problemData.problem.source && !contestID && !examID">
                     <p class="title">{{ $t('m.Source') }}</p>
                     <p class="content" v-html="problemData.problem.source"></p>
                   </template>
@@ -318,6 +315,14 @@
                     >
                       <template v-slot="{ row }">
                         <template v-if="contestID && row.score != null">
+                          <el-tag
+                            effect="plain"
+                            size="medium"
+                            :type="JUDGE_STATUS[row.status]['type']"
+                            >{{ row.score }}</el-tag
+                          >
+                        </template>
+                        <template v-else-if="examID && row.score != null">
                           <el-tag
                             effect="plain"
                             size="medium"
@@ -528,12 +533,14 @@
                 </template>
                 <template
                   v-else-if="
-                    !this.contestID ||
+                    !this.contestID && !this.examID ||
                       (this.contestID &&
                         ContestRealTimePermission &&
                         this.contestRuleType == RULE_TYPE.OI) ||
                       (this.contestID &&
-                        this.contestRuleType == RULE_TYPE.ACM)
+                        this.contestRuleType == RULE_TYPE.ACM) ||
+                      (this.examID &&
+                        ExamRealScorePermission)
                   "
                 >
                   <span>{{ $t('m.Status') }}:</span>
@@ -550,7 +557,9 @@
                   v-else-if="
                     this.contestID &&
                       !ContestRealTimePermission &&
-                      this.contestRuleType == RULE_TYPE.OI
+                      this.contestRuleType == RULE_TYPE.OI ||
+                    this.examID &&
+                      !ExamRealScorePermission
                   "
                 >
                   <el-alert
@@ -564,7 +573,7 @@
               </div>
               <div
                 v-else-if="
-                  (!this.contestID ||
+                  (!this.contestID || this.examID ||
                     this.contestRuleType == RULE_TYPE.ACM) &&
                     problemData.myStatus == JUDGE_STATUS_RESERVE.ac
                 "
@@ -579,10 +588,12 @@
               </div>
               <div
                 v-else-if="
-                  this.contestID &&
+                  (this.contestID &&
                     !ContestRealTimePermission &&
-                    this.contestRuleType == RULE_TYPE.OI &&
-                    submissionExists
+                    this.contestRuleType == RULE_TYPE.OI || 
+                  this.examID &&
+                    !ExamRealScorePermission) &&
+                  submissionExists
                 "
               >
                 <el-alert
@@ -600,6 +611,15 @@
                   effect="dark"
                   :closable="false"
                   >{{ $t('m.Contest_has_ended') }}</el-alert
+                >
+              </div>
+              <div v-else-if="examEnded">
+                <el-alert
+                  type="warning"
+                  show-icon
+                  effect="dark"
+                  :closable="false"
+                  >{{ $t('m.Exam_has_ended') }}</el-alert
                 >
               </div>
             </el-col>
@@ -623,7 +643,7 @@
                 size="small"
                 :loading="submitting"
                 @click.native="submitCode"
-                :disabled="problemSubmitDisabled || submitted"
+                :disabled="problemSubmitDisabled || examProblemSubmitDisabled || submitted"
                 class="fl-right"
               >
                 <span v-if="submitting">{{ $t('m.Submitting') }}</span>
@@ -646,7 +666,7 @@
     </el-dialog>
 
     <el-dialog :visible.sync="submitPwdVisible" width="340px">
-      <el-form>
+      <el-form v-if="contestID">
         <el-form-item :label="$t('m.Enter_the_contest_password')" required>
           <el-input
             :placeholder="$t('m.Enter_the_contest_password')"
@@ -663,6 +683,23 @@
           {{ $t('m.Submit') }}
         </el-button>
       </el-form>
+      <el-form v-else>
+        <el-form-item :label="$t('m.Enter_the_exam_password')" required>
+          <el-input
+            :placeholder="$t('m.Enter_the_exam_password')"
+            v-model="submitPwd"
+            show-password
+          ></el-input>
+        </el-form-item>
+        <el-button
+          type="primary"
+          round
+          style="margin-left:130px"
+          @click="checkExamPassword"
+        >
+          {{ $t('m.Submit') }}
+        </el-button>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -674,6 +711,7 @@ import utils from '@/common/utils';
 import {
   JUDGE_STATUS,
   CONTEST_STATUS,
+  EXAM_STATUS,
   JUDGE_STATUS_RESERVE,
   buildProblemCodeKey,
   buildIndividualLanguageAndThemeKey,
@@ -703,13 +741,13 @@ export default {
       captchaCode: '',
       captchaSrc: '',
       contestID: 0,
+      examID: 0,
       problemID: '',
       trainingID: null,
       submitting: false,
       code: '',
       language: '',
       isRemote: false,
-
       theme: 'solarized',
       submissionId: '',
       submitted: false,
@@ -801,12 +839,18 @@ export default {
         currentPage: this.mySubmission_currentPage,
         problemID: this.problemID,
         contestID: this.contestID,
+        examID: this.examID,
         limit: this.mySubmission_limit,
         gid: this.groupID
       };
-      let func = this.contestID
-        ? 'getContestSubmissionList'
-        : 'getSubmissionList';
+      let func;
+      if (this.contestID) {
+        func = 'getContestSubmissionList'
+      } else if(this.examID) {
+        func = 'getExamSubmissionList';
+      } else {
+        func = 'getSubmissionList';
+      }
       this.loadingTable = true;
       api[func](this.mySubmission_limit, utils.filterEmptyValue(params))
         .then(
@@ -842,6 +886,15 @@ export default {
           name: 'ContestSubmissionDetails',
           params: {
             contestID: this.$route.params.contestID,
+            problemID: row.displayId,
+            submitID: row.submitId,
+          },
+        });
+      } else if (row.eid != 0) {
+        this.$router.push({
+          name: 'ExamSubmissionDetails',
+          params: {
+            examID: this.$route.params.examID,
             problemID: row.displayId,
             submitID: row.submitId,
           },
@@ -943,16 +996,23 @@ export default {
       if (this.$route.params.contestID) {
         this.contestID = this.$route.params.contestID;
       }
+      if (this.$route.params.examID) {
+        this.examID = this.$route.params.examID;
+      }
       this.problemID = this.$route.params.problemID;
       if (this.$route.params.trainingID) {
         this.trainingID = this.$route.params.trainingID;
       }
-      let func =
-        this.$route.name === 'ContestProblemDetails'
-          ? 'getContestProblem'
-          : 'getProblem';
+      let func;
+      if (this.$route.name === 'ContestProblemDetails') {
+        func = 'getContestProblem';
+      } else if (this.$route.name === 'ExamProblemDetails') {
+        func = 'getExamProblem';
+      } else {
+        func = 'getProblem';
+      }
       this.loading = true;
-      api[func](this.problemID, this.contestID).then(
+      api[func](this.problemID, this.contestID ? this.contestID : this.examID).then(
         (res) => {
           let result = res.data.data;
           this.changeDomTitle({ title: result.problem.title });
@@ -998,11 +1058,14 @@ export default {
           if (this.isAuthenticated) {
             let pidList = [result.problem.id];
             let isContestProblemList = this.contestID ? true : false;
+            let isExamProblemList = this.examID ? true : false;
             api
               .getUserProblemStatus(
                 pidList,
                 isContestProblemList,
-                this.contestID
+                isExamProblemList,
+                this.contestID,
+                this.examID
               )
               .then((res) => {
                 let statusMap = res.data.data;
@@ -1094,6 +1157,12 @@ export default {
         this.$router.push({
           name: 'ContestSubmissionList',
           params: { contestID: this.contestID },
+          query: { problemID: this.problemID, completeProblemID: true },
+        });
+      } else if (this.examID) {
+        this.$router.push({
+          name: 'ExamSubmissionList',
+          params: { examID: this.examID },
           query: { problemID: this.problemID, completeProblemID: true },
         });
       } else {
@@ -1204,6 +1273,22 @@ export default {
       );
     },
 
+    checkExamPassword() {
+      // 密码为空，需要重新输入
+      if (!this.submitPwd) {
+        this.$msg.warning(this.$i18n.t('m.Enter_the_exam_password'));
+        return;
+      }
+      api.registerExam(this.examID + '', this.submitPwd).then(
+        (res) => {
+          this.$store.commit('examSubmitAccess', { submitAccess: true });
+          this.submitPwdVisible = false;
+          this.submitCode();
+        },
+        (res) => {}
+      );
+    },
+
     submitCode() {
       if (this.code.trim() === '') {
         this.$msg.error(this.$i18n.t('m.Code_can_not_be_empty'));
@@ -1221,6 +1306,11 @@ export default {
         return;
       }
 
+      if (!this.examCanSubmit && this.$route.params.examID) {
+        this.submitPwdVisible = true;
+        return;
+      }
+
       this.submissionId = '';
       this.result = { status: 9 };
       this.submitting = true;
@@ -1229,6 +1319,7 @@ export default {
         language: this.language,
         code: this.code,
         cid: this.contestID,
+        eid: this.examID,
         tid: this.trainingID,
         isRemote: this.isRemote,
       };
@@ -1253,8 +1344,11 @@ export default {
               this.$msg.success(this.$i18n.t('m.Submit_code_successfully'));
             }
             // 更新store的可提交权限
-            if (!this.canSubmit) {
+            if (!this.canSubmit && this.$route.params.contestID) {
               this.$store.commit('contestIntoAccess', { access: true });
+            }
+            if (!this.examCanSubmit && this.$route.params.examID) {
+              this.$store.commit('examIntoAccess', { access: true });
             }
             this.submitted = true;
             this.checkSubmissionStatus();
@@ -1268,7 +1362,8 @@ export default {
 
       if (
         this.contestRuleType === RULE_TYPE.OI &&
-        !this.ContestRealTimePermission
+        !this.ContestRealTimePermission ||
+        this.examID && !this.ExamRealScorePermission
       ) {
         if (this.submissionExists) {
           this.$confirm(
@@ -1352,17 +1447,27 @@ export default {
   computed: {
     ...mapGetters([
       'problemSubmitDisabled',
+      'examProblemSubmitDisabled',
       'contestRuleType',
       'ContestRealTimePermission',
+      'ExamRealScorePermission',
       'contestStatus',
+      'examStatus',
       'isAuthenticated',
       'canSubmit',
+      'examCanSubmit'
     ]),
     contest() {
       return this.$store.state.contest.contest;
     },
     contestEnded() {
       return this.contestStatus === CONTEST_STATUS.ENDED;
+    },
+    exam() {
+      return this.$store.state.exam.exam;
+    },
+    examEnded() {
+      return this.examStatus === EXAM_STATUS.ENDED;
     },
     submissionStatus() {
       return {
@@ -1377,6 +1482,16 @@ export default {
           name: 'ContestSubmissionDetails',
           params: {
             contestID: this.contestID,
+            problemID: this.problemID,
+            submitID: this.submissionId,
+          },
+        });
+      } else if (this.examID) {
+        // 比赛提交详情
+        this.$router.push({
+          name: 'ExamSubmissionDetails',
+          params: {
+            examID: this.examID,
             problemID: this.problemID,
             submitID: this.submissionId,
           },

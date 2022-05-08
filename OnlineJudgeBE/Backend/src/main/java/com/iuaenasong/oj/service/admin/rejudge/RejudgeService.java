@@ -14,4 +14,6 @@ public interface RejudgeService {
     CommonResult<Judge> rejudge(Long submitId);
 
     CommonResult<Void> rejudgeContestProblem(Long cid,Long pid);
+
+    CommonResult<Void> rejudgeExamProblem(Long eid,Long pid);
 }

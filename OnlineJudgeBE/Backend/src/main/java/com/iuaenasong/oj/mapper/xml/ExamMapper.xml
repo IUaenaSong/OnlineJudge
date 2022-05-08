@@ -14,7 +14,7 @@
     </select>
 
     <select id="getExamInfoById" resultType="com.iuaenasong.oj.pojo.vo.ExamVo" useCache="true">
-        select e.id,e.author,e.title,e.status,e.description,e.real_score,
+        select e.id,e.author,e.title,e.status,e.description,e.real_score,e.auto_real_score,
         e.source,e.auth,e.start_time,e.end_time,e.duration,e.rank_show_name,e.rank_score_type,e.gid
         from exam e where e.id = #{eid} and e.visible=true
     </select>

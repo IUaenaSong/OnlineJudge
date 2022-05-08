@@ -112,7 +112,7 @@ public class CommentManager {
             if (commentIdList.size() > 0) {
 
                 QueryWrapper<CommentLike> commentLikeQueryWrapper = new QueryWrapper<>();
-                commentLikeQueryWrapper.in("cid", commentIdList);
+                commentLikeQueryWrapper.in("cid", commentIdList).eq("uid", userRolesVo.getUid());
 
                 List<CommentLike> commentLikeList = commentLikeEntityService.list(commentLikeQueryWrapper);
 

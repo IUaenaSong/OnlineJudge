@@ -268,6 +268,10 @@ public class GroupContestProblemManager {
             throw new StatusNotFoundException("该比赛不存在！");
         }
 
+        if (problem.getType() != contest.getType() && !problem.getIsRemote()) {
+            throw new StatusFailException("题目类型不符！");
+        }
+
         Long gid = contest.getGid();
 
         Group group = groupEntityService.getById(gid);
@@ -335,6 +339,10 @@ public class GroupContestProblemManager {
 
         if (problem == null) {
             throw new StatusNotFoundException("该题目不存在或不是团队题目！");
+        }
+
+        if (problem.getType() != contest.getType() && !problem.getIsRemote()) {
+            throw new StatusFailException("题目类型不符！");
         }
 
         QueryWrapper<ContestProblem> contestProblemQueryWrapper = new QueryWrapper<>();

@@ -235,17 +235,17 @@ public class AdminProblemManager {
     }
 
     public void changeProblemAuth(Long pid, Integer auth) throws StatusFailException, StatusForbiddenException {
-        // 普通管理员只能将题目变成隐藏题目和比赛题目
-        boolean root = SecurityUtils.getSubject().hasRole("root");
-
-        boolean problemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
-
-        if (!problemAdmin && !root && auth == 1) {
-            throw new StatusForbiddenException("修改失败！你无权限公开题目！");
-        }
-
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+
+        Problem problem = problemEntityService.getById(pid);
+
+        if (!isRoot && !isProblemAdmin && !problem.getAuthor().equals(userRolesVo.getUsername())) {
+            throw new StatusForbiddenException("修改失败！你无权限修盖题目权限！");
+        }
 
         UpdateWrapper<Problem> problemUpdateWrapper = new UpdateWrapper<>();
         problemUpdateWrapper.eq("id", pid)

@@ -60,6 +60,9 @@ public class Question implements Serializable {
     @ApiModelProperty(value = "公开答案")
     private Boolean share;
 
+    @ApiModelProperty(value = "分数")
+    private Integer score;
+
     @ApiModelProperty(value = "修改题目的管理员用户名")
     private String modifiedUser;
 

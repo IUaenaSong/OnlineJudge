@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iuaenasong.oj.mapper.ExamQuestionMapper">
+    <select id="getExamQuestionList" resultType="com.iuaenasong.oj.pojo.vo.ExamQuestionVo">
+        select eq.id,eq.display_id,eq.eid,eq.qid,q.description,eq.score,q.type,q.single,
+        (select count(*) from exam_question_record
+        <where>
+            eqid=eq.id and eid=eq.eid and qid=eq.qid and status != 1
+            <if test="adminList != null and adminList.size > 0">
+                and uid NOT IN
+                <foreach collection="adminList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <choose>
+                <when test="isAdmin">
+                    AND submit_time >= #{startTime} AND #{endTime}>submit_time
+                </when>
+                <otherwise>
+                    AND false
+                </otherwise>
+            </choose>
+        </where>
+        ) as error,
+        (select count(*) from exam_question_record
+        <where>
+            eqid=eq.id and eid=eq.eid and qid=eq.qid and status = 1
+            <if test="adminList != null and adminList.size > 0">
+                and uid NOT IN
+                <foreach collection="adminList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <choose>
+                <when test="isAdmin">
+                    AND submit_time >= #{startTime} AND #{endTime}>submit_time
+                </when>
+                <otherwise>
+                    AND false
+                </otherwise>
+            </choose>
+        </where>
+        ) as ac,
+        (select AVG(score) from exam_question_record
+        <where>
+            eqid=eq.id and eid=eq.eid and qid=eq.qid
+            <if test="adminList != null and adminList.size > 0">
+                and uid NOT IN
+                <foreach collection="adminList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <choose>
+                <when test="isAdmin">
+                    AND submit_time >= #{startTime} AND #{endTime}>submit_time
+                </when>
+                <otherwise>
+                    AND false
+                </otherwise>
+            </choose>
+        </where>
+        ) as average
+        from exam_question eq,question q
+        <where>
+            eq.eid = #{eid} and eq.qid=q.id and q.auth!=2
+            <if test="type != 0">
+                and q.type = #{type}
+            </if>
+        </where>
+        order by eq.display_id asc
+    </select>
+</mapper>

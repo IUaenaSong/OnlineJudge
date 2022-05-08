@@ -9,7 +9,7 @@
             </div>
           </div>
           <el-row style="margin-top: 10px;">
-            <el-col :span="24" class="text-align:left">
+            <el-col :span="12" class="text-align:left">
               <el-tooltip
                 v-if="exam.auth != null && exam.auth != undefined"
                 :content="$t('m.' + EXAM_TYPE_REVERSE[exam.auth]['tips'])"
@@ -23,7 +23,15 @@
                 </el-tag>
               </el-tooltip>
             </el-col>
-
+            <el-col :span="12" style="text-align:right">
+              <el-button size="small" plain v-if="exam.count">
+                <i
+                  class="el-icon-user-solid"
+                  style="color:rgb(48, 145, 242);"
+                ></i
+                >x{{ exam.count }}
+              </el-button>
+            </el-col>
           </el-row>
           <div class="exam-time">
             <el-row>
@@ -60,7 +68,6 @@
       </el-col>
     </el-row>
     <div>
-      <!-- 判断是否需要密码验证 -->
       <el-tabs @tab-click="tabClick" v-model="route_name">
         <el-tab-pane name="ExamDetails" lazy >
           <span slot="label"
@@ -111,18 +118,18 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane
-          name="ExamProblemList"
+          name="ExamQuestionList"
           lazy
           :disabled="examMenuDisabled"
         >
           <span slot="label"
-            ><i class="fa fa-list" aria-hidden="true"></i>&nbsp;{{
+            ><i class="el-icon-tickets" aria-hidden="true"></i>&nbsp;{{
               $t('m.Group_Question')
             }}</span
           >
           <transition name="el-fade-in-linear">
             <router-view
-              v-if="route_name === 'ExamProblemList'"
+              v-if="route_name === 'ExamQuestionList'"
             ></router-view>
           </transition>
         </el-tab-pane>
@@ -156,93 +163,24 @@
             ></router-view>
           </transition>
         </el-tab-pane>
-        <el-tab-pane name="ExamRank" lazy :disabled="examMenuDisabled">
+        <el-tab-pane name="ExamPaperList" lazy v-if="isExamAdmin">
           <span slot="label"
             ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
-              $t('m.NavBar_Rank')
+              $t('m.Exam_Paper')
             }}</span
           >
           <transition name="el-fade-in-linear">
-            <router-view v-if="route_name === 'ExamRank'"></router-view>
+            <router-view v-if="route_name === 'ExamPaperList'"></router-view>
           </transition>
         </el-tab-pane>
-        <el-tab-pane
-          name="ExamAnnouncementList"
-          lazy
-          :disabled="examMenuDisabled"
-        >
+        <el-tab-pane name="MyExamPaperDetails" v-if="isAuthenticated && !isExamAdmin && examStatus == EXAM_STATUS.ENDED && examAutoRealScore">
           <span slot="label"
-            ><i class="fa fa-bullhorn" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Announcement')
-            }}</span
-          >
-          <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
-              <transition name="el-fade-in-linear">
-                <router-view
-                  v-if="route_name === 'ExamAnnouncementList'"
-                ></router-view>
-              </transition>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane name="ExamComment" lazy :disabled="examMenuDisabled">
-          <span slot="label"
-            ><i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Comment')
-            }}</span
-          >
-          <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
-              <transition name="el-fade-in-linear">
-                <router-view v-if="route_name === 'ExamComment'"></router-view>
-              </transition>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane
-          name="ExamPrint"
-          lazy
-          :disabled="examMenuDisabled"
-          v-if="exam.openPrint"
-        >
-          <span slot="label"
-            ><i class="el-icon-printer"></i>&nbsp;{{ $t('m.Print') }}</span
-          >
-          <transition name="el-fade-in-linear">
-            <router-view v-if="route_name === 'ExamPrint'"></router-view>
-          </transition>
-        </el-tab-pane>
-        <el-tab-pane
-          name="ExamACInfo"
-          lazy
-          :disabled="examMenuDisabled"
-          v-if="showAdminHelper"
-        >
-          <span slot="label"
-            ><i class="el-icon-s-help" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Admin_Helper')
+            ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
+              $t('m.Exam_Paper')
             }}</span
           >
           <transition name="el-fade-in-linear">
-            <router-view v-if="route_name === 'ExamACInfo'"></router-view>
-          </transition>
-        </el-tab-pane>
-        <el-tab-pane
-          name="ExamAdminPrint"
-          lazy
-          :disabled="examMenuDisabled"
-          v-if="isSuperAdmin && exam.openPrint"
-        >
-          <span slot="label"
-            ><i class="el-icon-printer"></i>&nbsp;{{
-              $t('m.Admin_Print')
-            }}</span
-          >
-          <transition name="el-fade-in-linear">
-            <router-view
-              v-if="route_name === 'ExamAdminPrint'"
-            ></router-view>
+            <router-view v-if="route_name === 'MyExamPaperDetails'"></router-view>
           </transition>
         </el-tab-pane>
         <el-tab-pane
@@ -281,9 +219,7 @@ import {
   EXAM_STATUS,
   EXAM_TYPE_REVERSE,
   RULE_TYPE,
-  buildExamAnnounceKey,
 } from '@/common/constants';
-import storage from '@/common/storage';
 export default {
   name: 'ExamDetails',
   data() {
@@ -304,8 +240,14 @@ export default {
     if (this.route_name == 'ExamProblemDetails') {
       this.route_name = 'ExamProblemList';
     }
+    if (this.route_name == 'ExamQuestionDetails') {
+      this.route_name = 'ExamQuestionList';
+    }
     if (this.route_name == 'ExamSubmissionDetails') {
       this.route_name = 'ExamSubmissionList';
+    }
+    if (this.route_name == 'ExamPaperDetails') {
+      this.route_name = 'ExamPaperList';
     }
     this.EXAM_TYPE_REVERSE = Object.assign({}, EXAM_TYPE_REVERSE);
     this.EXAM_STATUS = Object.assign({}, EXAM_STATUS);
@@ -321,39 +263,6 @@ export default {
         this.timer = setInterval(() => {
           this.$store.commit('nowAdd1s');
         }, 1000);
-
-        // 每分钟获取一次是否存在未阅读的公告
-        this.announceTimer = setInterval(() => {
-          let key = buildExamAnnounceKey(this.userInfo.uid, this.examID);
-          let readAnnouncementList = storage.get(key) || [];
-          let data = {
-            cid: this.examID,
-            readAnnouncementList: readAnnouncementList,
-          };
-
-          api.getExamUserNotReadAnnouncement(data).then((res) => {
-            let newAnnounceList = res.data.data;
-            for (let i = 0; i < newAnnounceList.length; i++) {
-              readAnnouncementList.push(newAnnounceList[i].id);
-              this.$notify({
-                title: newAnnounceList[i].title,
-                message:
-                  '<p style="text-align:center;"><i class="el-icon-time"> ' +
-                  time.utcToLocal(newAnnounceList[i].gmtCreate) +
-                  '</i></p>' +
-                  '<p style="text-align:center;color:#409eff">' +
-                  this.$i18n.t(
-                    'm.Please_check_the_exam_announcement_for_details'
-                  ) +
-                  '</p>',
-                type: 'warning',
-                dangerouslyUseHTMLString: true,
-                duration: 0,
-              });
-            }
-            storage.set(key, readAnnouncementList);
-          });
-        }, 60 * 1000);
       }
 
       this.$nextTick((_) => {
@@ -393,7 +302,11 @@ export default {
     tabClick(tab) {
       let name = tab.name;
       if (name !== this.$route.name) {
-        this.$router.push({ name: name });
+        if (name != 'MyExamPaperDetails') {
+          this.$router.push({ name: name });
+        } else {
+          this.$router.push({ name: name, params: {paperID: this.userInfo.uid } });
+        }
       }
     },
   },
@@ -413,6 +326,8 @@ export default {
       'ExamRealTimePermission',
       'examPasswordFormVisible',
       'userInfo',
+      'examAutoRealScore',
+      'isAuthenticated',
     ]),
     progressValue: {
       get: function() {
@@ -447,8 +362,14 @@ export default {
       if (newVal.name == 'ExamProblemDetails') {
         this.route_name = 'ExamProblemList';
       }
+      if (newVal.name == 'ExamQuestionDetails') {
+        this.route_name = 'ExamQuestionList';
+      }
       if (this.route_name == 'ExamSubmissionDetails') {
         this.route_name = 'ExamSubmissionList';
+      }
+      if (this.route_name == 'ExamPaperDetails') {
+        this.route_name = 'ExamPaperList';
       }
       this.examID = newVal.params.examID;
       this.changeDomTitle({ title: this.exam.title });

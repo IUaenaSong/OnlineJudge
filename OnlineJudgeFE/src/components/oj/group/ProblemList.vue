@@ -14,7 +14,7 @@
         min-width="100"
         field="problemId"
         :title="$t('m.Display_ID')"
-        v-if="!contestID"
+        v-if="!contestID && !examID"
       >
       </vxe-table-column>
       <vxe-table-column
@@ -24,10 +24,10 @@
         align="left"
       >
         <template v-slot="{ row }">
-          <p v-if="contestID">
+          <p v-if="contestID || examID">
             {{ $t('m.Display_ID') }}：{{ row.problemId }}
           </p>
-          <p v-if="contestID">{{ $t('m.Title') }}：{{ row.title }}</p>
+          <p v-if="contestID || examID">{{ $t('m.Title') }}：{{ row.title }}</p>
           <span v-else>{{ row.problemId }}</span>
         </template>
       </vxe-table-column>
@@ -36,13 +36,13 @@
         min-width="150"
         :title="$t('m.Title')"
         show-overflow
-        v-if="!contestID"
+        v-if="!contestID && !examID"
       >
       </vxe-table-column>
       <vxe-table-column
         min-width="150"
         :title="$t('m.Contest_Display')"
-        v-else
+        v-else-if="contestID"
         align="left"
       >
         <template v-slot="{ row }">
@@ -64,7 +64,7 @@
               size="small"
               style="vertical-align: middle;"
               @change="
-                changeProblemColor(
+                changeContestProblemColor(
                   contestProblemMap[row.id]
                 )
               "
@@ -75,8 +75,42 @@
         </template>
       </vxe-table-column>
       <vxe-table-column
+        min-width="150"
+        :title="$t('m.Exam_Display')"
+        v-else-if="examID"
+        align="left"
+      >
+        <template v-slot="{ row }">
+          <p v-if="examProblemMap[row.id]">
+            {{ $t('m.Display_ID') }}：{{
+              examProblemMap[row.id]['displayId']
+            }}
+          </p>
+          <p v-if="examProblemMap[row.id]">
+            {{ $t('m.Title') }}：{{
+              examProblemMap[row.id]['displayTitle']
+            }}
+          </p>
+          <span v-if="examProblemMap[row.id]">
+            {{ $t('m.Score') }}：
+            <el-input
+              v-model="examProblemMap[row.id].score"
+              size="small"
+              style="width: 60%"
+              @keyup.enter.native="
+                changeExamProblemScore(
+                  examProblemMap[row.id]
+                )
+              "
+            >
+            </el-input>
+          </span>
+          <span v-else>{{ row.title }}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column
         field="author"
-        min-width="130"
+        min-width="96"
         :title="$t('m.Author')"
         show-overflow
       >
@@ -110,9 +144,9 @@
               :value="2"
             ></el-option>
             <el-option
-              :label="$t('m.Contest_Problem')"
+              :label="$t('m.Contest_Exam_Problem')"
               :value="3"
-              :disabled="!contestID"
+              :disabled="!contestID && !examID"
             ></el-option>
           </el-select>
         </template>
@@ -147,7 +181,7 @@
             >
             </el-button>
           </el-tooltip>
-          <p v-if="contestID"></p>
+          <p v-if="contestID || examID"></p>
           <el-tooltip
             effect="dark"
             :content="$t('m.Remove')"
@@ -157,7 +191,21 @@
             <el-button
               icon="el-icon-close"
               size="mini"
-              @click.native="removeProblem(row.id)"
+              @click.native="removeContestProblem(row.id)"
+              type="warning"
+            >
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            effect="dark"
+            :content="$t('m.Remove')"
+            placement="top"
+            v-if="examID"
+          >
+            <el-button
+              icon="el-icon-close"
+              size="mini"
+              @click.native="removeExamProblem(row.id)"
               type="warning"
             >
             </el-button>
@@ -195,6 +243,7 @@
       apiMethod="updateGroupProblem"
       :pid="pid"
       :contestID="contestID"
+      :examID="examID"
       @handleEditPage="handleEditPage"
       @currentChange="currentChange"
     ></Problem>
@@ -218,6 +267,10 @@ export default {
       type: Number,
       default: null
     },
+    examID: {
+      type: Number,
+      default: null
+    },
   },
   data() {
     return {
@@ -226,6 +279,7 @@ export default {
       limit: 10,
       problemList: [],
       contestProblemMap: {},
+      examProblemMap: {},
       loading: false,
       pid: null,
       editPage: false,
@@ -252,18 +306,7 @@ export default {
     },
     getAdminProblemList() {
       this.loading = true;
-      if (!this.contestID) {
-        api.getGroupAdminProblemList(this.currentPage, this.limit, this.$route.params.groupID).then(
-          (res) => {
-            this.problemList = res.data.data.records;
-            this.total = res.data.data.total;
-            this.loading = false;
-          },
-          (err) => {
-            this.loading = false;
-          }
-        );
-      } else {
+      if (this.contestID) {
         let params = {
           cid: this.contestID,
         };
@@ -278,12 +321,42 @@ export default {
             this.loading = false;
           }
         );
+        
+      } else if (this.examID) {
+        let params = {
+          eid: this.examID,
+        };
+        api.getGroupExamProblemList(this.currentPage, this.limit, params).then(
+          (res) => {
+            this.total = res.data.data.problemList.total;
+            this.problemList = res.data.data.problemList.records;
+            this.examProblemMap = res.data.data.examProblemMap;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
+        
+      } else {
+        api.getGroupAdminProblemList(this.currentPage, this.limit, this.$route.params.groupID).then(
+          (res) => {
+            this.problemList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
       }
     },
     handleEditPage() {
       this.editPage = false;
       this.$emit("currentChange", 1);
       if (this.contestID) {
+        this.$emit("handleEditProblemPage");
+      } else if (this.examID) {
         this.$emit("handleEditProblemPage");
       } else {
         this.$emit("handleEditPage");
@@ -294,12 +367,19 @@ export default {
       this.editPage = !this.editPage;
       if (this.contestID) {
         this.$emit("handleEditProblemPage");
+      } else if (this.examID) {
+        this.$emit("handleEditProblemPage");
       } else {
         this.$emit("handleEditPage");
       }
     },
-    changeProblemColor(contestProblem) {
+    changeContestProblemColor(contestProblem) {
       api.updateGroupContestProblem(contestProblem).then((res) => {
+        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+      });
+    },
+    changeExamProblemScore(examProblem) {
+      api.updateGroupExamProblem(examProblem).then((res) => {
         this.$msg.success(this.$i18n.t('m.Update_Successfully'));
       });
     },
@@ -309,7 +389,7 @@ export default {
         this.$emit("currentChange", 1);
       });
     },
-    removeProblem(pid) {
+    removeContestProblem(pid) {
       this.$confirm(this.$i18n.t('m.Remove_Contest_Problem_Tips'), this.$i18n.t('m.Warning'), {
         type: 'warning',
       }).then(
@@ -317,7 +397,23 @@ export default {
           api
             .deleteGroupContestProblem(pid, this.contestID)
             .then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Delete_successfully'));
+              this.$emit("currentChangeProblem");
+            })
+            .catch(() => {});
+        },
+        () => {}
+      );
+    },
+    removeExamProblem(pid) {
+      this.$confirm(this.$i18n.t('m.Remove_Exam_Problem_Tips'), this.$i18n.t('m.Warning'), {
+        type: 'warning',
+      }).then(
+        () => {
+          api
+            .deleteGroupExamProblem(pid, this.examID)
+            .then((res) => {
+              this.$msg.success(this.$t('m.Delete_successfully'));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});

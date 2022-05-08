@@ -4,10 +4,10 @@
     <select id="getCommonJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="true">
         select j1.*,p.problem_id AS display_pid,p.title from (
         select j.submit_id,j.submit_time,j.username,j.uid,j.pid,j.status,j.share,
-        j.time,j.memory,j.score,j.oi_rank_score,j.length,j.language,j.cid,j.cpid,j.judger,j.is_public,j.gid
+        j.time,j.memory,j.score,j.oi_rank_score,j.length,j.language,j.cid,j.cpid,j.eid,j.epid,j.judger,j.is_public,j.gid
         from judge j
         <where>
-            j.cid = 0 AND j.cpid = 0
+            j.cid = 0 AND j.cpid = 0 AND j.eid = 0 AND j.epid = 0
             <if test="username!='' and username!=null">
                 AND j.username like concat('%',#{username},'%')
             </if>
@@ -43,7 +43,7 @@
 
     <select id="getContestJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="true">
         select j.submit_id,j.submit_time,j.uid,j.username,j.uid,cp.display_id,cp.display_title as title,
-        j.status,j.share,j.time,j.memory,j.score,j.length,j.language,j.cid,j.cpid,j.judger
+        j.status,j.share,j.time,j.memory,j.score,j.length,j.language,j.cid,j.cpid,j.eid,j.epid,j.judger
         from judge j right join
         (
         select display_title,display_id,cid,pid from contest_problem
@@ -87,6 +87,42 @@
         order by j.submit_time DESC,j.submit_id DESC
     </select>
 
+    <select id="getExamJudgeList" resultType="com.iuaenasong.oj.pojo.vo.JudgeVo" useCache="true">
+        select j.submit_id,j.submit_time,j.uid,j.username,j.uid,ep.display_id,ep.display_title as title,
+        j.status,j.share,j.time,j.memory,j.score,j.length,j.language,j.cid,j.cpid,j.eid,j.epid,j.judger
+        from judge j right join
+        (
+        select display_title,display_id,eid,pid from exam_problem
+        <where>
+            <if test="displayId!=null and displayId!=''">
+                <if test="completeProblemID != true">
+                    AND display_id like concat('%',#{displayId},'%')
+                </if>
+                <if test="completeProblemID">
+                    AND display_id = #{displayId}
+                </if>
+            </if>
+        </where>
+        ) ep
+        on j.pid = ep.pid AND j.eid = ep.eid
+        <where>
+            <if test="eid!=null">
+                AND j.eid = #{eid}
+            </if>
+            <if test="status!=null">
+               <if test="!isAdmin and (uid==null or uid=='')">AND false</if>
+               AND j.status = #{status}
+            </if>
+            <if test="uid!=null and uid!=''">
+                AND j.uid = #{uid}
+            </if>
+            <if test="!isAdmin">
+                AND j.submit_time >= #{startTime}
+            </if>
+        </where>
+        order by j.submit_time DESC,j.submit_id DESC
+    </select>
+
     <select id="getTodayJudgeNum" resultType="int">
         SELECT count(*) FROM judge WHERE DATE(gmt_create) = CURDATE();
     </select>
@@ -118,6 +154,36 @@
                  #{item}
              </foreach>
          </if>
+        </where>
+    </select>
+
+    <select id="getExamProblemCount" resultType="com.iuaenasong.oj.pojo.vo.ProblemCountVo">
+        SELECT COUNT(IF(status=-3,status,NULL)) AS pe,
+        COUNT(IF(status=-2,status,NULL)) AS ce,
+        COUNT(IF(status=-1,status,NULL)) AS wa,
+        COUNT(IF(status=0,status,NULL)) AS ac,
+        COUNT(IF(status=1,status,NULL)) AS tle,
+        COUNT(IF(status=2,status,NULL)) AS mle,
+        COUNT(IF(status=3,status,NULL)) AS re,
+        COUNT(IF(status=4,status,NULL)) AS se,
+        COUNT(IF(status=8,status,NULL)) AS pa,
+        COUNT(*) AS total
+        FROM judge
+        <where>
+            pid=#{pid} and epid = #{epid} and eid = #{eid}
+            <if test="startTime!=null">
+                and submit_time >= #{startTime}
+            </if>
+            <if test="adminList!=null and adminList.size>0">
+                and uid NOT IN
+                <foreach collection="adminList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="!isAdmin">
+                and false
+            </if>
         </where>
     </select>
 

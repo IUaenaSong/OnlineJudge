@@ -33,6 +33,12 @@ public class ExamProblemVo implements Serializable {
     @ApiModelProperty(value = "该题目在考试中的标题，默认为原名字")
     private String displayTitle;
 
+    @ApiModelProperty(value = "分数")
+    private Integer score;
+
+    @ApiModelProperty(value = "原始分数")
+    private Integer ioScore;
+
     @ApiModelProperty(value = "该题目的ac通过数")
     private Integer ac;
 

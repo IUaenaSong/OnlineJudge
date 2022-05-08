@@ -6,6 +6,11 @@
 
 package com.iuaenasong.oj.manager.oj;
 
+import com.iuaenasong.oj.dao.exam.ExamEntityService;
+import com.iuaenasong.oj.dao.exam.ExamRecordEntityService;
+import com.iuaenasong.oj.pojo.entity.exam.Exam;
+import com.iuaenasong.oj.pojo.entity.exam.ExamRecord;
+import com.iuaenasong.oj.validator.ExamValidator;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -69,6 +74,12 @@ public class JudgeManager {
     private ContestRecordEntityService contestRecordEntityService;
 
     @Autowired
+    private ExamEntityService examEntityService;
+
+    @Autowired
+    private ExamRecordEntityService examRecordEntityService;
+
+    @Autowired
     private UserAcproblemEntityService userAcproblemEntityService;
 
     @Autowired
@@ -85,6 +96,9 @@ public class JudgeManager {
 
     @Autowired
     private ContestValidator contestValidator;
+
+    @Autowired
+    private ExamValidator examValidator;
 
     @Autowired
     private BeforeDispatchInitManager beforeDispatchInitManager;
@@ -104,6 +118,8 @@ public class JudgeManager {
 
         boolean isContestSubmission = judgeDto.getCid() != 0;
 
+        boolean isExamSubmission = judgeDto.getEid() != 0;
+
         boolean isTrainingSubmission = judgeDto.getTid() != null && judgeDto.getTid() != 0;
 
         if (!isContestSubmission) { // 非比赛提交限制8秒提交一次
@@ -121,6 +137,7 @@ public class JudgeManager {
         judge.setShare(false) // 默认设置代码为单独自己可见
                 .setCode(judgeDto.getCode())
                 .setCid(judgeDto.getCid())
+                .setEid(judgeDto.getEid())
                 .setLanguage(judgeDto.getLanguage())
                 .setLength(judgeDto.getCode().length())
                 .setUid(userRolesVo.getUid())
@@ -133,6 +150,8 @@ public class JudgeManager {
         // 如果比赛id不等于0，则说明为比赛提交
         if (isContestSubmission) {
             beforeDispatchInitManager.initContestSubmission(judgeDto.getCid(), judgeDto.getPid(), userRolesVo, judge);
+        } else if (isExamSubmission) {
+            beforeDispatchInitManager.initExamSubmission(judgeDto.getEid(), judgeDto.getPid(), userRolesVo, judge);
         } else if (isTrainingSubmission) {
             beforeDispatchInitManager.initTrainingSubmission(judgeDto.getTid(), judgeDto.getPid(), userRolesVo, judge);
         } else { // 如果不是比赛提交和训练提交
@@ -141,9 +160,9 @@ public class JudgeManager {
 
         // 将提交加入任务队列
         if (judgeDto.getIsRemote()) { // 如果是远程oj判题
-            remoteJudgeDispatcher.sendTask(judge, judge.getDisplayPid(), isContestSubmission, false);
+            remoteJudgeDispatcher.sendTask(judge, judge.getDisplayPid(), isContestSubmission, isExamSubmission, false);
         } else {
-            judgeDispatcher.sendTask(judge, isContestSubmission);
+            judgeDispatcher.sendTask(judge, isContestSubmission, isExamSubmission);
         }
 
         return judge;
@@ -171,15 +190,7 @@ public class JudgeManager {
         }
 
         // 如果是非比赛题目
-        if (judge.getCid() == 0) {
-            // 重判前，需要将该题目对应记录表一并更新
-            // 如果该题已经是AC通过状态，更新该题目的用户ac做题表 user_acproblem
-            if (judge.getStatus().intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus().intValue()) {
-                QueryWrapper<UserAcproblem> userAcproblemQueryWrapper = new QueryWrapper<>();
-                userAcproblemQueryWrapper.eq("submit_id", judge.getSubmitId());
-                userAcproblemEntityService.remove(userAcproblemQueryWrapper);
-            }
-        } else {
+        if (judge.getCid() != 0) {
             if (problem.getIsRemote()) {
                 // 将对应比赛记录设置成默认值
                 UpdateWrapper<ContestRecord> updateWrapper = new UpdateWrapper<>();
@@ -187,6 +198,25 @@ public class JudgeManager {
                 contestRecordEntityService.update(updateWrapper);
             } else {
                 throw new StatusNotFoundException("错误！非vJudge题目在比赛过程无权限重新提交");
+            }
+
+        } else if (judge.getEid() != 0) {
+            if (problem.getIsRemote()) {
+                // 将对应考试记录设置成默认值
+                UpdateWrapper<ExamRecord> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("submit_id", submitId).setSql("status=null,score=null");
+                examRecordEntityService.update(updateWrapper);
+            } else {
+                throw new StatusNotFoundException("错误！非vJudge题目在比赛过程无权限重新提交");
+            }
+
+        } else {
+            // 重判前，需要将该题目对应记录表一并更新
+            // 如果该题已经是AC通过状态，更新该题目的用户ac做题表 user_acproblem
+            if (judge.getStatus().intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus().intValue()) {
+                QueryWrapper<UserAcproblem> userAcproblemQueryWrapper = new QueryWrapper<>();
+                userAcproblemQueryWrapper.eq("submit_id", judge.getSubmitId());
+                userAcproblemEntityService.remove(userAcproblemQueryWrapper);
             }
         }
 
@@ -215,9 +245,9 @@ public class JudgeManager {
         if (problem.getIsRemote()) { // 如果是远程oj判题
 
             remoteJudgeDispatcher.sendTask(judge, problem.getProblemId(),
-                    judge.getCid() != 0, isHasSubmitIdRemoteRejudge);
+                    judge.getCid() != 0, judge.getEid() != 0, isHasSubmitIdRemoteRejudge);
         } else {
-            judgeDispatcher.sendTask(judge, judge.getCid() != 0);
+            judgeDispatcher.sendTask(judge, judge.getCid() != 0, judge.getEid() != 0);
         }
         return judge;
     }
@@ -268,6 +298,36 @@ public class JudgeManager {
                         judge.setMemory(null);
                         judge.setLength(null);
                         judge.setErrorMessage("The contest is in progress. You are not allowed to view other people's error information.");
+                    }
+                }
+            }
+        } else if (judge.getEid() != 0) {
+            if (userRolesVo == null) {
+                throw new StatusAccessDeniedException("请先登录！");
+            }
+            Exam exam = examEntityService.getById(judge.getEid());
+            if (!isRoot && !userRolesVo.getUid().equals(exam.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), exam.getGid())) {
+                // 如果是比赛,那么还需要判断是否为封榜,比赛管理员和超级管理员可以有权限查看(ACM题目除外)
+                if (!examValidator.isRealScore(userRolesVo.getUid(), exam, false)) {
+                    if (judge.getStatus().intValue() == Constants.Judge.STATUS_COMPILE_ERROR.getStatus()) {
+                        judge.setErrorMessage(null);
+                    }
+                    judge.setStatus(Constants.Judge.STATUS_SUBMITTED_UNKNOWN_RESULT.getStatus());
+                    judge.setTime(null);
+                    judge.setMemory(null);
+                }
+                // 不是本人的话不能查看代码、时间，空间，长度
+                if (!userRolesVo.getUid().equals(judge.getUid())) {
+                    judge.setCode(null);
+                    // 如果还在比赛时间，不是本人不能查看时间，空间，长度，错误提示信息
+                    if (exam.getStatus().intValue() == Constants.Exam.STATUS_RUNNING.getCode()) {
+                        judge.setTime(null);
+                        judge.setMemory(null);
+                        judge.setLength(null);
+                        judge.setLanguage(null);
+                        judge.setUsername(null);
+                        judge.setUid(null);
+                        judge.setErrorMessage("The exam is in progress. You are not allowed to view other people's error information.");
                     }
                 }
             }
@@ -324,7 +384,7 @@ public class JudgeManager {
             throw new StatusForbiddenException("对不起，您不能修改他人的代码分享权限！");
         }
         Judge judgeInfo = judgeEntityService.getById(judge.getSubmitId());
-        if (judgeInfo.getCid() != 0) { // 如果是比赛提交，不可分享！
+        if (judgeInfo.getCid() != 0 || judgeInfo.getEid() != 0) { // 如果是比赛提交，不可分享！
             throw new StatusForbiddenException("对不起，您不能分享比赛题目的提交代码！");
         }
         judgeInfo.setShare(judge.getShare());
@@ -394,7 +454,8 @@ public class JudgeManager {
 
         QueryWrapper<Judge> queryWrapper = new QueryWrapper<>();
         // lambada表达式过滤掉code
-        queryWrapper.select(Judge.class, info -> !info.getColumn().equals("code")).in("submit_id", submitIds);
+        queryWrapper.select(Judge.class, info -> !info.getColumn().equals("code")).in("submit_id", submitIds)
+                .eq("cid", 0).eq("eid", 0);
         List<Judge> judgeList = judgeEntityService.list(queryWrapper);
         HashMap<Long, Object> result = new HashMap<>();
         for (Judge judge : judgeList) {
@@ -454,6 +515,56 @@ public class JudgeManager {
         return result;
     }
 
+    public HashMap<Long, Object> checkExamJudgeResult(SubmitIdListDto submitIdListDto) throws StatusNotFoundException {
+
+        if (submitIdListDto.getEid() == null) {
+            throw new StatusNotFoundException("查询考试id不能为空");
+        }
+
+        if (CollectionUtils.isEmpty(submitIdListDto.getSubmitIds())) {
+            return new HashMap<>();
+        }
+
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root"); // 是否为超级管理员
+
+        Exam exam = examEntityService.getById(submitIdListDto.getEid());
+
+        boolean isExamAdmin = isRoot || userRolesVo.getUid().equals(exam.getUid()) || groupValidator.isGroupRoot(userRolesVo.getUid(), exam.getGid());
+        // 如果是封榜时间且不是比赛管理员和超级管理员
+        boolean realScore = examValidator.isRealScore(userRolesVo.getUid(), exam, isRoot);
+
+        QueryWrapper<Judge> queryWrapper = new QueryWrapper<>();
+        // lambada表达式过滤掉code
+        queryWrapper.select(Judge.class, info -> !info.getColumn().equals("code"))
+                .in("submit_id", submitIdListDto.getSubmitIds())
+                .eq("eid", submitIdListDto.getEid());
+        List<Judge> judgeList = judgeEntityService.list(queryWrapper);
+        HashMap<Long, Object> result = new HashMap<>();
+        for (Judge judge : judgeList) {
+            judge.setCode(null);
+            judge.setDisplayPid(null);
+            judge.setErrorMessage(null);
+            judge.setVjudgeUsername(null);
+            judge.setVjudgeSubmitId(null);
+            judge.setVjudgePassword(null);
+            if (!judge.getUid().equals(userRolesVo.getUid()) && !isExamAdmin) {
+                judge.setTime(null);
+                judge.setMemory(null);
+                judge.setLength(null);
+                if (!realScore) {
+                    judge.setStatus(Constants.Judge.STATUS_SUBMITTED_UNKNOWN_RESULT.getStatus());
+                    judge.setUsername(null);
+                    judge.setUid(null);
+                    judge.setLanguage(null);
+                }
+            }
+
+            result.put(judge.getSubmitId(), judge);
+        }
+        return result;
+    }
     
     @GetMapping("/get-all-case-result")
     public List<JudgeCase> getALLCaseResult(Long submitId) throws StatusNotFoundException, StatusForbiddenException {
@@ -482,21 +593,39 @@ public class JudgeManager {
                 // 当前是比赛期间 同时处于封榜时间
                 if (contest.getSealRank() && contest.getStatus().intValue() == Constants.Contest.STATUS_RUNNING.getCode()
                         && contest.getSealRankTime().before(new Date())) {
-                    throw new StatusForbiddenException("对不起，该题测试样例详情不能查看！");
+                    return null;
                 }
 
                 // 若是比赛题目，只支持OI查看测试点情况，ACM强制禁止查看,比赛管理员除外
                 if (problem.getType().intValue() == Constants.Contest.TYPE_ACM.getCode()) {
-                    throw new StatusForbiddenException("对不起，该题测试样例详情不能查看！");
+                    return null;
+                }
+            }
+        }
+
+        if (judge.getEid() != 0 && userRolesVo != null && !isRoot) {
+            Exam exam = examEntityService.getById(judge.getEid());
+            // 如果不是比赛管理员 比赛封榜不能看
+            if (!exam.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), exam.getGid())) {
+                // 当前是比赛期间 同时处于封榜时间
+                if (!exam.getRealScore() && exam.getStatus().intValue() == Constants.Exam.STATUS_RUNNING.getCode()) {
+                    return null;
+                }
+
+                // 若是比赛题目，只支持OI查看测试点情况，ACM强制禁止查看,比赛管理员除外
+                if (problem.getType().intValue() == Constants.Contest.TYPE_ACM.getCode()) {
+                    return null;
                 }
             }
         }
 
         QueryWrapper<JudgeCase> wrapper = new QueryWrapper<>();
 
-        if (userRolesVo == null || (!isRoot
+        if (userRolesVo == null) {
+            return null;
+        } else if (!isRoot
                 && !SecurityUtils.getSubject().hasRole("admin")
-                && !SecurityUtils.getSubject().hasRole("problem_admin"))) {
+                && !SecurityUtils.getSubject().hasRole("problem_admin")) {
             wrapper.select("time", "memory", "score", "status", "user_output");
         }
         wrapper.eq("submit_id", submitId)

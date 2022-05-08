@@ -6,8 +6,6 @@
 
 package com.iuaenasong.oj.manager.oj;
 
-import com.iuaenasong.oj.dao.group.GroupMemberEntityService;
-import com.iuaenasong.oj.pojo.entity.group.GroupMember;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

@@ -9,6 +9,8 @@ package com.iuaenasong.oj.dao.judge.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.iuaenasong.oj.dao.exam.ExamRecordEntityService;
+import com.iuaenasong.oj.pojo.entity.exam.ExamRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class JudgeEntityServiceImpl extends ServiceImpl<JudgeMapper, Judge> impl
 
     @Autowired
     private ContestRecordEntityService contestRecordEntityService;
+
+    @Autowired
+    private ExamRecordEntityService examRecordEntityService;
 
     @Override
     public IPage<JudgeVo> getCommonJudgeList(Integer limit,
@@ -62,7 +67,18 @@ public class JudgeEntityServiceImpl extends ServiceImpl<JudgeMapper, Judge> impl
     }
 
     @Override
-    public void failToUseRedisPublishJudge(Long submitId, Long pid, Boolean isContest) {
+    public IPage<JudgeVo> getExamJudgeList(Integer limit, Integer currentPage, String displayId, Long eid, Integer status,
+                                              String username, String uid, Boolean isAdmin,
+                                              Date startTime, Date endTime, Boolean completeProblemID) {
+        //新建分页
+        Page<JudgeVo> page = new Page<>(currentPage, limit);
+
+        return judgeMapper.getExamJudgeList(page, displayId, eid, status, username, uid, isAdmin,
+                startTime, endTime, completeProblemID);
+    }
+
+    @Override
+    public void failToUseRedisPublishJudge(Long submitId, Long pid, Boolean isContest, Boolean isExam) {
         UpdateWrapper<Judge> judgeUpdateWrapper = new UpdateWrapper<>();
         judgeUpdateWrapper.eq("submit_id", submitId)
                 .set("error_message", "The something has gone wrong with the data Backup server. Please report this to administrator.")
@@ -76,11 +92,22 @@ public class JudgeEntityServiceImpl extends ServiceImpl<JudgeMapper, Judge> impl
                     .set("status", Constants.Contest.RECORD_NOT_AC_NOT_PENALTY.getCode());
             contestRecordEntityService.update(updateWrapper);
         }
+        if (isExam) {
+            UpdateWrapper<ExamRecord> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("submit_id", submitId) // submit_id一定只有一个
+                    .set("status", Constants.Exam.RECORD_NOT_AC_NOT_PENALTY.getCode());
+            examRecordEntityService.update(updateWrapper);
+        }
     }
 
     @Override
     public ProblemCountVo getContestProblemCount(Long pid, Long cpid, Long cid, Date startTime, Date sealRankTime, List<String> adminList) {
         return judgeMapper.getContestProblemCount(pid, cpid, cid, startTime, sealRankTime, adminList);
+    }
+
+    @Override
+    public ProblemCountVo getExamProblemCount(Long pid, Long epid, Long eid, Date startTime, Date endTime, Boolean isAdmin, List<String> adminList) {
+        return judgeMapper.getExamProblemCount(pid, epid, eid, startTime, endTime, isAdmin, adminList);
     }
 
     @Override

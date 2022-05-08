@@ -100,20 +100,23 @@ export default {
     };
   },
   created() {
-    if (this.isAdminRole || this.isGroupAdmin) {
+    if (this.isAdminRole || this.isGroupAdmin || this.$route.params.examID) {
       this.toolbars.imagelink = true;
     }
   },
   methods: {
     // 将图片上传到服务器，返回地址替换到md中
     $imgAdd(pos, $file) {
-      if (!this.isAdminRole && !this.isGroupAdmin) {
+      if (!this.isAdminRole && !this.isGroupAdmin && !this.$route.params.examID) {
         return;
       }
       var formdata = new FormData();
       formdata.append('image', $file);
       if (this.$route.params.groupID) {
         formdata.append('gid', this.$route.params.groupID);
+      }
+      if (this.$route.params.examID) {
+        formdata.append('eid', this.$route.params.examID);
       }
       //将下面上传接口替换为你自己的服务器接口
       this.$http({
@@ -149,6 +152,9 @@ export default {
       formdata.append('file', file);
       if (this.$route.params.groupID) {
         formdata.append('gid', this.$route.params.groupID);
+      }
+      if (this.$route.params.examID) {
+        formdata.append('eid', this.$route.params.examID);
       }
       this.$http({
         url: '/api/file/upload-md-file',

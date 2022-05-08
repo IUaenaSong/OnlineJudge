@@ -28,7 +28,6 @@ public class ContestController {
     @Autowired
     private ContestService contestService;
 
-    
     @GetMapping("/get-contest-list")
     public CommonResult<IPage<ContestVo>> getContestList(@RequestParam(value = "limit", required = false) Integer limit,
                                                          @RequestParam(value = "currentPage", required = false) Integer currentPage,
@@ -38,7 +37,6 @@ public class ContestController {
         return contestService.getContestList(limit, currentPage, status, type, keyword);
     }
 
-    
     @GetMapping("/get-contest-info")
     @RequiresAuthentication
     public CommonResult<ContestVo> getContestInfo(@RequestParam(value = "cid", required = true) Long cid) {
@@ -46,14 +44,12 @@ public class ContestController {
         return contestService.getContestInfo(cid);
     }
 
-    
     @PostMapping("/register-contest")
     @RequiresAuthentication
     public CommonResult<Void> toRegisterContest(@RequestBody RegisterContestDto registerContestDto) {
         return contestService.toRegisterContest(registerContestDto);
     }
 
-    
     @RequiresAuthentication
     @GetMapping("/get-contest-access")
     public CommonResult<AccessVo> getContestAccess(@RequestParam(value = "cid") Long cid) {
@@ -61,7 +57,6 @@ public class ContestController {
         return contestService.getContestAccess(cid);
     }
 
-    
     @GetMapping("/get-contest-problem")
     @RequiresAuthentication
     public CommonResult<List<ContestProblemVo>> getContestProblem(@RequestParam(value = "cid", required = true) Long cid) {
@@ -98,7 +93,6 @@ public class ContestController {
                 completeProblemID);
     }
 
-    
     @PostMapping("/get-contest-rank")
     @RequiresAuthentication
     public CommonResult<IPage> getContestRank(@RequestBody ContestRankDto contestRankDto) {
@@ -106,7 +100,6 @@ public class ContestController {
         return contestService.getContestRank(contestRankDto);
     }
 
-    
     @GetMapping("/get-contest-announcement")
     @RequiresAuthentication
     public CommonResult<IPage<AnnouncementVo>> getContestAnnouncement(@RequestParam(value = "cid", required = true) Long cid,
@@ -116,14 +109,12 @@ public class ContestController {
         return contestService.getContestAnnouncement(cid, limit, currentPage);
     }
 
-    
     @PostMapping("/get-contest-not-read-announcement")
     @RequiresAuthentication
     public CommonResult<List<Announcement>> getContestUserNotReadAnnouncement(@RequestBody UserReadContestAnnouncementDto userReadContestAnnouncementDto) {
         return contestService.getContestUserNotReadAnnouncement(userReadContestAnnouncementDto);
     }
 
-    
     @PostMapping("/submit-print-text")
     @RequiresAuthentication
     public CommonResult<Void> submitPrintText(@RequestBody ContestPrintDto contestPrintDto) {

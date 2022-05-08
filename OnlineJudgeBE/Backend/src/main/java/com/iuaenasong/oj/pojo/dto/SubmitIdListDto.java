@@ -17,4 +17,6 @@ public class SubmitIdListDto {
     private List<Long> submitIds;
 
     private Long cid;
+
+    private Long eid;
 }

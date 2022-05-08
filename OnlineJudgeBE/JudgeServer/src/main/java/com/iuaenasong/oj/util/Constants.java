@@ -374,4 +374,34 @@ public class Constants {
         }
     }
 
+    public enum Exam {
+        STATUS_SCHEDULED(-1, "Scheduled"),
+        STATUS_RUNNING(0, "Running"),
+        STATUS_ENDED(1, "Ended"),
+
+        AUTH_PUBLIC(0, "Public"),
+        AUTH_PRIVATE(1, "Private"),
+        AUTH_PROTECT(2, "Protect"),
+
+        RECORD_NOT_AC_PENALTY(-1, "未AC通过算罚时"),
+        RECORD_NOT_AC_NOT_PENALTY(0, "未AC通过不罚时"),
+        RECORD_AC(1, "AC通过");
+
+        private final Integer code;
+        private final String name;
+
+        Exam(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
 }

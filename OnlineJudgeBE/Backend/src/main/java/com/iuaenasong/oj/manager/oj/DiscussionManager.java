@@ -124,7 +124,7 @@ public class DiscussionManager {
         return discussionEntityService.page(iPage, discussionQueryWrapper);
     }
 
-    public DiscussionVo getDiscussion(Integer did) throws StatusNotFoundException, StatusForbiddenException {
+    public DiscussionVo getDiscussion(Integer did) throws StatusNotFoundException, StatusFailException, StatusForbiddenException {
 
         // 获取当前登录的用户
         Session session = SecurityUtils.getSubject().getSession();
@@ -133,6 +133,10 @@ public class DiscussionManager {
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         Discussion discussion = discussionEntityService.getById(did);
+
+        if (discussion == null) {
+            throw new StatusFailException("该讨论已被封禁或删除，无法访问！");
+        }
 
         if (discussion.getGid() != null) {
             if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), discussion.getGid())) {

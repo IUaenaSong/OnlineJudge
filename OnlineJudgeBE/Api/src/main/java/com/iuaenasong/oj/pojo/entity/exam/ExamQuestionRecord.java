@@ -31,7 +31,7 @@ public class ExamQuestionRecord implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "考试id")
-    private Long cid;
+    private Long eid;
 
     @ApiModelProperty(value = "用户id")
     private String uid;
@@ -46,7 +46,7 @@ public class ExamQuestionRecord implements Serializable {
     private String displayId;
 
     @ApiModelProperty(value = "提交的答案")
-    private String submit_answer;
+    private String submitAnswer;
 
     @ApiModelProperty(value = "用户名")
     private String username;
@@ -59,6 +59,9 @@ public class ExamQuestionRecord implements Serializable {
 
     @ApiModelProperty(value = "提交时间，为提交时间减去比赛时间")
     private Long time;
+
+    @ApiModelProperty(value = "结果")
+    private Integer status;
 
     @ApiModelProperty(value = "得分")
     private Integer score;

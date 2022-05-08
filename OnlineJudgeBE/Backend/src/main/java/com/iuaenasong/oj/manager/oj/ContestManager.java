@@ -391,7 +391,7 @@ public class ContestManager {
             sealRankTime = contest.getSealRankTime();
         }
 
-        boolean isAdmin = contest.getUid().equals(userRolesVo.getUid()) || isRoot || groupValidator.isGroupRoot(contest.getUid(), contest.getGid());
+        boolean isAdmin = contest.getUid().equals(userRolesVo.getUid()) || isRoot || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid());
         // OI比赛封榜期间不更新，ACM比赛封榜期间可看到自己的提交，但是其它人的不可见
         IPage<JudgeVo> contestJudgeList = judgeEntityService.getContestJudgeList(limit,
                 currentPage,
@@ -412,7 +412,7 @@ public class ContestManager {
         } else {
             // 比赛还是进行阶段，同时不是超级管理员与比赛管理员，需要将除自己之外的提交的时间、空间、长度隐藏
             if (contest.getStatus().intValue() == Constants.Contest.STATUS_RUNNING.getCode()
-                    && !isRoot && !userRolesVo.getUid().equals(contest.getUid())) {
+                    && !isAdmin) {
                 contestJudgeList.getRecords().forEach(judgeVo -> {
                     if (!judgeVo.getUid().equals(userRolesVo.getUid())) {
                         judgeVo.setTime(null);

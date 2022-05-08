@@ -341,23 +341,23 @@ export const CONTEST_TYPE = {
 
 export const EXAM_TYPE_REVERSE = {
   '0': {
-    name:'Public',
-    color:'success',
-    tips:'Exam_Public_Tips',
+    name: 'Exam_Public',
+    color: 'success',
+    tips: 'Exam_Public_Tips',
     submit:true,
     look:true,
   },
   '1':{
-    name:'Private',
-    color:'danger',
-    tips:'Exam_Private_Tips',
+    name: 'Exam_Private',
+    color: 'danger',
+    tips: 'Exam_Private_Tips',
     submit:false,
     look:false,
   },
   '2':{
-    name:'Protected',
-    color:'warning',
-    tips:'Exam_Protected_Tips',
+    name: 'Exam_Protected',
+    color: 'warning',
+    tips: 'Exam_Protected_Tips',
     submit:false,
     look:true,
   }
@@ -381,7 +381,7 @@ export const STORAGE_KEY = {
   PROBLEM_CODE: 'ojProblemCode',
   languages: 'languages',
   CONTEST_ANNOUNCE:'ojContestAnnounce',
-  EXAM_ANNOUNCE:'ojExamAnnounce',
+  EXAM_ANSWER:'ojExamAnswer',
   individualLanguageAndTheme:'ojIndividualLanguageAndTheme',
   CONTEST_RANK_CONCERNED:'ojContestRankConcerned'
 }
@@ -405,7 +405,7 @@ export function buildContestRankConcernedKey(contestID) {
   return `${STORAGE_KEY.CONTEST_RANK_CONCERNED}_${contestID}`
 }
 
-export function buildExamAnnounceKey (uid, examID) {
-  return `${STORAGE_KEY.EXAM_ANNOUNCE}_${uid}_${examID}`
+export function buildExamAnswerKey (examID) {
+  return `${STORAGE_KEY.EXAM_ANSWER}_${examID}`
 }
 

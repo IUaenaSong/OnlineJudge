@@ -47,6 +47,7 @@ public class RemoteJudgeContext {
                 .judgeId(toJudge.getJudge().getSubmitId())
                 .uid(toJudge.getJudge().getUid())
                 .cid(toJudge.getJudge().getCid())
+                .eid(toJudge.getJudge().getEid())
                 .pid(toJudge.getJudge().getPid())
                 .username(toJudge.getUsername())
                 .password(toJudge.getPassword())
@@ -84,6 +85,7 @@ public class RemoteJudgeContext {
             case "GYM":
             case "CF":
                 if (NumberUtil.isInteger(remoteJudgeDTO.getCompleteProblemId())) {
+                    remoteJudgeDTO.setContestId(ReUtil.get("([0-9]+)[0-9]{2}", remoteJudgeDTO.getCompleteProblemId(), 1));
                     remoteJudgeDTO.setContestId(ReUtil.get("([0-9]+)[0-9]{2}", remoteJudgeDTO.getCompleteProblemId(), 1));
                     remoteJudgeDTO.setProblemNum(ReUtil.get("[0-9]+([0-9]{2})", remoteJudgeDTO.getCompleteProblemId(), 1));
                 } else {

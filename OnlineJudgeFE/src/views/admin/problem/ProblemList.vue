@@ -189,7 +189,7 @@
                 v-model="row.auth"
                 @change="changeProblemAuth(row)"
                 size="small"
-                :disabled="!isSuperAdmin && !isProblemAdmin && !query.contestID"
+                :disabled="!isSuperAdmin && !isProblemAdmin && row.author != userInfo.username"
               >
                 <el-option
                   :label="$t('m.Public_Problem')"
@@ -279,7 +279,7 @@
 
         <div class="panel-options">
           <el-pagination
-            v-if="showPagination"
+            v-if="showPagination && total"
             class="page"
             layout="prev, pager, next, sizes"
             @current-change="currentChange"
@@ -556,7 +556,7 @@ export default {
           api
             .admin_deleteContestProblem(pid, this.query.contestID)
             .then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Delete_successfully'));
               this.getProblemList();
             })
             .catch(() => {});

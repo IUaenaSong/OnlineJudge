@@ -32,7 +32,20 @@
               examQuestionMap[row.id]['displayId']
             }}
           </p>
-          
+          <p v-if="examQuestionMap[row.id]">
+            {{ $t('m.Score') }}：
+            <el-input
+              v-model="examQuestionMap[row.id].score"
+              size="small"
+              style="width: 60%"
+              @keyup.enter.native="
+                changeExamQuestionScore(
+                  examQuestionMap[row.id]
+                )
+              "
+            >
+            </el-input>
+          </p>
         </template>
       </vxe-table-column>
       <vxe-table-column
@@ -227,7 +240,9 @@ export default {
         );
       } else {
         let params = {
-          cid: this.examID,
+          eid: this.examID,
+          questionType: this.type,
+          queryExisted: true,
         };
         api.getGroupExamQuestionList(this.currentPage, this.limit, params).then(
           (res) => {
@@ -266,6 +281,11 @@ export default {
         this.$emit("currentChange", 1);
       });
     },
+    changeExamQuestionScore(examQuestion) {
+      api.updateGroupExamQuestion(examQuestion).then((res) => {
+        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+      });
+    },
     removeQuestion(qid) {
       this.$confirm(this.$i18n.t('m.Remove_Exam_Question_Tips'), this.$i18n.t('m.Warning'), {
         type: 'warning',
@@ -274,7 +294,7 @@ export default {
           api
             .deleteGroupExamQuestion(qid, this.examID)
             .then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Remove_Successfully'));
               this.$emit("currentChangeQuestion");
             })
             .catch(() => {});

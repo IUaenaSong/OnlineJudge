@@ -6,6 +6,7 @@
 
 package com.iuaenasong.oj.dao.group.impl;
 
+import com.iuaenasong.oj.dao.contest.ContestEntityService;
 import com.iuaenasong.oj.dao.group.GroupContestEntityService;
 import com.iuaenasong.oj.mapper.GroupContestMapper;
 import com.iuaenasong.oj.pojo.entity.contest.Contest;
@@ -24,11 +25,16 @@ public class GroupContestEntityServiceImpl extends ServiceImpl<GroupContestMappe
     @Autowired
     private GroupContestMapper groupContestMapper;
 
+    @Autowired
+    private ContestEntityService contestEntityService;
+
     @Override
     public IPage<ContestVo> getContestList(int limit, int currentPage, Long gid) {
         IPage<ContestVo> iPage = new Page<>(currentPage, limit);
 
         List<ContestVo> contestList = groupContestMapper.getContestList(iPage, gid);
+
+        contestEntityService.setRegisterCount(contestList);
 
         return iPage.setRecords(contestList);
     }

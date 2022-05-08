@@ -23,6 +23,11 @@ import ContestComment from "@/views/oj/contest/children/ContestComment.vue"
 import ContestPrint from "@/views/oj/contest/children/ContestPrint.vue"
 import ContestAdminPrint from "@/views/oj/contest/children/ContestAdminPrint.vue"
 import ContestRejudgeAdmin from "@/views/oj/contest/children/ContestRejudgeAdmin.vue"
+import ExamProblemList from "@/views/oj/exam/children/ExamProblemList.vue"
+import ExamQuestionList from "@/views/oj/exam/children/ExamQuestionList.vue"
+import ExamPaperList from "@/views/oj/exam/children/ExamPaperList.vue"
+import ExamPaperDetails from "@/views/oj/exam/children/ExamPaperDetails.vue"
+import ExamRejudgeAdmin from '@/views/oj/exam/children/ExamRejudgeAdmin.vue'
 import DiscussionList from "@/views/oj/discussion/DiscussionList.vue"
 import DiscussionDetails from "@/views/oj/discussion/DiscussionDetails.vue"
 import Introduction from "@/views/oj/about/Introduction.vue"
@@ -225,27 +230,51 @@ const ojRoutes = [
       },
       {
         path: 'question',
-        name: 'ExamQutstionList',
-        component: ContestProblemList,
+        name: 'ExamQuestionList',
+        component: ExamQuestionList,
         meta: { title: 'Exam Qutstion' }
       },
       {
-        path: 'question/:questionID',
-        name: 'ExamQutstionDetails',
+        path: 'question/:questionId',
+        name: 'ExamQuestionDetails',
         component: QuestionDetails,
         meta: { title: 'Exam Qutstion Details' }
       },
       {
         path: 'problem',
         name: 'ExamProblemList',
-        component: ContestProblemList,
+        component: ExamProblemList,
         meta: { title: 'Exam Problem' }
       },
       {
-        path: 'problem/:problemId',
+        path: 'problem/:problemID',
         name: 'ExamProblemDetails',
         component: ProblemDetails,
         meta: { title: 'Exam Problem Details' }
+      },
+      {
+        path: 'paper',
+        name: 'ExamPaperList',
+        component: ExamPaperList,
+        meta: { title: 'Paper Problem' }
+      },
+      {
+        path: 'paper/:paperID',
+        name: 'ExamPaperDetails',
+        component: ExamPaperDetails,
+        meta: { title: 'Exam Paper Details' }
+      },
+      {
+        path: 'my-paper/:paperID',
+        name: 'MyExamPaperDetails',
+        component: ExamPaperDetails,
+        meta: { title: 'My Exam Paper Details' }
+      },
+      {
+        path: 'rejudge',
+        name: 'ExamRejudgeAdmin',
+        component: ExamRejudgeAdmin,
+        meta: { title: 'Exam Rejudge Admin' }
       },
     ]
   },

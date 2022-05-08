@@ -57,7 +57,7 @@ public class RemoteJudgeReceiver extends AbstractReceiver {
     public void processWaitingTask() {
         // 优先处理比赛的提交
         // 其次处理普通提交的提交
-        handleWaitingTask(Constants.Queue.CONTEST_REMOTE_JUDGE_WAITING_HANDLE.getName(),
+        handleWaitingTask(Constants.Queue.CONTEST_REMOTE_JUDGE_WAITING_HANDLE.getName(), Constants.Queue.EXAM_REMOTE_JUDGE_WAITING_HANDLE.getName(),
                 Constants.Queue.GENERAL_REMOTE_JUDGE_WAITING_HANDLE.getName());
     }
 

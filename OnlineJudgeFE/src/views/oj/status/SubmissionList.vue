@@ -27,6 +27,7 @@
                 @command="handleStatusChange"
                 placement="bottom"
                 trigger="hover"
+                :disabled="examID && !formFilter.onlyMine && !ExamRealScorePermission"
               >
                 <span class="el-dropdown-link">
                   {{ status }}
@@ -41,7 +42,9 @@
                     :key="result"
                     :command="result"
                   >
-                    {{ JUDGE_STATUS_LIST[result].name }}
+                    <span v-if="!(examID && !ExamRealScorePermission && rightStatus.indexOf(result) === -1)">
+                      {{ JUDGE_STATUS_LIST[result].name }}
+                    </span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -80,7 +83,7 @@
             <el-col :xs="24" :sm="12" :md="5" :lg="5" class="search">
               <vxe-input
                 v-model="formFilter.username"
-                :disabled="formFilter.onlyMine"
+                :disabled="formFilter.onlyMine || (examID && !ExamRealScorePermission)"
                 :placeholder="$t('m.Enter_Author')"
                 type="search"
                 size="medium"
@@ -126,13 +129,19 @@
             <template v-slot="{ row }">
               <span
                 v-if="contestID"
-                @click="getProblemUri(row.displayId, true)"
+                @click="getProblemUri(row.displayId, true, false)"
+                style="color: rgb(87, 163, 243)"
+                >{{ row.displayId + ' ' + row.title }}
+              </span>
+              <span
+                v-else-if="examID"
+                @click="getProblemUri(row.displayId, false, true)"
                 style="color: rgb(87, 163, 243)"
                 >{{ row.displayId + ' ' + row.title }}
               </span>
               <span
                 v-else
-                @click="getProblemUri(row.displayPid, false)"
+                @click="getProblemUri(row.displayPid, false, false)"
                 style="color: rgb(87, 163, 243)"
                 >{{ row.displayPid + ' ' + row.title }}
               </span>
@@ -169,11 +178,19 @@
             v-if="scoreColumnVisible"
           >
             <template v-slot="{ row }">
-              <template v-if="contestID && row.score != null">
+              <template v-if="contestID && row.score != null || examID && row.score != null">
                 <el-tag
                   effect="plain"
                   size="medium"
                   :type="JUDGE_STATUS[row.status]['type']"
+                  v-if="examID"
+                  >{{ row.score * problemK[row.displayId] }}</el-tag
+                >
+                <el-tag
+                  effect="plain"
+                  size="medium"
+                  :type="JUDGE_STATUS[row.status]['type']"
+                  v-else
                   >{{ row.score }}</el-tag
                 >
               </template>
@@ -261,11 +278,13 @@
                 effect="dark"
                 :content="$t('m.View_submission_details')"
                 placement="top"
+                v-if="row.language"
               >
                 <el-button type="text" @click="showSubmitDetail(row)">{{
                   row.language
                 }}</el-button>
               </el-tooltip>
+              <span v-else>--</span>
             </template>
           </vxe-table-column>
           <vxe-table-column
@@ -287,10 +306,12 @@
           >
             <template v-slot="{ row }">
               <a
+                v-if="row.username != null && row.uid != null"
                 @click="goUserHome(row.username, row.uid)"
                 style="color: rgb(87, 163, 243)"
                 >{{ row.username }}</a
               >
+              <span v-else>--</span>
             </template>
           </vxe-table-column>
           <vxe-table-column
@@ -345,6 +366,7 @@ import api from '@/common/api';
 import {
   JUDGE_STATUS,
   CONTEST_STATUS,
+  EXAM_STATUS,
   JUDGE_STATUS_RESERVE,
   RULE_TYPE,
 } from '@/common/constants';
@@ -372,6 +394,7 @@ export default {
       limit: 15,
       currentPage: 1,
       contestID: '',
+      examID: '',
       routeName: '',
       checkStatusNum: 0,
       JUDGE_STATUS: '',
@@ -380,6 +403,8 @@ export default {
       JUDGE_STATUS_RESERVE: {},
       CONTEST_STATUS: {},
       RULE_TYPE: {},
+      rightStatus: ['-10', '-5', '4', '5', '6', '7', '9', '10'],
+      problemK: {},
     };
   },
   created() {
@@ -390,6 +415,7 @@ export default {
     this.JUDGE_STATUS_LIST = Object.assign({}, JUDGE_STATUS);
     this.JUDGE_STATUS_RESERVE = Object.assign({}, JUDGE_STATUS_RESERVE);
     this.CONTEST_STATUS = Object.assign({}, CONTEST_STATUS);
+    this.EXAM_STATUS = Object.assign({}, EXAM_STATUS);
     this.RULE_TYPE = Object.assign({}, RULE_TYPE);
     // 去除下拉框选择中的Compiling,Judging,Submitting,Not Submitted,Submitted Unknown Result 五种状态
     delete this.JUDGE_STATUS_LIST['6'];
@@ -403,6 +429,7 @@ export default {
     init() {
       this.checkStatusNum = 0;
       this.contestID = this.$route.params.contestID;
+      this.examID = this.$route.params.examID;
       let query = this.$route.query;
       this.formFilter.problemID = query.problemID;
       this.formFilter.username = query.username || '';
@@ -420,6 +447,15 @@ export default {
       }
       this.limit = parseInt(query.limit) || 15;
       this.routeName = this.$route.name;
+      if (this.examID) {
+        this.getProblemK();
+      }
+    },
+
+    getProblemK() {
+      api.getExamProblemK(this.examID).then((res) => {
+        this.problemK = res.data.data;
+      })
     },
 
     getData() {
@@ -478,6 +514,7 @@ export default {
     getSubmissions() {
       let params = this.buildQuery();
       params.contestID = this.contestID;
+      params.examID = this.examID;
       if (this.formFilter.onlyMine) {
         // 需要判断是否为登陆状态
         if (this.isAuthenticated) {
@@ -493,9 +530,14 @@ export default {
       this.loadingTable = true;
       this.submissions = [];
       this.needCheckSubmitIds = {};
-      let func = this.contestID
-        ? 'getContestSubmissionList'
-        : 'getSubmissionList';
+      let func;
+      if (this.contestID) {
+        func = 'getContestSubmissionList';
+      } else if (this.examID) {
+        func = 'getExamSubmissionList';
+      } else {
+        func = 'getSubmissionList';
+      }
       api[func](this.limit, utils.filterEmptyValue(params))
         .then((res) => {
           let data = res.data.data;
@@ -533,10 +575,15 @@ export default {
       }
       const checkStatus = () => {
         let submitIds = this.needCheckSubmitIds;
-        let func = this.contestID
-          ? 'checkContestSubmissonsStatus'
-          : 'checkSubmissonsStatus';
-        api[func](Object.keys(submitIds), this.contestID).then(
+        let func;
+        if (this.contestID) {
+          func = 'checkContestSubmissonsStatus';
+        } else if (this.examID) {
+          func = 'checkExamSubmissonsStatus';
+        } else {
+          func = 'checkSubmissonsStatus';
+        }
+        api[func](Object.keys(submitIds), this.contestID ? this.contestID : this.examID).then(
           (res) => {
             let result = res.data.data;
             if (!this.$refs.xTable) {
@@ -599,6 +646,7 @@ export default {
     changeRoute() {
       let query = this.buildQuery();
       query.contestID = this.contestID;
+      query.examID = this.examID;
       let queryParams = utils.filterEmptyValue(query);
       // 判断新路径请求参数与当前路径请求的参数是否一致，避免重复访问路由报错
       let equal = true;
@@ -620,9 +668,14 @@ export default {
 
       if (!equal) {
         // 避免重复同个路径请求导致报错
-        let routeName = queryParams.contestID
-          ? 'ContestSubmissionList'
-          : 'SubmissionList';
+        let routeName;
+        if (queryParams.contestID) {
+          routeName = 'ContestSubmissionList';
+        } else if(queryParams.examID) {
+          routeName = 'ExamSubmissionList';
+        } else {
+          routeName = 'SubmissionList';
+        }
         this.$router.push({
           name: routeName,
           query: queryParams,
@@ -697,6 +750,10 @@ export default {
           this.$msg.error(this.$i18n.t('m.Please_login_first'));
           return;
         }
+      } else {
+        if (this.examID && !this.isExamAdmin) {
+          this.formFilter.status = '';
+        }
       }
       this.currentPage = 1;
       this.changeRoute();
@@ -714,6 +771,15 @@ export default {
             submitID: row.submitId,
           },
         });
+      } else if (row.eid != 0) {
+        this.$router.push({
+          name: 'ExamSubmissionDetails',
+          params: {
+            examID: this.$route.params.examID,
+            problemID: row.displayId,
+            submitID: row.submitId,
+          },
+        });
       } else {
         this.$router.push({
           name: 'SubmissionDetails',
@@ -721,12 +787,20 @@ export default {
         });
       }
     },
-    getProblemUri(pid, isContest) {
+    getProblemUri(pid, isContest, isExam) {
       if (isContest) {
         this.$router.push({
           name: 'ContestProblemDetails',
           params: {
             contestID: this.$route.params.contestID,
+            problemID: pid,
+          },
+        });
+      } else if (isExam) {
+        this.$router.push({
+          name: 'ExamProblemDetails',
+          params: {
+            examID: this.$route.params.examID,
             problemID: pid,
           },
         });
@@ -753,13 +827,15 @@ export default {
       'isAuthenticated',
       'userInfo',
       'isSuperAdmin',
+      'isExamAdmin',
       'isAdminRole',
       'contestRuleType',
       'contestStatus',
-      'ContestRealTimePermission',
+      'examStatus',
+      'ExamRealScorePermission',
     ]),
     title() {
-      if (!this.contestID) {
+      if (!this.contestID && !this.examID) {
         return 'Status';
       } else if (this.problemID) {
         return 'Problem Submissions';

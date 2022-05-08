@@ -6,7 +6,7 @@
 
 package com.iuaenasong.oj.judge;
 
-import com.iuaenasong.oj.dao.JudgeEntityService;
+import com.iuaenasong.oj.dao.ExamRecordEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.iuaenasong.oj.common.exception.SystemError;
@@ -32,7 +32,7 @@ public class JudgeContext {
     private ContestRecordEntityService contestRecordEntityService;
 
     @Autowired
-    private JudgeEntityService judgeEntityService;
+    private ExamRecordEntityService examRecordEntityService;
 
     public Judge Judge(Problem problem, Judge judge) {
 
@@ -77,11 +77,14 @@ public class JudgeContext {
         return Compiler.compileInteractive(code, pid, interactiveLanguage, extraFiles);
     }
 
-    public void updateOtherTable(Long submitId, Integer status, Long cid, String uid, Long pid, Boolean isPublic, Integer score, Integer useTime) {
+    public void updateOtherTable(Long submitId, Integer status, Long cid, Long eid, String uid, Long pid, Boolean isPublic, Integer score, Integer useTime) {
 
-        if (cid == 0) { // 非比赛提交
+        if (cid != 0) {
+            contestRecordEntityService.UpdateContestRecord(score, status, submitId, useTime);
+        } else if (eid != 0) {
+            examRecordEntityService.UpdateExamRecord(score, status, submitId, useTime);
+        } else {
             // 如果是AC,就更新user_acproblem表,
-            Judge judge = judgeEntityService.getById(submitId);
             if (status.intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus() && isPublic) {
                 userAcproblemEntityService.saveOrUpdate(new UserAcproblem()
                         .setPid(pid)
@@ -89,9 +92,6 @@ public class JudgeContext {
                         .setSubmitId(submitId)
                 );
             }
-
-        } else { //如果是比赛提交
-            contestRecordEntityService.UpdateContestRecord(score, status, submitId, useTime);
         }
     }
 }

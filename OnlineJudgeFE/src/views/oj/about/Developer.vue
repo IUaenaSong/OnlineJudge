@@ -2,7 +2,7 @@
   <div>
     <div class="intr-center">
       <paper-card type="server">
-        <h1 class="text-darken">POJ</h1>
+        <h1 class="text-darken">Pal OJ</h1>
         <h1>
           <a href="https://github.com/IUaenaSong/OnlineJudge" target="_blank"
             >Palette Online Judge</a

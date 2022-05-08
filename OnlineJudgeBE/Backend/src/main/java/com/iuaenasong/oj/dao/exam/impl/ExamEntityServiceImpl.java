@@ -6,8 +6,6 @@
 
 package com.iuaenasong.oj.dao.exam.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iuaenasong.oj.dao.exam.ExamEntityService;
 import com.iuaenasong.oj.mapper.ExamMapper;
@@ -40,6 +38,23 @@ public class ExamEntityServiceImpl extends ServiceImpl<ExamMapper, Exam> impleme
             }
         }
         return examVo;
+    }
+
+    @Override
+    public Void setRegisterCount(List<ExamVo> examList) {
+        List<Long> eidList = examList.stream().map(ExamVo::getId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(eidList)) {
+            List<ExamRegisterCountVo> examRegisterCountVoList = examMapper.getExamRegisterCount(eidList);
+            for (ExamRegisterCountVo examRegisterCountVo : examRegisterCountVoList) {
+                for (ExamVo examVo : examList) {
+                    if (examRegisterCountVo.getEid().equals(examVo.getId())) {
+                        examVo.setCount(examRegisterCountVo.getCount());
+                        break;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 }

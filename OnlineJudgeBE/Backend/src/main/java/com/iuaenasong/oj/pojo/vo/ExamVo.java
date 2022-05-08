@@ -61,6 +61,9 @@ public class ExamVo implements Serializable {
     @ApiModelProperty(value = "编程题得分方式，Recent、Highest（最近一次提交、最高得分提交）")
     private String rankScoreType;
 
+    @ApiModelProperty(value = "是否公开分数")
+    private Boolean autoRealScore;
+
     @ApiModelProperty(value = "考试的报名人数")
     private Integer count;
 

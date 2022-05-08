@@ -20,4 +20,6 @@ public interface ContestEntityService extends IService<Contest> {
     IPage<ContestVo> getContestList(Integer limit, Integer currentPage, Integer type, Integer status, String keyword);
 
     ContestVo getContestInfoById(long cid);
+
+    Void setRegisterCount(List<ContestVo> contestList);
 }

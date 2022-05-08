@@ -40,7 +40,19 @@ public interface JudgeEntityService extends IService<Judge> {
                                        String sealTimeUid,
                                        Boolean completeProblemID);
 
-    void failToUseRedisPublishJudge(Long submitId, Long pid, Boolean isContest);
+    IPage<JudgeVo> getExamJudgeList(Integer limit,
+                                       Integer currentPage,
+                                       String displayId,
+                                       Long eid,
+                                       Integer status,
+                                       String username,
+                                       String uid,
+                                       Boolean isAdmin,
+                                       Date startTime,
+                                       Date endTime,
+                                       Boolean completeProblemID);
+
+    void failToUseRedisPublishJudge(Long submitId, Long pid, Boolean isContest, Boolean isExam);
 
     ProblemCountVo getContestProblemCount(Long pid,
                                           Long cpid,
@@ -48,6 +60,14 @@ public interface JudgeEntityService extends IService<Judge> {
                                           Date startTime,
                                           Date sealRankTime,
                                           List<String> adminList);
+
+    ProblemCountVo getExamProblemCount(Long pid,
+                                       Long epid,
+                                       Long eid,
+                                       Date startTime,
+                                       Date endTime,
+                                       Boolean isAdmin,
+                                       List<String> adminList);
 
     ProblemCountVo getProblemCount(Long pid);
 

@@ -186,7 +186,7 @@ public class GroupManager {
             throw new StatusFailException("团队权限不能为空且应为1~3！");
         }
 
-        if (group.getAuth() == 2 || group.getAuth() == 3) {
+        if (group.getAuth() == 3) {
             if (StringUtils.isEmpty(group.getCode()) || group.getCode().length() != 6) {
                 throw new StatusFailException("团队邀请码不能为空且长度应为 6！");
             }
@@ -251,7 +251,7 @@ public class GroupManager {
             throw new StatusFailException("团队权限不能为空且应为1~3！");
         }
 
-        if (group.getAuth() == 2 || group.getAuth() == 3) {
+        if (group.getAuth() == 3) {
             if (StringUtils.isEmpty(group.getCode()) || group.getCode().length() != 6) {
                 throw new StatusFailException("团队邀请码不能为空且长度应为 6！");
             }

@@ -123,6 +123,7 @@
 
               <div class="panel-options">
                 <el-pagination
+                  v-if="total"
                   class="page"
                   layout="prev, pager, next, sizes"
                 @current-change="currentChange"
@@ -289,6 +290,7 @@
 
             <div class="panel-options">
               <el-pagination
+                v-if="total"
                 class="page"
                 layout="prev, pager, next, sizes"
               @current-change="roleAuthCurrentChange"

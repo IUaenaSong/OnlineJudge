@@ -5,7 +5,9 @@
         <el-col :span="3">
           <span class="title">{{ $t('m.Group_Exam') }}</span>
         </el-col>
-        <el-col :span="18" v-if="(isSuperAdmin || isGroupAdmin) && !problemPage && !editProblemPage && !announcementPage">
+        <el-col :span="18" v-if="(isSuperAdmin || isGroupAdmin) &&
+          !problemPage && !editProblemPage &&
+          !questionPage && !editQuestionPage ">
           <el-button
             v-if="!editPage"
             :type="createPage ? 'danger' : 'primary'"
@@ -27,7 +29,7 @@
             :icon="adminPage ? 'el-icon-back' : 'el-icon-s-opportunity'"
           >{{ adminPage ? $t('m.Back') : $t('m.Exam_Admin') }}</el-button>
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && problemPage && !editProblemPage && !createProblemPage && !announcementPage" >
+        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && problemPage && !editProblemPage && !createProblemPage">
           <el-button
             type="primary"
             size="small"
@@ -43,7 +45,7 @@
           <el-button
             type="success"
             size="small"
-            @click="handleGroupPage"
+            @click="handleGroupProblemPage"
             icon="el-icon-plus"
           >{{ $t('m.Add_From_Group_Problem') }}</el-button>
           <el-button
@@ -52,6 +54,49 @@
             @click="handleProblemPage(null)"
             icon="el-icon-back"
           >{{ $t('m.Back') }}</el-button>
+        </el-col>
+        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && questionPage && !editQuestionPage && !createQuestionPage">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleCreateQuestionPage"
+            icon="el-icon-plus"
+          >{{ $t('m.Create') }}</el-button>
+          <el-button
+            type="success"
+            size="small"
+            @click="groupQuestionPage = true"
+            icon="el-icon-plus"
+          >{{ $t('m.Add_From_Group_Question') }}</el-button>
+          <el-button
+            type="warning"
+            size="small"
+            @click="handleQuestionPage(null)"
+            icon="el-icon-back"
+          >{{ $t('m.Back') }}</el-button>
+        </el-col>
+        <el-col :span="24" v-if="(isSuperAdmin || isGroupAdmin) && questionPage && !editQuestionPage && !createQuestionPage">
+          <section v-if="!editQuestionPage && !editQuestionPage">
+            <b class="question-filter">{{ $t('m.Question_Type') }}</b>
+            <div>
+              <el-tag
+                size="medium"
+                class="filter-item"
+                type="primary"
+                :effect="type == 0 ? 'dark' : 'plain'"
+                @click="filterByType(0)"
+              > {{ $t('m.All') }} </el-tag>
+              <el-tag
+                size="medium"
+                class="filter-item"
+                v-for="(key, index) in QUESTION_TYPE_REVERSE"
+                :type="key.color"
+                :effect="type == index ? 'dark' : 'plain'"
+                :key="index"
+                @click="filterByType(index)"
+              > {{ $t('m.' + key.name + '_Question') }} </el-tag>
+            </div>
+          </section>
         </el-col>
         <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && (editProblemPage || createProblemPage)">
           <el-button
@@ -69,23 +114,25 @@
             icon="el-icon-back"
           >{{ $t('m.Back') }}</el-button>`
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && announcementPage">
+        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && (editQuestionPage || createQuestionPage)">
           <el-button
-            type="primary"
+            v-if="editQuestionPage"
+            type="danger"
             size="small"
-            @click="handleCreateAnnouncementPage"
-            icon="el-icon-plus"
-          >{{ $t('m.Create') }}</el-button>
-          <el-button
-            type="warning"
-            size="small"
-            @click="handleAnnouncementPage"
+            @click="handleEditQuestionPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>
+          >{{ $t('m.Back') }}</el-button>`
+          <el-button
+            v-if="createQuestionPage"
+            type="danger"
+            size="small"
+            @click="handleCreateQuestionPage"
+            icon="el-icon-back"
+          >{{ $t('m.Back') }}</el-button>`
         </el-col>
       </el-row>
     </div>
-    <div v-if="!adminPage && !createPage && !problemPage">
+    <div v-if="!adminPage && !createPage && !problemPage && !questionPage">
       <p id="no-exam" v-show="examList.length == 0">
         <el-empty :description="$t('m.No_Exam')"></el-empty>
       </p>
@@ -98,15 +145,8 @@
           <el-row type="flex" justify="space-between" align="middle">
             <el-col :xs="10" :sm="4" :md="3" :lg="2">
               <img
-                v-show="exam.type == 0"
                 class="trophy"
-                :src="acmSrc"
-                width="95px"
-              />
-              <img
-                v-show="exam.type == 1"
-                class="trophy"
-                :src="oiSrc"
+                :src="examSrc"
                 width="95px"
               />
             </el-col>
@@ -231,11 +271,11 @@
       ></Pagination>
     </div>
     <ExamList
-      v-if="adminPage && !createPage && !problemPage && !announcementPage"
+      v-if="adminPage && !createPage && !problemPage && !questionPage"
       @handleEditPage="handleEditPage"
       @currentChange="currentChange"
       @handleProblemPage="handleProblemPage"
-      @handleAnnouncementPage="handleAnnouncementPage"
+      @handleQuestionPage="handleQuestionPage"
       ref="examList"
     ></ExamList>
     <ProblemList
@@ -246,6 +286,15 @@
       ref="examProblemList"
     >
     </ProblemList>
+    <QuestionList
+      v-if="questionPage && !createQuestionPage"
+      :examID="examID"
+      :type="type"
+      @currentChangeQuestion="currentChangeQuestion"
+      @handleEditQuestionPage="handleEditQuestionPage"
+      ref="examQuestionList"
+    >
+    </QuestionList>
     <Exam
       v-if="createPage && !editPage && !problemPage"
       mode="add"
@@ -263,6 +312,15 @@
       @handleCreateProblemPage="handleCreateProblemPage"
       @currentChange="currentChange"
     ></Problem>
+    <Question
+      v-if="createQuestionPage"
+      mode="add"
+      :examID="examID"
+      :title="$t('m.Create_Question')"
+      apiMethod="addGroupExamQuestion"
+      @handleCreateQuestionPage="handleCreateQuestionPage"
+      @currentChange="currentChange"
+    ></Question>
     <el-dialog
       :title="$t('m.Add_Exam_Problem')"
       width="90%"
@@ -278,15 +336,28 @@
       ></AddPublicProblem>
     </el-dialog>
     <el-dialog
+      :title="$t('m.Add_Exam_Question')"
+      width="90%"
+      :visible.sync="groupQuestionPage"
+      :close-on-click-modal="false"
+    >
+      <AddGroupQuestion
+        v-if="groupQuestionPage"
+        :examID="examID"
+        @currentChangeQuestion="currentChangeQuestion"
+        ref="addGroupQuestion"
+      ></AddGroupQuestion>
+    </el-dialog>
+    <el-dialog
       :title="$t('m.Add_Exam_Problem')"
       width="350px"
-      :visible.sync="groupPage"
+      :visible.sync="groupProblemPage"
       :close-on-click-modal="false"
     >
       <AddGroupProblem
         :examID="examID"
         @currentChangeProblem="currentChangeProblem"
-        @handleGroupPage="handleGroupPage"
+        @handleGroupProblemPage="handleGroupProblemPage"
       ></AddGroupProblem>
     </el-dialog>
   </el-card>
@@ -298,10 +369,12 @@ import Pagination from '@/components/oj/common/Pagination';
 import ExamList from '@/components/oj/group/ExamList'
 import Exam from '@/components/oj/group/Exam'
 import Problem from '@/components/oj/group/Problem'
+import Question from '@/components/oj/group/Question'
 import ProblemList from '@/components/oj/group/ProblemList'
+import QuestionList from '@/components/oj/group/QuestionList'
 import AddPublicProblem from '@/components/oj/group/AddPublicProblem.vue';
 import AddGroupProblem from '@/components/oj/group/AddGroupProblem.vue';
-import AnnouncementList from '@/components/oj/group/AnnouncementList'
+import AddGroupQuestion from '@/components/oj/group/AddGroupQuestion.vue';
 import api from '@/common/api';
 import time from '@/common/time';
 import {
@@ -309,6 +382,7 @@ import {
   EXAM_TYPE,
   EXAM_TYPE_REVERSE,
   EXAM_STATUS,
+  QUESTION_TYPE_REVERSE,
 } from '@/common/constants';
 export default {
   name: 'GroupExamList',
@@ -318,9 +392,11 @@ export default {
     Exam,
     Problem,
     ProblemList,
+    Question,
+    QuestionList,
     AddPublicProblem,
     AddGroupProblem,
-    AnnouncementList
+    AddGroupQuestion,
   },
   data() {
     return {
@@ -333,14 +409,17 @@ export default {
       createPage: false,
       editPage: false,
       problemPage: false,
+      questionPage: false,
       publicPage: false,
-      groupPage: false,
+      groupProblemPage: false,
+      groupQuestionPage: false,
       editProblemPage: false,
       createProblemPage: false,
-      announcementPage: false,
+      editQuestionPage: false,
+      createQuestionPage: false,
       examID: null,
-      acmSrc: require('@/assets/acm.jpg'),
-      oiSrc: require('@/assets/oi.jpg'),
+      type: 0,
+      examSrc: require('@/assets/exam.png'),
     };
   },
   mounted() {
@@ -348,6 +427,7 @@ export default {
     this.EXAM_TYPE = Object.assign({}, EXAM_TYPE);
     this.EXAM_TYPE_REVERSE = Object.assign({}, EXAM_TYPE_REVERSE);
     this.EXAM_STATUS = Object.assign({}, EXAM_STATUS);
+    this.QUESTION_TYPE_REVERSE = Object.assign({}, QUESTION_TYPE_REVERSE);
     this.init();
   },
   methods: {
@@ -364,6 +444,9 @@ export default {
     },
     currentChangeProblem() {
       this.$refs.examProblemList.currentChange(1);
+    },
+    currentChangeQuestion() {
+      this.$refs.examQuestionList.currentChange(1);
     },
     getGroupExamList() {
       this.loading = true;
@@ -385,19 +468,6 @@ export default {
           examID: examID,
         },
       });
-    },
-    goExamOutsideScoreBoard(cid, type) {
-      if (type == 0) {
-        this.$router.push({
-          name: 'ACMScoreBoard',
-          params: { examID: cid },
-        });
-      } else if (type == 1) {
-        this.$router.push({
-          name: 'OIScoreBoard',
-          params: { examID: cid },
-        });
-      }
     },
     getDuration(startTime, endTime) {
       return time.formatSpecificDuration(startTime, endTime);
@@ -424,12 +494,12 @@ export default {
       this.examID = examID;
       this.problemPage = !this.problemPage;
     },
-    handleAnnouncementPage(examID) {
+    handleQuestionPage(examID) {
       this.examID = examID;
-      this.announcementPage = !this.announcementPage;
+      this.questionPage = !this.questionPage;
     },
-    handleGroupPage() {
-      this.groupPage = !this.groupPage;
+    handleGroupProblemPage() {
+      this.groupProblemPage = !this.groupProblemPage;
     },
     handleEditProblemPage() {
       this.editProblemPage = !this.editProblemPage;
@@ -439,10 +509,17 @@ export default {
       this.createProblemPage = !this.createProblemPage;
       this.$refs.examProblemList.currentChange(1);
     },
-    handleCreateAnnouncementPage() {
-      this.$refs.examAnnouncementList.openAnnouncementDialog(null);
+    handleEditQuestionPage() {
+      this.editQuestionPage = !this.editQuestionPage;
+      this.$refs.examQuestionList.editPage = this.editQuestionPage;
     },
-    
+    handleCreateQuestionPage() {
+      this.createQuestionPage = !this.createQuestionPage;
+      this.$refs.examQuestionList.currentChange(1);
+    },
+    filterByType(type) {
+      this.type = parseInt(type);
+    }
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
@@ -510,5 +587,25 @@ export default {
 #exam-list .exam-main li {
   display: inline-block;
   padding: 10px 0 0 10px;
+}
+section {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 0.8em;
+  margin-left: 10px;
+}
+.question-filter {
+  margin-right: 1em;
+  font-weight: bolder;
+  white-space: nowrap;
+  font-size: 16px;
+  margin-top: 8px;
+}
+.filter-item {
+  font-size: 13px;
+  margin: 2px 5px;
+}
+.filter-item:hover {
+  cursor: pointer;
 }
 </style>

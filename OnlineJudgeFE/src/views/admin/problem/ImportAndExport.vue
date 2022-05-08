@@ -57,6 +57,7 @@
 
         <div class="panel-options">
           <el-pagination
+            v-if="total"
             class="page"
             layout="prev, pager, next"
             @current-change="getProblems"

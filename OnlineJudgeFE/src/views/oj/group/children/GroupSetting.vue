@@ -194,7 +194,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :md="8" :xs="24" v-if="group.auth == 2 || group.auth == 3">
+        <el-col :md="8" :xs="24" v-if="group.auth == 3">
           <el-form-item :label="$t('m.Group_Code')" required prop="code">
             <el-input
               v-model="group.code"

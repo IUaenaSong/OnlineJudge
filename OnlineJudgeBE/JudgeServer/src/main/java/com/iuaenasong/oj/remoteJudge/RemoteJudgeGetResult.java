@@ -137,18 +137,40 @@ public class RemoteJudgeGetResult {
                         judgeContext.updateOtherTable(remoteJudgeDTO.getJudgeId(),
                                 status,
                                 remoteJudgeDTO.getCid(),
+                                remoteJudgeDTO.getEid(),
                                 remoteJudgeDTO.getUid(),
                                 remoteJudgeDTO.getPid(),
                                 remoteJudgeDTO.getIsPublic(),
                                 score,
                                 judge.getTime());
 
+                    } else if (remoteJudgeDTO.getEid() != 0) {
+                        int score = 0;
+
+                        if (judge.getStatus().intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus()) {
+                            score = 100;
+                        }
+
+                        judge.setScore(score);
+                        // 写回数据库
+                        judgeEntityService.updateById(judge);
+                        // 同步其它表
+                        judgeContext.updateOtherTable(remoteJudgeDTO.getJudgeId(),
+                                status,
+                                remoteJudgeDTO.getCid(),
+                                remoteJudgeDTO.getEid(),
+                                remoteJudgeDTO.getUid(),
+                                remoteJudgeDTO.getPid(),
+                                remoteJudgeDTO.getIsPublic(),
+                                score,
+                                judge.getTime());
                     } else {
                         judgeEntityService.updateById(judge);
                         // 同步其它表
                         judgeContext.updateOtherTable(remoteJudgeDTO.getJudgeId(),
                                 status,
                                 remoteJudgeDTO.getCid(),
+                                remoteJudgeDTO.getEid(),
                                 remoteJudgeDTO.getUid(),
                                 remoteJudgeDTO.getPid(),
                                 remoteJudgeDTO.getIsPublic(),

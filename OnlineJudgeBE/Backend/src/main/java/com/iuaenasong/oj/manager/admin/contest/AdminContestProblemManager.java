@@ -85,7 +85,7 @@ public class AdminContestProblemManager {
                             .or().eq("is_remote", true))
                     .ne("auth", 2); // 同时需要与比赛相同类型的题目，权限需要是公开的（隐藏的不可加入！）
             Contest contest = contestEntityService.getById(cid);
-            if (contest.getGid() != null) { //团队比赛不能查看公共题库的隐藏题目
+            if (contest.getGid() != null) { //团队比赛不能查看公共题库的比赛题目
                 problemQueryWrapper.ne("auth", 3);
             }
         }
@@ -258,6 +258,12 @@ public class AdminContestProblemManager {
     @Transactional(rollbackFor = Exception.class)
     public void addProblemFromPublic(ContestProblemDto contestProblemDto) throws StatusFailException {
 
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+
         Long pid = contestProblemDto.getPid();
         Long cid = contestProblemDto.getCid();
         String displayId = contestProblemDto.getDisplayId();
@@ -277,7 +283,10 @@ public class AdminContestProblemManager {
         String displayName = problem.getTitle();
 
         // 修改成比赛题目
-        boolean updateProblem = problemEntityService.saveOrUpdate(problem.setAuth(3));
+        if (isRoot || isProblemAdmin || problem.getAuthor().equals(userRolesVo.getUsername())) {
+            problem.setAuth(3);
+        }
+        boolean updateProblem = problemEntityService.saveOrUpdate(problem);
 
         boolean isOk = contestProblemEntityService.saveOrUpdate(new ContestProblem()
                 .setCid(cid).setPid(pid).setDisplayTitle(displayName).setDisplayId(displayId));
@@ -288,14 +297,18 @@ public class AdminContestProblemManager {
 
     @Transactional(rollbackFor = Exception.class)
     public void importContestRemoteOJProblem(String name, String problemId, Long cid, String displayId) throws StatusFailException {
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
+
         QueryWrapper<Problem> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("problem_id", name.toUpperCase() + "-" + problemId);
         Problem problem = problemEntityService.getOne(queryWrapper, false);
 
         // 如果该题目不存在，需要先导入
         if (problem == null) {
-            Session session = SecurityUtils.getSubject().getSession();
-            UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
             try {
                 ProblemStrategy.RemoteProblemInfo otherOJProblemInfo = remoteProblemManager.getOtherOJProblemInfo(name.toUpperCase(), problemId, userRolesVo.getUsername());
                 if (otherOJProblemInfo != null) {
@@ -325,8 +338,11 @@ public class AdminContestProblemManager {
         // 比赛中题目显示默认为原标题
         String displayName = problem.getTitle();
 
+        if (isRoot || isProblemAdmin || problem.getAuthor().equals(userRolesVo.getUsername())) {
+            problem.setAuth(3);
+        }
         // 修改成比赛题目
-        boolean updateProblem = problemEntityService.saveOrUpdate(problem.setAuth(3));
+        boolean updateProblem = problemEntityService.saveOrUpdate(problem);
 
         boolean isOk = contestProblemEntityService.saveOrUpdate(new ContestProblem()
                 .setCid(cid).setPid(problem.getId()).setDisplayTitle(displayName).setDisplayId(displayId));

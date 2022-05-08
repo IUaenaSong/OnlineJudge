@@ -10,12 +10,13 @@ const state = {
     auth: EXAM_TYPE.PUBLIC,
     rankShowName:'username',
   },
-  examProblems: [],
+  examProblemList: [],
   itemVisible: {
     table: true,
     chart: false,
   },
   groupExamAuth: 0,
+  answerList: {},
 }
 
 const getters = {
@@ -41,19 +42,18 @@ const getters = {
     }
     
   },
+  examAutoRealScore: (state, getters) => {
+    return state.exam.autoRealScore;
+  },
 
-  ExamRealTimePermission: (state, getters, _, rootGetters) => {
+  ExamRealScorePermission: (state, getters, _, rootGetters) => {
     if (getters.examStatus === EXAM_STATUS.ENDED) {
       return true
     }
     if (getters.isExamAdmin) {
       return true
     }
-    if (state.exam.sealRank === true) {
-      return !state.now.isAfter(moment(state.exam.sealRankTime))
-    } else {
-      return true
-    }
+    return state.exam.realScore === true
   },
   examProblemSubmitDisabled: (state, getters, _, rootGetters) => {
     if (getters.examStatus === EXAM_STATUS.ENDED) {
@@ -129,14 +129,14 @@ const mutations = {
   changeRankRemoveStar(state, payload){
     state.removeStar = payload.value
   },
-  changeConcernedList(state, payload){
-    state.concernedList = payload.value
+  changeAnswerList(state, payload){
+    state.answerList = payload.value
   },
-  changeExamProblems(state, payload) {
-    state.examProblems = payload.examProblems;
+  changeExamProblemList(state, payload) {
+    state.examProblemList = payload.examProblemList;
     let tmp={};
-    for(var j = 0,len = payload.examProblems.length; j < len; j++){
-      tmp[payload.examProblems[j].displayId] = payload.examProblems[j].color;
+    for(var j = 0,len = payload.examProblemList.length; j < len; j++){
+      tmp[payload.examProblemList[j].displayId] = payload.examProblemList[j].color;
     }
     state.disPlayIdMapColor = tmp;
   },
@@ -154,7 +154,7 @@ const mutations = {
   },
   clearExam (state) {
     state.exam = {}
-    state.examProblems = []
+    state.examProblemList = []
     state.intoAccess = false
     state.submitAccess = false
     state.itemVisible = {
@@ -162,8 +162,6 @@ const mutations = {
       chart: false,
       realName: false
     }
-    state.forceUpdate = false
-    state.removeStar = false
     state.groupExamAuth = 0
   },
   now(state, payload) {
@@ -195,28 +193,14 @@ const actions = {
       })
     })
   },
-  getScoreBoardExamInfo ({commit, rootState, dispatch}) {
-    return new Promise((resolve, reject) => {
-      api.getScoreBoardExamInfo(rootState.route.params.examID).then((res) => {
-        resolve(res)
-        let exam = res.data.data.exam;
-        let problemList = res.data.data.problemList;
-        commit('changeExam', {exam: exam})
-        commit('changeExamProblems', {examProblems: problemList})
-        commit('now', {now: moment(exam.now)})
-      }, err => {
-        reject(err)
-      })
-    })
-  },
 
-  getExamProblems ({commit, rootState}) {
+  getExamProblemList ({commit, rootState}) {
     return new Promise((resolve, reject) => {
       api.getExamProblemList(rootState.route.params.examID).then(res => {
         resolve(res)
-        commit('changeExamProblems', {examProblems: res.data.data})
+        commit('changeExamProblemList', {examProblemList: res.data.data})
       }, (err) => {
-        commit('changeExamProblems', {examProblems: []})
+        commit('changeExamProblemList', {examProblemList: []})
         reject(err)
       })
     })

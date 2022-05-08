@@ -227,7 +227,7 @@ export default {
 
       api[funcName](trainingDto)
         .then((res) => {
-          this.$msg.success('success');
+          this.$msg.success(this.$t('m.Save_Successfully'));
           this.$router.push({
             name: 'admin-training-list',
             query: { refresh: 'true' },

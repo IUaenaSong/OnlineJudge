@@ -40,4 +40,14 @@ public class RejudgeServiceImpl implements RejudgeService {
             return CommonResult.errorResponse(e.getMessage());
         }
     }
+
+    @Override
+    public CommonResult<Void> rejudgeExamProblem(Long eid, Long pid) {
+        try {
+            rejudgeManager.rejudgeExamProblem(eid, pid);
+            return CommonResult.successResponse("重判成功！该题目对应的全部提交已进入判题队列！");
+        } catch (StatusFailException e) {
+            return CommonResult.errorResponse(e.getMessage());
+        }
+    }
 }

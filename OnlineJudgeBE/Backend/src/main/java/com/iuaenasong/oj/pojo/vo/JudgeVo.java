@@ -73,6 +73,12 @@ public class JudgeVo {
     @ApiModelProperty(value = "比赛中题目排序id，非比赛题目默认为0")
     private Long cpid;
 
+    @ApiModelProperty(value = "考试id，非考试题目默认为0")
+    private Long eid;
+
+    @ApiModelProperty(value = "考试中题目排序id，非考试题目默认为0")
+    private Long epid;
+
     @ApiModelProperty(value = "题目来源")
     private String source;
 

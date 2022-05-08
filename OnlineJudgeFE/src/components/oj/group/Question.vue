@@ -29,6 +29,26 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
+              <el-row :gutter="20" v-if="examID">
+                <el-col :md="12" :xs="24">
+                  <el-form-item :label="$t('m.Exam_Display_ID')" required>
+                    <el-input
+                      :placeholder="$t('m.Exam_Display_ID')"
+                      v-model="examQuestion.displayId"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :md="12" :xs="24">
+                  <el-form-item :label="$t('m.Score')" required>
+                    <el-input
+                      :placeholder="$t('m.Score')"
+                      v-model="examQuestion.score"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="24">
               <el-row :gutter="10">
                 <el-col :sm="12" :xs="24">
                   <el-form-item
@@ -265,6 +285,12 @@ export default {
         choices: [],
       },
       reQuestion: {},
+      examQuestion: {
+        displayId: null,
+        score: null,
+        eid: null,
+        qid: null,
+      },
     }
   },
   mounted() {
@@ -300,6 +326,11 @@ export default {
           data.choices = utils.stringToChoices(data.choices);
           data.questionId = data.questionId.slice(this.group.shortName.length);
           this.question = data;
+          if (this.examID) {
+            api.getGroupExamQuestion(this.qid, this.examID).then((res) => {
+              this.examQuestion = res.data.data;
+            });
+          }
         })
       } else {
         this.addChoice();
@@ -351,7 +382,9 @@ export default {
             count += 1;
           }
         }
-        if (this.question.single && (this.question.radio < 0 || this.question.radio >= this.question.choices.length)
+        if (this.question.single && (this.question.radio == null ||
+          this.question.radio < 0 ||
+          this.question.radio >= this.question.choices.length)
             || !this.question.single && count == 0) {
           this.$msg.error(this.$i18n.t('m.Question_No_Right_Answer'));
           return;
@@ -361,28 +394,43 @@ export default {
       this.question.choices = utils.choicesToString(
         this.question.choices
       );
+      this.question.score = 0;
       api[this.apiMethod](this.question)
         .then((res) => {
           if (this.examID) {
             if (res.data.data) {
-              this.examQuestion['qid'] = res.data.data.pid;
+              this.examQuestion['qid'] = res.data.data.qid;
               this.examQuestion['eid'] = this.examID;
             }
             api.updateGroupExamQuestion(this.examQuestion).then((res) => {
+              if (this.mode === 'edit') {
+                this.$msg.success(this.$t('m.Update_Successfully'));
+                this.$emit("handleEditPage");
+              } else {
+                this.$msg.success(this.$t('m.Create_Successfully'));
+                if (this.examID) {
+                  this.$emit("handleCreateQuestionPage");
+                } else {
+                  this.$emit("handleCreatePage");
+                }
+              }
+              this.$emit("currentChange", 1);
             });
-          }
-          if (this.mode === 'edit') {
-            this.$msg.success(this.$t('m.Update_Successfully'));
-            this.$emit("handleEditPage");
           } else {
-            this.$msg.success(this.$t('m.Create_Successfully'));
-            if (this.examID) {
-              this.$emit("handleCreateQuestionPage");
+            if (this.mode === 'edit') {
+              this.$msg.success(this.$t('m.Update_Successfully'));
+              this.$emit("handleEditPage");
             } else {
-              this.$emit("handleCreatePage");
+              this.$msg.success(this.$t('m.Create_Successfully'));
+              if (this.examID) {
+                this.$emit("handleCreateQuestionPage");
+              } else {
+                this.$emit("handleCreatePage");
+              }
             }
+            this.$emit("currentChange", 1);
           }
-          this.$emit("currentChange", 1);
+          
         })
         .catch(() => {});
         this.question.choices = tmp;

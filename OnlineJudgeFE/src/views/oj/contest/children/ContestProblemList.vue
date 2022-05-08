@@ -175,6 +175,7 @@ export default {
       this.$store.dispatch('getContestProblems').then((res) => {
         if (this.isAuthenticated) {
           let isContestProblemList = true;
+          let isExamProblemList = false; // 为了与考试题目区分
           // 如果已登录，则需要查询对当前页面题目列表中各个题目的提交情况
           let pidList = [];
           if (this.problems && this.problems.length > 0) {
@@ -185,7 +186,9 @@ export default {
               .getUserProblemStatus(
                 pidList,
                 isContestProblemList,
-                this.$route.params.contestID
+                isExamProblemList,
+                this.$route.params.contestID,
+                0
               )
               .then((res) => {
                 let result = res.data.data;

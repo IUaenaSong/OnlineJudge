@@ -9,6 +9,7 @@ package com.iuaenasong.oj.dao.group.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.iuaenasong.oj.dao.exam.ExamEntityService;
 import com.iuaenasong.oj.dao.group.GroupExamEntityService;
 import com.iuaenasong.oj.mapper.GroupExamMapper;
 import com.iuaenasong.oj.pojo.entity.exam.Exam;
@@ -24,11 +25,16 @@ public class GroupExamEntityServiceImpl extends ServiceImpl<GroupExamMapper, Exa
     @Autowired
     private GroupExamMapper groupExamMapper;
 
+    @Autowired
+    private ExamEntityService examEntityService;
+
     @Override
     public IPage<ExamVo> getExamList(int limit, int currentPage, Long gid) {
         IPage<ExamVo> iPage = new Page<>(currentPage, limit);
 
         List<ExamVo> examList = groupExamMapper.getExamList(iPage, gid);
+
+        examEntityService.setRegisterCount(examList);
 
         return iPage.setRecords(examList);
     }

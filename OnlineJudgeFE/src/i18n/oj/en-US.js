@@ -197,6 +197,7 @@ export const m = {
   Only_View_Problem: 'Only View Problem',
   Put_away_the_full_screen_and_write_the_code: 'Put away the full screen and write the code',
   Contest_Problem: 'Contest Problem',
+  Exam_Problem: 'Exam Problem',
   Show_Tags: 'Show Tags',
   Hide_Tags: 'Hide Tags',
   No_tag: 'No tag',
@@ -237,6 +238,16 @@ export const m = {
   OK: 'OK',
   Copied_successfully: 'Copied successfully',
   Copied_failed: 'Copied failed',
+
+  // /views/oj/question/QuestionDetails.vue
+  The_Present_Answer_Has_Not_Been_Saved: 'The present answer hasn\'t been saved!',
+  Last_Question: 'Last Question',
+  Next_Question: 'Next Question',
+  Save_Successfully: 'Save Successfully',
+  Enter_the_exam_password: 'Enter the exam password',
+
+  // /views/oj/exam/children/ExamQuestionList.vue
+  Submitted: 'Has Submitted',
 
   // /views/oj/status/SubmissionList.vue
   Mine: 'Mine',
@@ -394,7 +405,7 @@ export const m = {
   // /views/oj/contest/children/ContestRejudgeAdmin.vue
   Contest_Rejudge: 'Contest Rejudge',
   ID: 'ID',
-  Contest_Rejudge_Tips: 'Are you sure you want to rejudge all submissions of the questions?',
+  Contest_Rejudge_Tips: 'Are you sure you want to rejudge all submissions of the problems?',
   Rejudge_All: 'Rejudge All',
   Rejudge_successfully: 'Rejudge successfully',
 
@@ -613,6 +624,7 @@ export const m = {
   Exam_Admin: 'Exam Admin',
   No_Exam: 'No Exam',
   Create_Exam: 'Create Exam',
+  Edit_Exam: 'Edit Exam',
   Exam_Title: 'Exam Title',
   Exam_Description: 'Exam Description',
   Exam_Start_Time: 'Start Time',
@@ -630,6 +642,27 @@ export const m = {
   Exam_Protected: 'Protected',
   Exam_Private: 'Private',
   Exam_Password: 'Exam Password',
+  Exam_Public_Tips: 'Public - Any one can see and submit.',
+  Exam_Protected_Tips: 'Protected - Any one can see, but only users knowing exam password can submit.',
+  Exam_Private_Tips: 'Private - Only users knowing exam password can see and submit.',
+  Add_Exam_Problem: 'Add Exam Problem',
+  View_Exam_Problem_List: 'View Exam Problem List',
+  View_Exam_Question_List: 'View Exam Question List',
+  Mark_Paper: 'Mark Papers',
+  Add_Exam_Question: 'Add Exam Question',
+  Add_From_Group_Question: 'Add From Group Question',
+  Enter_The_Question_Display_ID_in_the_Exam: 'Enter The Question Display ID in the Exam',
+  The_Question_Display_ID_in_the_Exam_is_required: 'The Question Display ID in the Exam is required',
+  Original_Display_ID: 'Original Display ID',
+  Remove_Exam_Question_Tips: 'Are you sure you want to remove the question from the exam?',
+  Remove_Successfully: 'Remove Successfully',
+  Exam_Rejudge: 'Exam Rejudge',
+  Exam_Rejudge_Tips: 'Are you sure you want to rejudge all submissions of the problems?',
+  Code_Question: 'Code Question',
+  Exam_Paper: 'Exam Paper',
+  Paper: 'Paper',
+  User_Answer: 'User Answer',
+  Register_exam_successfully: 'Register exam successfully',
 
   // /views/oj/group/GroupRank.vue
   Group_ACM_Rank_Type: 'ACM Rank',

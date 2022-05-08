@@ -31,10 +31,27 @@ public class ExamValidator {
     @Autowired
     private GroupValidator groupValidator;
 
+    public boolean isRealScore(String uid, Exam exam, Boolean isRoot) {
+        // 如果是管理员同时选择强制刷新榜单，则封榜无效
+        Long gid = exam.getGid();
+        if (isRoot || exam.getUid().equals(uid) || groupValidator.isGroupRoot(uid, gid)) {
+            return true;
+        } else if (!exam.getRealScore()) {
+            Date now = new Date();
+            // 如果现在时间处于封榜开始到比赛结束之间
+            if (now.before(exam.getEndTime())) {
+                return false;
+            }
+            // 或者没有开启赛后自动解除封榜，不可刷新榜单
+            return exam.getAutoRealScore() && now.after(exam.getEndTime());
+        }
+        return true;
+    }
+
     public void validateExamAuth(Exam exam, UserRolesVo userRolesVo, Boolean isRoot) throws StatusFailException, StatusForbiddenException {
 
         if (exam == null || !exam.getVisible()) {
-            throw new StatusFailException("对不起，该比赛不存在！");
+            throw new StatusFailException("对不起，该考试不存在！");
         }
 
         Long gid = exam.getGid();
@@ -43,23 +60,23 @@ public class ExamValidator {
             // 判断一下比赛的状态，还未开始不能查看题目。
             if (exam.getStatus().intValue() != Constants.Exam.STATUS_RUNNING.getCode() &&
                     exam.getStatus().intValue() != Constants.Exam.STATUS_ENDED.getCode()) {
-                throw new StatusForbiddenException("比赛还未开始，您无权访问该比赛！");
+                throw new StatusForbiddenException("考试还未开始，您无权访问该比赛！");
             } else {
                 if (!exam.getIsPublic() && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
-                    throw new StatusForbiddenException("对不起，您并非团队内的成员无法参加该团队内的比赛！");
+                    throw new StatusForbiddenException("对不起，您并非团队内的成员无法参加该团队内的考试！");
                 }
                 // 如果是处于比赛正在进行阶段，需要判断该场比赛是否为私有赛，私有赛需要判断该用户是否已注册
                 if (exam.getAuth().intValue() == Constants.Exam.AUTH_PRIVATE.getCode()) {
                     QueryWrapper<ExamRegister> registerQueryWrapper = new QueryWrapper<>();
-                    registerQueryWrapper.eq("cid", exam.getId()).eq("uid", userRolesVo.getUid());
+                    registerQueryWrapper.eq("eid", exam.getId()).eq("uid", userRolesVo.getUid());
                     ExamRegister register = examRegisterEntityService.getOne(registerQueryWrapper);
                     if (register == null) { // 如果数据为空，表示未注册私有赛，不可访问
-                        throw new StatusForbiddenException("对不起，请先到比赛首页输入比赛密码进行注册！");
+                        throw new StatusForbiddenException("对不起，请先到考试首页输入考试密码进行注册！");
                     }
 
                     if (exam.getOpenAccountLimit()
                             && !validateAccountRule(exam.getAccountLimitRule(), userRolesVo.getUsername())) {
-                        throw new StatusForbiddenException("对不起！本次比赛只允许特定账号规则的用户参赛！");
+                        throw new StatusForbiddenException("对不起！本次考试只允许特定账号规则的用户参加！");
                     }
                 }
             }
@@ -71,7 +88,7 @@ public class ExamValidator {
         if (exam.getAuth().intValue() == Constants.Exam.AUTH_PRIVATE.getCode() ||
                 exam.getAuth().intValue() == Constants.Exam.AUTH_PROTECT.getCode()) {
             QueryWrapper<ExamRegister> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("cid", exam.getId()).eq("uid", uid);
+            queryWrapper.eq("eid", exam.getId()).eq("uid", uid);
             ExamRegister register = examRegisterEntityService.getOne(queryWrapper, false);
             // 如果还没注册
             if (register == null) {

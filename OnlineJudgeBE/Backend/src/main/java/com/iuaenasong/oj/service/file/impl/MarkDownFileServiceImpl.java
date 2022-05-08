@@ -26,9 +26,9 @@ public class MarkDownFileServiceImpl implements MarkDownFileService {
     private MarkDownFileManager markDownFileManager;
 
     @Override
-    public CommonResult<Map<Object, Object>> uploadMDImg(MultipartFile image, Long gid) {
+    public CommonResult<Map<Object, Object>> uploadMDImg(MultipartFile image, Long gid, Long eid) {
         try {
-            return CommonResult.successResponse(markDownFileManager.uploadMDImg(image, gid));
+            return CommonResult.successResponse(markDownFileManager.uploadMDImg(image, gid, eid));
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
         } catch (StatusSystemErrorException e) {
@@ -51,9 +51,9 @@ public class MarkDownFileServiceImpl implements MarkDownFileService {
     }
 
     @Override
-    public CommonResult<Map<Object, Object>> uploadMd(MultipartFile file, Long gid) {
+    public CommonResult<Map<Object, Object>> uploadMd(MultipartFile file, Long gid, Long eid) {
         try {
-            return CommonResult.successResponse(markDownFileManager.uploadMd(file, gid));
+            return CommonResult.successResponse(markDownFileManager.uploadMd(file, gid, eid));
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
         } catch (StatusSystemErrorException e) {

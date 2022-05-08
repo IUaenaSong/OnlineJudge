@@ -41,4 +41,12 @@ public class AdminJudgeController {
     public CommonResult<Void> rejudgeContestProblem(@RequestParam("cid") Long cid, @RequestParam("pid") Long pid) {
         return rejudgeService.rejudgeContestProblem(cid, pid);
     }
+
+    @GetMapping("/rejudge-exam-problem")
+    @RequiresAuthentication
+    @RequiresRoles("root")  // 只有超级管理员能操作
+    @RequiresPermissions("rejudge")
+    public CommonResult<Void> rejudgeExamProblem(@RequestParam("eid") Long eid, @RequestParam("pid") Long pid) {
+        return rejudgeService.rejudgeExamProblem(eid, pid);
+    }
 }

@@ -58,9 +58,11 @@ public class JudgeServiceImpl implements JudgeService {
 
         if (finalJudge.getStatus().intValue() != Constants.Judge.STATUS_SUBMITTED_FAILED.getStatus()) {
             // 更新其它表
-            judgeContext.updateOtherTable(finalJudge.getSubmitId(),
+            judgeContext
+                    .updateOtherTable(finalJudge.getSubmitId(),
                     finalJudge.getStatus(),
                     finalJudge.getCid(),
+                    finalJudge.getEid(),
                     finalJudge.getUid(),
                     finalJudge.getPid(),
                     finalJudge.getIsPublic(),

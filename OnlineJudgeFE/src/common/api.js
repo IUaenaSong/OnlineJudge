@@ -200,12 +200,14 @@ const ojApi = {
   },
 
   // 查询当前登录用户对题目的提交状态
-  getUserProblemStatus(pidList,isContestProblemList,cid){
+  getUserProblemStatus(pidList,isContestProblemList,isExamProblemList,cid,eid){
     return ajax("/api/get-user-problem-status",'post',{
       data:{
         pidList,
         isContestProblemList,
-        cid
+        isExamProblemList,
+        cid,
+        eid
       }
     })
   },
@@ -277,12 +279,12 @@ const ojApi = {
   },
   checkSubmissonsStatus(submitIds,cid){
     return ajax('/api/check-submissions-status', 'post', {
-      data:{submitIds,cid}
+      data:{submitIds,cid:0,eid:0}
     })
   },
   checkContestSubmissonsStatus(submitIds,cid){
     return ajax('/api/check-contest-submissions-status', 'post', {
-      data:{submitIds,cid}
+      data:{submitIds, cid, eid: 0}
     })
   },
 
@@ -519,6 +521,96 @@ const ojApi = {
   getExam(eid) {
     return ajax('/api/get-exam-info', 'get', {
       params: { eid }
+    })
+  },
+  registerExam(eid, password){
+    return ajax('/api/register-exam', 'post', {
+      data:{
+        eid,
+        password
+      }
+    })
+  },
+  getExamAccess(eid) {
+    return ajax('/api/get-exam-access', 'get', {
+      params: { eid }
+    })
+  },
+  // 获取比赛题目列表
+  getExamProblemList(eid) {
+    return ajax('/api/get-exam-problem-list', 'get', {
+      params: { eid }
+    })
+  },
+  // 获取比赛题目详情
+  getExamProblem(displayId, eid) {
+    return ajax('/api/get-exam-problem-details', 'get', {
+      params: { displayId, eid }
+    })
+  },
+  getExamQuestionList(type, eid) {
+    return ajax('/api/get-exam-question-list', 'get', {
+      params: { type, eid }
+    })
+  },
+  getExamQuestionStatus(eid) {
+    return ajax('/api/get-exam-question-status', 'get', {
+      params: { eid }
+    })
+  },
+  // 获取比赛问题详情
+  getExamQuestion(displayId, eid) {
+    return ajax('/api/get-exam-question-details', 'get', {
+      params: { displayId, eid }
+    })
+  },
+  getExamSubmissionList (limit, params) {
+    params.limit = limit
+    return ajax('/api/get-exam-submission-list', 'get', {
+      params
+    })
+  },
+  
+  checkExamSubmissonsStatus(submitIds, eid) {
+    return ajax('/api/check-exam-submissions-status', 'post', {
+      data:{submitIds, cid: 0, eid}
+    })
+  },
+
+  submitQuestion(data) {
+    return ajax('/api/submit-question', 'post', {
+      data
+    })
+  },
+  rejudgeExamQuesiton(params) {
+    return ajax('/api/rejudge-question', 'post', {
+      params
+    })
+  },
+  getMyAnswer(questionId, eid) {
+    return ajax('/api/get-my-answer', 'get', {
+      params: { questionId, eid }
+    })
+  },
+  getExamPaperList(eid, uid) {
+    return ajax('/api/get-exam-paper-list', 'get', {
+      params: { eid, uid }
+    })
+  },
+  getExamProblemK(eid) {
+    return ajax('/api/get-exam-problem-k', 'get', {
+      params: { eid }
+    })
+  },
+  submitScore(paper, eid) {
+    return ajax('/api/submit-exam-paper-score', 'post', {
+      data: paper,
+      params: { eid }
+    })
+  },
+  ExamRejudgeProblem(params){
+    return ajax('/api/admin/judge/rejudge-exam-problem', 'get', {
+      params
     })
   },
 
@@ -1159,6 +1251,97 @@ const ojApi = {
       params:{ eid, visible }
     })
   },
+
+  getGroupExamProblemList(currentPage, limit, query) {
+    let params = { currentPage, limit }
+    Object.keys(query).forEach((element) => {
+      if (query[element] !== '' && query[element] !== null && query[element] !== undefined) {
+        params[element] = query[element]
+      }
+    })
+    return ajax("/api/group/get-exam-problem-list",'get',{
+      params: params
+    })
+  },
+
+  addGroupExamProblem(data) {
+    return ajax("/api/group/exam-problem", 'post', {
+      data
+    })
+  },
+
+  getGroupExamProblem(pid, eid) {
+    return ajax("/api/group/exam-problem", 'get', {
+      params:{ pid, eid }
+    })
+  },
+
+  updateGroupExamProblem(data) {
+    return ajax("/api/group/exam-problem", 'put', {
+      data
+    })
+  },
+
+  deleteGroupExamProblem(pid, eid) {
+    return ajax("/api/group/exam-problem",'delete', {
+      params:{ pid, eid }
+    })
+  },
+
+  addGroupExamProblemFromPublic(data) {
+    return ajax("/api/group/add-exam-problem-from-public", 'post', {
+      data
+    })
+  },
+
+  addGroupExamProblemFromGroup(problemId, eid, displayId) {
+    return ajax("/api/group/add-exam-problem-from-group", 'post', {
+      params:{ problemId, eid, displayId }
+    })
+  },
+
+  getGroupExamQuestionList(currentPage, limit, query) {
+    let params = { currentPage, limit }
+    Object.keys(query).forEach((element) => {
+      if (query[element] !== '' && query[element] !== null && query[element] !== undefined) {
+        params[element] = query[element]
+      }
+    })
+    return ajax("/api/group/get-exam-question-list",'get',{
+      params: params
+    })
+  },
+
+  addGroupExamQuestion(data) {
+    return ajax("/api/group/exam-question", 'post', {
+      data
+    })
+  },
+
+  getGroupExamQuestion(qid, eid) {
+    return ajax("/api/group/exam-question", 'get', {
+      params:{ qid, eid }
+    })
+  },
+
+  updateGroupExamQuestion(data) {
+    return ajax("/api/group/exam-question", 'put', {
+      data
+    })
+  },
+
+  deleteGroupExamQuestion(qid, eid) {
+    return ajax("/api/group/exam-question",'delete', {
+      params:{ qid, eid }
+    })
+  },
+
+  addGroupExamQuestionFromGroup(data) {
+    return ajax("/api/group/add-exam-question-from-group", 'post', {
+      data
+    })
+  },
+
 
   // Group Rank
   getGroupRankList(currentPage, limit, gid, type, searchUser){

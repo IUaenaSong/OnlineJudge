@@ -58,6 +58,24 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row :gutter="20" v-if="examID">
+            <el-col :md="12" :xs="24">
+              <el-form-item :label="$t('m.Exam_Display_Title')" required>
+                <el-input
+                  :placeholder="$t('m.Exam_Display_Title')"
+                  v-model="examProblem.displayTitle"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :md="12" :xs="24">
+              <el-form-item :label="$t('m.Exam_Display_ID')" required>
+                <el-input
+                  :placeholder="$t('m.Exam_Display_ID')"
+                  v-model="examProblem.displayId"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item
@@ -155,7 +173,7 @@
                     :value="2"
                   ></el-option>
                   <el-option
-                    :label="$t('m.Contest_Problem')"
+                    :label="$t('m.Contest_Exam_Problem')"
                     :value="3"
                   ></el-option>
                 </el-select>
@@ -652,6 +670,10 @@ export default {
     contestID: {
       type: Number,
       default: null
+    },
+    examID: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -675,11 +697,18 @@ export default {
       },
       loadingCompile: false,
       contest: {},
+      exam: {},
       codeTemplate: {},
       contestProblem: {
         displayId: null,
         displayTitle: null,
         cid: null,
+        pid: null,
+      },
+      examProblem: {
+        displayId: null,
+        displayTitle: null,
+        eid: null,
         pid: null,
       },
       problem: {
@@ -707,6 +736,7 @@ export default {
         hint: '',
         source: '',
         cid: null,
+        eid: null,
         judgeMode: 'default',
         userExtraFile: '',
         judgeExtraFile: '',
@@ -748,7 +778,7 @@ export default {
   },
   mounted() {
     this.PROBLEM_LEVEL = Object.assign({}, PROBLEM_LEVEL);
-    this.uploadFileUrl = '/api/file/upload-testcase-zip?gid=this.$route.params.groupID';
+    this.uploadFileUrl = '/api/file/upload-testcase-zip?gid=' + this.$route.params.groupID;
     api.getGroupProblemTagList(this.$route.params.groupID).then((res) => {
         this.allTags = res.data.data;
         for (let tag of res.data.data) {
@@ -785,10 +815,12 @@ export default {
         uploadTestcaseDir: '',
         testCaseScore: [],
         contestProblem: {},
+        examProblem: {},
         type: 0,
         hint: '',
         source: '',
         cid: null,
+        eid: null,
         judgeMode: 'default',
         userExtraFile: null,
         judgeExtraFile: null,
@@ -800,6 +832,15 @@ export default {
         api.getGroupContest(this.contestID).then((res) => {
           this.problem.type = this.reProblem.type = res.data.data.type;
           this.contest = res.data.data;
+        });
+      }
+      if (this.examID) {
+        this.problem.eid = this.reProblem.eid = this.examID;
+        this.problem.auth = this.reProblem.auth = 3;
+        this.disableRuleType = true;
+        api.getGroupExam(this.examID).then((res) => {
+          this.problem.type = 1;
+          this.exam = res.data.data;
         });
       }
       this.problem.spjLanguage = 'C';
@@ -900,6 +941,11 @@ export default {
         if (this.contestID) {
           api.getGroupContestProblem(this.pid, this.contestID).then((res) => {
               this.contestProblem = res.data.data;
+            });
+        }
+        if (this.examID) {
+          api.getGroupExamProblem(this.pid, this.examID).then((res) => {
+              this.examProblem = res.data.data;
             });
         }
         this.getProblemCodeTemplateAndLanguage();
@@ -1170,6 +1216,24 @@ export default {
           return;
         }
       }
+      if (this.examID) {
+        if (!this.examProblem.displayId) {
+          this.$msg.error(
+            this.$i18n.t('m.Exam_Display_ID') +
+              ' ' +
+              this.$i18n.t('m.is_required')
+          );
+          return;
+        }
+        if (!this.examProblem.displayTitle) {
+          this.$msg.error(
+            this.$i18n.t('m.Exam_Display_Title') +
+              ' ' +
+              this.$i18n.t('m.is_required')
+          );
+          return;
+        }
+      }
       if (!this.problem.isRemote) {
         if (!this.problem.isUploadCase) {
           if (!this.problemSamples.length) {
@@ -1291,9 +1355,13 @@ export default {
       if (this.apiMethod === 'updateGroupContestProblem') {
         this.problem.cid = this.contest.id;
       }
+      if (this.apiMethod === 'updateGroupExamProblem') {
+        this.problem.eid = this.exam.id;
+      }
       if (
         this.apiMethod === 'addGroupProblem' ||
-        this.apiMethod === 'addGroupContestProblem'
+        this.apiMethod === 'addGroupContestProblem' ||
+        this.apiMethod === 'addGroupExamProblem'
       ) {
         this.problem.author = this.userInfo.username;
       }
@@ -1383,18 +1451,43 @@ export default {
             api.updateGroupContestProblem(this.contestProblem).then((res) => {
             });
           }
-          if (this.mode === 'edit') {
-            this.$msg.success(this.$t('m.Update_Successfully'));
-            this.$emit("handleEditPage");
-          } else {
-            this.$msg.success(this.$t('m.Create_Successfully'));
-            if (this.contestID) {
-              this.$emit("handleCreateProblemPage");
-            } else {
-              this.$emit("handleCreatePage");
+          if (this.examID) {
+            if (res.data.data) {
+              this.examProblem['pid'] = res.data.data.pid;
+              this.examProblem['eid'] = this.examID;
             }
+            api.updateGroupExamProblem(this.examProblem).then((res) => {
+              if (this.mode === 'edit') {
+                this.$msg.success(this.$t('m.Update_Successfully'));
+                this.$emit("handleEditPage");
+              } else {
+                this.$msg.success(this.$t('m.Create_Successfully'));
+                if (this.contestID) {
+                  this.$emit("handleCreateProblemPage");
+                } else if (this.examID) {
+                  this.$emit("handleCreateProblemPage");
+                } else {
+                  this.$emit("handleCreatePage");
+                }
+              }
+              this.$emit("currentChange", 1);
+            });
+          } else {
+              if (this.mode === 'edit') {
+              this.$msg.success(this.$t('m.Update_Successfully'));
+              this.$emit("handleEditPage");
+            } else {
+              this.$msg.success(this.$t('m.Create_Successfully'));
+              if (this.contestID) {
+                this.$emit("handleCreateProblemPage");
+              } else if (this.examID) {
+                this.$emit("handleCreateProblemPage");
+              } else {
+                this.$emit("handleCreatePage");
+              }
+            }
+            this.$emit("currentChange", 1);
           }
-          this.$emit("currentChange", 1);
         })
         .catch(() => {});
     },

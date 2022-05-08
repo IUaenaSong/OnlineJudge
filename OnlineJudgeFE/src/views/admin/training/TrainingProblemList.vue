@@ -172,6 +172,7 @@
 
         <div class="panel-options">
           <el-pagination
+            v-if="total"
             class="page"
             layout="prev, pager, next, sizes"
             @current-change="currentChange"
@@ -357,7 +358,7 @@ export default {
           api
             .admin_deleteTrainingProblem(pid, this.trainingID)
             .then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Delete_successfully'));
               this.getProblemList(this.currentPage);
             })
             .catch(() => {});

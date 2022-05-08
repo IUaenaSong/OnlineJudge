@@ -508,8 +508,9 @@ export default {
               // 必须当前页有显示题目才发送查询请求
               this.isGetStatusOk = false;
               let isContestProblemList = false; // 为了与比赛题目区分
+              let isExamProblemList = false; // 为了与考试题目区分
               api
-                .getUserProblemStatus(pidList, isContestProblemList)
+                .getUserProblemStatus(pidList, isContestProblemList, isExamProblemList)
                 .then((res) => {
                   let result = res.data.data;
                   for (

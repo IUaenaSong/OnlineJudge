@@ -109,7 +109,7 @@
 
           <div class="panel-options">
             <el-pagination
-              v-if="!contestID"
+              v-if="!contestID && total"
               class="page"
               layout="prev, pager, next"
               @current-change="currentChange"

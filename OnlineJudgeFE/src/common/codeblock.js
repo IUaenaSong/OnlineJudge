@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import Vue from 'vue'
+import i18n from '@/i18n'
 export const addCodeBtn = _ => {
 	//markdown代码存放在pre code 标签对中
   $('pre code').each(function () {
@@ -25,7 +26,7 @@ export const addCodeBtn = _ => {
     document.execCommand('Copy')
     element.remove()
     //这里是自定义的消息通知组件
-    Vue.prototype.$msg.success('success')
+    Vue.prototype.$msg.success(i18n.t('m.Copied_successfully'))
   })
 }
 

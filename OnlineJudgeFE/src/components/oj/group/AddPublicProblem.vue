@@ -35,6 +35,7 @@
       </vxe-table-column>
     </vxe-table>
     <el-pagination
+      v-if="total"
       class="page"
       layout="prev, pager, next, sizes"
       @current-change="currentChange"
@@ -68,6 +69,10 @@ export default {
       type: Number,
       default: null
     },
+    examID: {
+      type: Number,
+      default: null
+    },
   },
   data() {
     return {
@@ -77,6 +82,7 @@ export default {
       loading: false,
       problemList: [],
       contest: {},
+      exam: {},
       keyword: '',
     };
   },
@@ -84,6 +90,12 @@ export default {
     if (this.contestID) {
       api.getGroupContest(this.contestID).then((res) => {
           this.contest = res.data.data;
+          this.init();
+        })
+        .catch(() => {});
+    } else if (this.examID) {
+      api.getGroupExam(this.examID).then((res) => {
+          this.exam = res.data.data;
           this.init();
         })
         .catch(() => {});
@@ -109,9 +121,13 @@ export default {
         keyword: this.keyword,
         problemType: this.contest.type,
         cid: this.contest.id,
+        eid: this.exam.id,
         tid: this.trainingID,
         queryExisted: false,
       };
+      if (this.examID) {
+        params.problemType = 1;
+      }
       api[this.apiMethod](this.currentPage, this.limit, params)
         .then((res) => {
           this.loading = false;
@@ -134,7 +150,37 @@ export default {
               cid: this.contestID,
               displayId: value,
             };
+            if (value == null || value == '') {
+              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Contest_is_required'));
+              return;
+            }
             api.addGroupContestProblemFromPublic(data).then(
+              (res) => {
+                this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+                this.$emit("currentChangeProblem");
+                this.currentChange(1);
+              },
+              () => {}
+            );
+          },
+          () => {}
+        );
+      } else if (this.examID) {
+        this.$prompt(
+          this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Exam'),
+          'Tips'
+        ).then(
+          ({ value }) => {
+            let data = {
+              pid: id,
+              eid: this.examID,
+              displayId: value,
+            };
+            if (value == null || value == '') {
+              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Exam_is_required'));
+              return;
+            }
+            api.addGroupExamProblemFromPublic(data).then(
               (res) => {
                 this.$msg.success(this.$i18n.t('m.Add_Successfully'));
                 this.$emit("currentChangeProblem");

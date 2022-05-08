@@ -144,6 +144,7 @@
         </vxe-table>
         <div class="panel-options">
           <el-pagination
+            v-if="total"
             class="page"
             layout="prev, pager, next, sizes"
             @current-change="currentChange"
@@ -268,6 +269,7 @@
               >{{ $t('m.Clear_All') }}
             </el-button>
             <el-pagination
+              v-if="total"
               class="page"
               layout="prev, pager, next"
               :page-size="uploadUsersPageSize"

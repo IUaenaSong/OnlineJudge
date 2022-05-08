@@ -33,7 +33,7 @@ public class JudgeReceiver extends AbstractReceiver {
     public void processWaitingTask() {
         // 优先处理比赛的提交
         // 其次处理普通提交的提交
-        handleWaitingTask(Constants.Queue.CONTEST_JUDGE_WAITING.getName(),
+        handleWaitingTask(Constants.Queue.CONTEST_JUDGE_WAITING.getName(), Constants.Queue.EXAM_JUDGE_WAITING.getName(),
                 Constants.Queue.GENERAL_JUDGE_WAITING.getName());
     }
 

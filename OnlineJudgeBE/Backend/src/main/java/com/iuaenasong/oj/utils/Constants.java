@@ -8,7 +8,8 @@ package com.iuaenasong.oj.utils;
 
 public class Constants {
 
-    
+    static private String filePath = "";
+
     public enum Judge {
         STATUS_NOT_SUBMITTED(-10, "Not Submitted", null),
         STATUS_SUBMITTED_UNKNOWN_RESULT(-5, "Submitted Unknown Result", null),
@@ -54,8 +55,10 @@ public class Constants {
 
     public enum Queue{
         CONTEST_JUDGE_WAITING("Contest_Waiting_Handle_Queue"),
+        EXAM_JUDGE_WAITING("Exam_Waiting_Handle_Queue"),
         GENERAL_JUDGE_WAITING("General_Waiting_Handle_Queue"),
         CONTEST_REMOTE_JUDGE_WAITING_HANDLE("Contest_Remote_Waiting_Handle_Queue"),
+        EXAM_REMOTE_JUDGE_WAITING_HANDLE("Exam_Remote_Waiting_Handle_Queue"),
         GENERAL_REMOTE_JUDGE_WAITING_HANDLE("General_Remote_Waiting_Handle_Queue");
 
         private Queue(String name) {
@@ -146,6 +149,10 @@ public class Constants {
         AUTH_PRIVATE(1, "Private"),
         AUTH_PROTECT(2, "Protect"),
 
+        RECORD_NOT_AC_PENALTY(-1, "未AC通过算罚时"),
+        RECORD_NOT_AC_NOT_PENALTY(0, "未AC通过不罚时"),
+        RECORD_AC(1, "AC通过"),
+
         RANK_RECENT_SCORE(null,"Recent"),
         RANK_HIGHEST_SCORE(null,"Highest");
 
@@ -205,29 +212,29 @@ public class Constants {
     
     public enum File {
 
-        USER_AVATAR_FOLDER("/oj/file/avatar/user"),
+        USER_AVATAR_FOLDER(filePath + "/oj/file/avatar/user"),
 
-        GROUP_AVATAR_FOLDER("/oj/file/avatar/group"),
+        GROUP_AVATAR_FOLDER(filePath + "/oj/file/avatar/group"),
 
-        HOME_CAROUSEL_FOLDER("/oj/file/carousel"),
+        HOME_CAROUSEL_FOLDER(filePath + "/oj/file/carousel"),
 
-        MARKDOWN_FILE_FOLDER("/oj/file/md"),
+        MARKDOWN_FILE_FOLDER(filePath + "/oj/file/md"),
 
-        PROBLEM_FILE_FOLDER("/oj/file/problem"),
+        PROBLEM_FILE_FOLDER(filePath + "/oj/file/problem"),
 
-        CONTEST_TEXT_PRINT_FOLDER("/oj/file/contest_print"),
+        CONTEST_TEXT_PRINT_FOLDER(filePath + "/oj/file/contest_print"),
 
         IMG_API("/api/public/img/"),
 
         FILE_API("/api/public/file/"),
 
-        TESTCASE_TMP_FOLDER("/oj/file/zip"),
+        TESTCASE_TMP_FOLDER(filePath + "/oj/file/zip"),
 
-        TESTCASE_BASE_FOLDER("/oj/testcase"),
+        TESTCASE_BASE_FOLDER(filePath + "/oj/testcase"),
 
-        FILE_DOWNLOAD_TMP_FOLDER("/oj/file/zip/download"),
+        FILE_DOWNLOAD_TMP_FOLDER(filePath + "/oj/file/zip/download"),
 
-        CONTEST_AC_SUBMISSION_TMP_FOLDER("/oj/file/zip/contest_ac");
+        CONTEST_AC_SUBMISSION_TMP_FOLDER(filePath + "/oj/file/zip/contest_ac");
 
         private final String path;
 

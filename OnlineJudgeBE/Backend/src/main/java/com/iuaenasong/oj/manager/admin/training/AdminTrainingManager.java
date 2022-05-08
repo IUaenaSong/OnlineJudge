@@ -99,7 +99,18 @@ public class AdminTrainingManager {
         return trainingDto;
     }
 
-    public void deleteTraining(Long tid) throws StatusFailException {
+    public void deleteTraining(Long tid) throws StatusFailException, StatusForbiddenException {
+
+        Session session = SecurityUtils.getSubject().getSession();
+        UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
+        // 是否为超级管理员
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+
+        Training training = trainingEntityService.getById(tid);
+        // 只有超级管理员和训练拥有者才能操作
+        if (!isRoot && !userRolesVo.getUsername().equals(training.getAuthor())) {
+            throw new StatusForbiddenException("对不起，你无权限操作！");
+        }
 
         boolean isOk = trainingEntityService.removeById(tid);
         

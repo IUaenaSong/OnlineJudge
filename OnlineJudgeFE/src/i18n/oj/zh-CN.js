@@ -197,6 +197,7 @@ export const m = {
   Only_View_Problem: '只看题目内容',
   Put_away_the_full_screen_and_write_the_code: '收起全屏，编写代码',
   Contest_Problem: '比赛题目',
+  Exam_Problem: '考试题目',
   Show_Tags: '显示标签',
   Hide_Tags: '隐藏标签',
   No_tag: '暂无标签',
@@ -237,6 +238,16 @@ export const m = {
   OK: '确定',
   Copied_successfully: '复制成功',
   Copied_failed: '复制失败',
+
+  // /views/oj/question/QuestionDetails.vue
+  The_Present_Answer_Has_Not_Been_Saved: '当前答案还未保存！',
+  Last_Question: '上一题',
+  Next_Question: '下一题',
+  Save_Successfully: '保存成功',
+  Enter_the_exam_password: '输入考试密码',
+
+  // /views/oj/exam/children/ExamQuestionList.vue
+  Submitted: '已提交',
 
   // /views/oj/status/SubmissionList.vue
   Mine: '我的',
@@ -614,6 +625,7 @@ export const m = {
   Exam_Admin: '考试管理',
   No_Exam: '暂无考试',
   Create_Exam: '创建考试',
+  Edit_Exam: '编辑考试',
   Exam_Title: '考试标题',
   Exam_Description: '考试描述',
   Exam_Start_Time: '开始时间',
@@ -631,6 +643,27 @@ export const m = {
   Exam_Protected: '保护考试',
   Exam_Private: '私有考试',
   Exam_Password: '考试密码',
+  Exam_Public_Tips: '公开考试 - 每个用户都可查看与提交',
+  Exam_Protected_Tips: '保护考试 - 每个用户都可查看，但是提交需要密码',
+  Exam_Private_Tips: '私有考试 - 用户需要密码才可查看与提交',
+  Add_Exam_Problem: '添加考试题目',
+  View_Exam_Problem_List: '查看题目列表',
+  View_Exam_Question_List: '查看问题列表',
+  Mark_Paper: '批改试卷',
+  Add_Exam_Question: '添加考试问题',
+  Add_From_Group_Question: '从团队问题中添加',
+  Enter_The_Question_Display_ID_in_the_Exam: '请输入该问题在考试中展示ID',
+  The_Question_Display_ID_in_the_Exam_is_required: '问题在考试中的展示ID不能为空',
+  Original_Display_ID: '原始展示ID',
+  Remove_Exam_Question_Tips: '你是否确定要将该问题移出考试？',
+  Remove_Successfully: '移除成功',
+  Exam_Rejudge: '考试重新测评',
+  Exam_Rejudge_Tips: '您确定重测所有提交记录?',
+  Code_Question: '编程题',
+  Exam_Paper: '试卷',
+  Paper: '试卷',
+  User_Answer: '用户答案',
+  Register_exam_successfully: '注册考试成功',
 
   // /views/oj/group/GroupRank.vue
   Group_ACM_Rank_Type: 'ACM 排名',

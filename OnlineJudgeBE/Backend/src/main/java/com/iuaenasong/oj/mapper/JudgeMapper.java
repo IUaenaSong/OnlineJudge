@@ -43,6 +43,17 @@ public interface JudgeMapper extends BaseMapper<Judge> {
                                        @Param("sealTimeUid") String sealTimeUid,
                                        @Param("completeProblemID")Boolean completeProblemID);
 
+    IPage<JudgeVo> getExamJudgeList(Page<JudgeVo> page,
+                                       @Param("displayId") String displayId,
+                                       @Param("eid") Long eid,
+                                       @Param("status") Integer status,
+                                       @Param("username") String username,
+                                       @Param("uid") String uid,
+                                       @Param("isAdmin") Boolean isAdmin,
+                                       @Param("startTime") Date startTime,
+                                       @Param("endTime") Date endTime,
+                                       @Param("completeProblemID") Boolean completeProblemID);
+
     int getTodayJudgeNum();
 
     ProblemCountVo getContestProblemCount(@Param("pid") Long pid,
@@ -50,6 +61,14 @@ public interface JudgeMapper extends BaseMapper<Judge> {
                                           @Param("cid") Long cid,
                                           @Param("startTime") Date startTime,
                                           @Param("sealRankTime") Date sealRankTime,
+                                          @Param("adminList") List<String> adminList);
+
+    ProblemCountVo getExamProblemCount(@Param("pid") Long pid,
+                                          @Param("epid") Long cpid,
+                                          @Param("eid") Long cid,
+                                          @Param("startTime") Date startTime,
+                                          @Param("endTime") Date endTime,
+                                          @Param("isAdmin") Boolean isAdmin,
                                           @Param("adminList") List<String> adminList);
 
     ProblemCountVo getProblemCount(@Param("pid") Long pid);

@@ -1472,14 +1472,14 @@ export default {
               this.contestProblem['cid'] = this.$route.params.contestID;
             }
             api.admin_setContestProblemInfo(this.contestProblem).then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Save_Successfully'));
               this.$router.push({
                 name: 'admin-contest-problem-list',
                 params: { contestID: this.$route.params.contestID },
               });
             });
           } else {
-            this.$msg.success('success');
+            this.$msg.success(this.$t('m.Save_Successfully'));
             if (this.backPath) {
               this.$router.push({ path: this.backPath });
             } else {

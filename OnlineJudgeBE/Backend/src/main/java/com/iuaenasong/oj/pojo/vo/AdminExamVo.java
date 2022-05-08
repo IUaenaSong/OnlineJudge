@@ -51,7 +51,7 @@ public class AdminExamVo {
     private Long duration;
 
     @ApiModelProperty(value = "编程题是否实时出分")
-    private Boolean sealScore;
+    private Boolean realScore;
 
     @ApiModelProperty(value = "考试结束是否自动公开成绩以及小题分")
     private Boolean autoRealScore;
@@ -72,7 +72,7 @@ public class AdminExamVo {
     private String rankShowName;
 
     @ApiModelProperty(value = "编程题目得分方式，Recent、Highest（最近一次提交、最高得分提交）")
-    private String oiRankScoreType;
+    private String rankScoreType;
 
     @ApiModelProperty(value = "团队id")
     private Long gid;

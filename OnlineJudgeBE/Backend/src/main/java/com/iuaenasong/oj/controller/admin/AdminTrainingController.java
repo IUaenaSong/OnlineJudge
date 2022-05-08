@@ -51,7 +51,7 @@ public class AdminTrainingController {
 
     @DeleteMapping("")
     @RequiresAuthentication
-    @RequiresRoles(value = "root") // 只有超级管理员能删除训练
+    @RequiresRoles(value = {"root", "admin", "problem_admin"}, logical = Logical.OR)
     public CommonResult<Void> deleteTraining(@RequestParam("tid") Long tid) {
         return adminTrainingService.deleteTraining(tid);
     }

@@ -547,12 +547,13 @@ export default {
       }
       api[this.apiMethod](data)
         .then((res) => {
-          this.$msg.success('success');
           this.$router.push({ name: 'GroupContestList' });
           if (this.mode === 'edit') {
             this.$emit("handleEditPage");
+            this.$msg.success(this.$t('m.Update_Successfully'));
           } else {
             this.$emit("handleCreatePage");
+            this.$msg.success(this.$t('m.Create_Successfully'));
           }
           this.$emit("currentChange", 1);
         })

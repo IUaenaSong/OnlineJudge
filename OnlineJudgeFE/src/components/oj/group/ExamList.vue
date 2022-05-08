@@ -79,14 +79,14 @@
           </el-tooltip>
           <el-tooltip
             effect="dark"
-            :content="$t('m.View_Exam_Problem_List')"
+            :content="$t('m.View_Exam_Question_List')"
             placement="top"
             v-if="isGroupRoot || userInfo.uid == row.uid"
           >
             <el-button
               icon="el-icon-tickets"
               size="mini"
-              @click.native="goExamProblemList(row.id)"
+              @click.native="goExamQuestionList(row.id)"
               type="success"
             >
             </el-button>
@@ -94,33 +94,18 @@
           <p></p>
           <el-tooltip
             effect="dark"
-            :content="$t('m.View_Exam_Announcement_List')"
+            :content="$t('m.View_Exam_Problem_List')"
             placement="top"
             v-if="isGroupRoot || userInfo.uid == row.uid"
           >
             <el-button
-              icon="el-icon-info"
+              icon="fa fa-list"
               size="mini"
-              @click.native="goExamAnnouncementList(row.id)"
-              type="info"
-            >
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            effect="dark"
-            :content="$t('m.Download_Exam_AC_Submission')"
-            placement="top"
-            v-if="isGroupRoot || userInfo.uid == row.uid"
-          >
-            <el-button
-              icon="el-icon-download"
-              size="mini"
-              @click.native="openDownloadOptions(row.id)"
+              @click.native="goExamProblemList(row.id)"
               type="warning"
             >
             </el-button>
           </el-tooltip>
-          <p></p>
           <el-tooltip
             effect="dark"
             :content="$t('m.Delete')"
@@ -156,25 +141,6 @@
       @handleEditPage="handleEditPage"
       @currentChange="currentChange"
     ></Exam>
-    <el-dialog
-      :title="$t('m.Download_Exam_AC_Submission')"
-      width="320px"
-      :visible.sync="downloadDialogVisible"
-    >
-      <el-switch
-        v-model="excludeAdmin"
-        :active-text="$t('m.Exclude_admin_submissions')"
-      ></el-switch>
-      <el-radio-group v-model="splitType" style="margin-top:10px">
-        <el-radio label="user">{{ $t('m.SplitType_User') }}</el-radio>
-        <el-radio label="problem">{{ $t('m.SplitType_Problem') }}</el-radio>
-      </el-radio-group>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="downloadSubmissions">{{
-          $t('m.OK')
-        }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -182,7 +148,6 @@
 import { mapGetters } from 'vuex';
 import Pagination from '@/components/oj/common/Pagination';
 import api from '@/common/api';
-import utils from '@/common/utils';
 import Exam from '@/components/oj/group/Exam'
 import {
   EXAM_STATUS_REVERSE,
@@ -248,15 +213,6 @@ export default {
         }
       );
     },
-    openDownloadOptions(examID) {
-      this.downloadDialogVisible = true;
-      this.currentId = examID;
-    },
-    downloadSubmissions() {
-      let url = `/api/file/download-exam-ac-submission?cid=${this.currentId}&excludeAdmin=${this.excludeAdmin}&splitType=${this.splitType}`;
-      utils.downloadFile(url);
-      this.downloadDialogVisible = false;
-    },
     goEditExam(examID) {
       this.editPage = true;
       this.cid = examID;
@@ -265,8 +221,8 @@ export default {
     goExamProblemList(examID) {
       this.$emit("handleProblemPage", examID);
     },
-    goExamAnnouncementList(examID) {
-      this.$emit("handleAnnouncementPage", examID);
+    goExamQuestionList(examID) {
+      this.$emit("handleQuestionPage", examID);
     },
     changeExamVisible(cid, visible) {
       api.changeGroupExamVisible(cid, visible).then((res) => {

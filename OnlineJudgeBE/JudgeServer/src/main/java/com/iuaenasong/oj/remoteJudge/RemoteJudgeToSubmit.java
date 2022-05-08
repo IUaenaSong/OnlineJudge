@@ -76,6 +76,7 @@ public class RemoteJudgeToSubmit {
             judgeContext.updateOtherTable(remoteJudgeDTO.getSubmitId(),
                     Constants.Judge.STATUS_SYSTEM_ERROR.getStatus(),
                     remoteJudgeDTO.getCid(),
+                    remoteJudgeDTO.getEid(),
                     remoteJudgeDTO.getUid(),
                     remoteJudgeDTO.getPid(),
                     remoteJudgeDTO.getIsPublic(),

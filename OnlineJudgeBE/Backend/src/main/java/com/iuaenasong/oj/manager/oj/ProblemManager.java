@@ -6,6 +6,9 @@
 
 package com.iuaenasong.oj.manager.oj;
 
+import com.iuaenasong.oj.dao.exam.ExamEntityService;
+import com.iuaenasong.oj.pojo.entity.exam.Exam;
+import com.iuaenasong.oj.validator.ExamValidator;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -52,6 +55,9 @@ public class ProblemManager {
     private ContestEntityService contestEntityService;
 
     @Autowired
+    private ExamEntityService examEntityService;
+
+    @Autowired
     private ProblemLanguageEntityService problemLanguageEntityService;
 
     @Autowired
@@ -59,6 +65,9 @@ public class ProblemManager {
 
     @Autowired
     private ContestValidator contestValidator;
+
+    @Autowired
+    private ExamValidator examValidator;
 
     @Autowired
     private GroupValidator groupValidator;
@@ -114,20 +123,31 @@ public class ProblemManager {
         if (pidListDto.getIsContestProblemList()) {
             // 如果是比赛的提交记录需要判断cid
             queryWrapper.eq("cid", pidListDto.getCid());
+        } else if (pidListDto.getIsExamProblemList()) {
+            // 如果是比赛的提交记录需要判断cid
+            queryWrapper.eq("eid", pidListDto.getEid());
         } else {
-            queryWrapper.eq("cid", 0);
+            queryWrapper.eq("cid", 0).eq("eid", 0);
         }
 
         List<Judge> judges = judgeEntityService.list(queryWrapper);
 
         boolean isACMContest = true;
         Contest contest = null;
+        Exam exam = null;
         if (pidListDto.getIsContestProblemList()) {
             contest = contestEntityService.getById(pidListDto.getCid());
             if (contest == null) {
                 throw new StatusNotFoundException("错误：该比赛不存在！");
             }
             isACMContest = contest.getType().intValue() == Constants.Contest.TYPE_ACM.getCode();
+        }
+
+        if (pidListDto.getIsExamProblemList()) {
+            exam = examEntityService.getById(pidListDto.getEid());
+            if (exam == null) {
+                throw new StatusNotFoundException("错误：该考试不存在！");
+            }
         }
 
         for (Judge judge : judges) {
@@ -161,6 +181,20 @@ public class ProblemManager {
                     }
                 }
 
+            } else if (pidListDto.getIsExamProblemList()) {
+                if (!result.containsKey(judge.getPid())) { // IO比赛的，如果还未写入，则使用最新一次提交的结果
+                    // 判断该提交是否为封榜之后的提交,OI赛制封榜后的提交看不到提交结果，
+                    // 只有比赛结束可以看到,比赛管理员与超级管理员的提交除外
+                    if (!examValidator.isRealScore(userRolesVo.getUid(), exam,
+                            SecurityUtils.getSubject().hasRole("root"))) {
+                        temp.put("status", Constants.Judge.STATUS_SUBMITTED_UNKNOWN_RESULT.getStatus());
+                        temp.put("score", null);
+                    } else {
+                        temp.put("status", judge.getStatus());
+                        temp.put("score", judge.getScore());
+                    }
+                    result.put(judge.getPid(), temp);
+                }
             } else { // 不是比赛题目
                 if (judge.getStatus().intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus()) { // 如果该题目已通过，则强制写为通过（0）
                     temp.put("status", Constants.Judge.STATUS_ACCEPTED.getStatus());
@@ -183,6 +217,13 @@ public class ProblemManager {
                     temp.put("status", Constants.Judge.STATUS_NOT_SUBMITTED.getStatus());
                     result.put(pid, temp);
                 }
+            } else if (pidListDto.getIsExamProblemList()) {
+                if (!result.containsKey(pid)) {
+                    HashMap<String, Object> temp = new HashMap<>();
+                    temp.put("score", null);
+                    temp.put("status", Constants.Judge.STATUS_NOT_SUBMITTED.getStatus());
+                    result.put(pid, temp);
+                }
             } else {
                 if (!result.containsKey(pid)) {
                     HashMap<String, Object> temp = new HashMap<>();
@@ -192,10 +233,8 @@ public class ProblemManager {
             }
         }
         return result;
-
     }
 
-    
     public ProblemInfoVo getProblemInfo(String problemId) throws StatusNotFoundException, StatusForbiddenException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");

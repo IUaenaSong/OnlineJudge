@@ -30,6 +30,10 @@ export default {
       type: Number,
       default: null
     },
+    examID: {
+      type: Number,
+      default: null
+    },
   },
   data() {
     return {
@@ -45,7 +49,33 @@ export default {
           'Tips'
         ).then(
           ({ value }) => {
+            if (value == null || value == '') {
+              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Contest_is_required'));
+              return;
+            }
             api.addGroupContestProblemFromGroup(this.problemId, this.contestID, value).then(
+              (res) => {
+                this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+                this.loading = false;
+                this.$emit("currentChangeProblem");
+                this.$emit("handleGroupPage");
+              },
+              () => {}
+            );
+          },
+          () => {}
+        );
+      } else if (this.examID) {
+        this.$prompt(
+          this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Exam'),
+          'Tips'
+        ).then(
+          ({ value }) => {
+            if (value == null || value == '') {
+              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Exam_is_required'));
+              return;
+            }
+            api.addGroupExamProblemFromGroup(this.problemId, this.examID, value).then(
               (res) => {
                 this.$msg.success(this.$i18n.t('m.Add_Successfully'));
                 this.loading = false;

@@ -30,10 +30,10 @@
               {{ submissionLengthFormat(submission.length) }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Language') }}: {{ submission.language }}</span
+              >{{ $t('m.Language') }}: {{ submission.language ? submission.language : '--' }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Author') }}: {{ submission.username }}</span
+              >{{ $t('m.Author') }}: {{ submission.username ? submission.username : '--' }}</span
             >
           </div>
         </template>
@@ -268,6 +268,7 @@ export default {
         submitTime: '',
         pid: '',
         cid: '',
+        eid: '',
         displayPid: '',
         status: 0,
         time: '',
@@ -327,6 +328,15 @@ export default {
             problemID: row.displayPid,
           },
         });
+      } else if (row.eid != 0) {
+        // 比赛题目
+        this.$router.push({
+          name: 'ExamProblemDetails',
+          params: {
+            examID: row.eid,
+            problemID: row.displayPid,
+          },
+        });
       } else {
         this.$router.push({
           name: 'ProblemDetails',
@@ -361,6 +371,7 @@ export default {
               this.auth = res.data.data;
             }).catch()
           }
+          this.gid = data.gid;
           if (
             data.submission.memory &&
             data.submission.score &&
@@ -372,12 +383,12 @@ export default {
             }
           }
           // 如果是比赛 需要显示的是比赛题号
-          if (this.$route.params.problemID && data.submission.cid != 0) {
+          if (this.$route.params.problemID && (data.submission.cid != 0 || data.submission.eid != 0)) {
             data.submission.displayPid = this.$route.params.problemID;
           }
           this.submission = data.submission;
           this.tableData = [data.submission];
-          if (data.submission.cid != 0) {
+          if (data.submission.cid != 0 || data.submission.eid != 0) {
             // 比赛的提交不可分享
             this.codeShare = false;
           } else {

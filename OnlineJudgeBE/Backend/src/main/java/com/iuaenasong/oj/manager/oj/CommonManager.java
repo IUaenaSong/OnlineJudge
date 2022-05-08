@@ -104,7 +104,7 @@ public class CommonManager {
         boolean isRoot = SecurityUtils.getSubject().hasRole("root");
 
         if (!problem.getIsPublic()) {
-            if (!groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid()) && !userRolesVo.getUid().equals(problem.getAuthor()) && !isRoot) {
+            if (!groupValidator.isGroupRoot(userRolesVo.getUid(), problem.getGid()) && !userRolesVo.getUsername().equals(problem.getAuthor()) && !isRoot) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }

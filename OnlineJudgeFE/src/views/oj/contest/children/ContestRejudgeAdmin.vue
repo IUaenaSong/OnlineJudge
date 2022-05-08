@@ -30,7 +30,11 @@
         field="total"
         :title="$t('m.Total')"
         min-width="80"
-      ></vxe-table-column>
+      >
+        <template v-slot="{ row }">
+          <span>{{row.ac + row.error}}</span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="option" :title="$t('m.Option')" min-width="150">
         <template v-slot="{ row }">
           <el-button

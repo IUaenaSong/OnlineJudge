@@ -9,6 +9,9 @@ package com.iuaenasong.oj.manager.file;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
+import com.iuaenasong.oj.dao.exam.ExamEntityService;
+import com.iuaenasong.oj.pojo.entity.exam.Exam;
+import com.iuaenasong.oj.validator.ExamValidator;
 import com.iuaenasong.oj.validator.GroupValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -37,7 +40,13 @@ public class MarkDownFileManager {
     @Autowired
     private GroupValidator groupValidator;
 
-    public Map<Object, Object> uploadMDImg(MultipartFile image, Long gid) throws StatusFailException, StatusSystemErrorException, StatusForbiddenException {
+    @Autowired
+    private ExamEntityService examEntityService;
+
+    @Autowired
+    private ExamValidator examValidator;
+
+    public Map<Object, Object> uploadMDImg(MultipartFile image, Long gid, Long eid) throws StatusFailException, StatusSystemErrorException, StatusForbiddenException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -45,7 +54,13 @@ public class MarkDownFileManager {
         boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
         boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
-        if (!isRoot && !isProblemAdmin && !isAdmin && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+        Exam exam = examEntityService.getById(eid);
+
+        if (exam != null) {
+            examValidator.validateExamAuth(exam, userRolesVo, isRoot);
+        }
+
+        if (!isRoot && !isProblemAdmin && !isAdmin && !groupValidator.isGroupMember(userRolesVo.getUid(), gid) && exam == null) {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }
 
@@ -120,7 +135,7 @@ public class MarkDownFileManager {
         }
     }
 
-    public Map<Object, Object> uploadMd(MultipartFile file, Long gid) throws StatusFailException, StatusSystemErrorException, StatusForbiddenException {
+    public Map<Object, Object> uploadMd(MultipartFile file, Long gid, Long eid) throws StatusFailException, StatusSystemErrorException, StatusForbiddenException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -128,7 +143,13 @@ public class MarkDownFileManager {
         boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");
         boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
 
-        if (!isRoot && !isProblemAdmin && !isAdmin && !groupValidator.isGroupAdmin(userRolesVo.getUid(), gid)) {
+        Exam exam = examEntityService.getById(eid);
+
+        if (exam != null) {
+            examValidator.validateExamAuth(exam, userRolesVo, isRoot);
+        }
+
+        if (!isRoot && !isProblemAdmin && !isAdmin && !groupValidator.isGroupAdmin(userRolesVo.getUid(), gid) && exam == null) {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }
 

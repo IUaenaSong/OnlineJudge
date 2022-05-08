@@ -49,7 +49,7 @@
           <el-select
             v-model="row.auth"
             @change="changeProblemAuth(row.id, row.auth)"
-            :disabled="row.gid != gid"
+            :disabled="row.gid != gid || (!isGroupRoot && userInfo.username != row.author)"
             size="small"
           >
             <el-option
@@ -74,7 +74,7 @@
             effect="dark"
             :content="$t('m.Edit')"
             placement="top"
-            v-if="row.gid == gid"
+            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
           >
             <el-button
               icon="el-icon-edit-outline"
@@ -89,7 +89,7 @@
             effect="dark"
             :content="$t('m.Download_Testcase')"
             placement="top"
-            v-if="row.gid == gid"
+            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
           >
             <el-button
               icon="el-icon-download"
@@ -114,7 +114,7 @@
             effect="dark"
             :content="$t('m.Delete')"
             placement="top"
-            v-if="row.gid == gid"
+            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
           >
             <el-button
               icon="el-icon-delete-solid"
@@ -187,7 +187,7 @@ export default {
     this.init();
   },
   computed: {
-    ...mapGetters(['userInfo', 'isSuperAdmin']),
+    ...mapGetters(['userInfo', 'isSuperAdmin', 'isGroupRoot']),
   },
   methods: {
     init() {
@@ -262,7 +262,7 @@ export default {
           api
             .deleteGroupTrainingProblem(pid, this.trainingID)
             .then((res) => {
-              this.$msg.success('success');
+              this.$msg.success(this.$t('m.Delete_successfully'));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});

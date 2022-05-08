@@ -22,5 +22,10 @@ public class PidListDto {
     @NotNull(message = "是否为比赛题目提交判断不能为空")
     private Boolean isContestProblemList;
 
+    @NotNull(message = "是否为考试题目提交判断不能为空")
+    private Boolean isExamProblemList;
+
     private Long cid;
+
+    private Long eid;
 }

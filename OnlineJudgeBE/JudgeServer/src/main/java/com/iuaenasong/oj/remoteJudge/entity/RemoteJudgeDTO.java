@@ -51,6 +51,8 @@ public class RemoteJudgeDTO implements Serializable {
 
     private Long cid;
 
+    private Long eid;
+
     private Long judgeId;
 
     private Long submitId;

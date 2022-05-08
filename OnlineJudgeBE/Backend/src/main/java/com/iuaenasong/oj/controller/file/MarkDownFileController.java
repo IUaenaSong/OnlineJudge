@@ -32,8 +32,9 @@ public class MarkDownFileController {
     @RequiresAuthentication
     @ResponseBody
     public CommonResult<Map<Object, Object>> uploadMDImg(@RequestParam("image") MultipartFile image,
-                                                         @RequestParam(value = "gid", required = false) Long gid) {
-        return markDownFileService.uploadMDImg(image, gid);
+                                                         @RequestParam(value = "gid", required = false) Long gid,
+                                                         @RequestParam(value = "eid", required = false) Long eid) {
+        return markDownFileService.uploadMDImg(image, gid, eid);
     }
 
     @RequestMapping(value = "/delete-md-img", method = RequestMethod.GET)
@@ -47,8 +48,9 @@ public class MarkDownFileController {
     @RequiresAuthentication
     @ResponseBody
     public CommonResult<Map<Object, Object>> uploadMd(@RequestParam("file") MultipartFile file,
-                                                      @RequestParam(value = "gid", required = false) Long gid) {
-        return markDownFileService.uploadMd(file, gid);
+                                                      @RequestParam(value = "gid", required = false) Long gid,
+                                                      @RequestParam(value = "eid", required = false) Long eid) {
+        return markDownFileService.uploadMd(file, gid, eid);
     }
 
 }

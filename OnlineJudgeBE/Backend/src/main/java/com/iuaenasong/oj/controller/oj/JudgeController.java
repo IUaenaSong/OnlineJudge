@@ -82,6 +82,12 @@ public class JudgeController {
         return judgeService.checkContestJudgeResult(submitIdListDto);
     }
 
+    @RequestMapping(value = "/check-exam-submissions-status", method = RequestMethod.POST)
+    @RequiresAuthentication
+    public CommonResult<HashMap<Long, Object>> checkExamJudgeResult(@RequestBody SubmitIdListDto submitIdListDto) {
+        return judgeService.checkExamJudgeResult(submitIdListDto);
+    }
+
     
     @GetMapping("/get-all-case-result")
     public CommonResult<List<JudgeCase>> getALLCaseResult(@RequestParam(value = "submitId", required = true) Long submitId) {

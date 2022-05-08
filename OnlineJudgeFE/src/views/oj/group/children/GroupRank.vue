@@ -129,7 +129,7 @@ import { mapGetters } from 'vuex';
 import Avatar from 'vue-avatar';
 import Pagination from '@/components/oj/common/Pagination';
 export default {
-  name: 'Group Rank',
+  name: 'GroupRank',
   components: {
     Pagination,
     Avatar,

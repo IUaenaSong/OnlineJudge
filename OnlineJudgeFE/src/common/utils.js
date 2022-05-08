@@ -169,13 +169,17 @@ function getLevelName(difficulty) {
   }
 }
 
-function stringToChoices(value){
+function stringToChoices(value, filterAnswer){
   let reg = "<content>([\\s\\S]*?)</content><status>([\\s\\S]*?)</status>";
   let re = RegExp(reg,"g");
   let objList = []
   let tmp;
   while(tmp=re.exec(value)){
-    objList.push({ content: tmp[1], status:tmp[2] == "true" ? true : false })
+    if (filterAnswer) {
+      objList.push({ content: tmp[1], status:false })
+    } else {
+      objList.push({ content: tmp[1], status:tmp[2] == "true" ? true : false })
+    }
   }
   return objList
 }
@@ -189,6 +193,34 @@ function choicesToString(objList){
     result+= "<content>"+obj.content+"</content><status>"+obj.status+"</status>"
   }
   return result
+}
+
+function questionToString(question) {
+  let ans = '';
+  if (question.type == 1) {
+    if (question.single) {
+      if (question.radio != null) {
+        ans = question.radio.toString();
+      }
+    } else {
+      for (let obj of question.choices) {
+        if (obj.status) {
+          ans += '1';
+        } else {
+          ans += '0';
+        }
+      }
+    }
+  } else if (question.type == 2) {
+    if (question.judge) {
+      ans = 'true';
+    } else {
+      ans = 'false';
+    }
+  } else {
+    ans = question.answer;
+  }
+  return ans;
 }
 
 export default {
@@ -206,5 +238,6 @@ export default {
   getLevelColor:getLevelColor,
   getLevelName:getLevelName,
   stringToChoices:stringToChoices,
-  choicesToString:choicesToString
+  choicesToString:choicesToString,
+  questionToString:questionToString,
 }

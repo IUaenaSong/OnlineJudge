@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iuaenasong.oj.mapper.ExamRecordMapper">
+
+    <select id="getExamRecordByRecentSubmission" resultType="com.iuaenasong.oj.pojo.vo.ExamRecordVo">
+        SELECT er.id,er.eid,er.uid,er.pid,er.epid,er.display_id,er.submit_id,er.username,er.realname,er.status,er.submit_time,
+        er.time,er.score,er.use_time,er.gmt_create,er.gmt_modified,j.code
+        FROM
+        (SELECT uid,pid,epid,MAX(time) AS time FROM exam_record
+        <where>
+            eid=#{eid} AND status IS NOT NULL
+            <if test="uid != null and uid != ''">
+                and uid = #{uid}
+            </if>
+            <if test="superAdminUidList!=null and superAdminUidList.size>0">
+                and uid NOT IN
+                <foreach collection="superAdminUidList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND submit_time BETWEEN #{startTime} AND #{endTime}
+        </where>
+        GROUP BY uid,pid,epid) t,
+        exam_record er, judge j WHERE t.uid = er.uid AND t.pid =er.pid
+        AND t.epid = er.epid AND t.time = er.time AND er.submit_id=j.submit_id
+    </select>
+
+    <select id="getExamRecordByHighestSubmission" resultType="com.iuaenasong.oj.pojo.vo.ExamRecordVo">
+        SELECT er.id,er.eid,er.uid,er.pid,er.epid,er.display_id,er.submit_id,er.username,er.realname,er.status,er.submit_time,
+        er.time,er.score,er.use_time,er.gmt_create,er.gmt_modified,j.code
+        FROM
+        (SELECT uid,pid,epid,MAX(score) AS score FROM exam_record
+        <where>
+            eid=#{eid} AND status IS NOT NULL
+            <if test="uid != null and uid != ''">
+                and uid = #{uid}
+            </if>
+            <if test="superAdminUidList!=null and superAdminUidList.size>0">
+                and uid NOT IN
+                <foreach collection="superAdminUidList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND submit_time BETWEEN #{startTime} AND #{endTime}
+        </where>
+        GROUP BY uid,pid,epid) t,
+        exam_record er, judge j WHERE t.uid = er.uid AND t.pid =er.pid
+        AND t.epid = er.epid AND t.score = er.score AND er.submit_id=j.submit_id
+    </select>
+
+    <select id="getExamProblemK" resultType="com.iuaenasong.oj.pojo.vo.ExamProblemKVo">
+        SELECT display_id, ep.score/p.io_score as k
+        FROM problem p, exam_problem ep
+        where ep.eid=#{eid} and p.id=ep.pid
+    </select>
+
+</mapper>

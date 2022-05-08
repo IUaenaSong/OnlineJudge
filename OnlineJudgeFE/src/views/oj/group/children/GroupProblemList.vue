@@ -241,7 +241,7 @@ export default {
                 pidList.push(this.problemList[index].pid);
               }
               this.isGetStatusOk = false;
-              api.getUserProblemStatus(pidList, false).then((res) => {
+              api.getUserProblemStatus(pidList, false, false).then((res) => {
                 let result = res.data.data;
                 for (let index = 0; index < this.problemList.length; index++) {
                   this.problemList[index]['myStatus'] =

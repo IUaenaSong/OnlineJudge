@@ -185,7 +185,7 @@ public class GroupMemberManager {
 
         GroupMember groupMember = groupMemberEntityService.getOne(groupMemberQueryWrapper);
 
-        if (groupMember == null && !isRoot && !group.getUid().equals(userRolesVo.getUid())) {
+        if (groupMember == null && !isRoot) {
             throw new StatusForbiddenException("对不起，您无权限操作！");
         }
 
@@ -198,8 +198,8 @@ public class GroupMemberManager {
             throw new StatusNotFoundException("该用户不在团队中！");
         }
 
-        if (!isRoot && !group.getUid().equals(userRolesVo.getUid())) {
-            if (groupMember1.getAuth() >= groupMember.getAuth() || groupMemberDto.getAuth() >= groupMember.getAuth() || !group.getUid().equals(groupMemberDto.getUid())) {
+        if (!isRoot) {
+            if (groupMember1.getAuth() >= groupMember.getAuth() || groupMemberDto.getAuth() >= groupMember.getAuth()) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }

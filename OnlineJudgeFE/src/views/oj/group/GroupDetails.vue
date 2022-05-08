@@ -29,11 +29,11 @@
                 <i class="el-icon-s-data"></i>&nbsp;{{ $t('m.Group_Contest') }}
               </span>
             </el-tab-pane>
-            <!-- <el-tab-pane lazy name="GroupExamList" :disabled="groupMenuDisabled">
+            <el-tab-pane lazy name="GroupExamList" :disabled="groupMenuDisabled">
               <span slot="label">
-                <i class="el-icon-s-data"></i>&nbsp;{{ $t('m.Group_Exam') }}
+                <i class="el-icon-document"></i>&nbsp;{{ $t('m.Group_Exam') }}
               </span>
-            </el-tab-pane> -->
+            </el-tab-pane>
             <el-tab-pane lazy name="GroupRank" :disabled="groupMenuDisabled">
               <span slot="label">
                 <i class="el-icon-medal-1"></i>&nbsp;{{ $t('m.Group_Rank') }}

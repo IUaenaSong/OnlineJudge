@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <el-pagination
+      v-if="total"
       background
       :small="isMobile"
       :total="total"

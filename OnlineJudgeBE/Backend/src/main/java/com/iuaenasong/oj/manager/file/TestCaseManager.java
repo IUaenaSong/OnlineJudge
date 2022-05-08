@@ -173,11 +173,11 @@ public class TestCaseManager {
         Long gid = problem.getGid();
 
         if (gid != null) {
-            if (!isRoot && !problem.getAuthor().equals(userRolesVo.getUsername()) && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+            if (!isRoot && !problem.getAuthor().equals(userRolesVo.getUsername()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), gid)) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         } else {
-            if (!isRoot && !isProblemAdmin && !problem.getAuthor().equals(userRolesVo.getUsername()) && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
+            if (!isRoot && !isProblemAdmin && !problem.getAuthor().equals(userRolesVo.getUsername()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), gid)) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }

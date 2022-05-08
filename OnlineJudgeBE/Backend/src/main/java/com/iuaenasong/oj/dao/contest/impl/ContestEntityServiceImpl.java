@@ -61,7 +61,8 @@ public class ContestEntityServiceImpl extends ServiceImpl<ContestMapper, Contest
         return contestVo;
     }
 
-    private void setRegisterCount(List<ContestVo> contestList){
+    @Override
+    public Void setRegisterCount(List<ContestVo> contestList) {
         List<Long> cidList = contestList.stream().map(ContestVo::getId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(cidList)) {
             List<ContestRegisterCountVo> contestRegisterCountVoList = contestMapper.getContestRegisterCount(cidList);
@@ -74,6 +75,7 @@ public class ContestEntityServiceImpl extends ServiceImpl<ContestMapper, Contest
                 }
             }
         }
+        return null;
     }
 
 }

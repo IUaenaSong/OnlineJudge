@@ -75,9 +75,11 @@ public class ContestScoreboardManager {
 
         List<ContestProblemVo> contestProblemList;
 
-        boolean isAdmin = isRoot || contest.getUid().equals(userRolesVo.getUid()) || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid());
+        boolean isAdmin = isRoot ||userRolesVo != null &&
+                (contest.getUid().equals(userRolesVo.getUid()) || groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid()));
         // 如果比赛开启封榜
-        if (contestValidator.isSealRank(userRolesVo.getUid(), contest, true, isRoot)) {
+        if (userRolesVo == null && contest.getSealRank() && contest.getSealRankTime() != null ||
+                userRolesVo != null && contestValidator.isSealRank(userRolesVo.getUid(), contest, true, isRoot)) {
             contestProblemList = contestProblemEntityService.getContestProblemList(cid, contest.getStartTime(), contest.getEndTime(),
                     contest.getSealRankTime(), isAdmin, contest.getUid());
         } else {

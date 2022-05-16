@@ -200,46 +200,45 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item :label="$t('m.Star_User_UserName')" required>
+                <el-tag
+                  v-for="username in contest.starAccount"
+                  closable
+                  :close-transition="false"
+                  :key="username"
+                  type="warning"
+                  size="medium"
+                  @close="removeStarUser(username)"
+                  style="margin-right: 7px; margin-top: 4px"
+                  >{{ username }}</el-tag
+                >
+                <el-input
+                  v-if="inputVisible"
+                  size="medium"
+                  class="input-new-star-user"
+                  v-model="starUserInput"
+                  :trigger-on-focus="true"
+                  @keyup.enter.native="addStarUser"
+                  @blur="addStarUser"
+                >
+                </el-input>
+                <el-tooltip
+                  effect="dark"
+                  :content="$t('m.Add')"
+                  placement="top"
+                  v-else
+                >
+                  <el-button
+                    class="button-new-tag"
+                    size="small"
+                    @click="inputVisible = true"
+                    icon="el-icon-plus"
+                  ></el-button>
+                </el-tooltip>
+              </el-form-item>
+            </el-col>
           </el-row>
-
-          <el-col :span="24">
-            <el-form-item :label="$t('m.Star_User_UserName')" required>
-              <el-tag
-                v-for="username in contest.starAccount"
-                closable
-                :close-transition="false"
-                :key="username"
-                type="warning"
-                size="medium"
-                @close="removeStarUser(username)"
-                style="margin-right: 7px; margin-top: 4px"
-                >{{ username }}</el-tag
-              >
-              <el-input
-                v-if="inputVisible"
-                size="medium"
-                class="input-new-star-user"
-                v-model="starUserInput"
-                :trigger-on-focus="true"
-                @keyup.enter.native="addStarUser"
-                @blur="addStarUser"
-              >
-              </el-input>
-              <el-tooltip
-                effect="dark"
-                :content="$t('m.Add')"
-                placement="top"
-                v-else
-              >
-                <el-button
-                  class="button-new-tag"
-                  size="small"
-                  @click="inputVisible = true"
-                  icon="el-icon-plus"
-                ></el-button>
-              </el-tooltip>
-            </el-form-item>
-          </el-col>
           <el-row :gutter="20">
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Contest_Auth')" required>

@@ -95,3 +95,20 @@
 .submission-hover:hover {
   cursor: pointer;
 }
+
+.contest-rank-switch {
+  margin-bottom: 30px;
+  margin-top: -8px;
+}
+.contest-rank-switch span {
+  margin-left: 5px;
+}
+.contest-rank-concerned {
+  font-size: 1rem;
+  margin-left: 0.5rem !important;
+  vertical-align: top;
+}
+.contest-rank-concerned svg {
+  margin-top: 11px;
+  cursor: pointer;
+}

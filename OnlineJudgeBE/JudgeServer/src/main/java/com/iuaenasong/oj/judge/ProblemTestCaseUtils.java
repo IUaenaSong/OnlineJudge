@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.common.exception.SystemError;
 import com.iuaenasong.oj.dao.ProblemCaseEntityService;
 import com.iuaenasong.oj.pojo.entity.problem.ProblemCase;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;

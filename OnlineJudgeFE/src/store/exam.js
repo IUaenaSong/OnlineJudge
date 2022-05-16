@@ -8,7 +8,7 @@ const state = {
   submitAccess: false,
   exam: {
     auth: EXAM_TYPE.PUBLIC,
-    rankShowName:'username',
+    rankShowName: 'username',
   },
   examProblemList: [],
   itemVisible: {
@@ -21,29 +21,29 @@ const state = {
 
 const getters = {
   examStatus: (state, getters) => {
-    return state.exam.status;
+    return state.exam.status
   },
-  examRuleType: (state,getters) => {
-    return state.exam.type;
+  examRuleType: (state, getters) => {
+    return state.exam.type
   },
   isExamAdmin: (state, getters, _, rootGetters) => {
     return rootGetters.isAuthenticated &&
       (state.exam.author === rootGetters.userInfo.username || rootGetters.isSuperAdmin || state.groupExamAuth == 5)
   },
   examCanSubmit: (state, getters) => {
-     return state.intoAccess || state.submitAccess || state.exam.auth === EXAM_TYPE.PUBLIC || getters.isExamAdmin
+    return state.intoAccess || state.submitAccess || state.exam.auth === EXAM_TYPE.PUBLIC || getters.isExamAdmin
   },
   examMenuDisabled: (state, getters) => {
     if (getters.isExamAdmin) return false
-    if(getters.examStatus === EXAM_STATUS.SCHEDULED) return true
+    if (getters.examStatus === EXAM_STATUS.SCHEDULED) return true
 
     if (state.exam.auth === EXAM_TYPE.PRIVATE) {
       return !state.intoAccess
     }
-    
+
   },
   examAutoRealScore: (state, getters) => {
-    return state.exam.autoRealScore;
+    return state.exam.autoRealScore
   },
 
   ExamRealScorePermission: (state, getters, _, rootGetters) => {
@@ -64,7 +64,7 @@ const getters = {
     return !rootGetters.isAuthenticated
   },
   examPasswordFormVisible: (state, getters) => {
-    return state.exam.auth !== EXAM_TYPE.PUBLIC &&state.exam.auth !== EXAM_TYPE.PROTECTED &&!state.intoAccess && !getters.isExamAdmin 
+    return state.exam.auth !== EXAM_TYPE.PUBLIC && state.exam.auth !== EXAM_TYPE.PROTECTED && !state.intoAccess && !getters.isExamAdmin
   },
   examStartTime: (state) => {
     return moment(state.exam.startTime)
@@ -82,63 +82,63 @@ const getters = {
         return 'Start At ' + duration.humanize()
       }
 
-      if(duration.asSeconds()<=0){
+      if (duration.asSeconds() <= 0) {
         state.exam.status = EXAM_STATUS.RUNNING
       }
 
       let texts = time.secondFormat(durationMs)
       return '-' + texts
     } else if (getters.examStatus === EXAM_STATUS.RUNNING) {
-      if(getters.examEndTime.diff(state.now, 'seconds')>0){
+      if (getters.examEndTime.diff(state.now, 'seconds') > 0) {
         let texts = time.secondFormat(getters.examEndTime.diff(state.now, 'seconds'))
         return '-' + texts
-      }else{
+      } else {
         state.exam.status = EXAM_STATUS.ENDED
         return "00:00:00"
       }
-      
+
     } else {
       return 'Ended'
     }
   },
-  examBeginToNowDuration:(state,getters) => {
+  examBeginToNowDuration: (state, getters) => {
     return moment.duration(state.now.diff(getters.examStartTime, 'seconds'), 'seconds').asSeconds()
   },
-  examProgressValue:(state,getters) => {
+  examProgressValue: (state, getters) => {
     if (getters.examStatus === EXAM_STATUS.SCHEDULED) {
-      return 0;
+      return 0
     } else if (getters.examStatus === EXAM_STATUS.RUNNING) {
       let duration = getters.examBeginToNowDuration
-      return (duration / state.exam.duration)*100
-    }else{
-      return 100;
+      return (duration / state.exam.duration) * 100
+    } else {
+      return 100
     }
   },
 }
 
 const mutations = {
-  changeExam (state, payload) {
+  changeExam(state, payload) {
     state.exam = payload.exam
   },
   changeExamItemVisible(state, payload) {
-    state.itemVisible = {...state.itemVisible, ...payload}
+    state.itemVisible = { ...state.itemVisible, ...payload }
   },
-  changeRankForceUpdate (state, payload) {
+  changeRankForceUpdate(state, payload) {
     state.forceUpdate = payload.value
   },
-  changeRankRemoveStar(state, payload){
+  changeRankRemoveStar(state, payload) {
     state.removeStar = payload.value
   },
-  changeAnswerList(state, payload){
+  changeAnswerList(state, payload) {
     state.answerList = payload.value
   },
   changeExamProblemList(state, payload) {
-    state.examProblemList = payload.examProblemList;
-    let tmp={};
-    for(var j = 0,len = payload.examProblemList.length; j < len; j++){
-      tmp[payload.examProblemList[j].displayId] = payload.examProblemList[j].color;
+    state.examProblemList = payload.examProblemList
+    let tmp = {}
+    for (var j = 0, len = payload.examProblemList.length; j < len; j++) {
+      tmp[payload.examProblemList[j].displayId] = payload.examProblemList[j].color
     }
-    state.disPlayIdMapColor = tmp;
+    state.disPlayIdMapColor = tmp
   },
   changeExamRankLimit(state, payload) {
     state.rankLimit = payload.rankLimit
@@ -152,7 +152,7 @@ const mutations = {
   examSubmitAccess(state, payload) {
     state.submitAccess = payload.submitAccess
   },
-  clearExam (state) {
+  clearExam(state) {
     state.exam = {}
     state.examProblemList = []
     state.intoAccess = false
@@ -167,26 +167,26 @@ const mutations = {
   now(state, payload) {
     state.now = payload.now
   },
-  nowAdd1s (state) {
+  nowAdd1s(state) {
     state.now = moment(state.now.add(1, 's'))
   },
 }
 
 const actions = {
-  getExam ({commit, rootState, dispatch}) {
+  getExam({ commit, rootState, dispatch }) {
     return new Promise((resolve, reject) => {
       api.getExam(rootState.route.params.examID).then((res) => {
         resolve(res)
         let exam = res.data.data
-        commit('changeExam', {exam: exam})
+        commit('changeExam', { exam: exam })
         if (exam.gid) {
-          dispatch('getGroupExamAuth', {gid: exam.gid})
+          dispatch('getGroupExamAuth', { gid: exam.gid })
         }
-        commit('now', {now: moment(exam.now)})
+        commit('now', { now: moment(exam.now) })
         if (exam.auth == EXAM_TYPE.PRIVATE) {
-          dispatch('getExamAccess',{auth:EXAM_TYPE.PRIVATE})
-        }else if(exam.auth == EXAM_TYPE.PROTECTED){
-          dispatch('getExamAccess',{auth:EXAM_TYPE.PROTECTED})
+          dispatch('getExamAccess', { auth: EXAM_TYPE.PRIVATE })
+        } else if (exam.auth == EXAM_TYPE.PROTECTED) {
+          dispatch('getExamAccess', { auth: EXAM_TYPE.PROTECTED })
         }
       }, err => {
         reject(err)
@@ -194,33 +194,33 @@ const actions = {
     })
   },
 
-  getExamProblemList ({commit, rootState}) {
+  getExamProblemList({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getExamProblemList(rootState.route.params.examID).then(res => {
         resolve(res)
-        commit('changeExamProblemList', {examProblemList: res.data.data})
+        commit('changeExamProblemList', { examProblemList: res.data.data })
       }, (err) => {
-        commit('changeExamProblemList', {examProblemList: []})
+        commit('changeExamProblemList', { examProblemList: [] })
         reject(err)
       })
     })
   },
-  getExamAccess ({commit, rootState},examType) {
+  getExamAccess({ commit, rootState }, examType) {
     return new Promise((resolve, reject) => {
       api.getExamAccess(rootState.route.params.examID).then(res => {
-        if(examType.auth == EXAM_TYPE.PRIVATE){
-          commit('examIntoAccess', {intoAccess: res.data.data.access})
-        }else{
-          commit('examSubmitAccess', {submitAccess: res.data.data.access})
+        if (examType.auth == EXAM_TYPE.PRIVATE) {
+          commit('examIntoAccess', { intoAccess: res.data.data.access })
+        } else {
+          commit('examSubmitAccess', { submitAccess: res.data.data.access })
         }
         resolve(res)
       }).catch()
     })
   },
-  getGroupExamAuth ({commit, rootState}, gid) {
+  getGroupExamAuth({ commit, rootState }, gid) {
     return new Promise((resolve, reject) => {
       api.getGroupAuth(gid.gid).then(res => {
-        commit('changeGroupExamAuth', {groupExamAuth: res.data.data})
+        commit('changeGroupExamAuth', { groupExamAuth: res.data.data })
         resolve(res)
       }).catch()
     })

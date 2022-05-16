@@ -1,14 +1,19 @@
 <template>
   <div class="contest-body">
     <el-row>
-      <el-col :xs="24" :md="24" :lg="24" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col
+        :xs="24"
+        :md="24"
+        :lg="24"
+        style="margin-top: 10px; margin-bottom: 10px"
+      >
         <el-card shadow>
           <div class="contest-title">
             <div slot="header">
               <span class="panel-title">{{ contest.title }}</span>
             </div>
           </div>
-          <el-row style="margin-top: 10px;">
+          <el-row style="margin-top: 10px">
             <el-col :span="12" class="text-align:left">
               <el-tooltip
                 v-if="contest.auth != null && contest.auth != undefined"
@@ -19,15 +24,15 @@
                   :type.sync="CONTEST_TYPE_REVERSE[contest.auth]['color']"
                   effect="plain"
                 >
-                  {{ $t('m.' + CONTEST_TYPE_REVERSE[contest.auth]['name']) }}
+                  {{ $t("m." + CONTEST_TYPE_REVERSE[contest.auth]["name"]) }}
                 </el-tag>
               </el-tooltip>
             </el-col>
-            <el-col :span="12" style="text-align:right">
+            <el-col :span="12" style="text-align: right">
               <el-button size="small" plain v-if="contest.count">
                 <i
                   class="el-icon-user-solid"
-                  style="color:rgb(48, 145, 242);"
+                  style="color: rgb(48, 145, 242)"
                 ></i
                 >x{{ contest.count }}
               </el-button>
@@ -41,14 +46,14 @@
                 <el-tooltip
                   :content="
                     $t('m.Contest_Rank') +
-                      '：' +
-                      (contest.oiRankScoreType == 'Recent'
-                        ? $t(
-                            'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
-                          )
-                        : $t(
-                            'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
-                          ))
+                    '：' +
+                    (contest.oiRankScoreType == 'Recent'
+                      ? $t(
+                          'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
+                        )
+                      : $t(
+                          'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
+                        ))
                   "
                   placement="top"
                 >
@@ -65,13 +70,13 @@
               <el-col :xs="24" :md="12" class="left">
                 <p>
                   <i class="fa fa-hourglass-start" aria-hidden="true"></i>
-                  {{ $t('m.StartAt') }}：{{ contest.startTime | localtime }}
+                  {{ $t("m.StartAt") }}：{{ contest.startTime | localtime }}
                 </p>
               </el-col>
               <el-col :xs="24" :md="12" class="right">
                 <p>
                   <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-                  {{ $t('m.EndAt') }}：{{ contest.endTime | localtime }}
+                  {{ $t("m.EndAt") }}：{{ contest.endTime | localtime }}
                 </p>
               </el-col>
             </el-row>
@@ -84,7 +89,7 @@
             ></el-slider>
           </div>
           <el-row>
-            <el-col :span="24" style="text-align:center">
+            <el-col :span="24" style="text-align: center">
               <el-tag effect="dark" size="medium" :style="countdownColor">
                 <i class="fa fa-circle" aria-hidden="true"></i>
                 {{ countdown }}
@@ -97,25 +102,29 @@
     <div>
       <!-- 判断是否需要密码验证 -->
       <el-tabs @tab-click="tabClick" v-model="route_name">
-        <el-tab-pane name="ContestDetails" lazy >
+        <el-tab-pane name="ContestDetails" lazy>
           <span slot="label"
-            ><i class="el-icon-s-home"></i>&nbsp;{{ $t('m.Overview') }}</span
+            ><i class="el-icon-s-home"></i>&nbsp;{{ $t("m.Overview") }}</span
           >
           <el-row>
-            <el-col :span="24" v-if="passwordFormVisible" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col
+              :span="24"
+              v-if="passwordFormVisible"
+              style="margin-top: 10px; margin-bottom: 10px"
+            >
               <el-card
                 class="password-form-card"
-                style="text-align:center;margin-bottom:15px"
+                style="text-align: center; margin-bottom: 15px"
               >
                 <div slot="header">
-                  <span class="panel-title" style="color: #e6a23c;"
+                  <span class="panel-title" style="color: #e6a23c"
                     ><i class="el-icon-warning">
-                      {{ $t('m.Password_Required') }}</i
+                      {{ $t("m.Password_Required") }}</i
                     ></span
                   >
                 </div>
                 <p class="password-form-tips">
-                  {{ $t('m.To_Enter_Need_Password') }}
+                  {{ $t("m.To_Enter_Need_Password") }}
                 </p>
                 <el-form>
                   <el-input
@@ -123,18 +132,18 @@
                     type="password"
                     :placeholder="$t('m.Enter_the_contest_password')"
                     @keydown.enter.native="checkPassword"
-                    style="width:70%"
+                    style="width: 70%"
                   />
                   <el-button
                     type="primary"
                     @click="checkPassword"
-                    style="float:right;"
-                    >{{ $t('m.Enter') }}</el-button
+                    style="float: right"
+                    >{{ $t("m.Enter") }}</el-button
                   >
                 </el-form>
               </el-card>
             </el-col>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <el-card class="box-card">
                 <div
                   v-html="descriptionHtml"
@@ -152,7 +161,7 @@
         >
           <span slot="label"
             ><i class="fa fa-list" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Problem')
+              $t("m.Problem")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -162,12 +171,13 @@
           </transition>
         </el-tab-pane>
         <el-tab-pane
+          v-if="websiteConfig.openContestJudge || isSuperAdmin"
           name="ContestSubmissionList"
           lazy
           :disabled="contestMenuDisabled"
         >
           <span slot="label"
-            ><i class="el-icon-menu"></i>&nbsp;{{ $t('m.Status') }}</span
+            ><i class="el-icon-menu"></i>&nbsp;{{ $t("m.Status") }}</span
           >
           <transition name="el-fade-in-linear">
             <router-view
@@ -178,7 +188,7 @@
         <el-tab-pane name="ContestRank" lazy :disabled="contestMenuDisabled">
           <span slot="label"
             ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
-              $t('m.NavBar_Rank')
+              $t("m.NavBar_Rank")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -192,11 +202,11 @@
         >
           <span slot="label"
             ><i class="fa fa-bullhorn" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Announcement')
+              $t("m.Announcement")
             }}</span
           >
           <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <transition name="el-fade-in-linear">
                 <router-view
                   v-if="route_name === 'ContestAnnouncementList'"
@@ -205,16 +215,23 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane name="ContestComment" lazy :disabled="contestMenuDisabled">
+        <el-tab-pane
+          name="ContestComment"
+          lazy
+          :disabled="contestMenuDisabled"
+          v-if="websiteConfig.openContestComment || isSuperAdmin"
+        >
           <span slot="label"
             ><i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Comment')
+              $t("m.Comment")
             }}</span
           >
           <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <transition name="el-fade-in-linear">
-                <router-view v-if="route_name === 'ContestComment'"></router-view>
+                <router-view
+                  v-if="route_name === 'ContestComment'"
+                ></router-view>
               </transition>
             </el-col>
           </el-row>
@@ -226,7 +243,7 @@
           v-if="contest.openPrint"
         >
           <span slot="label"
-            ><i class="el-icon-printer"></i>&nbsp;{{ $t('m.Print') }}</span
+            ><i class="el-icon-printer"></i>&nbsp;{{ $t("m.Print") }}</span
           >
           <transition name="el-fade-in-linear">
             <router-view v-if="route_name === 'ContestPrint'"></router-view>
@@ -240,7 +257,7 @@
         >
           <span slot="label"
             ><i class="el-icon-s-help" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Admin_Helper')
+              $t("m.Admin_Helper")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -255,7 +272,7 @@
         >
           <span slot="label"
             ><i class="el-icon-printer"></i>&nbsp;{{
-              $t('m.Admin_Print')
+              $t("m.Admin_Print")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -272,11 +289,11 @@
         >
           <span slot="label"
             ><i class="el-icon-refresh" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Rejudge')
+              $t("m.Rejudge")
             }}</span
           >
           <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <transition name="el-fade-in-linear">
                 <router-view
                   v-if="route_name === 'ContestRejudgeAdmin'"
@@ -290,47 +307,47 @@
   </div>
 </template>
 <script>
-import time from '@/common/time';
-import moment from 'moment';
-import api from '@/common/api';
-import { mapState, mapGetters, mapActions } from 'vuex';
-import { addCodeBtn } from '@/common/codeblock';
+import time from "@/common/time";
+import moment from "moment";
+import api from "@/common/api";
+import { mapState, mapGetters, mapActions } from "vuex";
+import { addCodeBtn } from "@/common/codeblock";
 import {
   CONTEST_STATUS_REVERSE,
   CONTEST_STATUS,
   CONTEST_TYPE_REVERSE,
   RULE_TYPE,
   buildContestAnnounceKey,
-} from '@/common/constants';
-import storage from '@/common/storage';
+} from "@/common/constants";
+import storage from "@/common/storage";
 export default {
-  name: '',
+  name: "",
   data() {
     return {
-      route_name: 'contestDetails',
+      route_name: "contestDetails",
       timer: null,
       CONTEST_STATUS: {},
       CONTEST_STATUS_REVERSE: {},
       CONTEST_TYPE_REVERSE: {},
       RULE_TYPE: {},
       btnLoading: false,
-      contestPassword: '',
+      contestPassword: "",
     };
   },
   created() {
     this.contestID = this.$route.params.contestID;
     this.route_name = this.$route.name;
-    if (this.route_name == 'ContestProblemDetails') {
-      this.route_name = 'ContestProblemList';
+    if (this.route_name == "ContestProblemDetails") {
+      this.route_name = "ContestProblemList";
     }
-    if (this.route_name == 'ContestSubmissionDetails') {
-      this.route_name = 'ContestSubmissionList';
+    if (this.route_name == "ContestSubmissionDetails") {
+      this.route_name = "ContestSubmissionList";
     }
     this.CONTEST_TYPE_REVERSE = Object.assign({}, CONTEST_TYPE_REVERSE);
     this.CONTEST_STATUS = Object.assign({}, CONTEST_STATUS);
     this.CONTEST_STATUS_REVERSE = Object.assign({}, CONTEST_STATUS_REVERSE);
     this.RULE_TYPE = Object.assign({}, RULE_TYPE);
-    this.$store.dispatch('getContest').then((res) => {
+    this.$store.dispatch("getContest").then((res) => {
       this.changeDomTitle({ title: res.data.data.title });
       let data = res.data.data;
       let endTime = moment(data.endTime);
@@ -338,9 +355,8 @@ export default {
       if (endTime.isAfter(moment(data.now))) {
         // 实时更新时间
         this.timer = setInterval(() => {
-          this.$store.commit('nowAdd1s');
+          this.$store.commit("nowAdd1s");
         }, 1000);
-
         // 每分钟获取一次是否存在未阅读的公告
         this.announceTimer = setInterval(() => {
           let key = buildContestAnnounceKey(this.userInfo.uid, this.contestID);
@@ -349,7 +365,6 @@ export default {
             cid: this.contestID,
             readAnnouncementList: readAnnouncementList,
           };
-
           api.getContestUserNotReadAnnouncement(data).then((res) => {
             let newAnnounceList = res.data.data;
             for (let i = 0; i < newAnnounceList.length; i++) {
@@ -359,13 +374,13 @@ export default {
                 message:
                   '<p style="text-align:center;"><i class="el-icon-time"> ' +
                   time.utcToLocal(newAnnounceList[i].gmtCreate) +
-                  '</i></p>' +
+                  "</i></p>" +
                   '<p style="text-align:center;color:#409eff">' +
                   this.$i18n.t(
-                    'm.Please_check_the_contest_announcement_for_details'
+                    "m.Please_check_the_contest_announcement_for_details"
                   ) +
-                  '</p>',
-                type: 'warning',
+                  "</p>",
+                type: "warning",
                 dangerouslyUseHTMLString: true,
                 duration: 0,
               });
@@ -374,18 +389,17 @@ export default {
           });
         }, 60 * 1000);
       }
-
       this.$nextTick((_) => {
         addCodeBtn();
       });
     });
   },
   methods: {
-    ...mapActions(['changeDomTitle']),
+    ...mapActions(["changeDomTitle"]),
     formatTooltip(val) {
       if (this.contest.status == -1) {
         // 还未开始
-        return '00:00:00';
+        return "00:00:00";
       } else if (this.contest.status == 0) {
         return time.secondFormat(this.BeginToNowDuration); // 格式化时间
       } else {
@@ -393,15 +407,15 @@ export default {
       }
     },
     checkPassword() {
-      if (this.contestPassword === '') {
-        this.$msg.warning(this.$i18n.t('m.Enter_the_contest_password'));
+      if (this.contestPassword === "") {
+        this.$msg.warning(this.$i18n.t("m.Enter_the_contest_password"));
         return;
       }
       this.btnLoading = true;
-      api.registerContest(this.contestID + '', this.contestPassword).then(
+      api.registerContest(this.contestID + "", this.contestPassword).then(
         (res) => {
-          this.$msg.success(this.$i18n.t('m.Register_contest_successfully'));
-          this.$store.commit('contestIntoAccess', { intoAccess: true });
+          this.$msg.success(this.$i18n.t("m.Register_contest_successfully"));
+          this.$store.commit("contestIntoAccess", { intoAccess: true });
           this.btnLoading = false;
         },
         (res) => {
@@ -422,22 +436,23 @@ export default {
       now: (state) => state.contest.now,
     }),
     ...mapGetters([
-      'contestMenuDisabled',
-      'contestRuleType',
-      'contestStatus',
-      'countdown',
-      'BeginToNowDuration',
-      'isContestAdmin',
-      'isSuperAdmin',
-      'ContestRealTimePermission',
-      'passwordFormVisible',
-      'userInfo',
+      "contestMenuDisabled",
+      "contestRuleType",
+      "contestStatus",
+      "countdown",
+      "BeginToNowDuration",
+      "isContestAdmin",
+      "isSuperAdmin",
+      "ContestRealTimePermission",
+      "passwordFormVisible",
+      "userInfo",
+      "websiteConfig",
     ]),
     progressValue: {
-      get: function() {
+      get: function () {
         return this.$store.getters.progressValue;
       },
-      set: function() {},
+      set: function () {},
     },
     timeStep() {
       // 时间段平分滑条长度
@@ -445,7 +460,7 @@ export default {
     },
     countdownColor() {
       if (this.contestStatus) {
-        return 'color:' + CONTEST_STATUS_REVERSE[this.contestStatus].color;
+        return "color:" + CONTEST_STATUS_REVERSE[this.contestStatus].color;
       }
     },
     showAdminHelper() {
@@ -463,11 +478,11 @@ export default {
   watch: {
     $route(newVal) {
       this.route_name = newVal.name;
-      if (newVal.name == 'ContestProblemDetails') {
-        this.route_name = 'ContestProblemList';
+      if (newVal.name == "ContestProblemDetails") {
+        this.route_name = "ContestProblemList";
       }
-      if (this.route_name == 'ContestSubmissionDetails') {
-        this.route_name = 'ContestSubmissionList';
+      if (this.route_name == "ContestSubmissionDetails") {
+        this.route_name = "ContestSubmissionList";
       }
       this.contestID = newVal.params.contestID;
       this.changeDomTitle({ title: this.contest.title });
@@ -476,7 +491,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.announceTimer);
-    this.$store.commit('clearContest');
+    this.$store.commit("clearContest");
   },
 };
 </script>

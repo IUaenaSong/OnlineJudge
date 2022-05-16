@@ -31,10 +31,7 @@
         show-overflow
       >
       </vxe-table-column>
-      <vxe-table-column
-        min-width="200"
-        :title="$t('m.Training_Problem_Rank')"
-      >
+      <vxe-table-column min-width="200" :title="$t('m.Training_Problem_Rank')">
         <template v-slot="{ row }">
           <el-input-number
             v-model="trainingProblemMap[row.id].rank"
@@ -49,17 +46,14 @@
           <el-select
             v-model="row.auth"
             @change="changeProblemAuth(row.id, row.auth)"
-            :disabled="row.gid != gid || (!isGroupRoot && userInfo.username != row.author)"
+            :disabled="
+              row.gid != gid ||
+              (!isGroupRoot && userInfo.username != row.author)
+            "
             size="small"
           >
-            <el-option
-              :label="$t('m.Public_Problem')"
-              :value="1"
-            ></el-option>
-            <el-option
-              :label="$t('m.Private_Problem')"
-              :value="2"
-            ></el-option>
+            <el-option :label="$t('m.Public_Problem')" :value="1"></el-option>
+            <el-option :label="$t('m.Private_Problem')" :value="2"></el-option>
             <el-option
               :label="$t('m.Contest_Problem')"
               :value="3"
@@ -74,7 +68,9 @@
             effect="dark"
             :content="$t('m.Edit')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-edit-outline"
@@ -89,7 +85,9 @@
             effect="dark"
             :content="$t('m.Download_Testcase')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-download"
@@ -114,7 +112,9 @@
             effect="dark"
             :content="$t('m.Delete')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-delete-solid"
@@ -149,33 +149,33 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import Pagination from '@/components/oj/common/Pagination';
-import Problem from '@/components/oj/group/Problem'
-import { mapGetters } from 'vuex';
-import utils from '@/common/utils';
+import api from "@/common/api";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import Problem from "@/components/oj/group/Problem";
+import { mapGetters } from "vuex";
+import utils from "@/common/utils";
 export default {
-  name: 'GroupTrainingProblemList',
+  name: "GroupTrainingProblemList",
   components: {
     Pagination,
-    Problem
+    Problem,
   },
   props: {
     trainingID: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
     return {
-      oj: 'All',
+      oj: "All",
       limit: 10,
       currentPage: 1,
       total: 0,
       problemList: [],
       trainingProblemMap: {},
       loading: false,
-      currentProblemID: '',
+      currentProblemID: "",
       currentRow: {},
       editPage: false,
       pid: null,
@@ -187,7 +187,7 @@ export default {
     this.init();
   },
   computed: {
-    ...mapGetters(['userInfo', 'isSuperAdmin', 'isGroupRoot']),
+    ...mapGetters(["userInfo", "isSuperAdmin", "isGroupRoot"]),
   },
   methods: {
     init() {
@@ -205,7 +205,7 @@ export default {
       this.loading = true;
       let params = {
         tid: this.trainingID,
-      }
+      };
       api.getGroupTrainingProblemList(page, this.limit, params).then(
         (res) => {
           this.loading = false;
@@ -220,13 +220,13 @@ export default {
     },
     handleChangeRank(data) {
       api.updateGroupTrainingProblem(data).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.getProblemList(1);
       });
     },
     changeProblemAuth(pid, auth) {
       api.changeGroupProblemAuth(pid, auth).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     handleEditPage() {
@@ -239,14 +239,18 @@ export default {
       this.$emit("handleEditProblemPage");
     },
     deleteProblem(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Delete_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .deleteGroupProblem(id)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});
@@ -255,14 +259,18 @@ export default {
       );
     },
     removeProblem(pid) {
-      this.$confirm(this.$i18n.t('m.Remove_Training_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Remove_Training_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .deleteGroupTrainingProblem(pid, this.trainingID)
             .then((res) => {
-              this.$msg.success(this.$t('m.Delete_successfully'));
+              this.$msg.success(this.$t("m.Delete_successfully"));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});
@@ -271,9 +279,12 @@ export default {
       );
     },
     downloadTestCase(problemID) {
-      let url = '/api/file/download-testcase?pid=' + problemID;
+      let url = "/api/file/download-testcase?pid=" + problemID;
       utils.downloadFile(url).then(() => {
-        this.$alert(this.$i18n.t('m.Download_Testcase_Success'), this.$i18n.t('m.Tips'));
+        this.$alert(
+          this.$i18n.t("m.Download_Testcase_Success"),
+          this.$i18n.t("m.Tips")
+        );
       });
     },
   },

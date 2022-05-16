@@ -9,13 +9,16 @@ package com.iuaenasong.oj.crawler.problem;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.HtmlUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 
+import com.iuaenasong.oj.utils.CodeForcesUtils;
 import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
 import com.iuaenasong.oj.pojo.entity.problem.Tag;
 import com.iuaenasong.oj.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -59,7 +62,22 @@ public class CFProblemStrategy extends ProblemStrategy {
             throw new IllegalArgumentException("Codeforces: Incorrect problem id format!");
         }
 
-        String html = HttpUtil.get(getProblemUrl(contestId, problemNum));
+        String html = HttpRequest.get(getProblemUrl(contestId, problemNum))
+                .header("cookie", "RCPC=" + CodeForcesUtils.getRCPC())
+                .timeout(20000)
+                .execute()
+                .body();
+
+        // 重定向失效，更新RCPC
+        if(html.contains("Redirecting... Please, wait.")) {
+            List<String> list = ReUtil.findAll("[a-z0-9]+[a-z0-9]{31}", html, 0, new ArrayList<>());
+            CodeForcesUtils.updateRCPC(list);
+            html = HttpRequest.get(getProblemUrl(contestId, problemNum))
+                    .header("cookie", "RCPC=" +CodeForcesUtils.getRCPC())
+                    .timeout(20000)
+                    .execute()
+                    .body();
+        }
 
         Problem info = new Problem();
         info.setProblemId(getJudgeName() + "-" + problemId);
@@ -161,7 +179,7 @@ public class CFProblemStrategy extends ProblemStrategy {
         info.setType(0)
                 .setAuth(1)
                 .setAuthor(author)
-                .setOpenCaseResult(false)
+                .setOpenCaseResult(true)
                 .setIsRemoveEndBlank(false)
                 .setIsPublic(true)
                 .setDifficulty(1); // 默认为中等

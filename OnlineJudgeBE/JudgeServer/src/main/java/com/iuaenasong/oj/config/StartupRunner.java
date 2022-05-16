@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import com.iuaenasong.oj.dao.JudgeServerEntityService;
 import com.iuaenasong.oj.pojo.entity.judge.JudgeServer;
-import com.iuaenasong.oj.util.IpUtils;
+import com.iuaenasong.oj.utils.IpUtils;
 
 import java.util.HashMap;
 

@@ -22,7 +22,7 @@
                   :placeholder="$t('m.Question_Display_ID')"
                   v-model="question.questionId"
                 >
-                  <template slot="prepend" >
+                  <template slot="prepend">
                     {{ group.shortName.toUpperCase() }}
                   </template>
                 </el-input>
@@ -56,11 +56,22 @@
                     :label="$t('m.Question_Type')"
                     required
                   >
-                    <el-radio-group v-model="question.type" @change="switchType">
-                      <el-radio :label="1">{{ $t('m.Choice_Question') }}</el-radio>
-                      <el-radio :label="2">{{ $t('m.Judge_Question') }}</el-radio>
-                      <el-radio :label="3">{{ $t('m.Blank_Question') }}</el-radio>
-                      <el-radio :label="4">{{ $t('m.Answer_Question') }}</el-radio>
+                    <el-radio-group
+                      v-model="question.type"
+                      @change="switchType"
+                    >
+                      <el-radio :label="1">{{
+                        $t("m.Choice_Question")
+                      }}</el-radio>
+                      <el-radio :label="2">{{
+                        $t("m.Judge_Question")
+                      }}</el-radio>
+                      <el-radio :label="3">{{
+                        $t("m.Blank_Question")
+                      }}</el-radio>
+                      <el-radio :label="4">{{
+                        $t("m.Answer_Question")
+                      }}</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -73,7 +84,9 @@
                     <el-switch
                       v-model="question.single"
                       :active-text="$t('m.Single_Choice_Question')"
-                      :inactive-text="$t('m.Indefinite_Multiple_Choice_Question')"
+                      :inactive-text="
+                        $t('m.Indefinite_Multiple_Choice_Question')
+                      "
                     >
                     </el-switch>
                   </el-form-item>
@@ -102,14 +115,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :sm="12" :xs="24">
-                  <el-form-item
-                    :label="$t('m.Answer_Share')"
-                    required
-                  >
-                    <el-switch
-                      v-model="question.share"
-                    >
-                    </el-switch>
+                  <el-form-item :label="$t('m.Answer_Share')" required>
+                    <el-switch v-model="question.share"> </el-switch>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -133,23 +140,20 @@
               </el-form-item>
             </el-col>
             <el-col :span="24" v-if="question.type == 1">
-              <el-form-item
-                :label="$t('m.Question_Choices')"
-                required
-              >
+              <el-form-item :label="$t('m.Question_Choices')" required>
                 <el-button
                   @click="addChoice"
                   icon="el-icon-plus"
                   type="success"
                   size="small"
-                  >{{ $t('m.Add_Choice') }}
+                  >{{ $t("m.Add_Choice") }}
                 </el-button>
                 <el-button
                   @click="deleteAllChoices"
                   icon="el-icon-minus"
                   type="danger"
                   size="small"
-                  >{{ $t('m.Delete_All') }}
+                  >{{ $t("m.Delete_All") }}
                 </el-button>
                 <div
                   v-for="(choice, index) in question.choices"
@@ -169,7 +173,13 @@
                         {{ String.fromCharCode(index + 65) }}
                       </el-checkbox>
                     </el-col>
-                    <el-col :sm="19" :xs="24" v-if="choice.content != null && choice.content != undefined">
+                    <el-col
+                      :sm="19"
+                      :xs="24"
+                      v-if="
+                        choice.content != null && choice.content != undefined
+                      "
+                    >
                       <Editor
                         :value.sync="choice.content"
                         :toolbarsFlag="false"
@@ -183,26 +193,31 @@
                         icon="el-icon-delete"
                         @click="deleteChoice(index)"
                       >
-                        {{ $t('m.Delete') }}
+                        {{ $t("m.Delete") }}
                       </el-button>
                     </el-col>
                   </el-row>
                 </div>
               </el-form-item>
             </el-col>
-            <el-col :span="24" v-if="question.type == 1 && question.single" class="right-answer">
-              {{ $t('m.Right_Answer') + ': ' }}
+            <el-col
+              :span="24"
+              v-if="question.type == 1 && question.single"
+              class="right-answer"
+            >
+              {{ $t("m.Right_Answer") + ": " }}
               <span v-if="question.radio != null">
                 {{ String.fromCharCode(question.radio + 65) }}
               </span>
             </el-col>
-            <el-col :span="24" v-if="question.type == 1 && !question.single" class="right-answer">
-              {{ $t('m.Right_Answer') + ': ' }}
-              <span
-                v-for="(choice, index) in question.choices"
-                :key="index"
-              >
-                {{ choice.status ? String.fromCharCode(index + 65) + ',' : '' }}
+            <el-col
+              :span="24"
+              v-if="question.type == 1 && !question.single"
+              class="right-answer"
+            >
+              {{ $t("m.Right_Answer") + ": " }}
+              <span v-for="(choice, index) in question.choices" :key="index">
+                {{ choice.status ? String.fromCharCode(index + 65) + "," : "" }}
               </span>
             </el-col>
             <el-col :span="24" v-if="question.type == 2">
@@ -221,7 +236,7 @@
             </el-col>
             <el-col :span="24">
               <el-button type="primary" @click.native="submit" size="small">{{
-                $t('m.Save')
+                $t("m.Save")
               }}</el-button>
             </el-col>
           </el-row>
@@ -232,54 +247,54 @@
 </template>
 
 <script>
-import utils from '@/common/utils';
-import api from '@/common/api';
-import { mapGetters } from 'vuex';
-import Editor from '@/components/admin/Editor.vue';
+import utils from "@/common/utils";
+import api from "@/common/api";
+import { mapGetters } from "vuex";
+import Editor from "@/components/admin/Editor.vue";
 export default {
-  name: 'GroupQuestion',
+  name: "GroupQuestion",
   components: {
-    Editor
+    Editor,
   },
   props: {
     mode: {
       type: String,
-      default: 'add'
+      default: "add",
     },
     title: {
       type: String,
-      default: 'Create Question'
+      default: "Create Question",
     },
     examID: {
       type: Number,
-      default: null
+      default: null,
     },
     qid: {
       type: Number,
-      default: null
+      default: null,
     },
     apiMethod: {
       type: String,
-      default: 'addGroupQuestion',
-    }
+      default: "addGroupQuestion",
+    },
   },
   data() {
     return {
       rules: {
         description: {
           required: true,
-          message: 'Description is required',
-          trigger: 'blur',
+          message: "Description is required",
+          trigger: "blur",
         },
       },
       question: {
-        questionId: '',
+        questionId: "",
         type: 1,
         auth: 1,
         single: true,
         judge: null,
-        description: '',
-        answer: '',
+        description: "",
+        answer: "",
         radio: null,
         share: false,
         choices: [],
@@ -291,21 +306,21 @@ export default {
         eid: null,
         qid: null,
       },
-    }
+    };
   },
   mounted() {
     this.problem = this.reProblem = {
-      questionId: '',
+      questionId: "",
       type: 1,
       auth: 1,
       single: true,
       judge: null,
-      description: '',
-      answer: '',
+      description: "",
+      answer: "",
       radio: null,
       share: false,
       choices: [],
-    }
+    };
     if (this.examID) {
       this.question.auth = this.reQuestion.auth = 3;
     }
@@ -320,7 +335,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.mode === 'edit') {
+      if (this.mode === "edit") {
         api.getGroupQuestion(this.qid).then((res) => {
           let data = res.data.data;
           data.choices = utils.stringToChoices(data.choices);
@@ -331,7 +346,7 @@ export default {
               this.examQuestion = res.data.data;
             });
           }
-        })
+        });
       } else {
         this.addChoice();
       }
@@ -340,7 +355,7 @@ export default {
       this.question.type = type;
     },
     addChoice() {
-      this.question.choices.push({ content: '', status: false });
+      this.question.choices.push({ content: "", status: false });
     },
     deleteChoice(index) {
       this.question.choices.splice(index, 1);
@@ -349,9 +364,14 @@ export default {
       }
     },
     deleteAllChoices() {
-      this.$confirm(this.$i18n.t('m.Delete_Choice_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
+      this.$confirm(
+        this.$i18n.t("m.Delete_Choice_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
           this.question.choices = [];
           this.question.radio = null;
         },
@@ -361,53 +381,54 @@ export default {
     submit() {
       if (!this.question.questionId) {
         this.$msg.error(
-          this.$i18n.t('m.Question_Display_ID') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Question_Display_ID") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
-      if (this.mode === 'add') {
+      if (this.mode === "add") {
         this.question.gid = this.$route.params.groupID;
         this.question.author = this.userInfo.username;
       }
       if (this.question.type == 1) {
         if (this.question.choices.length == 0) {
-          this.$msg.error(this.$i18n.t('m.Question_No_Choice'));
+          this.$msg.error(this.$i18n.t("m.Question_No_Choice"));
           return;
-        }      
+        }
         let count = 0;
         for (let choice of this.question.choices) {
           if (choice.status) {
             count += 1;
           }
         }
-        if (this.question.single && (this.question.radio == null ||
-          this.question.radio < 0 ||
-          this.question.radio >= this.question.choices.length)
-            || !this.question.single && count == 0) {
-          this.$msg.error(this.$i18n.t('m.Question_No_Right_Answer'));
+        if (
+          (this.question.single &&
+            (this.question.radio == null ||
+              this.question.radio < 0 ||
+              this.question.radio >= this.question.choices.length)) ||
+          (!this.question.single && count == 0)
+        ) {
+          this.$msg.error(this.$i18n.t("m.Question_No_Right_Answer"));
           return;
         }
       }
       let tmp = this.question.choices;
-      this.question.choices = utils.choicesToString(
-        this.question.choices
-      );
+      this.question.choices = utils.choicesToString(this.question.choices);
       this.question.score = 0;
       api[this.apiMethod](this.question)
         .then((res) => {
           if (this.examID) {
             if (res.data.data) {
-              this.examQuestion['qid'] = res.data.data.qid;
-              this.examQuestion['eid'] = this.examID;
+              this.examQuestion["qid"] = res.data.data.qid;
+              this.examQuestion["eid"] = this.examID;
             }
             api.updateGroupExamQuestion(this.examQuestion).then((res) => {
-              if (this.mode === 'edit') {
-                this.$msg.success(this.$t('m.Update_Successfully'));
+              if (this.mode === "edit") {
+                this.$msg.success(this.$t("m.Update_Successfully"));
                 this.$emit("handleEditPage");
               } else {
-                this.$msg.success(this.$t('m.Create_Successfully'));
+                this.$msg.success(this.$t("m.Create_Successfully"));
                 if (this.examID) {
                   this.$emit("handleCreateQuestionPage");
                 } else {
@@ -417,11 +438,11 @@ export default {
               this.$emit("currentChange", 1);
             });
           } else {
-            if (this.mode === 'edit') {
-              this.$msg.success(this.$t('m.Update_Successfully'));
+            if (this.mode === "edit") {
+              this.$msg.success(this.$t("m.Update_Successfully"));
               this.$emit("handleEditPage");
             } else {
-              this.$msg.success(this.$t('m.Create_Successfully'));
+              this.$msg.success(this.$t("m.Create_Successfully"));
               if (this.examID) {
                 this.$emit("handleCreateQuestionPage");
               } else {
@@ -430,16 +451,15 @@ export default {
             }
             this.$emit("currentChange", 1);
           }
-          
         })
         .catch(() => {});
-        this.question.choices = tmp;
-    }
+      this.question.choices = tmp;
+    },
   },
   computed: {
-    ...mapGetters(['userInfo', 'group']),
+    ...mapGetters(["userInfo", "group"]),
   },
-}
+};
 </script>
 
 <style scoped>

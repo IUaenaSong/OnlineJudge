@@ -8,15 +8,15 @@ package com.iuaenasong.oj.manager.oj;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import com.iuaenasong.oj.dao.exam.ExamEntityService;
 import com.iuaenasong.oj.dao.exam.ExamProblemEntityService;
 import com.iuaenasong.oj.dao.exam.ExamRecordEntityService;
+import com.iuaenasong.oj.exception.AccessException;
 import com.iuaenasong.oj.pojo.entity.exam.Exam;
 import com.iuaenasong.oj.pojo.entity.exam.ExamProblem;
 import com.iuaenasong.oj.pojo.entity.exam.ExamRecord;
-import com.iuaenasong.oj.validator.ExamValidator;
-import com.iuaenasong.oj.validator.GroupValidator;
-import com.iuaenasong.oj.validator.TrainingValidator;
+import com.iuaenasong.oj.validator.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -45,7 +45,6 @@ import com.iuaenasong.oj.dao.training.TrainingEntityService;
 import com.iuaenasong.oj.dao.training.TrainingProblemEntityService;
 import com.iuaenasong.oj.dao.training.TrainingRecordEntityService;
 import com.iuaenasong.oj.utils.Constants;
-import com.iuaenasong.oj.validator.ContestValidator;
 
 import javax.annotation.Resource;
 
@@ -97,7 +96,10 @@ public class BeforeDispatchInitManager {
     @Autowired
     private GroupValidator groupValidator;
 
-    public void initCommonSubmission(String problemId, Judge judge) throws StatusForbiddenException {
+    @Autowired
+    private AccessValidator accessValidator;
+
+    public void initCommonSubmission(String problemId, Judge judge) throws StatusForbiddenException, AccessException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -117,8 +119,10 @@ public class BeforeDispatchInitManager {
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
+            accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
             judge.setIsPublic(false);
         } else {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
             judge.setIsPublic(true);
         }
 
@@ -170,18 +174,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-
-        judge.setGid(problem.getGid());
-
-        if (!problem.getIsPublic()) {
-            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-            judge.setIsPublic(false);
-        } else {
-            judge.setIsPublic(true);
-        }
+        judge.setIsPublic(true);
 
         judge.setDisplayPid(problem.getProblemId());
 
@@ -251,18 +244,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-
-        judge.setGid(problem.getGid());
-
-        if (!problem.getIsPublic()) {
-            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-            judge.setIsPublic(false);
-        } else {
-            judge.setIsPublic(true);
-        }
+        judge.setIsPublic(true);
 
         judge.setDisplayPid(problem.getProblemId());
 
@@ -312,18 +294,7 @@ public class BeforeDispatchInitManager {
             throw new StatusForbiddenException("错误！当前题目不可提交！");
         }
 
-        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-
-        judge.setGid(problem.getGid());
-
-        if (!problem.getIsPublic()) {
-            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
-                throw new StatusForbiddenException("对不起，您无权限操作！");
-            }
-            judge.setIsPublic(false);
-        } else {
-            judge.setIsPublic(true);
-        }
+        judge.setIsPublic(true);
 
         judge.setDisplayPid(problem.getProblemId());
 

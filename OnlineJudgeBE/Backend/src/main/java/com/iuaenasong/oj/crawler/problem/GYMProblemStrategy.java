@@ -8,17 +8,23 @@ package com.iuaenasong.oj.crawler.problem;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
+import com.iuaenasong.oj.utils.CodeForcesUtils;
 import com.iuaenasong.oj.utils.Constants;
 
+import javax.script.ScriptException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GYMProblemStrategy extends CFProblemStrategy {
 
-    public static final String IMAGE_HOST = "https://codeforces.ml";
+    public static final String IMAGE_HOST = "https://codeforces.com";
 
     @Override
     public String getJudgeName() {
@@ -56,7 +62,23 @@ public class GYMProblemStrategy extends CFProblemStrategy {
         Problem problem = new Problem();
 
         String url = HOST + "/gym/" + contestNum;
-        String html = HttpUtil.get(url);
+        String html = HttpRequest.get(url)
+                .header("cookie", "RCPC=" + CodeForcesUtils.getRCPC())
+                .timeout(20000)
+                .execute()
+                .body();
+
+        // 重定向失效，更新RCPC
+        if (html.contains("Redirecting... Please, wait.")) {
+            List<String> list = ReUtil.findAll("[a-z0-9]+[a-z0-9]{31}", html, 0, new ArrayList<>());
+            CodeForcesUtils.updateRCPC(list);
+            html = HttpRequest.get(url)
+                    .header("cookie","RCPC="+CodeForcesUtils.getRCPC())
+                    .timeout(20000)
+                    .execute()
+                    .body();
+        }
+
         String regex = "<a href=\"\\/gym\\/" + contestNum + "\\/problem\\/" + problemNum
                 + "\"><!--\\s*-->([^<]+)(?:(?:.|\\s)*?<div){2}[^>]*>\\s*([^<]+)<\\/div>\\s*([\\d.]+)\\D*(\\d+)";
 
@@ -86,7 +108,14 @@ public class GYMProblemStrategy extends CFProblemStrategy {
             HttpUtil.downloadFile(IMAGE_HOST + matcher.group(0), filePath);
             pdfURI = Constants.File.FILE_API.getPath() + fileName;
         } catch (Exception e1) {
-            pdfURI = HOST + matcher.group(0);
+            try {
+                pdfURI = HOST + matcher.group(0);
+            } catch (Exception e2) {
+                String fileName = IdUtil.fastSimpleUUID() + ".pdf";
+                String filePath = Constants.File.PROBLEM_FILE_FOLDER.getPath() + File.separator + fileName;
+                CodeForcesUtils.downloadPDF(HOST + "/gym/" + contestNum + "/problem/" + problemNum, filePath);
+                pdfURI = Constants.File.FILE_API.getPath() + fileName;
+            }
         }
         String description = "<p><a style='color:#3091f2' href=\"" + pdfURI + "\">Click here to download the PDF file.</a></p>";
         problem.setDescription(description);
@@ -94,7 +123,7 @@ public class GYMProblemStrategy extends CFProblemStrategy {
                 .setIsRemote(true)
                 .setAuth(1)
                 .setAuthor(author)
-                .setOpenCaseResult(false)
+                .setOpenCaseResult(true)
                 .setIsRemoveEndBlank(false)
                 .setIsPublic(true)
                 .setDifficulty(1); // 默认为中等

@@ -1,25 +1,25 @@
 // 引入 view 组件
-import Login from '@/views/admin/Login'
-import Home from '@/views/admin/Home'
-import Dashboard from '@/views/admin/Dashboard'
-import User from '@/views/admin/general/User'
-import Auth from '@/views/admin/general/Auth'
-import Announcement from '@/views/admin/general/Announcement'
-import SysNotice from '@/views/admin/general/SysNotice'
-import SystemConfig from '@/views/admin/general/SystemConfig'
-import ProblemList from '@/views/admin/problem/ProblemList'
-import Problem from '@/views/admin/problem/Problem'
-import Tag from '@/views/admin/problem/Tag'
-import ProblemImportAndExport from '@/views/admin/problem/ImportAndExport'
-import Contest from '@/views/admin/contest/Contest'
-import ContestList from '@/views/admin/contest/ContestList'
-import Training from '@/views/admin/training/Training'
-import TrainingList from '@/views/admin/training/TrainingList'
-import TrainingProblemList from '@/views/admin/training/TrainingProblemList'
-import TrainingCategory from '@/views/admin/training/Category'
-import DiscussionList from '@/views/admin/discussion/Discussion'
-
-const adminRoutes= [
+const Login = () => import('@/views/admin/Login')
+const Home = () => import('@/views/admin/Home')
+const Dashboard = () => import('@/views/admin/Dashboard')
+const User = () => import('@/views/admin/general/User')
+const Auth = () => import('@/views/admin/general/Auth')
+const Announcement = () => import('@/views/admin/general/Announcement')
+const SysNotice = () => import('@/views/admin/general/SysNotice')
+const SystemConfig = () => import('@/views/admin/general/SystemConfig')
+const SysSwitch = () => import('@/views/admin/general/SysSwitch')
+const ProblemList = () => import('@/views/admin/problem/ProblemList')
+const Problem = () => import('@/views/admin/problem/Problem')
+const Tag = () => import('@/views/admin/problem/Tag')
+const ProblemImportAndExport = () => import('@/views/admin/problem/ImportAndExport')
+const Contest = () => import('@/views/admin/contest/Contest')
+const ContestList = () => import('@/views/admin/contest/ContestList')
+const Training = () => import('@/views/admin/training/Training')
+const TrainingList = () => import('@/views/admin/training/TrainingList')
+const TrainingProblemList = () => import('@/views/admin/training/TrainingProblemList')
+const TrainingCategory = () => import('@/views/admin/training/Category')
+const DiscussionList = () => import('@/views/admin/discussion/Discussion')
+const adminRoutes = [
   {
     path: '/admin/login',
     name: 'admin-login',
@@ -72,6 +72,12 @@ const adminRoutes= [
         name: 'admin-conf',
         component: SystemConfig,
         meta: { title: 'System Config', requireSuperAdmin: true },
+      },
+      {
+        path: 'switch',
+        name: 'admin-switch',
+        component: SysSwitch,
+        meta: { requireSuperAdmin: true, title: 'System Switch' },
       },
       {
         path: 'problems',
@@ -187,5 +193,4 @@ const adminRoutes= [
     path: '/admin/*', redirect: '/admin/login'
   }
 ]
-
-  export default adminRoutes
+export default adminRoutes

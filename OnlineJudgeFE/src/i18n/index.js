@@ -8,8 +8,8 @@ import storage from '@/common/storage'
 Vue.use(VueI18n)
 
 const languages = [
-  {value: 'en-US', label: 'English', el: elEnUS, vxe: {...vxeEnUS}},
-  {value: 'zh-CN', label: '简体中文',  el: elZhCN, vxe: {...vxeZhCN}},
+  { value: 'en-US', label: 'English', el: elEnUS, vxe: { ...vxeEnUS } },
+  { value: 'zh-CN', label: '简体中文', el: elZhCN, vxe: { ...vxeZhCN } },
 ]
 const messages = {}
 
@@ -19,7 +19,7 @@ for (let lang of languages) {
   let m = require(`./oj/${locale}`).m
   Object.assign(m, require(`./admin/${locale}`).m)
   let ui = Object.assign(lang.vxe, lang.el)
-  messages[locale] = Object.assign({m: m}, ui);
+  messages[locale] = Object.assign({ m: m }, ui)
 }
 
 // load language packages
@@ -28,4 +28,4 @@ export default new VueI18n({
   messages: messages
 })
 
-export {languages}
+export { languages }

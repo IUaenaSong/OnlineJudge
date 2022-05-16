@@ -18,8 +18,8 @@ import filters from '@/common/filters.js'
 import VueCropper from 'vue-cropper'
 import VueParticles from 'vue-particles'
 import SlideVerify from 'vue-monoplasty-slide-verify'
-import {Drawer,List,Menu,Icon,AppBar,Button,Divider} from 'muse-ui';
-import 'muse-ui/dist/muse-ui.css';
+import { Drawer, List, Menu, Icon, AppBar, Button, Divider } from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css'
 
 Vue.use(Drawer)
 Vue.use(List)

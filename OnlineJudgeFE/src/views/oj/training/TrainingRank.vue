@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow>
         <div slot="header" class="rank-title">
-          <span class="panel-title">{{ $t('m.Record_List') }}</span>
+          <span class="panel-title">{{ $t("m.Record_List") }}</span>
         </div>
         <vxe-table
           round
@@ -42,10 +42,12 @@
                 :title="row.username"
               ></avatar>
 
-              <span style="float:right;text-align:right">
+              <span style="float: right; text-align: right">
                 <a @click="getUserHomeByUsername(row.uid, row.username)">
                   <span class="contest-username"
-                    ><span class="contest-rank-flag" v-if="row.gender == 'female'"
+                    ><span
+                      class="contest-rank-flag"
+                      v-if="row.gender == 'female'"
                       >Girl</span
                     >{{ row.username }}</span
                   >
@@ -74,10 +76,12 @@
                 :title="row.username"
               ></avatar>
 
-              <span style="float:right;text-align:right">
+              <span style="float: right; text-align: right">
                 <a @click="getUserHomeByUsername(row.uid, row.username)">
                   <span class="contest-username"
-                    ><span class="contest-rank-flag" v-if="row.gender == 'female'"
+                    ><span
+                      class="contest-rank-flag"
+                      v-if="row.gender == 'female'"
                       >Girl</span
                     >{{ row.username }}</span
                   >
@@ -105,7 +109,7 @@
               <span style="font-size: 14px"
                 ><a
                   @click="getUserACSubmit(row.username)"
-                  style="color:rgb(87, 163, 243)"
+                  style="color: rgb(87, 163, 243)"
                   >{{ row.ac }}</a
                 >
                 <br />
@@ -124,7 +128,7 @@
                 ><a
                   @click="getTrainingProblemById(problem.problemId)"
                   class="emphasis"
-                  style="color:#495060;"
+                  style="color: #495060"
                   >{{ problem.problemId }}</a
                 ></span
               >
@@ -142,8 +146,8 @@
                     class="judge-status submission-hover"
                     :style="
                       'color:' +
-                        JUDGE_STATUS[row.submissionInfo[problem.problemId].status]
-                          .rgb
+                      JUDGE_STATUS[row.submissionInfo[problem.problemId].status]
+                        .rgb
                     "
                   >
                     {{
@@ -177,16 +181,16 @@
   </el-row>
 </template>
 <script>
-import Avatar from 'vue-avatar';
-import { mapActions, mapGetters } from 'vuex';
-import { JUDGE_STATUS } from '@/common/constants';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import { mapState } from 'vuex';
-import time from '@/common/time';
+import Avatar from "vue-avatar";
+import { mapActions, mapGetters } from "vuex";
+import { JUDGE_STATUS } from "@/common/constants";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import { mapState } from "vuex";
+import time from "@/common/time";
 
 export default {
-  name: 'TrainingRank',
+  name: "TrainingRank",
   components: {
     Pagination,
     Avatar,
@@ -196,7 +200,7 @@ export default {
       total: 0,
       page: 1,
       limit: 30,
-      trainingID: '',
+      trainingID: "",
       dataRank: [],
       JUDGE_STATUS: {},
     };
@@ -211,7 +215,7 @@ export default {
     this.getTrainingRankData();
   },
   methods: {
-    ...mapActions(['getTrainingProblemList']),
+    ...mapActions(["getTrainingProblemList"]),
 
     getTrainingRankData() {
       let data = {
@@ -230,19 +234,19 @@ export default {
 
     getUserACSubmit(username) {
       this.$router.push({
-        name: 'SubmissionList',
+        name: "SubmissionList",
         query: { username: username, status: 0 },
       });
     },
     getUserHomeByUsername(uid, username) {
       this.$router.push({
-        name: 'UserHome',
+        name: "UserHome",
         query: { username: username, uid: uid },
       });
     },
     getTrainingProblemById(pid) {
       this.$router.push({
-        name: 'TrainingProblemDetails',
+        name: "TrainingProblemDetails",
         params: {
           trainingID: this.trainingID,
           problemID: pid,
@@ -251,28 +255,32 @@ export default {
     },
     getUserProblemSubmission({ row, column }) {
       if (
-        column.property !== 'rank' &&
-        column.property !== 'totalScore' &&
-        column.property !== 'username' &&
-        column.property !== 'realname' &&
-        column.property !== 'rating' &&
+        column.property !== "rank" &&
+        column.property !== "totalScore" &&
+        column.property !== "username" &&
+        column.property !== "realname" &&
+        column.property !== "rating" &&
         row.submissionInfo[column.property]
       ) {
         this.$router.push({
-          name: 'SubmissionList',
-          query: { username: row.username, problemID: column.property, gid: this.gid },
+          name: "SubmissionList",
+          query: {
+            username: row.username,
+            problemID: column.property,
+            gid: this.gid,
+          },
         });
       }
     },
     cellClassName({ row, rowIndex, column, columnIndex }) {
-      if (column.property === 'username' && row.userCellClassName) {
+      if (column.property === "username" && row.userCellClassName) {
         return row.userCellClassName;
       }
     },
     applyToTable(dataRank) {
       dataRank.forEach((rank, i) => {
-        if (dataRank[i].gender == 'female') {
-          dataRank[i].userCellClassName = 'bg-female';
+        if (dataRank[i].gender == "female") {
+          dataRank[i].userCellClassName = "bg-female";
         }
       });
       this.dataRank = dataRank;
@@ -286,7 +294,7 @@ export default {
       gid: (state) => state.training.training.gid,
       trainingProblemList: (state) => state.training.trainingProblemList,
     }),
-    ...mapGetters(['isTrainingAdmin']),
+    ...mapGetters(["isTrainingAdmin"]),
     training() {
       return this.$store.state.training.training;
     },

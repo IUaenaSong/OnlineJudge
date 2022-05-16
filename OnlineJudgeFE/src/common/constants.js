@@ -4,205 +4,205 @@ export const JUDGE_STATUS = {
     short: 'NS',
     color: 'gray',
     type: 'info',
-    rgb:'#909399'
+    rgb: '#909399'
   },
   '-5': {
     name: 'Submitted Unknown Result',
     short: 'SNR',
     color: 'gray',
     type: 'info',
-    rgb:'#909399'
+    rgb: '#909399'
   },
   '-3': {
     name: 'Presentation Error',
     short: 'PE',
     color: 'yellow',
     type: 'warning',
-    rgb:'#f90'
+    rgb: '#f90'
   },
   '-2': {
     name: 'Compile Error',
     short: 'CE',
     color: 'yellow',
     type: 'warning',
-    rgb:'#f90'
+    rgb: '#f90'
   },
   '-1': {
     name: 'Wrong Answer',
     short: 'WA',
     color: 'red',
     type: 'danger',
-    rgb:'#ed3f14'
+    rgb: '#ed3f14'
   },
   '0': {
     name: 'Accepted',
     short: 'AC',
     color: 'green',
     type: 'success',
-    rgb:'#19be6b'
+    rgb: '#19be6b'
   },
   '1': {
     name: 'Time Limit Exceeded',
     short: 'TLE',
     color: 'red',
     type: 'danger',
-    rgb:'#ed3f14'
+    rgb: '#ed3f14'
   },
   '2': {
     name: 'Memory Limit Exceeded',
     short: 'MLE',
     color: 'red',
     type: 'danger',
-    rgb:'#ed3f14'
+    rgb: '#ed3f14'
   },
   '3': {
     name: 'Runtime Error',
     short: 'RE',
     color: 'red',
     type: 'danger',
-    rgb:'#ed3f14'
+    rgb: '#ed3f14'
   },
   '4': {
     name: 'System Error',
     short: 'SE',
     color: 'gray',
     type: 'info',
-    rgb:'#909399'
+    rgb: '#909399'
   },
   '5': {
     name: 'Pending',
     color: 'yellow',
     type: 'warning',
-    rgb:'#f90'
+    rgb: '#f90'
   },
-  '6':{
+  '6': {
     name: 'Compiling',
     short: 'CP',
     color: 'green',
     type: 'info',
-    rgb:'#25bb9b'
+    rgb: '#25bb9b'
   },
   '7': {
     name: 'Judging',
     color: 'blue',
     type: '',
-    rgb:'#2d8cf0'
+    rgb: '#2d8cf0'
   },
   '8': {
     name: 'Partial Accepted',
     short: 'PAC',
     color: 'blue',
     type: '',
-    rgb:'#2d8cf0'
+    rgb: '#2d8cf0'
   },
   '9': {
     name: 'Submitting',
     color: 'yellow',
     type: 'warning',
-    rgb:'#f90'
+    rgb: '#f90'
   },
-  '10':{
-    name:"Submitted Failed",
-    color:'gray',
-    short:'SF',
+  '10': {
+    name: "Submitted Failed",
+    color: 'gray',
+    short: 'SF',
     type: 'info',
-    rgb:'#909399',
+    rgb: '#909399',
   }
 }
 
-export const JUDGE_STATUS_RESERVE={
-  'snr':-5,
-  'pe':-3,
-  'ce':-2,
-  'wa':-1,
-  'ac':0,
-  'tle':1,
-  'mle':2,
-  're':3,
-  'se':4,
-  'Compiling':5,
-  'Pending':6,
-  'Judging':7,
-  'pa':8,
-  'sf':10,
+export const JUDGE_STATUS_RESERVE = {
+  'snr': -5,
+  'pe': -3,
+  'ce': -2,
+  'wa': -1,
+  'ac': 0,
+  'tle': 1,
+  'mle': 2,
+  're': 3,
+  'se': 4,
+  'Compiling': 5,
+  'Pending': 6,
+  'Judging': 7,
+  'pa': 8,
+  'sf': 10,
 }
 
-export const PROBLEM_LEVEL={
-  '0':{
-    name:{
-      'zh-CN':'入门',
-      'en-US':'Extremely Easy',
+export const PROBLEM_LEVEL = {
+  '0': {
+    name: {
+      'zh-CN': '入门',
+      'en-US': 'Extremely Easy',
     },
-    color:'#fe4c61'
+    color: '#fe4c61'
   },
-  '1':{
-    name:{
-      'zh-CN':'普及-',
-      'en-US':'Easy',
+  '1': {
+    name: {
+      'zh-CN': '普及-',
+      'en-US': 'Easy',
     },
-    color:'#f39c11'
+    color: '#f39c11'
   },
-  '2':{
-    name:{
-      'zh-CN':'普及/提高-',
-      'en-US':'Easy-Mid',
+  '2': {
+    name: {
+      'zh-CN': '普及/提高-',
+      'en-US': 'Easy-Mid',
     },
-    color:'#ffc116'
+    color: '#ffc116'
   },
-  '3':{
-    name:{
-      'zh-CN':'普及+/提高',
-      'en-US':'Mid',
+  '3': {
+    name: {
+      'zh-CN': '普及+/提高',
+      'en-US': 'Mid',
     },
-    color:'#52c41a'
+    color: '#52c41a'
   },
-  '4':{
-    name:{
-      'zh-CN':'提高+/省选-',
-      'en-US':'Mid-Hard',
+  '4': {
+    name: {
+      'zh-CN': '提高+/省选-',
+      'en-US': 'Mid-Hard',
     },
-    color:'#3498db'
+    color: '#3498db'
   },
-  '5':{
-    name:{
-      'zh-CN':'省选/NOI-',
-      'en-US':'Hard',
+  '5': {
+    name: {
+      'zh-CN': '省选/NOI-',
+      'en-US': 'Hard',
     },
-    color:'#9d3dcf'
+    color: '#9d3dcf'
   },
-  '6':{
-    name:{
-      'zh-CN':'NOI/NOI+/CTSC',
-      'en-US':'Extremely Hard',
+  '6': {
+    name: {
+      'zh-CN': 'NOI/NOI+/CTSC',
+      'en-US': 'Extremely Hard',
     },
-    color:'#0e1d69'
+    color: '#0e1d69'
   }
 }
 
 export const REMOTE_OJ = [
   {
-    name:'HDU',
-    key:"HDU"
+    name: 'HDU',
+    key: "HDU"
   },
   {
-    name:"Codeforces",
-    key:"CF"
+    name: "Codeforces",
+    key: "CF"
   },
   {
-    name:"POJ",
-    key:"POJ"
+    name: "POJ",
+    key: "POJ"
   },
   {
-    name:"GYM",
-    key:"GYM"
+    name: "GYM",
+    key: "GYM"
   },
   {
-    name:"AtCoder",
-    key:"AC"
+    name: "AtCoder",
+    key: "AC"
   },
   {
-    name:"SPOJ",
-    key:"SPOJ"
+    name: "SPOJ",
+    key: "SPOJ"
   }
 ]
 
@@ -249,15 +249,15 @@ export const EXAM_STATUS_REVERSE = {
 }
 
 export const TRAINING_TYPE = {
-  'Public':{
-    name:'Public',
-    color:'success'
-    
+  'Public': {
+    name: 'Public',
+    color: 'success'
+
   },
-  'Private':{
-    name:'Private',
-    color:'danger'
-    
+  'Private': {
+    name: 'Private',
+    color: 'danger'
+
   }
 }
 
@@ -268,17 +268,17 @@ export const GROUP_TYPE = {
 }
 
 export const GROUP_TYPE_REVERSE = {
-  '1':{
+  '1': {
     name: 'Public',
     color: 'success',
     tips: 'Group_Public_Tips',
   },
-  '2':{
+  '2': {
     name: 'Protected',
     color: 'warning',
     tips: 'Group_Protected_Tips',
   },
-  '3':{
+  '3': {
     name: 'Private',
     color: 'danger',
     tips: 'Group_Private_Tips',
@@ -294,11 +294,11 @@ export const QUESTION_TYPE_REVERSE = {
     name: 'Judge',
     color: 'warning',
   },
-  '3':{
+  '3': {
     name: 'Blank',
     color: 'danger',
   },
-  '4':{
+  '4': {
     name: 'Answer',
     color: 'info',
   }
@@ -311,25 +311,25 @@ export const RULE_TYPE = {
 
 export const CONTEST_TYPE_REVERSE = {
   '0': {
-    name:'Public',
-    color:'success',
-    tips:'Contest_Public_Tips',
-    submit:true,              // 公开赛可看可提交
-    look:true,
+    name: 'Public',
+    color: 'success',
+    tips: 'Contest_Public_Tips',
+    submit: true,              // 公开赛可看可提交
+    look: true,
   },
-  '1':{
-    name:'Private',
-    color:'danger',
-    tips:'Contest_Private_Tips',
-    submit:false,         // 私有赛 必须要密码才能看和提交
-    look:false,
+  '1': {
+    name: 'Private',
+    color: 'danger',
+    tips: 'Contest_Private_Tips',
+    submit: false,         // 私有赛 必须要密码才能看和提交
+    look: false,
   },
-  '2':{
-    name:'Protected',
-    color:'warning',
-    tips:'Contest_Protected_Tips',
-    submit:false,       //保护赛，可以看但是不能提交，提交需要附带比赛密码
-    look:true,
+  '2': {
+    name: 'Protected',
+    color: 'warning',
+    tips: 'Contest_Protected_Tips',
+    submit: false,       //保护赛，可以看但是不能提交，提交需要附带比赛密码
+    look: true,
   }
 }
 
@@ -344,22 +344,22 @@ export const EXAM_TYPE_REVERSE = {
     name: 'Exam_Public',
     color: 'success',
     tips: 'Exam_Public_Tips',
-    submit:true,
-    look:true,
+    submit: true,
+    look: true,
   },
-  '1':{
+  '1': {
     name: 'Exam_Private',
     color: 'danger',
     tips: 'Exam_Private_Tips',
-    submit:false,
-    look:false,
+    submit: false,
+    look: false,
   },
-  '2':{
+  '2': {
     name: 'Exam_Protected',
     color: 'warning',
     tips: 'Exam_Protected_Tips',
-    submit:false,
-    look:true,
+    submit: false,
+    look: true,
   }
 }
 
@@ -372,7 +372,7 @@ export const EXAM_TYPE = {
 export const USER_TYPE = {
   REGULAR_USER: 'user',
   ADMIN: 'admin',
-  PROBLEM_ADMIN:'problem_admin',
+  PROBLEM_ADMIN: 'problem_admin',
   SUPER_ADMIN: 'root'
 }
 
@@ -380,24 +380,24 @@ export const STORAGE_KEY = {
   AUTHED: 'authed',
   PROBLEM_CODE: 'ojProblemCode',
   languages: 'languages',
-  CONTEST_ANNOUNCE:'ojContestAnnounce',
-  EXAM_ANSWER:'ojExamAnswer',
-  individualLanguageAndTheme:'ojIndividualLanguageAndTheme',
-  CONTEST_RANK_CONCERNED:'ojContestRankConcerned'
+  CONTEST_ANNOUNCE: 'ojContestAnnounce',
+  EXAM_ANSWER: 'ojExamAnswer',
+  individualLanguageAndTheme: 'ojIndividualLanguageAndTheme',
+  CONTEST_RANK_CONCERNED: 'ojContestRankConcerned'
 }
 
-export function buildIndividualLanguageAndThemeKey () {
+export function buildIndividualLanguageAndThemeKey() {
   return `${STORAGE_KEY.individualLanguageAndTheme}`
 }
 
-export function buildProblemCodeKey (problemID, contestID = null) {
+export function buildProblemCodeKey(problemID, contestID = null) {
   if (contestID) {
     return `${STORAGE_KEY.PROBLEM_CODE}_${contestID}_${problemID}`
   }
   return `${STORAGE_KEY.PROBLEM_CODE}_NoContest_${problemID}`
 }
 
-export function buildContestAnnounceKey (uid, contestID) {
+export function buildContestAnnounceKey(uid, contestID) {
   return `${STORAGE_KEY.CONTEST_ANNOUNCE}_${uid}_${contestID}`
 }
 
@@ -405,7 +405,7 @@ export function buildContestRankConcernedKey(contestID) {
   return `${STORAGE_KEY.CONTEST_RANK_CONCERNED}_${contestID}`
 }
 
-export function buildExamAnswerKey (examID) {
+export function buildExamAnswerKey(examID) {
   return `${STORAGE_KEY.EXAM_ANSWER}_${examID}`
 }
 

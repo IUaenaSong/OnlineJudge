@@ -1,36 +1,36 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow>
         <div slot="header">
           <span class="panel-title"
-            >{{ $t('m.Contest_Rank') }}（{{
-              contest.oiRankScoreType == 'Recent'
-                ? $t('m.Based_on_The_Recent_Score_Submitted_Of_Each_Problem')
-                : $t('m.Based_on_The_Highest_Score_Submitted_For_Each_Problem')
+            >{{ $t("m.Contest_Rank") }}（{{
+              contest.oiRankScoreType == "Recent"
+                ? $t("m.Based_on_The_Recent_Score_Submitted_Of_Each_Problem")
+                : $t("m.Based_on_The_Highest_Score_Submitted_For_Each_Problem")
             }}）</span
           >
-          <span style="float:right;font-size: 20px;">
+          <span style="float: right; font-size: 20px">
             <el-popover trigger="hover" placement="left-start">
               <i class="el-icon-s-tools" slot="reference"></i>
               <div id="switches">
                 <p>
-                  <span>{{ $t('m.Chart') }}</span>
+                  <span>{{ $t("m.Chart") }}</span>
                   <el-switch v-model="showChart"></el-switch>
                 </p>
                 <p>
-                  <span>{{ $t('m.Table') }}</span>
+                  <span>{{ $t("m.Table") }}</span>
                   <el-switch v-model="showTable"></el-switch>
                 </p>
                 <p>
-                  <span>{{ $t('m.Star_User') }}</span>
+                  <span>{{ $t("m.Star_User") }}</span>
                   <el-switch
                     v-model="showStarUser"
                     @change="getContestRankData(page)"
                   ></el-switch>
                 </p>
                 <p>
-                  <span>{{ $t('m.Auto_Refresh') }}(10s)</span>
+                  <span>{{ $t("m.Auto_Refresh") }}(10s)</span>
                   <el-switch
                     :disabled="refreshDisabled"
                     @change="handleAutoRefresh"
@@ -39,7 +39,7 @@
                 </p>
                 <template v-if="isContestAdmin">
                   <p>
-                    <span>{{ $t('m.Force_Update') }}</span>
+                    <span>{{ $t("m.Force_Update") }}</span>
                     <el-switch
                       v-model="forceUpdate"
                       @change="getContestRankData(page)"
@@ -47,9 +47,12 @@
                   </p>
                 </template>
                 <template v-if="isContestAdmin">
-                  <el-button type="primary" size="small" @click="downloadRankCSV">{{
-                    $t('m.Download_as_CSV')
-                  }}</el-button>
+                  <el-button
+                    type="primary"
+                    size="small"
+                    @click="downloadRankCSV"
+                    >{{ $t("m.Download_as_CSV") }}</el-button
+                  >
                 </template>
               </div>
             </el-popover>
@@ -77,7 +80,7 @@
               :title="$t('m.Contest_Rank_Seq')"
             >
               <template v-slot="{ row }">
-                {{ row.rank == -1 ? '*' : row.rank }}
+                {{ row.rank == -1 ? "*" : row.rank }}
               </template>
             </vxe-table-column>
 
@@ -102,7 +105,9 @@
                 <el-tooltip placement="top">
                   <div slot="content">
                     {{
-                      row.isConcerned ? $t('m.Unfollow') : $t('m.Top_And_Follow')
+                      row.isConcerned
+                        ? $t("m.Unfollow")
+                        : $t("m.Top_And_Follow")
                     }}
                   </div>
                   <span
@@ -112,21 +117,25 @@
                     <i
                       class="fa fa-star"
                       v-if="row.isConcerned"
-                      style="color: red;"
+                      style="color: red"
                     ></i>
                     <i class="el-icon-star-off" v-else></i>
                   </span>
                 </el-tooltip>
-                <span style="float:right;text-align:right">
+                <span style="float: right; text-align: right">
                   <a @click="getUserHomeByUsername(row.uid, row.username)">
                     <span class="contest-username">
-                      <span class="contest-rank-flag" v-if="row.uid == userInfo.uid"
+                      <span
+                        class="contest-rank-flag"
+                        v-if="row.uid == userInfo.uid"
                         >Me</span
                       >
                       <span class="contest-rank-flag" v-if="row.rank == -1"
                         >Star</span
                       >
-                      <span class="contest-rank-flag" v-if="row.gender == 'female'"
+                      <span
+                        class="contest-rank-flag"
+                        v-if="row.gender == 'female'"
                         >Girl</span
                       >
                       {{ row[contest.rankShowName] }}</span
@@ -159,7 +168,9 @@
                 <el-tooltip placement="top">
                   <div slot="content">
                     {{
-                      row.isConcerned ? $t('m.Unfollow') : $t('m.Top_And_Follow')
+                      row.isConcerned
+                        ? $t("m.Unfollow")
+                        : $t("m.Top_And_Follow")
                     }}
                   </div>
                   <span
@@ -169,21 +180,25 @@
                     <i
                       class="fa fa-star"
                       v-if="row.isConcerned"
-                      style="color: red;"
+                      style="color: red"
                     ></i>
                     <i class="el-icon-star-off" v-else></i>
                   </span>
                 </el-tooltip>
-                <span style="float:right;text-align:right">
+                <span style="float: right; text-align: right">
                   <a @click="getUserHomeByUsername(row.uid, row.username)">
                     <span class="contest-username">
-                      <span class="contest-rank-flag" v-if="row.uid == userInfo.uid"
+                      <span
+                        class="contest-rank-flag"
+                        v-if="row.uid == userInfo.uid"
                         >Me</span
                       >
                       <span class="contest-rank-flag" v-if="row.rank == -1"
                         >Star</span
                       >
-                      <span class="contest-rank-flag" v-if="row.gender == 'female'"
+                      <span
+                        class="contest-rank-flag"
+                        v-if="row.gender == 'female'"
                         >Girl</span
                       >
                       {{ row[contest.rankShowName] }}</span
@@ -213,7 +228,7 @@
                 <span style="font-size: 14px"
                   ><a
                     @click="getUserTotalSubmit(row.username)"
-                    style="color:rgb(87, 163, 243);"
+                    style="color: rgb(87, 163, 243)"
                     >{{ row.totalScore }}</a
                   >
                   <br />
@@ -230,14 +245,14 @@
               <template v-slot:header>
                 <el-tooltip effect="dark" placement="top">
                   <div slot="content">
-                    {{ problem.displayId + '. ' + problem.displayTitle }}
+                    {{ problem.displayId + ". " + problem.displayTitle }}
                     <br />
-                    {{ 'Accepted: ' + problem.ac }}
+                    {{ "Accepted: " + problem.ac }}
                     <br />
-                    {{ 'Rejected: ' + problem.error }}
+                    {{ "Rejected: " + problem.error }}
                   </div>
                   <div>
-                    <span style="vertical-align: middle;" v-if="problem.color">
+                    <span style="vertical-align: middle" v-if="problem.color">
                       <svg
                         t="1633685184463"
                         class="icon"
@@ -259,7 +274,7 @@
                       <a
                         @click="getContestProblemById(problem.displayId)"
                         class="emphasis"
-                        style="color:#495060;"
+                        style="color: #495060"
                         >{{ problem.displayId }}
                       </a>
                       <br />
@@ -273,10 +288,14 @@
                   v-if="row.submissionInfo[problem.displayId]"
                   class="submission-hover"
                 >
-                  <span style="font-size:14px;">{{ row.submissionInfo[problem.displayId] }}</span>
+                  <span style="font-size: 14px">{{
+                    row.submissionInfo[problem.displayId]
+                  }}</span>
                   <br />
                   <span
-                    v-if="row.timeInfo && row.timeInfo[problem.displayId] != null"
+                    v-if="
+                      row.timeInfo && row.timeInfo[problem.displayId] != null
+                    "
                     >{{ row.timeInfo[problem.displayId] }}ms</span
                   >
                 </div>
@@ -297,13 +316,13 @@
   </el-row>
 </template>
 <script>
-import Avatar from 'vue-avatar';
-import { mapActions } from 'vuex';
-import ContestRankMixin from './contestRankMixin';
-import utils from '@/common/utils';
-import Pagination from '@/components/oj/common/Pagination';
+import Avatar from "vue-avatar";
+import { mapActions } from "vuex";
+import ContestRankMixin from "./contestRankMixin";
+import utils from "@/common/utils";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'OIContestRank',
+  name: "OIContestRank",
   components: {
     Pagination,
     Avatar,
@@ -314,38 +333,38 @@ export default {
       total: 0,
       page: 1,
       limit: 30,
-      contestID: '',
+      contestID: "",
       dataRank: [],
       autoRefresh: false,
       options: {
         title: {
-          text: this.$i18n.t('m.Top_10_Teams'),
-          left: 'center',
+          text: this.$i18n.t("m.Top_10_Teams"),
+          left: "center",
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
         },
         toolbox: {
           show: true,
           feature: {
             dataView: { show: true, readOnly: true },
-            magicType: { show: true, type: ['line', 'bar'] },
-            saveAsImage: { show: true, title: this.$i18n.t('m.save_as_image') },
+            magicType: { show: true, type: ["line", "bar"] },
+            saveAsImage: { show: true, title: this.$i18n.t("m.save_as_image") },
           },
-          right: '10%',
-          top: '5%',
+          right: "10%",
+          top: "5%",
         },
         calculable: true,
         xAxis: [
           {
-            type: 'category',
-            data: ['root'],
+            type: "category",
+            data: ["root"],
             boundaryGap: true,
             axisLabel: {
               interval: 0,
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'center',
+              align: "center",
               formatter: (value, index) => {
                 return utils.breakLongWords(value, 14);
               },
@@ -357,20 +376,20 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value',
+            type: "value",
           },
         ],
         grid: {
-          left: '11%',
+          left: "11%",
         },
         series: [
           {
-            name: this.$i18n.t('m.Score'),
-            type: 'bar',
-            barMaxWidth: '80',
+            name: this.$i18n.t("m.Score"),
+            type: "bar",
+            barMaxWidth: "80",
             data: [0],
             markPoint: {
-              data: [{ type: 'max', name: 'max' }],
+              data: [{ type: "max", name: "max" }],
             },
           },
         ],
@@ -397,29 +416,29 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getContestProblems']),
+    ...mapActions(["getContestProblems"]),
 
     cellClassName({ row, rowIndex, column, columnIndex }) {
       if (row.username == this.userInfo.username) {
         if (
-          column.property == 'rank' ||
-          column.property == 'totalScore' ||
-          column.property == 'username' ||
-          column.property == 'realname'
+          column.property == "rank" ||
+          column.property == "totalScore" ||
+          column.property == "username" ||
+          column.property == "realname"
         ) {
-          return 'own-submit-row';
+          return "own-submit-row";
         }
       }
 
-      if (column.property === 'username' && row.userCellClassName) {
+      if (column.property === "username" && row.userCellClassName) {
         return row.userCellClassName;
       }
 
       if (
-        column.property !== 'rank' &&
-        column.property !== 'totalScore' &&
-        column.property !== 'username' &&
-        column.property !== 'realname'
+        column.property !== "rank" &&
+        column.property !== "totalScore" &&
+        column.property !== "username" &&
+        column.property !== "realname"
       ) {
         if (this.isContestAdmin) {
           return row.cellClassName[
@@ -431,26 +450,26 @@ export default {
           ];
         }
       } else {
-        if (row.isConcerned && column.property !== 'username') {
-          return 'bg-concerned';
+        if (row.isConcerned && column.property !== "username") {
+          return "bg-concerned";
         }
       }
     },
     getUserTotalSubmit(username) {
       this.$router.push({
-        name: 'ContestSubmissionList',
+        name: "ContestSubmissionList",
         query: { username: username },
       });
     },
     getUserHomeByUsername(uid, username) {
       this.$router.push({
-        name: 'UserHome',
+        name: "UserHome",
         query: { username: username, uid: uid },
       });
     },
     getContestProblemById(pid) {
       this.$router.push({
-        name: 'ContestProblemDetails',
+        name: "ContestProblemDetails",
         params: {
           contestID: this.contestID,
           problemID: pid,
@@ -459,14 +478,14 @@ export default {
     },
     getUserProblemSubmission({ row, column }) {
       if (
-        column.property !== 'rank' &&
-        column.property !== 'totalScore' &&
-        column.property !== 'username' &&
-        column.property !== 'realname' &&
+        column.property !== "rank" &&
+        column.property !== "totalScore" &&
+        column.property !== "username" &&
+        column.property !== "realname" &&
         row[column.property]
       ) {
         this.$router.push({
-          name: 'ContestSubmissionList',
+          name: "ContestSubmissionList",
           query: { username: row.username, problemID: column.property },
         });
       }
@@ -500,19 +519,19 @@ export default {
           dataRank[i][problemID] = submissionInfo[problemID];
           let score = submissionInfo[problemID];
           if (timeInfo != null && timeInfo[problemID] != undefined) {
-            cellClass[problemID] = 'oi-100';
+            cellClass[problemID] = "oi-100";
           } else if (score == 0) {
-            cellClass[problemID] = 'oi-0';
+            cellClass[problemID] = "oi-0";
           } else if (score != null) {
-            cellClass[problemID] = 'oi-between';
+            cellClass[problemID] = "oi-between";
           }
         });
         dataRank[i].cellClassName = cellClass;
         if (dataRank[i].rank == -1) {
-          dataRank[i].userCellClassName = 'bg-star';
+          dataRank[i].userCellClassName = "bg-star";
         }
-        if (dataRank[i].gender == 'female') {
-          dataRank[i].userCellClassName = 'bg-female';
+        if (dataRank[i].gender == "female") {
+          dataRank[i].userCellClassName = "bg-female";
         }
       });
       this.dataRank = dataRank;

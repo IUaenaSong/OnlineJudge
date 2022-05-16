@@ -9,14 +9,13 @@ package com.iuaenasong.oj.judge;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.common.exception.SystemError;
 import com.iuaenasong.oj.judge.entity.JudgeDTO;
 import com.iuaenasong.oj.judge.entity.JudgeGlobalDTO;
 import com.iuaenasong.oj.judge.entity.SandBoxRes;
-import com.iuaenasong.oj.util.Constants;
-import com.iuaenasong.oj.util.JudgeUtils;
+import com.iuaenasong.oj.utils.Constants;
+import com.iuaenasong.oj.utils.JudgeUtils;
 
 import java.io.File;
 import java.text.MessageFormat;

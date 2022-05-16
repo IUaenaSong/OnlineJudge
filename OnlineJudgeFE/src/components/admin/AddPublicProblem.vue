@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align:center">
+  <div style="text-align: center">
     <vxe-input
       v-model="keyword"
       :placeholder="$t('m.Enter_keyword')"
@@ -7,7 +7,7 @@
       size="medium"
       @search-click="filterByKeyword"
       @keyup.enter.native="filterByKeyword"
-      style="margin-bottom:10px"
+      style="margin-bottom: 10px"
     ></vxe-input>
     <vxe-table
       :data="problems"
@@ -48,10 +48,10 @@
   </div>
 </template>
 <script>
-import api from '@/common/api';
+import api from "@/common/api";
 export default {
-  name: 'add-problem-from-public',
-  props: ['contestID', 'trainingID'],
+  name: "add-problem-from-public",
+  props: ["contestID", "trainingID"],
   data() {
     return {
       page: 1,
@@ -60,7 +60,7 @@ export default {
       loading: false,
       problems: [],
       contest: {},
-      keyword: '',
+      keyword: "",
     };
   },
   mounted() {
@@ -90,9 +90,9 @@ export default {
 
       let func = null;
       if (this.contestID) {
-        func = 'admin_getContestProblemList';
+        func = "admin_getContestProblemList";
       } else if (this.trainingID) {
-        func = 'admin_getTrainingProblemList';
+        func = "admin_getTrainingProblemList";
       }
 
       api[func](params)
@@ -108,8 +108,8 @@ export default {
     handleAddProblem(id, problemId) {
       if (this.contestID) {
         this.$prompt(
-          this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Contest'),
-          'Tips'
+          this.$i18n.t("m.Enter_The_Problem_Display_ID_in_the_Contest"),
+          "Tips"
         ).then(
           ({ value }) => {
             let data = {
@@ -119,8 +119,8 @@ export default {
             };
             api.admin_addContestProblemFromPublic(data).then(
               (res) => {
-                this.$emit('on-change');
-                this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+                this.$emit("on-change");
+                this.$msg.success(this.$i18n.t("m.Add_Successfully"));
                 this.getPublicProblem(this.page);
               },
               () => {}
@@ -136,8 +136,8 @@ export default {
         };
         api.admin_addTrainingProblemFromPublic(data).then(
           (res) => {
-            this.$emit('on-change');
-            this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+            this.$emit("on-change");
+            this.$msg.success(this.$i18n.t("m.Add_Successfully"));
             this.getPublicProblem(this.page);
           },
           () => {}

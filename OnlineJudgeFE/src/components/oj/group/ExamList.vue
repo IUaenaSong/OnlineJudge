@@ -23,11 +23,8 @@
             placement="top"
             effect="light"
           >
-            <el-tag
-              :type="EXAM_TYPE_REVERSE[row.auth].color"
-              effect="plain"
-            >
-              {{ $t('m.' + EXAM_TYPE_REVERSE[row.auth].name) }}
+            <el-tag :type="EXAM_TYPE_REVERSE[row.auth].color" effect="plain">
+              {{ $t("m." + EXAM_TYPE_REVERSE[row.auth].name) }}
             </el-tag>
           </el-tooltip>
         </template>
@@ -39,7 +36,7 @@
             :color="EXAM_STATUS_REVERSE[row.status].color"
             size="medium"
           >
-            {{ $t('m.' + EXAM_STATUS_REVERSE[row.status]['name']) }}
+            {{ $t("m." + EXAM_STATUS_REVERSE[row.status]["name"]) }}
           </el-tag>
         </template>
       </vxe-table-column>
@@ -55,10 +52,10 @@
       </vxe-table-column>
       <vxe-table-column min-width="210" :title="$t('m.Info')">
         <template v-slot="{ row }">
-          <p>{{ $t('m.Start_Time') }}: {{ row.startTime | localtime }}</p>
-          <p>{{ $t('m.End_Time') }}: {{ row.endTime | localtime }}</p>
-          <p>{{ $t('m.Created_Time') }}: {{ row.gmtCreate | localtime }}</p>
-          <p>{{ $t('m.Creator') }}: {{ row.author }}</p>
+          <p>{{ $t("m.Start_Time") }}: {{ row.startTime | localtime }}</p>
+          <p>{{ $t("m.End_Time") }}: {{ row.endTime | localtime }}</p>
+          <p>{{ $t("m.Created_Time") }}: {{ row.gmtCreate | localtime }}</p>
+          <p>{{ $t("m.Creator") }}: {{ row.author }}</p>
         </template>
       </vxe-table-column>
       <vxe-table-column min-width="150" :title="$t('m.Option')">
@@ -145,21 +142,21 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Exam from '@/components/oj/group/Exam'
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Exam from "@/components/oj/group/Exam";
 import {
   EXAM_STATUS_REVERSE,
   EXAM_TYPE,
   EXAM_TYPE_REVERSE,
   EXAM_STATUS,
-} from '@/common/constants';
+} from "@/common/constants";
 export default {
-  name: 'GroupExamList',
+  name: "GroupExamList",
   components: {
     Pagination,
-    Exam
+    Exam,
   },
   data() {
     return {
@@ -168,12 +165,12 @@ export default {
       limit: 10,
       examList: [],
       loading: false,
-      routeName: '',
+      routeName: "",
       cid: null,
       editPage: false,
       downloadDialogVisible: false,
       excludeAdmin: true,
-      splitType: 'user',
+      splitType: "user",
     };
   },
   mounted() {
@@ -202,16 +199,22 @@ export default {
     },
     getAdminExamList() {
       this.loading = true;
-      api.getGroupAdminExamList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.examList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupAdminExamList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.examList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     goEditExam(examID) {
       this.editPage = true;
@@ -226,18 +229,24 @@ export default {
     },
     changeExamVisible(cid, visible) {
       api.changeGroupExamVisible(cid, visible).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.$emit("currentChange", 1);
         this.currentChange(1);
       });
     },
     deleteExam(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Exam_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
-          api.deleteGroupExam(id, this.$route.params.groupID)
+      this.$confirm(
+        this.$i18n.t("m.Delete_Exam_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
+          api
+            .deleteGroupExam(id, this.$route.params.groupID)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChange", 1);
               this.currentChange(1);
             })
@@ -248,7 +257,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['isGroupRoot', 'userInfo']),
+    ...mapGetters(["isGroupRoot", "userInfo"]),
   },
 };
 </script>

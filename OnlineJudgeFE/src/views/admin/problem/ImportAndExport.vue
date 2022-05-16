@@ -1,9 +1,11 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Export_Problem') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Export_Problem")
+          }}</span>
           <div class="filter-row">
             <span>
               <el-button
@@ -11,7 +13,7 @@
                 size="small"
                 @click="exportProblems"
                 icon="el-icon-arrow-down"
-                >{{ $t('m.Export') }}
+                >{{ $t("m.Export") }}
               </el-button>
             </span>
             <span>
@@ -39,7 +41,11 @@
           <vxe-table-column type="checkbox" width="60"> </vxe-table-column>
           <vxe-table-column title="ID" min-width="100" field="id">
           </vxe-table-column>
-          <vxe-table-column min-width="150" :title="$t('m.Title')" field="title">
+          <vxe-table-column
+            min-width="150"
+            :title="$t('m.Title')"
+            field="title"
+          >
           </vxe-table-column>
           <vxe-table-column
             min-width="150"
@@ -68,10 +74,12 @@
         </div>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Import_Problem') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Import_Problem")
+          }}</span>
         </div>
         <el-upload
           ref="OJ"
@@ -92,26 +100,26 @@
             type="primary"
             slot="trigger"
             icon="el-icon-folder-opened"
-            >{{ $t('m.Choose_File') }}</el-button
+            >{{ $t("m.Choose_File") }}</el-button
           >
           <el-button
-            style="margin-left: 10px;"
+            style="margin-left: 10px"
             size="small"
             type="success"
             @click="submitUpload('OJ')"
             :loading="loading.OJ"
             :disabled="!fileList1.length"
             icon="el-icon-upload"
-            >{{ $t('m.Upload') }}</el-button
+            >{{ $t("m.Upload") }}</el-button
           >
         </el-upload>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Import_QDOJ_Problem')
+            $t("m.Import_QDOJ_Problem")
           }}</span>
         </div>
         <el-upload
@@ -133,26 +141,26 @@
             slot="trigger"
             :loading="loading.QDOJ"
             icon="el-icon-folder-opened"
-            >{{ $t('m.Choose_File') }}</el-button
+            >{{ $t("m.Choose_File") }}</el-button
           >
           <el-button
-            style="margin-left: 10px;"
+            style="margin-left: 10px"
             size="small"
             type="success"
             @click="submitUpload('QDOJ')"
             :loading="loading.QDOJ"
             icon="el-icon-upload"
             :disabled="!fileList2.length"
-            >{{ $t('m.Upload') }}</el-button
+            >{{ $t("m.Upload") }}</el-button
           >
         </el-upload>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Import_FPS_Problem')
+            $t("m.Import_FPS_Problem")
           }}</span>
         </div>
         <el-upload
@@ -174,17 +182,17 @@
             slot="trigger"
             :loading="loading.FPS"
             icon="el-icon-folder-opened"
-            >{{ $t('m.Choose_File') }}</el-button
+            >{{ $t("m.Choose_File") }}</el-button
           >
           <el-button
-            style="margin-left: 10px;"
+            style="margin-left: 10px"
             size="small"
             type="success"
             @click="submitUpload('FPS')"
             :loading="loading.FPS"
             icon="el-icon-upload"
             :disabled="!fileList3.length"
-            >{{ $t('m.Upload') }}</el-button
+            >{{ $t("m.Upload") }}</el-button
           >
         </el-upload>
       </el-card>
@@ -192,10 +200,10 @@
   </el-row>
 </template>
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
+import api from "@/common/api";
+import utils from "@/common/utils";
 export default {
-  name: 'import_and_export',
+  name: "import_and_export",
   data() {
     return {
       fileList1: [],
@@ -206,7 +214,7 @@ export default {
       total: 0,
       loadingProblems: false,
       loadingImporting: false,
-      keyword: '',
+      keyword: "",
       problems: [],
       selected_problems: [],
       loading: {
@@ -235,7 +243,7 @@ export default {
         keyword: this.keyword,
         currentPage: page,
         limit: this.limit,
-        oj: 'Mine',
+        oj: "Mine",
       };
       this.loadingProblems = true;
       api.admin_getProblemList(params).then((res) => {
@@ -247,13 +255,13 @@ export default {
     exportProblems() {
       let params = [];
       if (this.selected_problems.length <= 0) {
-        this.$msg.error(this.$i18n.t('m.Export_Problem_NULL_Tips'));
+        this.$msg.error(this.$i18n.t("m.Export_Problem_NULL_Tips"));
         return;
       }
       for (let p of this.selected_problems) {
-        params.push('pid=' + p.id);
+        params.push("pid=" + p.id);
       }
-      let url = '/api/file/export-problem?' + params.join('&');
+      let url = "/api/file/export-problem?" + params.join("&");
       utils.downloadFile(url);
     },
     submitUpload(ref) {
@@ -276,7 +284,7 @@ export default {
       if (response.status != 200) {
         this.$msg.error(response.msg);
       } else {
-        this.$msg.success(this.$i18n.t('m.Upload_Problem_Succeeded'));
+        this.$msg.success(this.$i18n.t("m.Upload_Problem_Succeeded"));
         this.getProblems();
       }
     },
@@ -284,7 +292,7 @@ export default {
       this.loading.OJ = false;
       this.loading.QDOJ = false;
       this.loading.FPS = false;
-      this.$msg.error(this.$i18n.t('m.Upload_Problem_Failed'));
+      this.$msg.error(this.$i18n.t("m.Upload_Problem_Failed"));
     },
     filterByKeyword() {
       this.getProblems();

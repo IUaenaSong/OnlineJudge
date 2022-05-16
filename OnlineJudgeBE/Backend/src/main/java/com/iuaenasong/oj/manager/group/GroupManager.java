@@ -16,6 +16,7 @@ import com.iuaenasong.oj.pojo.entity.group.GroupMember;
 import com.iuaenasong.oj.pojo.entity.group.Group;
 import com.iuaenasong.oj.pojo.entity.user.UserAcproblem;
 import com.iuaenasong.oj.pojo.vo.AccessVo;
+import com.iuaenasong.oj.pojo.vo.ConfigVo;
 import com.iuaenasong.oj.pojo.vo.GroupVo;
 import com.iuaenasong.oj.pojo.vo.UserRolesVo;
 import com.iuaenasong.oj.utils.Constants;
@@ -50,6 +51,9 @@ public class GroupManager {
 
     @Autowired
     private GroupValidator groupValidator;
+
+    @Autowired
+    private ConfigVo configVo;
 
     public IPage<GroupVo> getGroupList(Integer limit, Integer currentPage, String keyword, Integer auth, Boolean onlyMine) {
         Session session = SecurityUtils.getSubject().getSession();
@@ -153,18 +157,27 @@ public class GroupManager {
             queryWrapper.eq("uid", userRolesVo.getUid()).select("distinct pid");
             int userAcProblemCount = userAcproblemEntityService.count(queryWrapper);
 
-            if (userAcProblemCount < 20 && userRolesVo.getMobile() == null) {
-                throw new StatusForbiddenException("对不起，您暂时无权限创建团队！请先去绑定手机号或提交题目通过20道以上!");
+            if (userAcProblemCount < configVo.getDefaultCreateGroupACInitValue() && userRolesVo.getMobile() == null) {
+                throw new StatusForbiddenException("对不起，您暂时无权限创建团队！请先去绑定手机号或提交题目通过" +
+                        configVo.getDefaultCreateGroupACInitValue() + "道以上!");
             }
 
             String lockKey = Constants.Account.GROUP_ADD_NUM_LOCK.getCode() + userRolesVo.getUid();
             Integer num = (Integer) redisUtils.get(lockKey);
             if (num == null) {
                 redisUtils.set(lockKey, 1, 3600 * 24);
-            } else if (num >= 2) {
-                throw new StatusForbiddenException("对不起，您今天创建团队次数已超过2次，已被限制！");
+            } else if (num >= configVo.getDefaultCreateGroupDailyLimit()) {
+                throw new StatusForbiddenException("对不起，您今天创建团队次数已超过" + configVo.getDefaultCreateGroupDailyLimit() + "次，已被限制！");
             } else {
                 redisUtils.incr(lockKey, 1);
+            }
+
+            QueryWrapper<Group> existedGroupQueryWrapper = new QueryWrapper<>();
+            existedGroupQueryWrapper.eq("owner", userRolesVo.getUsername());
+            int existedGroupNum = groupEntityService.count(existedGroupQueryWrapper);
+
+            if (existedGroupNum >= configVo.getDefaultCreateGroupLimit()) {
+                throw new StatusForbiddenException("对不起，您总共已创建了" + configVo.getDefaultCreateGroupLimit() + "个团队，不可再创建，已被限制！");
             }
         }
         group.setOwner(userRolesVo.getUsername());

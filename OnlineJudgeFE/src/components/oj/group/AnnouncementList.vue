@@ -107,7 +107,7 @@
       @open="onOpenEditDialog"
       style="text-align: left"
     >
-      <el-form label-position="top" :model="announcement" >
+      <el-form label-position="top" :model="announcement">
         <el-form-item :label="$t('m.Announcement_Title')" required>
           <el-input
             v-model="announcement.title"
@@ -120,7 +120,7 @@
           <Editor :value.sync="announcement.content"></Editor>
         </el-form-item>
         <div class="visible-box">
-          <span>{{ $t('m.Announcement_visible') }}</span>
+          <span>{{ $t("m.Announcement_visible") }}</span>
           <el-switch
             v-model="announcement.status"
             :active-value="0"
@@ -135,10 +135,10 @@
         <el-button
           type="danger"
           @click.native="showEditAnnouncementDialog = false"
-          >{{ $t('m.Cancel') }}</el-button
+          >{{ $t("m.Cancel") }}</el-button
         >
         <el-button type="primary" @click.native="submitAnnouncement">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -146,22 +146,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Editor from '@/components/admin/Editor.vue';
-import AnnouncementList from '@/components/oj/group/AnnouncementList.vue';
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Editor from "@/components/admin/Editor.vue";
+import AnnouncementList from "@/components/oj/group/AnnouncementList.vue";
 export default {
-  name: 'GroupAnnouncementList',
+  name: "GroupAnnouncementList",
   components: {
     Pagination,
     Editor,
-    AnnouncementList
+    AnnouncementList,
   },
   props: {
     contestID: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -170,18 +170,18 @@ export default {
       adminTotal: 0,
       currentPage: 1,
       limit: 10,
-      mode: 'create',
+      mode: "create",
       adminAnnouncementList: [],
       announcement: {
         id: null,
-        title: '',
-        content: '',
+        title: "",
+        content: "",
         status: 0,
-        uid: '',
+        uid: "",
       },
-      announcementDialogTitle: 'Edit Announcement',
+      announcementDialogTitle: "Edit Announcement",
       loading: false,
-      routeName: '',
+      routeName: "",
     };
   },
   mounted() {
@@ -205,43 +205,55 @@ export default {
     },
     getGroupAdminAnnouncementList() {
       this.loading = true;
-      api.getGroupAdminAnnouncementList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.adminAnnouncementList = res.data.data.records;
-          this.adminTotal = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupAdminAnnouncementList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.adminAnnouncementList = res.data.data.records;
+            this.adminTotal = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     getGroupContestAnnouncementList() {
       this.loading = true;
-      api.getGroupContestAnnouncementList(this.currentPage, this.limit, this.contestID).then(
-        (res) => {
-          this.adminAnnouncementList = res.data.data.records;
-          this.adminTotal = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupContestAnnouncementList(
+          this.currentPage,
+          this.limit,
+          this.contestID
+        )
+        .then(
+          (res) => {
+            this.adminAnnouncementList = res.data.data.records;
+            this.adminTotal = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     onOpenEditDialog() {
       setTimeout(() => {
         if (document.createEvent) {
-          let event = document.createEvent('HTMLEvents');
-          event.initEvent('resize', true, true);
+          let event = document.createEvent("HTMLEvents");
+          event.initEvent("resize", true, true);
           window.dispatchEvent(event);
         } else if (document.createEventObject) {
-          window.fireEvent('onresize');
+          window.fireEvent("onresize");
         }
       }, 0);
     },
     submitAnnouncement(data = undefined) {
-      let funcName = '';
+      let funcName = "";
       if (!data.id) {
         data = this.announcement;
       }
@@ -254,42 +266,48 @@ export default {
         };
         requestData = announcement;
         funcName =
-          this.mode === 'edit'
-            ? 'updateGroupContestAnnouncement'
-            : 'addGroupContestAnnouncement';
+          this.mode === "edit"
+            ? "updateGroupContestAnnouncement"
+            : "addGroupContestAnnouncement";
       } else {
         funcName =
-          this.mode === 'edit'
-            ? 'updateGroupAnnouncement'
-            : 'addGroupAnnouncement';
+          this.mode === "edit"
+            ? "updateGroupAnnouncement"
+            : "addGroupAnnouncement";
         requestData = data;
       }
       api[funcName](requestData)
         .then((res) => {
           this.showEditAnnouncementDialog = false;
-          this.$msg.success(this.$i18n.t('m.Post_successfully'));
+          this.$msg.success(this.$i18n.t("m.Post_successfully"));
           this.currentChange(1);
         })
         .catch();
     },
     deleteAnnouncement(announcementId) {
-      this.$confirm(this.$i18n.t('m.Delete_Announcement_Tips'), this.$i18n.t('m.Warning'), {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
-      })
+      this.$confirm(
+        this.$i18n.t("m.Delete_Announcement_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          confirmButtonText: this.$i18n.t("m.OK"),
+          cancelButtonText: this.$i18n.t("m.Cancel"),
+          type: "warning",
+        }
+      )
         .then(() => {
           this.loading = true;
           if (this.contestID) {
-            api.deleteGroupContestAnnouncement(announcementId, this.contestID).then((res) => {
-              this.loading = true;
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
-              this.init();
-            });
+            api
+              .deleteGroupContestAnnouncement(announcementId, this.contestID)
+              .then((res) => {
+                this.loading = true;
+                this.$msg.success(this.$i18n.t("m.Delete_successfully"));
+                this.init();
+              });
           } else {
             api.deleteGroupAnnouncement(announcementId).then((res) => {
               this.loading = true;
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.init();
             });
           }
@@ -301,21 +319,21 @@ export default {
     openAnnouncementDialog(row) {
       this.showEditAnnouncementDialog = true;
       if (row !== null) {
-        this.announcementDialogTitle = this.$i18n.t('m.Edit_Announcement');
+        this.announcementDialogTitle = this.$i18n.t("m.Edit_Announcement");
         this.announcement = Object.assign({}, row);
-        this.mode = 'edit';
+        this.mode = "edit";
       } else {
-        this.announcementDialogTitle = this.$i18n.t('m.Create_Announcement');
-        this.announcement.title = '';
+        this.announcementDialogTitle = this.$i18n.t("m.Create_Announcement");
+        this.announcement.title = "";
         this.announcement.status = 0;
-        this.announcement.content = '';
+        this.announcement.content = "";
         this.announcement.uid = this.userInfo.uid;
         this.announcement.username = this.userInfo.username;
-        this.mode = 'add';
+        this.mode = "add";
       }
     },
     handleVisibleSwitch(row) {
-      this.mode = 'edit';
+      this.mode = "edit";
       this.submitAnnouncement({
         id: row.id,
         title: row.title,
@@ -326,7 +344,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isGroupRoot']),
+    ...mapGetters(["userInfo", "isGroupRoot"]),
   },
 };
 </script>

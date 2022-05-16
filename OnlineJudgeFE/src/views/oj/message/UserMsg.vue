@@ -1,11 +1,11 @@
 <template>
   <div class="msg-wrap" v-loading="loading">
     <h3 class="msg-list-header">
-      <span class="ft">{{ $t('m.' + route_name) }}</span>
+      <span class="ft">{{ $t("m." + route_name) }}</span>
       <span class="fr"
-        >{{ $t('m.Msg_Total') + ' ' + total + ' ' + $t('m.Msg_Messages') }}
+        >{{ $t("m.Msg_Total") + " " + total + " " + $t("m.Msg_Messages") }}
         <span class="clear-all" @click="deleteMsg()">{{
-          $t('m.Clean_All')
+          $t("m.Clean_All")
         }}</span></span
       >
     </h3>
@@ -32,7 +32,7 @@
           </span>
           <span
             @click="getInfoByUsername(item.senderId, item.senderUsername)"
-            style="cursor: pointer;"
+            style="cursor: pointer"
           >
             <avatar
               :username="item.senderUsername"
@@ -46,17 +46,17 @@
           <div class="title">
             <div>
               <span
-                style="margin-right:3px;"
+                style="margin-right: 3px"
                 class="user-name"
                 @click="getInfoByUsername(item.senderId, item.senderUsername)"
                 :title="item.senderUsername"
                 >{{ item.senderUsername }}</span
               >
               <span class="msg-action">
-                {{ $t('m.Action_' + item.action) }}
+                {{ $t("m.Action_" + item.action) }}
               </span>
             </div>
-            <div @click="goMsgSourceUrl(item.url)" style="cursor: pointer;">
+            <div @click="goMsgSourceUrl(item.url)" style="cursor: pointer">
               <div
                 class="content"
                 v-if="item.sourceContent != null"
@@ -85,7 +85,7 @@
                 ></span
               >
               <span class="delete" @click="deleteMsg(item.id)"
-                ><i class="el-icon-delete"> {{ $t('m.Delete') }}</i></span
+                ><i class="el-icon-delete"> {{ $t("m.Delete") }}</i></span
               >
             </div>
           </div>
@@ -93,9 +93,9 @@
         <div class="link-discussion">
           <span
             >{{
-              item.sourceType == 'Discussion'
-                ? $t('m.From_Discussion_Post')
-                : $t('m.From_the_Contest')
+              item.sourceType == "Discussion"
+                ? $t("m.From_Discussion_Post")
+                : $t("m.From_the_Contest")
             }}
             <span class="title" @click="goMsgSourceUrl(item.url)"
               >“{{ item.sourceTitle }}”</span
@@ -116,9 +116,9 @@
   </div>
 </template>
 <script>
-import Avatar from 'vue-avatar';
-import api from '@/common/api';
-import Pagination from '@/components/oj/common/Pagination';
+import Avatar from "vue-avatar";
+import api from "@/common/api";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
   components: { Avatar, Pagination },
   data() {
@@ -130,7 +130,7 @@ export default {
       },
       loading: false,
       total: 0,
-      route_name: 'DiscussMsg',
+      route_name: "DiscussMsg",
     };
   },
   created() {
@@ -171,18 +171,18 @@ export default {
     },
     getInfoByUsername(uid, username) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { uid, username },
       });
     },
     deleteMsg(id = undefined) {
-      this.$confirm(this.$i18n.t('m.Delete_Msg_Tips'), 'Tips', {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
+      this.$confirm(this.$i18n.t("m.Delete_Msg_Tips"), "Tips", {
+        confirmButtonText: this.$i18n.t("m.OK"),
+        cancelButtonText: this.$i18n.t("m.Cancel"),
+        type: "warning",
       }).then(() => {
         api.cleanMsg(this.route_name, id).then((res) => {
-          this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+          this.$msg.success(this.$i18n.t("m.Delete_successfully"));
           this.getMsgList();
         });
       });
@@ -190,21 +190,21 @@ export default {
     substractUnreadMsgNum() {
       let countName;
       switch (this.route_name) {
-        case 'DiscussMsg':
-          countName = 'comment';
+        case "DiscussMsg":
+          countName = "comment";
           break;
-        case 'ReplyMsg':
-          countName = 'reply';
+        case "ReplyMsg":
+          countName = "reply";
           break;
-        case 'LikeMsg':
-          countName = 'like';
+        case "LikeMsg":
+          countName = "like";
           break;
       }
       let needSubstractMsg = {
         name: countName,
         num: this.limit,
       };
-      this.$store.dispatch('substractUnreadMessageCount', needSubstractMsg);
+      this.$store.dispatch("substractUnreadMessageCount", needSubstractMsg);
     },
     mdToHtml(content) {
       return this.$markDown.render(content);

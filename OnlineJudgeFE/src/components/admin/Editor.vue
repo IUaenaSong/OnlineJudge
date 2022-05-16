@@ -36,14 +36,14 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import { addCodeBtn } from '@/common/codeblock';
+import { mapGetters } from "vuex";
+import { addCodeBtn } from "@/common/codeblock";
 export default {
-  name: 'Editor',
+  name: "Editor",
   props: {
     value: {
       type: String,
-      default: '',
+      default: "",
     },
     openHtml: {
       type: Boolean,
@@ -55,8 +55,8 @@ export default {
     },
     height: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
@@ -82,18 +82,18 @@ export default {
         readmodel: true, // 沉浸式阅读
         htmlcode: true, // 展示html源码
         help: true, // 帮助
-        
+
         undo: true, // 上一步
         redo: true, // 下一步
         trash: true, // 清空
         save: true, // 保存（触发events中的save事件）
-        
+
         navigation: true, // 导航目录
-        
+
         alignleft: true, // 左对齐
         aligncenter: true, // 居中
         alignright: true, // 右对齐
-        
+
         subfield: true, // 单双栏模式
         preview: true, // 预览
       },
@@ -107,23 +107,27 @@ export default {
   methods: {
     // 将图片上传到服务器，返回地址替换到md中
     $imgAdd(pos, $file) {
-      if (!this.isAdminRole && !this.isGroupAdmin && !this.$route.params.examID) {
+      if (
+        !this.isAdminRole &&
+        !this.isGroupAdmin &&
+        !this.$route.params.examID
+      ) {
         return;
       }
       var formdata = new FormData();
-      formdata.append('image', $file);
+      formdata.append("image", $file);
       if (this.$route.params.groupID) {
-        formdata.append('gid', this.$route.params.groupID);
+        formdata.append("gid", this.$route.params.groupID);
       }
       if (this.$route.params.examID) {
-        formdata.append('eid', this.$route.params.examID);
+        formdata.append("eid", this.$route.params.examID);
       }
       //将下面上传接口替换为你自己的服务器接口
       this.$http({
-        url: '/api/file/upload-md-img',
-        method: 'post',
+        url: "/api/file/upload-md-img",
+        method: "post",
         data: formdata,
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { "Content-Type": "multipart/form-data" },
       }).then((res) => {
         this.$refs.md.$img2Url(pos, res.data.data.link);
         this.img_file[res.data.data.link] = res.data.data.fileId;
@@ -132,8 +136,8 @@ export default {
     $imgDel(pos) {
       // 删除文件
       this.$http({
-        url: '/api/file/delete-md-img',
-        method: 'get',
+        url: "/api/file/delete-md-img",
+        method: "get",
         params: {
           fileId: this.img_file[pos[0]],
         },
@@ -149,32 +153,32 @@ export default {
       const file = e.target.files[0];
       // 创建form格式的数据，将文件放入form中
       const formdata = new FormData();
-      formdata.append('file', file);
+      formdata.append("file", file);
       if (this.$route.params.groupID) {
-        formdata.append('gid', this.$route.params.groupID);
+        formdata.append("gid", this.$route.params.groupID);
       }
       if (this.$route.params.examID) {
-        formdata.append('eid', this.$route.params.examID);
+        formdata.append("eid", this.$route.params.examID);
       }
       this.$http({
-        url: '/api/file/upload-md-file',
-        method: 'post',
+        url: "/api/file/upload-md-file",
+        method: "post",
         data: formdata,
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { "Content-Type": "multipart/form-data" },
       }).then((res) => {
         // 这里获取到的是mavon编辑器实例，上面挂载着很多方法
         const $vm = this.$refs.md;
         // 将文件名与文件路径插入当前光标位置，这是mavon-editor 内置的方法
         $vm.insertText($vm.getTextareaDom(), {
           prefix: `[${file.name}](${res.data.data.link})`,
-          subfix: '',
-          str: '',
+          subfix: "",
+          str: "",
         });
       });
     },
   },
   computed: {
-    ...mapGetters(['isAdminRole', 'isGroupAdmin']),
+    ...mapGetters(["isAdminRole", "isGroupAdmin"]),
   },
   watch: {
     value(val) {
@@ -184,7 +188,7 @@ export default {
     },
     currentValue(newVal, oldVal) {
       if (newVal !== oldVal) {
-        this.$emit('update:value', newVal);
+        this.$emit("update:value", newVal);
         this.$nextTick((_) => {
           addCodeBtn();
         });

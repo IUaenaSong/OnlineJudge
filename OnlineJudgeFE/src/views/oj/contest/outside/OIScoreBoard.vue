@@ -1,13 +1,13 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow v-loading="loading.info">
         <div class="contest-title">
           <div slot="header">
             <span class="panel-title">{{ contest.title }}</span>
           </div>
         </div>
-        <el-row style="margin-top: 10px;">
+        <el-row style="margin-top: 10px">
           <el-col :span="12" class="text-align:left">
             <el-tooltip
               v-if="contest.auth != null && contest.auth != undefined"
@@ -18,16 +18,13 @@
                 :type.sync="CONTEST_TYPE_REVERSE[contest.auth]['color']"
                 effect="plain"
               >
-                {{ $t('m.' + CONTEST_TYPE_REVERSE[contest.auth]['name']) }}
+                {{ $t("m." + CONTEST_TYPE_REVERSE[contest.auth]["name"]) }}
               </el-tag>
             </el-tooltip>
           </el-col>
-          <el-col :span="12" style="text-align:right">
+          <el-col :span="12" style="text-align: right">
             <el-button size="small" plain v-if="contest.count">
-              <i
-                class="el-icon-user-solid"
-                style="color:rgb(48, 145, 242);"
-              ></i
+              <i class="el-icon-user-solid" style="color: rgb(48, 145, 242)"></i
               >x{{ contest.count }}
             </el-button>
             <template v-if="contest.type == 0">
@@ -40,14 +37,14 @@
               <el-tooltip
                 :content="
                   $t('m.Contest_Rank') +
-                    '：' +
-                    (contest.oiRankScoreType == 'Recent'
-                      ? $t(
-                          'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
-                        )
-                      : $t(
-                          'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
-                        ))
+                  '：' +
+                  (contest.oiRankScoreType == 'Recent'
+                    ? $t(
+                        'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
+                      )
+                    : $t(
+                        'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
+                      ))
                 "
                 placement="top"
               >
@@ -64,13 +61,13 @@
             <el-col :xs="24" :md="12" class="left">
               <p>
                 <i class="fa fa-hourglass-start" aria-hidden="true"></i>
-                {{ $t('m.StartAt') }}：{{ contest.startTime | localtime }}
+                {{ $t("m.StartAt") }}：{{ contest.startTime | localtime }}
               </p>
             </el-col>
             <el-col :xs="24" :md="12" class="right">
               <p>
                 <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-                {{ $t('m.EndAt') }}：{{ contest.endTime | localtime }}
+                {{ $t("m.EndAt") }}：{{ contest.endTime | localtime }}
               </p>
             </el-col>
           </el-row>
@@ -83,7 +80,7 @@
           ></el-slider>
         </div>
         <el-row>
-          <el-col :span="24" style="text-align:center">
+          <el-col :span="24" style="text-align: center">
             <el-tag effect="dark" size="medium" :style="countdownColor">
               <i class="fa fa-circle" aria-hidden="true"></i>
               {{ countdown }}
@@ -92,26 +89,26 @@
         </el-row>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow v-loading="loading.rank">
         <div class="contest-rank-switch">
-          <span style="float:right;">
-            <span>{{ $t('m.Auto_Refresh') }}(30s)</span>
+          <span style="float: right">
+            <span>{{ $t("m.Auto_Refresh") }}(30s)</span>
             <el-switch
               :disabled="contestEnded"
               @change="handleAutoRefresh"
               v-model="autoRefresh"
             ></el-switch>
           </span>
-          <span style="float:right;" v-if="isContestAdmin">
-            <span>{{ $t('m.Force_Update') }}</span>
+          <span style="float: right" v-if="isContestAdmin">
+            <span>{{ $t("m.Force_Update") }}</span>
             <el-switch
               v-model="forceUpdate"
               @change="getContestOutsideScoreboard"
             ></el-switch>
           </span>
-          <span style="float:right;">
-            <span>{{ $t('m.Star_User') }}</span>
+          <span style="float: right">
+            <span>{{ $t("m.Star_User") }}</span>
             <el-switch
               v-model="showStarUser"
               @change="getContestOutsideScoreboard"
@@ -135,7 +132,7 @@
             :title="$t('m.Contest_Rank_Seq')"
           >
             <template v-slot="{ row }">
-              {{ row.rank == -1 ? '*' : row.rank }}
+              {{ row.rank == -1 ? "*" : row.rank }}
             </template>
           </vxe-table-column>
           <vxe-table-column
@@ -159,7 +156,7 @@
               <el-tooltip placement="top">
                 <div slot="content">
                   {{
-                    row.isConcerned ? $t('m.Unfollow') : $t('m.Top_And_Follow')
+                    row.isConcerned ? $t("m.Unfollow") : $t("m.Top_And_Follow")
                   }}
                 </div>
                 <span
@@ -169,18 +166,20 @@
                   <i
                     class="fa fa-star"
                     v-if="row.isConcerned"
-                    style="color: red;"
+                    style="color: red"
                   ></i>
                   <i class="el-icon-star-off" v-else></i>
                 </span>
               </el-tooltip>
-              <span style="float:right;text-align:right">
+              <span style="float: right; text-align: right">
                 <a @click="getUserHomeByUsername(row.uid, row.username)">
                   <span class="contest-username"
                     ><span class="contest-rank-flag" v-if="row.rank == -1"
                       >Star</span
                     >
-                    <span class="contest-rank-flag" v-if="row.gender == 'female'"
+                    <span
+                      class="contest-rank-flag"
+                      v-if="row.gender == 'female'"
                       >Girl</span
                     >
                     {{ row[contest.rankShowName] }}</span
@@ -212,7 +211,7 @@
               <el-tooltip placement="top">
                 <div slot="content">
                   {{
-                    row.isConcerned ? $t('m.Unfollow') : $t('m.Top_And_Follow')
+                    row.isConcerned ? $t("m.Unfollow") : $t("m.Top_And_Follow")
                   }}
                 </div>
                 <span
@@ -222,18 +221,20 @@
                   <i
                     class="fa fa-star"
                     v-if="row.isConcerned"
-                    style="color: red;"
+                    style="color: red"
                   ></i>
                   <i class="el-icon-star-off" v-else></i>
                 </span>
               </el-tooltip>
-              <span style="float:right;text-align:right">
+              <span style="float: right; text-align: right">
                 <a @click="getUserHomeByUsername(row.uid, row.username)">
                   <span class="contest-username"
                     ><span class="contest-rank-flag" v-if="row.rank == -1"
                       >Star</span
                     >
-                    <span class="contest-rank-flag" v-if="row.gender == 'female'"
+                    <span
+                      class="contest-rank-flag"
+                      v-if="row.gender == 'female'"
                       >Girl</span
                     >
                     {{ row[contest.rankShowName] }}</span
@@ -252,7 +253,7 @@
           >
             <template v-slot="{ row }">
               <span style="font-size: 14px"
-                ><a style="color:rgb(87, 163, 243);">{{ row.totalScore }}</a>
+                ><a style="color: rgb(87, 163, 243)">{{ row.totalScore }}</a>
                 <br />
                 <span class="problem-time">{{ row.totalTime }}ms</span>
               </span>
@@ -266,36 +267,36 @@
             <template v-slot:header>
               <el-tooltip effect="dark" placement="top">
                 <div slot="content">
-                  {{ problem.displayId + '. ' + problem.displayTitle }}
+                  {{ problem.displayId + ". " + problem.displayTitle }}
                   <br />
-                  {{ 'Accepted: ' + problem.ac }}
+                  {{ "Accepted: " + problem.ac }}
                   <br />
-                  {{ 'Rejected: ' + problem.error }}
+                  {{ "Rejected: " + problem.error }}
                 </div>
                 <div>
-                    <span style="vertical-align: middle;" v-if="problem.color">
+                  <span style="vertical-align: middle" v-if="problem.color">
                     <svg
-                        t="1633685184463"
-                        class="icon"
-                        viewBox="0 0 1088 1024"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        p-id="5840"
-                        width="25"
-                        height="25"
+                      t="1633685184463"
+                      class="icon"
+                      viewBox="0 0 1088 1024"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      p-id="5840"
+                      width="25"
+                      height="25"
                     >
-                        <path
+                      <path
                         d="M575.872 849.408c-104.576 0-117.632-26.56-119.232-31.808-6.528-22.528 32.896-70.592 63.744-96.768l-1.728-2.624c137.6-42.688 243.648-290.112 243.648-433.472A284.544 284.544 0 0 0 478.016 0a284.544 284.544 0 0 0-284.288 284.736c0 150.4 116.352 415.104 263.744 438.336-25.152 29.568-50.368 70.784-39.104 108.928 12.608 43.136 62.72 63.232 157.632 63.232 7.872 0 11.52 9.408 4.352 19.52-21.248 29.248-77.888 63.424-167.68 63.424V1024c138.944 0 215.936-74.816 215.936-126.528a46.72 46.72 0 0 0-16.32-36.608 56.32 56.32 0 0 0-36.416-11.456zM297.152 297.472c0 44.032-38.144 25.344-38.144-38.656 0-108.032 85.248-195.712 190.592-195.712 62.592 0 81.216 39.232 38.08 39.232-105.152 0.064-190.528 87.04-190.528 195.136z"
                         :fill="problem.color"
                         p-id="5841"
-                        ></path>
+                      ></path>
                     </svg>
-                    </span>
-                    <span class="emphasis" style="color:#495060;"
+                  </span>
+                  <span class="emphasis" style="color: #495060"
                     >{{ problem.displayId }}
                     <br />
                     <span>{{ problem.ac }}</span>
-                    </span>
+                  </span>
                 </div>
               </el-tooltip>
             </template>
@@ -305,7 +306,7 @@
                 <br />
                 <span
                   v-if="row.timeInfo && row.timeInfo[problem.displayId] != null"
-                  style="font-size:12px;"
+                  style="font-size: 12px"
                   >{{ row.timeInfo[problem.displayId] }}ms</span
                 >
               </div>
@@ -317,17 +318,17 @@
   </el-row>
 </template>
 <script>
-import Avatar from 'vue-avatar';
-import ScoreBoardMixin from './scoreBoardMixin';
+import Avatar from "vue-avatar";
+import ScoreBoardMixin from "./scoreBoardMixin";
 export default {
-  name: 'OIContestRank',
+  name: "OIContestRank",
   components: {
     Avatar,
   },
   mixins: [ScoreBoardMixin],
   data() {
     return {
-      contestID: '',
+      contestID: "",
       dataRank: [],
       autoRefresh: false,
       loading: {
@@ -354,27 +355,27 @@ export default {
   },
   methods: {
     cellClassName({ row, rowIndex, column, columnIndex }) {
-      if (column.property === 'username' && row.userCellClassName) {
+      if (column.property === "username" && row.userCellClassName) {
         return row.userCellClassName;
       }
 
       if (
-        column.property !== 'rank' &&
-        column.property !== 'totalScore' &&
-        column.property !== 'username'
+        column.property !== "rank" &&
+        column.property !== "totalScore" &&
+        column.property !== "username"
       ) {
         return row.cellClassName[
           [this.contestProblems[columnIndex - 3].displayId]
         ];
       } else {
-        if (row.isConcerned && column.property !== 'username') {
-          return 'bg-concerned';
+        if (row.isConcerned && column.property !== "username") {
+          return "bg-concerned";
         }
       }
     },
     getUserHomeByUsername(uid, username) {
       this.$router.push({
-        name: 'UserHome',
+        name: "UserHome",
         query: { username: username, uid: uid },
       });
     },
@@ -390,19 +391,19 @@ export default {
           dataRank[i][problemID] = submissionInfo[problemID];
           let score = submissionInfo[problemID];
           if (timeInfo != null && timeInfo[problemID] != undefined) {
-            cellClass[problemID] = 'oi-100';
+            cellClass[problemID] = "oi-100";
           } else if (score == 0) {
-            cellClass[problemID] = 'oi-0';
+            cellClass[problemID] = "oi-0";
           } else if (score != null) {
-            cellClass[problemID] = 'oi-between';
+            cellClass[problemID] = "oi-between";
           }
         });
         dataRank[i].cellClassName = cellClass;
         if (dataRank[i].rank == -1) {
-          dataRank[i].userCellClassName = 'bg-star';
+          dataRank[i].userCellClassName = "bg-star";
         }
-        if (dataRank[i].gender == 'female') {
-          dataRank[i].userCellClassName = 'bg-female';
+        if (dataRank[i].gender == "female") {
+          dataRank[i].userCellClassName = "bg-female";
         }
       });
       this.dataRank = dataRank;

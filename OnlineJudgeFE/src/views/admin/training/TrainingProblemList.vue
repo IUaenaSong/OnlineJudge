@@ -1,10 +1,10 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Training_Problem_List')
+            $t("m.Training_Problem_List")
           }}</span>
           <div class="filter-row">
             <span>
@@ -13,7 +13,7 @@
                 size="small"
                 icon="el-icon-plus"
                 @click="addProblemDialogVisible = true"
-                >{{ $t('m.Add_From_Public_Problem') }}
+                >{{ $t("m.Add_From_Public_Problem") }}
               </el-button>
             </span>
             <span>
@@ -22,7 +22,7 @@
                 size="small"
                 @click="AddRemoteOJProblemDialogVisible = true"
                 icon="el-icon-plus"
-                >{{ $t('m.Add_Rmote_OJ_Problem') }}
+                >{{ $t("m.Add_Rmote_OJ_Problem") }}
               </el-button>
             </span>
             <span>
@@ -114,8 +114,8 @@
                 placement="top"
                 v-if="
                   isSuperAdmin ||
-                    isProblemAdmin ||
-                    row.author == userInfo.username
+                  isProblemAdmin ||
+                  row.author == userInfo.username
                 "
               >
                 <el-button
@@ -142,7 +142,11 @@
                 </el-button>
               </el-tooltip>
 
-              <el-tooltip effect="dark" :content="$t('m.Remove')" placement="top">
+              <el-tooltip
+                effect="dark"
+                :content="$t('m.Remove')"
+                placement="top"
+              >
                 <el-button
                   icon="el-icon-close"
                   size="mini"
@@ -219,13 +223,13 @@
           <el-input v-model="otherOJProblemId" size="small"></el-input>
         </el-form-item>
 
-        <el-form-item style="text-align:center">
+        <el-form-item style="text-align: center">
           <el-button
             type="primary"
             icon="el-icon-plus"
             @click="addRemoteOJProblem"
             :loading="addRemoteOJproblemLoading"
-            >{{ $t('m.Add') }}
+            >{{ $t("m.Add") }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -234,46 +238,46 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import AddPublicProblem from '@/components/admin/AddPublicProblem.vue';
-import { REMOTE_OJ } from '@/common/constants';
-import { mapGetters } from 'vuex';
-import utils from '@/common/utils';
+import api from "@/common/api";
+import AddPublicProblem from "@/components/admin/AddPublicProblem.vue";
+import { REMOTE_OJ } from "@/common/constants";
+import { mapGetters } from "vuex";
+import utils from "@/common/utils";
 export default {
-  name: 'ProblemList',
+  name: "ProblemList",
   components: {
     AddPublicProblem,
   },
   data() {
     return {
       problemListAuth: 0,
-      oj: 'All',
+      oj: "All",
       pageSize: 10,
       total: 0,
       problemList: [],
       trainingProblemMap: {},
-      keyword: '',
+      keyword: "",
       loading: false,
       currentPage: 1,
-      routeName: '',
-      trainingID: '',
+      routeName: "",
+      trainingID: "",
       // for make public use
-      currentProblemID: '',
+      currentProblemID: "",
       currentRow: {},
       addProblemDialogVisible: false,
       AddRemoteOJProblemDialogVisible: false,
       addRemoteOJproblemLoading: false,
-      otherOJName: 'HDU',
-      otherOJProblemId: '',
+      otherOJName: "HDU",
+      otherOJProblemId: "",
       REMOTE_OJ: {},
-      displayId: '',
+      displayId: "",
     };
   },
   mounted() {
     this.init();
   },
   computed: {
-    ...mapGetters(['userInfo', 'isSuperAdmin', 'isProblemAdmin']),
+    ...mapGetters(["userInfo", "isSuperAdmin", "isProblemAdmin"]),
   },
   methods: {
     init() {
@@ -285,7 +289,7 @@ export default {
 
     goEdit(problemId) {
       this.$router.push({
-        name: 'admin-edit-problem',
+        name: "admin-edit-problem",
         params: { problemId: problemId },
       });
     },
@@ -308,7 +312,7 @@ export default {
         queryExisted: true,
       };
       if (this.problemListAuth != 0) {
-        params['auth'] = this.problemListAuth;
+        params["auth"] = this.problemListAuth;
       }
       api.admin_getTrainingProblemList(params).then(
         (res) => {
@@ -324,25 +328,29 @@ export default {
     },
     handleChangeRank(data) {
       api.admin_updateTrainingProblem(data).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.getProblemList(1);
       });
     },
     changeProblemAuth(row) {
       api.admin_changeProblemAuth(row).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
 
     deleteProblem(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Delete_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .admin_deleteTrainingProblem(id, null)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.getProblemList(this.currentPage);
             })
             .catch(() => {});
@@ -351,14 +359,18 @@ export default {
       );
     },
     removeProblem(pid) {
-      this.$confirm(this.$i18n.t('m.Remove_Training_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Remove_Training_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .admin_deleteTrainingProblem(pid, this.trainingID)
             .then((res) => {
-              this.$msg.success(this.$t('m.Delete_successfully'));
+              this.$msg.success(this.$t("m.Delete_successfully"));
               this.getProblemList(this.currentPage);
             })
             .catch(() => {});
@@ -367,9 +379,12 @@ export default {
       );
     },
     downloadTestCase(problemID) {
-      let url = '/api/file/download-testcase?pid=' + problemID;
+      let url = "/api/file/download-testcase?pid=" + problemID;
       utils.downloadFile(url).then(() => {
-        this.$alert(this.$i18n.t('m.Download_Testcase_Success'), this.$i18n.t('m.Tips'));
+        this.$alert(
+          this.$i18n.t("m.Download_Testcase_Success"),
+          this.$i18n.t("m.Tips")
+        );
       });
     },
     filterByKeyword() {
@@ -377,7 +392,7 @@ export default {
     },
     addRemoteOJProblem() {
       if (!this.otherOJProblemId) {
-        this.$msg.error(this.$i18n.t('m.Problem_ID_is_required'));
+        this.$msg.error(this.$i18n.t("m.Problem_ID_is_required"));
         return;
       }
       this.addRemoteOJproblemLoading = true;
@@ -391,7 +406,7 @@ export default {
           (res) => {
             this.addRemoteOJproblemLoading = false;
             this.AddRemoteOJProblemDialogVisible = false;
-            this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Add_Successfully"));
             this.currentChange(1);
           },
           (err) => {

@@ -97,6 +97,15 @@ public class Constants {
             return false;
 
         }
+
+        public static RemoteOJ getRemoteOJ(String name){
+            for (RemoteOJ remoteOJ : RemoteOJ.values()) {
+                if (remoteOJ.getName().equals(name)) {
+                    return remoteOJ;
+                }
+            }
+            return null;
+        }
     }
 
     

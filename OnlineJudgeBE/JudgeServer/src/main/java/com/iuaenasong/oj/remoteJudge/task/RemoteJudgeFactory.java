@@ -7,7 +7,7 @@
 package com.iuaenasong.oj.remoteJudge.task;
 
 import com.iuaenasong.oj.remoteJudge.task.Impl.*;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 public class RemoteJudgeFactory {
 
@@ -15,7 +15,7 @@ public class RemoteJudgeFactory {
         Constants.RemoteJudge remoteJudge = Constants.RemoteJudge.getTypeByName(judgeName);
         switch (remoteJudge) {
             case HDU_JUDGE:
-                return new HduJudge();
+                return new HDUJudge();
             case CF_JUDGE:
                 return new CodeForcesJudge();
             case POJ_JUDGE:

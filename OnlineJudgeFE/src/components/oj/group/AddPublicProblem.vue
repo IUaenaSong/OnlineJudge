@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align:center">
+  <div style="text-align: center">
     <vxe-input
       v-model="keyword"
       :placeholder="$t('m.Enter_keyword')"
@@ -7,7 +7,7 @@
       size="medium"
       @search-click="filterByKeyword"
       @keyup.enter.native="filterByKeyword"
-      style="margin-bottom:10px"
+      style="margin-bottom: 10px"
     ></vxe-input>
     <vxe-table
       :data="problemList"
@@ -49,29 +49,29 @@
   </div>
 </template>
 <script>
-import api from '@/common/api';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'AddProblemFromPublic',
+  name: "AddProblemFromPublic",
   components: {
     Pagination,
   },
   props: {
     apiMethod: {
       type: String,
-      default: 'getGroupTrainingProblemList'
+      default: "getGroupTrainingProblemList",
     },
     trainingID: {
       type: Number,
-      default: null
+      default: null,
     },
     contestID: {
       type: Number,
-      default: null
+      default: null,
     },
     examID: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -83,18 +83,22 @@ export default {
       problemList: [],
       contest: {},
       exam: {},
-      keyword: '',
+      keyword: "",
     };
   },
   mounted() {
     if (this.contestID) {
-      api.getGroupContest(this.contestID).then((res) => {
+      api
+        .getGroupContest(this.contestID)
+        .then((res) => {
           this.contest = res.data.data;
           this.init();
         })
         .catch(() => {});
     } else if (this.examID) {
-      api.getGroupExam(this.examID).then((res) => {
+      api
+        .getGroupExam(this.examID)
+        .then((res) => {
           this.exam = res.data.data;
           this.init();
         })
@@ -141,8 +145,8 @@ export default {
     addPublicProblem(id, problemId) {
       if (this.contestID) {
         this.$prompt(
-          this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Contest'),
-          'Tips'
+          this.$i18n.t("m.Enter_The_Problem_Display_ID_in_the_Contest"),
+          "Tips"
         ).then(
           ({ value }) => {
             let data = {
@@ -150,13 +154,15 @@ export default {
               cid: this.contestID,
               displayId: value,
             };
-            if (value == null || value == '') {
-              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Contest_is_required'));
+            if (value == null || value == "") {
+              this.$msg.error(
+                this.$t("m.The_Problem_Display_ID_in_the_Contest_is_required")
+              );
               return;
             }
             api.addGroupContestProblemFromPublic(data).then(
               (res) => {
-                this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+                this.$msg.success(this.$i18n.t("m.Add_Successfully"));
                 this.$emit("currentChangeProblem");
                 this.currentChange(1);
               },
@@ -167,8 +173,8 @@ export default {
         );
       } else if (this.examID) {
         this.$prompt(
-          this.$i18n.t('m.Enter_The_Problem_Display_ID_in_the_Exam'),
-          'Tips'
+          this.$i18n.t("m.Enter_The_Problem_Display_ID_in_the_Exam"),
+          "Tips"
         ).then(
           ({ value }) => {
             let data = {
@@ -176,13 +182,15 @@ export default {
               eid: this.examID,
               displayId: value,
             };
-            if (value == null || value == '') {
-              this.$msg.error(this.$t('m.The_Problem_Display_ID_in_the_Exam_is_required'));
+            if (value == null || value == "") {
+              this.$msg.error(
+                this.$t("m.The_Problem_Display_ID_in_the_Exam_is_required")
+              );
               return;
             }
             api.addGroupExamProblemFromPublic(data).then(
               (res) => {
-                this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+                this.$msg.success(this.$i18n.t("m.Add_Successfully"));
                 this.$emit("currentChangeProblem");
                 this.currentChange(1);
               },
@@ -199,7 +207,7 @@ export default {
         };
         api.addGroupTrainingProblemFromPublic(data).then(
           (res) => {
-            this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Add_Successfully"));
             this.$emit("currentChangeProblem");
             this.currentChange(1);
           },

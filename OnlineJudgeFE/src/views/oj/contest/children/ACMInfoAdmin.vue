@@ -1,12 +1,12 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow="always">
         <div slot="header">
-          <span class="panel-title">{{ $t('m.Admin_Helper') }}</span>
+          <span class="panel-title">{{ $t("m.Admin_Helper") }}</span>
           <div class="filter-row">
             <span>
-              {{ $t('m.Auto_Refresh') }}(10s)
+              {{ $t("m.Auto_Refresh") }}(10s)
               <el-switch
                 @change="handleAutoRefresh"
                 v-model="autoRefresh"
@@ -19,7 +19,7 @@
                 size="small"
                 icon="el-icon-refresh"
                 :loading="btnLoading"
-                >{{ $t('m.Refresh') }}</el-button
+                >{{ $t("m.Refresh") }}</el-button
               >
             </span>
           </div>
@@ -47,7 +47,7 @@
           >
             <template v-slot="{ row }">
               <span
-                style="vertical-align: top;"
+                style="vertical-align: top"
                 v-if="disPlayIdMapColor[row.displayId]"
               >
                 <svg
@@ -77,10 +77,10 @@
           >
             <template v-slot="{ row }">
               <el-tag effect="dark" color="#ed3f14" v-if="row.firstBlood">{{
-                $t('m.First_Blood')
+                $t("m.First_Blood")
               }}</el-tag>
               <el-tag effect="dark" color="#19be6b" v-else>{{
-                $t('m.Accepted')
+                $t("m.Accepted")
               }}</el-tag>
             </template>
           </vxe-table-column>
@@ -93,7 +93,7 @@
               <span
                 ><a
                   @click="getUserTotalSubmit(row.username)"
-                  style="color:rgb(87, 163, 243);"
+                  style="color: rgb(87, 163, 243)"
                   >{{ row.username }}</a
                 >
               </span>
@@ -104,17 +104,25 @@
             :title="$t('m.RealName')"
             min-width="150"
           ></vxe-table-column>
-          <vxe-table-column field="checked" :title="$t('m.Status')" min-width="150">
+          <vxe-table-column
+            field="checked"
+            :title="$t('m.Status')"
+            min-width="150"
+          >
             <template v-slot="{ row }">
               <el-tag effect="dark" color="#19be6b" v-if="row.checked">{{
-                $t('m.Checked')
+                $t("m.Checked")
               }}</el-tag>
               <el-tag effect="dark" color="#f90" v-else>{{
-                $t('m.Not_Checked')
+                $t("m.Not_Checked")
               }}</el-tag>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="option" :title="$t('m.Option')" min-width="150">
+          <vxe-table-column
+            field="option"
+            :title="$t('m.Option')"
+            min-width="150"
+          >
             <template v-slot="{ row }">
               <el-button
                 type="primary"
@@ -122,7 +130,7 @@
                 icon="el-icon-circle-check"
                 @click="updateCheckedStatus(row)"
                 round
-                >{{ $t('m.Check_It') }}</el-button
+                >{{ $t("m.Check_It") }}</el-button
               >
             </template>
           </vxe-table-column>
@@ -138,13 +146,13 @@
   </el-row>
 </template>
 <script>
-import api from '@/common/api';
-import { mapState } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import { mapState } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'ACM-Info-Admin',
+  name: "ACM-Info-Admin",
   components: {
-    Pagination
+    Pagination,
   },
   data() {
     return {
@@ -163,7 +171,7 @@ export default {
   },
   beforeCreate() {
     if (this.$store.state.contest.contestProblems.length === 0) {
-      this.$store.dispatch('getContestProblems');
+      this.$store.dispatch("getContestProblems");
     }
   },
   mounted() {
@@ -172,7 +180,7 @@ export default {
   methods: {
     getUserTotalSubmit(username) {
       this.$router.push({
-        name: 'ContestSubmissionList',
+        name: "ContestSubmissionList",
         query: { username: username },
       });
     },
@@ -203,7 +211,7 @@ export default {
       api
         .updateACInfoCheckedStatus(data)
         .then((res) => {
-          this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Update_Successfully"));
           this.getACInfo();
         })
         .catch(() => {});

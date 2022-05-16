@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <section>
-          <b class="question-filter">{{ $t('m.Question_Type') }}</b>
+          <b class="question-filter">{{ $t("m.Question_Type") }}</b>
           <div>
             <el-tag
               size="medium"
@@ -11,7 +11,9 @@
               type="primary"
               :effect="type == 0 ? 'dark' : 'plain'"
               @click="filterByType(0)"
-            > {{ $t('m.All') }} </el-tag>
+            >
+              {{ $t("m.All") }}
+            </el-tag>
             <el-tag
               size="medium"
               class="filter-item"
@@ -20,7 +22,9 @@
               :effect="type == index ? 'dark' : 'plain'"
               :key="index"
               @click="filterByType(index)"
-            > {{ $t('m.' + key.name + '_Question') }} </el-tag>
+            >
+              {{ $t("m." + key.name + "_Question") }}
+            </el-tag>
           </div>
         </section>
         <vxe-table
@@ -33,17 +37,14 @@
           align="center"
           @cell-click="goExamQuestion"
         >
-          <vxe-table-column
-            :title="$t('m.Status')"
-            width="100"
-          >
+          <vxe-table-column :title="$t('m.Status')" width="100">
             <template v-slot="{ row }">
               <el-tag
                 type="success"
                 effect="dark"
                 v-if="submittedQuestion.indexOf(row.displayId) != -1"
               >
-                {{ $t('m.Submitted') }}
+                {{ $t("m.Submitted") }}
               </el-tag>
             </template>
           </vxe-table-column>
@@ -74,14 +75,26 @@
                 class="filter-item"
                 :type="QUESTION_TYPE_REVERSE[row.type].color"
                 effect="dark"
-              > {{ $t('m.' + QUESTION_TYPE_REVERSE[row.type].name + '_Question') }} </el-tag>
+              >
+                {{
+                  $t("m." + QUESTION_TYPE_REVERSE[row.type].name + "_Question")
+                }}
+              </el-tag>
               <el-tag
                 v-if="row.type == 1"
                 size="medium"
                 type="primary"
                 effect="plain"
               >
-                {{ $t('m.' + (row.single ? 'Single_Choice' : 'Indefinite_Multiple_Choice') + '_Question') }}
+                {{
+                  $t(
+                    "m." +
+                      (row.single
+                        ? "Single_Choice"
+                        : "Indefinite_Multiple_Choice") +
+                      "_Question"
+                  )
+                }}
               </el-tag>
             </template>
           </vxe-table-column>
@@ -99,11 +112,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { QUESTION_TYPE_REVERSE } from '@/common/constants';
-import api from '@/common/api';
+import { mapGetters } from "vuex";
+import { QUESTION_TYPE_REVERSE } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'GroupQuestionList',
+  name: "GroupQuestionList",
   data() {
     return {
       questionList: [],
@@ -111,7 +124,7 @@ export default {
       examID: null,
       loading: true,
       submittedQuestion: [],
-    }
+    };
   },
   mounted() {
     this.examID = this.$route.params.examID;
@@ -138,11 +151,9 @@ export default {
         (res) => {
           this.questionList = res.data.data;
           if (this.isAuthenticated) {
-            api.getExamQuestionStatus(this.$route.params.examID).then(
-              (res) => {
-                this.submittedQuestion = res.data.data;
-              }
-            )
+            api.getExamQuestionStatus(this.$route.params.examID).then((res) => {
+              this.submittedQuestion = res.data.data;
+            });
           }
           this.loading = false;
         },
@@ -153,20 +164,20 @@ export default {
     },
     goExamQuestion(event) {
       this.$router.push({
-        name: 'ExamQuestionDetails',
+        name: "ExamQuestionDetails",
         params: {
           questionId: event.row.displayId,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     filterByType(type) {
       this.type = parseInt(type);
       this.currentChange(1);
-    }
+    },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
+    ...mapGetters(["isAuthenticated", "isSuperAdmin", "isGroupAdmin"]),
   },
   watch: {
     $route() {
@@ -178,7 +189,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.mapper.ContestRecordMapper;
 import com.iuaenasong.oj.pojo.entity.contest.ContestRecord;
 import com.iuaenasong.oj.dao.ContestRecordEntityService;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.util.Arrays;
 import java.util.List;

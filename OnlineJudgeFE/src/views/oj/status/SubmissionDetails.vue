@@ -1,13 +1,17 @@
 <template>
   <el-row type="flex" justify="space-around">
-    <el-col :span="24" id="status" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col
+      :span="24"
+      id="status"
+      style="margin-top: 10px; margin-bottom: 10px"
+    >
       <el-alert
         :type="status.type"
         show-icon
         :closable="false"
         effect="dark"
         :class="getbackgroudColor(submission.status)"
-        style="padding: 18px;"
+        style="padding: 18px"
       >
         <template slot="title">
           <span class="title">{{ status.statusName }}</span>
@@ -18,28 +22,34 @@
           </div>
           <div v-else class="content">
             <span class="span-row"
-              >{{ $t('m.Time') }}:
+              >{{ $t("m.Time") }}:
               {{ submissionTimeFormat(submission.time) }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Memory') }}:
+              >{{ $t("m.Memory") }}:
               {{ submissionMemoryFormat(submission.memory) }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Length') }}:
+              >{{ $t("m.Length") }}:
               {{ submissionLengthFormat(submission.length) }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Language') }}: {{ submission.language ? submission.language : '--' }}</span
+              >{{ $t("m.Language") }}:
+              {{ submission.language ? submission.language : "--" }}</span
             >
             <span class="span-row"
-              >{{ $t('m.Author') }}: {{ submission.username ? submission.username : '--' }}</span
+              >{{ $t("m.Author") }}:
+              {{ submission.username ? submission.username : "--" }}</span
             >
           </div>
         </template>
       </el-alert>
     </el-col>
-    <el-col v-if="tableData && !isCE" :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col
+      v-if="tableData && !isCE"
+      :span="24"
+      style="margin-top: 10px; margin-bottom: 10px"
+    >
       <vxe-table
         align="center"
         :data="tableData"
@@ -98,13 +108,13 @@
             <template v-if="row.score != null">
               <el-tooltip placement="top">
                 <div slot="content">
-                  {{ $t('m.Problem_Score') }}：{{
-                    row.score != null ? row.score : $t('m.Nothing')
-                  }}<br />{{ $t('m.OI_Rank_Score') }}：{{
-                    row.oiRankScore != null ? row.oiRankScore : $t('m.Nothing')
+                  {{ $t("m.Problem_Score") }}：{{
+                    row.score != null ? row.score : $t("m.Nothing")
+                  }}<br />{{ $t("m.OI_Rank_Score") }}：{{
+                    row.oiRankScore != null ? row.oiRankScore : $t("m.Nothing")
                   }}<br />
                   {{
-                    $t('m.OI_Rank_Calculation_Rule')
+                    $t("m.OI_Rank_Calculation_Rule")
                   }}:(score*0.1+diffculty*2)*(ac_testcase/sum_testcase)
                 </div>
                 <span>{{ row.score }}</span>
@@ -122,11 +132,15 @@
         </vxe-table-column>
       </vxe-table>
     </el-col>
-    <el-col :span="24" v-if="testCaseResult != null && testCaseResult.length > 0" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col
+      :span="24"
+      v-if="testCaseResult != null && testCaseResult.length > 0"
+      style="margin-top: 10px; margin-bottom: 10px"
+    >
       <el-card shadow="hover">
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Test_point_details')
+            $t("m.Test_point_details")
           }}</span>
         </div>
         <el-row :gutter="10">
@@ -138,20 +152,20 @@
             :xl="3"
             v-for="(item, index) in testCaseResult"
             :key="index"
-            style="margin-top: 5px; margin-bottom: 5px;"
+            style="margin-top: 5px; margin-bottom: 5px"
           >
             <el-tooltip placement="top">
               <div slot="content">
                 <template v-if="item.inputData">
-                  {{ $t('m.Input_File') }}：{{ item.inputData }}<br />
+                  {{ $t("m.Input_File") }}：{{ item.inputData }}<br />
                 </template>
 
                 <template v-if="item.outputData">
-                  {{ $t('m.Output_File') }}：{{ item.outputData }}<br />
+                  {{ $t("m.Output_File") }}：{{ item.outputData }}<br />
                 </template>
 
-                {{ $t('m.Case_tips') }}：{{
-                  item.userOutput ? item.userOutput : $t('m.Nothing')
+                {{ $t("m.Case_tips") }}：{{
+                  item.userOutput ? item.userOutput : $t("m.Nothing")
                 }}
               </div>
               <div
@@ -160,9 +174,9 @@
                 v-if="item.status == JUDGE_STATUS_RESERVE.ac"
               >
                 <span>Test #{{ index + 1 }}:</span>
-                <h2>{{ JUDGE_STATUS[item.status]['short'] }}</h2>
-                <div style="text-align:center;">
-                  {{ item.time + ` ms / ` + item.memory + ' KB'}}
+                <h2>{{ JUDGE_STATUS[item.status]["short"] }}</h2>
+                <div style="text-align: center">
+                  {{ item.time + ` ms / ` + item.memory + " KB" }}
                 </div>
                 <div class="test-run-static">
                   <span v-if="item.score != null">
@@ -179,8 +193,8 @@
                 v-else
               >
                 <span>Test #{{ index + 1 }}: </span>
-                <h2>{{ JUDGE_STATUS[item.status]['short'] }}</h2>
-                <div style="text-align:center;">
+                <h2>{{ JUDGE_STATUS[item.status]["short"] }}</h2>
+                <div style="text-align: center">
                   {{ item.time }}ms/{{ item.memory }}KB
                 </div>
                 <div class="test-run-static">
@@ -200,19 +214,23 @@
     <template
       v-if="
         (submission.code && submission.share && codeShare) ||
-          isMeSubmisson ||
-          isAdminRole ||
-          isGroupRoot
+        isMeSubmisson ||
+        isAdminRole ||
+        isGroupRoot
       "
     >
-      <el-col :span="24" v-if="submission.code" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col
+        :span="24"
+        v-if="submission.code"
+        style="margin-top: 10px; margin-bottom: 10px"
+      >
         <Highlight
           :code="submission.code"
           :language="submission.language"
           :border-color.sync="status.color"
         ></Highlight>
       </el-col>
-      <el-col :span="24" style="margin-bottom: 10px;">
+      <el-col :span="24" style="margin-bottom: 10px">
         <div id="share-btn">
           <el-button
             type="primary"
@@ -220,7 +238,7 @@
             size="large"
             @click="doCopy"
             v-if="submission.code"
-            >{{ $t('m.Copy') }}</el-button
+            >{{ $t("m.Copy") }}</el-button
           >
           <template v-if="codeShare && isMeSubmisson">
             <el-button
@@ -230,7 +248,7 @@
               icon="el-icon-circle-close"
               @click="shareSubmission(false)"
             >
-              {{ $t('m.Unshared') }}
+              {{ $t("m.Unshared") }}
             </el-button>
             <el-button
               v-else-if="!submission.share"
@@ -239,7 +257,7 @@
               icon="el-icon-share"
               @click="shareSubmission(true)"
             >
-              {{ $t('m.Shared') }}
+              {{ $t("m.Shared") }}
             </el-button>
           </template>
         </div>
@@ -249,33 +267,33 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { JUDGE_STATUS, JUDGE_STATUS_RESERVE } from '@/common/constants';
-import utils from '@/common/utils';
-import { addCodeBtn } from '@/common/codeblock';
-import Highlight from '@/components/oj/common/Highlight';
+import api from "@/common/api";
+import { JUDGE_STATUS, JUDGE_STATUS_RESERVE } from "@/common/constants";
+import utils from "@/common/utils";
+import { addCodeBtn } from "@/common/codeblock";
+import Highlight from "@/components/oj/common/Highlight";
 
 export default {
-  name: 'SubmissionDetails',
+  name: "SubmissionDetails",
   components: {
     Highlight,
   },
   data() {
     return {
       submission: {
-        code: '',
-        submitId: '',
-        submitTime: '',
-        pid: '',
-        cid: '',
-        eid: '',
-        displayPid: '',
+        code: "",
+        submitId: "",
+        submitTime: "",
+        pid: "",
+        cid: "",
+        eid: "",
+        displayPid: "",
         status: 0,
-        time: '',
-        memory: '',
-        language: '',
-        author: '',
-        errorMessage: '',
+        time: "",
+        memory: "",
+        language: "",
+        author: "",
+        errorMessage: "",
         share: true,
       },
       tableData: [],
@@ -283,8 +301,8 @@ export default {
       codeShare: true,
       isIOProblem: false,
       loadingTable: false,
-      JUDGE_STATUS: '',
-      JUDGE_STATUS_RESERVE: '',
+      JUDGE_STATUS: "",
+      JUDGE_STATUS_RESERVE: "",
       auth: 0,
     };
   },
@@ -298,10 +316,10 @@ export default {
     doCopy() {
       this.$copyText(this.submission.code).then(
         () => {
-          this.$msg.success(this.$i18n.t('m.Copied_successfully'));
+          this.$msg.success(this.$i18n.t("m.Copied_successfully"));
         },
         () => {
-          this.$msg.success(this.$i18n.t('m.Copied_failed'));
+          this.$msg.success(this.$i18n.t("m.Copied_failed"));
         }
       );
     },
@@ -322,7 +340,7 @@ export default {
       if (row.cid != 0) {
         // 比赛题目
         this.$router.push({
-          name: 'ContestProblemDetails',
+          name: "ContestProblemDetails",
           params: {
             contestID: row.cid,
             problemID: row.displayPid,
@@ -331,7 +349,7 @@ export default {
       } else if (row.eid != 0) {
         // 比赛题目
         this.$router.push({
-          name: 'ExamProblemDetails',
+          name: "ExamProblemDetails",
           params: {
             examID: row.eid,
             problemID: row.displayPid,
@@ -339,7 +357,7 @@ export default {
         });
       } else {
         this.$router.push({
-          name: 'ProblemDetails',
+          name: "ProblemDetails",
           params: {
             problemID: row.displayPid,
           },
@@ -347,19 +365,19 @@ export default {
       }
     },
     getStatusColor(status) {
-      return 'el-tag el-tag--medium status-' + JUDGE_STATUS[status].color;
+      return "el-tag el-tag--medium status-" + JUDGE_STATUS[status].color;
     },
     getTestCaseResultColor(status) {
       return (
-        'background-color:' +
+        "background-color:" +
         JUDGE_STATUS[status].rgb +
-        '!important;border-color:' +
+        "!important;border-color:" +
         JUDGE_STATUS[status].rgb +
-        '!important'
+        "!important"
       );
     },
     getbackgroudColor(status) {
-      return 'status-' + JUDGE_STATUS[status].color;
+      return "status-" + JUDGE_STATUS[status].color;
     },
     getSubmission() {
       this.loadingTable = true;
@@ -367,9 +385,12 @@ export default {
         (res) => {
           let data = res.data.data;
           if (data.gid) {
-            api.getGroupAuth(data.gid).then((res) => {
-              this.auth = res.data.data;
-            }).catch()
+            api
+              .getGroupAuth(data.gid)
+              .then((res) => {
+                this.auth = res.data.data;
+              })
+              .catch();
           }
           this.gid = data.gid;
           if (
@@ -383,7 +404,10 @@ export default {
             }
           }
           // 如果是比赛 需要显示的是比赛题号
-          if (this.$route.params.problemID && (data.submission.cid != 0 || data.submission.eid != 0)) {
+          if (
+            this.$route.params.problemID &&
+            (data.submission.cid != 0 || data.submission.eid != 0)
+          ) {
             data.submission.displayPid = this.$route.params.problemID;
           }
           this.submission = data.submission;
@@ -423,9 +447,9 @@ export default {
         (res) => {
           this.getSubmission();
           if (shared) {
-            this.$msg.success(this.$i18n.t('m.Shared_successfully'));
+            this.$msg.success(this.$i18n.t("m.Shared_successfully"));
           } else {
-            this.$msg.success(this.$i18n.t('m.Cancel_Sharing_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Cancel_Sharing_Successfully"));
           }
         },
         () => {}

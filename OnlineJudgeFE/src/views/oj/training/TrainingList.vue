@@ -1,28 +1,28 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <section>
-          <span class="find-training">{{ $t('m.Search_Training') }}</span>
+          <span class="find-training">{{ $t("m.Search_Training") }}</span>
           <vxe-input
             v-model="query.keyword"
             :placeholder="$t('m.Enter_keyword')"
             type="search"
             size="medium"
-            style="width:230px"
+            style="width: 230px"
             @keyup.enter.native="filterByChange"
             @search-click="filterByChange"
           ></vxe-input>
         </section>
         <section>
-          <b class="training-category">{{ $t('m.Training_Auth') }}</b>
+          <b class="training-category">{{ $t("m.Training_Auth") }}</b>
           <div>
             <el-tag
               size="medium"
               class="category-item"
               :effect="query.auth ? 'plain' : 'dark'"
               @click="filterByAuthType(null)"
-              >{{ $t('m.All') }}</el-tag
+              >{{ $t("m.All") }}</el-tag
             >
             <el-tag
               size="medium"
@@ -32,19 +32,19 @@
               :effect="query.auth == key.name ? 'dark' : 'plain'"
               :key="index"
               @click="filterByAuthType(key.name)"
-            >{{ $t('m.Training_' + key.name) }}</el-tag
+              >{{ $t("m.Training_" + key.name) }}</el-tag
             >
           </div>
         </section>
         <section>
-          <b class="training-category">{{ $t('m.Training_Category') }}</b>
+          <b class="training-category">{{ $t("m.Training_Category") }}</b>
           <div>
             <el-tag
               size="medium"
               class="category-item"
               :style="getCategoryBlockColor(null)"
               @click="filterByCategory(null)"
-              >{{ $t('m.All') }}</el-tag
+              >{{ $t("m.All") }}</el-tag
             >
             <el-tag
               size="medium"
@@ -59,7 +59,7 @@
         </section>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <vxe-table
           border="inner"
@@ -68,7 +68,7 @@
           auto-resize
           :data="trainingList"
           :loading="loading"
-          style="font-size: 14px !important;font-weight: 450 !important;"
+          style="font-size: 14px !important; font-weight: 450 !important"
         >
           <vxe-table-column
             field="rank"
@@ -98,7 +98,7 @@
           >
             <template v-slot="{ row }">
               <el-tag :type="TRAINING_TYPE[row.auth]['color']" effect="dark">
-                {{ $t('m.Training_' + row.auth) }}
+                {{ $t("m.Training_" + row.auth) }}
               </el-tag>
             </template>
           </vxe-table-column>
@@ -113,10 +113,10 @@
                 size="large"
                 :style="
                   'background-color: #fff; color: ' +
-                    row.categoryColor +
-                    '; border-color: ' +
-                    row.categoryColor +
-                    ';'
+                  row.categoryColor +
+                  '; border-color: ' +
+                  row.categoryColor +
+                  ';'
                 "
                 >{{ row.categoryName }}</el-tag
               >
@@ -166,20 +166,20 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
-import { TRAINING_TYPE } from '@/common/constants';
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import utils from "@/common/utils";
+import { TRAINING_TYPE } from "@/common/constants";
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'TrainingList',
+  name: "TrainingList",
   components: {
     Pagination,
   },
   data() {
     return {
       query: {
-        keyword: '',
+        keyword: "",
         categoryId: null,
         auth: null,
       },
@@ -204,7 +204,7 @@ export default {
   methods: {
     init() {
       let route = this.$route.query;
-      this.query.keyword = route.keyword || '';
+      this.query.keyword = route.keyword || "";
       this.query.categoryId = route.categoryId || null;
       this.query.auth = route.auth || null;
       this.getTrainingList();
@@ -227,7 +227,7 @@ export default {
       let query = Object.assign({}, this.query);
       query.currentPage = this.currentPage;
       this.$router.push({
-        path: '/training',
+        path: "/training",
         query: utils.filterEmptyValue(query),
       });
     },
@@ -253,18 +253,18 @@ export default {
 
     toTraining(trainingID) {
       if (!this.isAuthenticated) {
-        this.$msg.warning(this.$i18n.t('m.Please_login_first'));
-        this.$store.dispatch('changeModalStatus', { visible: true });
+        this.$msg.warning(this.$i18n.t("m.Please_login_first"));
+        this.$store.dispatch("changeModalStatus", { visible: true });
       } else {
         this.$router.push({
-          name: 'TrainingDetails',
+          name: "TrainingDetails",
           params: { trainingID: trainingID },
         });
       }
     },
     goUserHome(username) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { username },
       });
     },
@@ -272,33 +272,33 @@ export default {
     getCategoryBlockColor(category) {
       if (category == null) {
         if (!this.query.categoryId) {
-          return 'color: #fff;background-color: #409EFF;background-color: #409EFF';
+          return "color: #fff;background-color: #409EFF;background-color: #409EFF";
         } else {
-          return 'background-color: #fff;color: #409EFF;border-color: #409EFF';
+          return "background-color: #fff;color: #409EFF;border-color: #409EFF";
         }
       }
 
       if (category.id == this.query.categoryId) {
         return (
-          'color: #fff;background-color: ' +
+          "color: #fff;background-color: " +
           category.color +
-          ';background-color: ' +
+          ";background-color: " +
           category.color +
-          ';'
+          ";"
         );
       } else {
         return (
-          'background-color: #fff;color: ' +
+          "background-color: #fff;color: " +
           category.color +
-          ';border-color: ' +
+          ";border-color: " +
           category.color +
-          ';'
+          ";"
         );
       }
     },
   },
   computed: {
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(["isAuthenticated"]),
   },
   watch: {
     $route(newVal, oldVal) {

@@ -21,7 +21,7 @@
       <vxe-table-column :title="$t('m.Auth')" width="100">
         <template v-slot="{ row }">
           <el-tag :type="TRAINING_TYPE[row.auth]['color']" effect="dark">
-            {{ $t('m.Training_' + row.auth) }}
+            {{ $t("m.Training_" + row.auth) }}
           </el-tag>
         </template>
       </vxe-table-column>
@@ -37,9 +37,9 @@
       </vxe-table-column>
       <vxe-table-column min-width="210" :title="$t('m.Info')">
         <template v-slot="{ row }">
-          <p>{{ $t('m.Created_Time') }}: {{ row.gmtCreate | localtime }}</p>
-          <p>{{ $t('m.Update_Time') }}: {{ row.gmtModified | localtime }}</p>
-          <p>{{ $t('m.Creator') }}: {{ row.author }}</p>
+          <p>{{ $t("m.Created_Time") }}: {{ row.gmtCreate | localtime }}</p>
+          <p>{{ $t("m.Update_Time") }}: {{ row.gmtModified | localtime }}</p>
+          <p>{{ $t("m.Creator") }}: {{ row.author }}</p>
         </template>
       </vxe-table-column>
       <vxe-table-column min-width="150" :title="$t('m.Option')">
@@ -112,16 +112,16 @@
 </template>
 
 <script>
-import { TRAINING_TYPE } from '@/common/constants';
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Training from '@/components/oj/group/Training'
+import { TRAINING_TYPE } from "@/common/constants";
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Training from "@/components/oj/group/Training";
 export default {
-  name: 'GroupTrainingList',
+  name: "GroupTrainingList",
   components: {
     Pagination,
-    Training
+    Training,
   },
   data() {
     return {
@@ -130,7 +130,7 @@ export default {
       limit: 10,
       trainingList: [],
       loading: false,
-      routeName: '',
+      routeName: "",
       tid: null,
       editPage: false,
     };
@@ -158,16 +158,22 @@ export default {
     },
     getAdminTrainingList() {
       this.loading = true;
-      api.getGroupAdminTrainingList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.trainingList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupAdminTrainingList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.trainingList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     goEditTraining(trainingID) {
       this.$emit("handleEditPage");
@@ -179,18 +185,24 @@ export default {
     },
     changeTrainingStatus(tid, status) {
       api.changeGroupTrainingStatus(tid, status).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.$emit("currentChange", 1);
         this.currentChange(1);
       });
     },
     deleteTraining(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Training_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
-          api.deleteGroupTraining(id, this.$route.params.groupID)
+      this.$confirm(
+        this.$i18n.t("m.Delete_Training_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
+          api
+            .deleteGroupTraining(id, this.$route.params.groupID)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChange", 1);
               this.currentChange(1);
             })
@@ -201,7 +213,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isGroupRoot']),
+    ...mapGetters(["userInfo", "isGroupRoot"]),
   },
 };
 </script>

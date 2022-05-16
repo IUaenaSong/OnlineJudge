@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import com.iuaenasong.oj.common.exception.SystemError;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.util.Arrays;
 import java.util.HashMap;

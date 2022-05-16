@@ -7,6 +7,8 @@
 package com.iuaenasong.oj.controller.oj;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.annotation.OJAccess;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,6 +76,7 @@ public class ContestController {
 
     @GetMapping("/contest-submissions")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.CONTEST_JUDGE})
     public CommonResult<IPage<JudgeVo>> getContestSubmissionList(@RequestParam(value = "limit", required = false) Integer limit,
                                                                  @RequestParam(value = "currentPage", required = false) Integer currentPage,
                                                                  @RequestParam(value = "onlyMine", required = false) Boolean onlyMine,

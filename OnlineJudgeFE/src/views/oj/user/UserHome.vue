@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-row>
-      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
         <div class="avatar-container">
           <avatar
             :username="profile.username"
@@ -19,7 +19,7 @@
             >
               <el-tag type="success" effect="plain" size="medium">
                 <i class="fa fa-circle">
-                  {{ $t('m.Recent_login_time')
+                  {{ $t("m.Recent_login_time")
                   }}{{ profile.recentLoginTime | fromNow }}</i
                 >
               </el-tag>
@@ -70,7 +70,7 @@
                 class="icon"
                 target="_blank"
               >
-                <i class="fa fa-github"> {{ $t('m.Github') }}</i>
+                <i class="fa fa-github"> {{ $t("m.Github") }}</i>
               </a>
               <a
                 :href="profile.blog"
@@ -78,7 +78,7 @@
                 class="icon"
                 target="_blank"
               >
-                <i class="fa fa-share-alt-square"> {{ $t('m.Blog') }}</i>
+                <i class="fa fa-share-alt-square"> {{ $t("m.Blog") }}</i>
               </a>
             </span>
             <hr id="split" />
@@ -87,7 +87,7 @@
                 <el-card shadow="always" class="submission">
                   <p>
                     <i class="fa fa-th" aria-hidden="true"></i>
-                    {{ $t('m.UserHome_Submissions') }}
+                    {{ $t("m.UserHome_Submissions") }}
                   </p>
                   <p class="data-number">{{ profile.total }}</p>
                 </el-card>
@@ -96,7 +96,7 @@
                 <el-card shadow="always" class="solved">
                   <p>
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
-                    {{ $t('m.UserHome_Solved') }}
+                    {{ $t("m.UserHome_Solved") }}
                   </p>
                   <p class="data-number">{{ profile.solvedList.length }}</p>
                 </el-card>
@@ -105,24 +105,26 @@
                 <el-card shadow="always" class="score">
                   <p>
                     <i class="fa fa-star" aria-hidden="true"></i>
-                    {{ $t('m.UserHome_Score') }}
+                    {{ $t("m.UserHome_Score") }}
                   </p>
-                  <p class="data-number">{{ getSumScore(profile.scoreList) }}</p>
+                  <p class="data-number">
+                    {{ getSumScore(profile.scoreList) }}
+                  </p>
                 </el-card>
               </el-col>
               <el-col :md="6" :sm="24">
                 <el-card shadow="always" class="rating">
                   <p>
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
-                    {{ $t('m.UserHome_Rating') }}
+                    {{ $t("m.UserHome_Rating") }}
                   </p>
                   <p class="data-number">
-                    {{ profile.rating ? profile.rating : '--' }}
+                    {{ profile.rating ? profile.rating : "--" }}
                   </p>
                 </el-card>
               </el-col>
             </el-row>
-            <el-tabs type="card" style="margin-top:1rem;">
+            <el-tabs type="card" style="margin-top: 1rem">
               <el-tab-pane :label="$t('m.Personal_Profile')">
                 <div class="signature-body">
                   <div
@@ -133,14 +135,14 @@
                     v-if="contentHtml"
                   ></div>
                   <div class="markdown-body" v-else>
-                    <p>{{ $t('m.Not_set_yet') }}</p>
+                    <p>{{ $t("m.Not_set_yet") }}</p>
                   </div>
                 </div>
               </el-tab-pane>
               <el-tab-pane :label="$t('m.UserHome_Solved_Problems')"
                 ><div id="problems">
                   <div v-if="profile.solvedList.length">
-                    {{ $t('m.List_Solved_Problems') }}
+                    {{ $t("m.List_Solved_Problems") }}
                     <el-button
                       type="primary"
                       icon="el-icon-refresh"
@@ -149,7 +151,7 @@
                       @click="freshProblemDisplayID"
                     ></el-button>
                   </div>
-                  <p v-else>{{ $t('m.UserHome_Not_Data') }}</p>
+                  <p v-else>{{ $t("m.UserHome_Not_Data") }}</p>
                   <div class="btns">
                     <div
                       class="problem-btn"
@@ -171,10 +173,10 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
-import api from '@/common/api';
-import { addCodeBtn } from '@/common/codeblock';
-import Avatar from 'vue-avatar';
+import { mapActions } from "vuex";
+import api from "@/common/api";
+import { addCodeBtn } from "@/common/codeblock";
+import Avatar from "vue-avatar";
 export default {
   components: {
     Avatar,
@@ -182,12 +184,12 @@ export default {
   data() {
     return {
       profile: {
-        username: '',
-        nickname: '',
-        gender: '',
-        avatar: '',
-        school: '',
-        signature: '',
+        username: "",
+        nickname: "",
+        gender: "",
+        avatar: "",
+        school: "",
+        signature: "",
         total: 0,
         rating: 0,
         score: 0,
@@ -199,7 +201,7 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(['changeDomTitle']),
+    ...mapActions(["changeDomTitle"]),
     init() {
       let uid = this.$route.query.uid;
       let username = this.$route.query.username;
@@ -213,13 +215,13 @@ export default {
     },
     goProblem(problemID) {
       this.$router.push({
-        name: 'ProblemDetails',
+        name: "ProblemDetails",
         params: { problemID: problemID },
       });
     },
     freshProblemDisplayID() {
       this.init();
-      this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+      this.$msg.success(this.$i18n.t("m.Update_Successfully"));
     },
     getSumScore(scoreList) {
       if (scoreList) {
@@ -231,7 +233,7 @@ export default {
       }
     },
     nicknameColor(nickname) {
-      let typeArr = ['', 'success', 'info', 'danger', 'warning'];
+      let typeArr = ["", "success", "info", "danger", "warning"];
       let index = nickname.length % 5;
       return typeArr[index];
     },

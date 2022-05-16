@@ -1,9 +1,11 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Admin_Category') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Admin_Category")
+          }}</span>
           <div class="filter">
             <span>
               <el-button
@@ -11,7 +13,7 @@
                 size="small"
                 @click="openCategoryDialog('add', null)"
                 icon="el-icon-plus"
-                >{{ $t('m.Add_Category') }}
+                >{{ $t("m.Add_Category") }}
               </el-button>
             </span>
           </div>
@@ -52,12 +54,12 @@
         <el-form-item :label="$t('m.Category_Color')" required>
           <el-color-picker v-model="category.color"></el-color-picker>
         </el-form-item>
-        <el-form-item style="text-align:center">
+        <el-form-item style="text-align: center">
           <el-button
             type="primary"
             @click="upsertCategory"
             :loading="upsertCategoryLoading"
-            >{{ $t('m.' + upsertCategoryBtn) }}
+            >{{ $t("m." + upsertCategoryBtn) }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -65,15 +67,15 @@
   </el-row>
 </template>
 <script>
-import api from '@/common/api';
+import api from "@/common/api";
 export default {
   data() {
     return {
       getCategoryListLoading: false,
       categoryList: [],
       addCategoryDialogVisible: false,
-      upsertTitle: 'Add_Category',
-      upsertCategoryBtn: 'To_Add',
+      upsertTitle: "Add_Category",
+      upsertCategoryBtn: "To_Add",
       upsertCategoryLoading: false,
       category: {
         id: null,
@@ -100,14 +102,18 @@ export default {
     },
 
     deleteCategory(category) {
-      this.$confirm(this.$i18n.t('m.Delete_Category_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Delete_Category_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .admin_deleteCategory(category.id)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.categoryList.splice(this.categoryList.indexOf(category), 1);
             })
             .catch(() => {});
@@ -116,17 +122,17 @@ export default {
       );
     },
     openCategoryDialog(action, category) {
-      if (action == 'add') {
-        this.upsertTitle = 'Add_Category';
-        this.upsertCategoryBtn = 'To_Add';
+      if (action == "add") {
+        this.upsertTitle = "Add_Category";
+        this.upsertCategoryBtn = "To_Add";
         this.category = {
           id: null,
           name: null,
           color: null,
         };
       } else {
-        this.upsertTitle = 'Update_Category';
-        this.upsertCategoryBtn = 'To_Update';
+        this.upsertTitle = "Update_Category";
+        this.upsertCategoryBtn = "To_Update";
         this.category = Object.assign({}, category);
       }
       this.addCategoryDialogVisible = true;
@@ -138,7 +144,7 @@ export default {
         api.admin_updateCategory(this.category).then(
           (res) => {
             this.upsertCategoryLoading = false;
-            this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Update_Successfully"));
             this.categoryList.push(res.data.data);
             this.addCategoryDialogVisible = false;
             this.getTrainingCategoryList();
@@ -152,7 +158,7 @@ export default {
         api.admin_addCategory(this.category).then(
           (res) => {
             this.upsertCategoryLoading = false;
-            this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Add_Successfully"));
             this.categoryList.push(res.data.data);
             this.addCategoryDialogVisible = false;
           },

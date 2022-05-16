@@ -15,7 +15,7 @@ import com.iuaenasong.oj.dao.UserAcproblemEntityService;
 import com.iuaenasong.oj.pojo.entity.judge.Judge;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
 import com.iuaenasong.oj.pojo.entity.user.UserAcproblem;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.util.HashMap;
 

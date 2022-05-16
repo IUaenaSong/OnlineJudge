@@ -23,62 +23,65 @@
           </el-tooltip>
         </div>
         <el-menu-item index="/home"
-          ><i class="el-icon-s-home"></i>{{ $t('m.NavBar_Home') }}</el-menu-item
+          ><i class="el-icon-s-home"></i>{{ $t("m.NavBar_Home") }}</el-menu-item
         >
         <el-menu-item index="/problem"
           ><i class="el-icon-s-grid"></i
-          >{{ $t('m.NavBar_Problem') }}</el-menu-item
+          >{{ $t("m.NavBar_Problem") }}</el-menu-item
         >
         <el-menu-item index="/training"
           ><i class="el-icon-s-claim"></i
-          >{{ $t('m.NavBar_Training') }}</el-menu-item
+          >{{ $t("m.NavBar_Training") }}</el-menu-item
         >
         <el-menu-item index="/contest"
           ><i class="el-icon-trophy"></i
-          >{{ $t('m.NavBar_Contest') }}</el-menu-item
+          >{{ $t("m.NavBar_Contest") }}</el-menu-item
         >
-        <el-menu-item index="/status"
+        <el-menu-item
+          index="/status"
+          v-if="websiteConfig.openPublicJudge || isSuperAdmin"
           ><i class="el-icon-s-marketing"></i
-          >{{ $t('m.NavBar_Status') }}</el-menu-item
+          >{{ $t("m.NavBar_Status") }}</el-menu-item
         >
         <el-submenu index="rank">
           <template slot="title"
-            ><i class="el-icon-s-data"></i>{{ $t('m.NavBar_Rank') }}</template
+            ><i class="el-icon-s-data"></i>{{ $t("m.NavBar_Rank") }}</template
           >
           <el-menu-item index="/acm-rank">{{
-            $t('m.NavBar_ACM_Rank')
+            $t("m.NavBar_ACM_Rank")
           }}</el-menu-item>
           <el-menu-item index="/oi-rank">{{
-            $t('m.NavBar_OI_Rank')
+            $t("m.NavBar_OI_Rank")
           }}</el-menu-item>
         </el-submenu>
-
-        <el-menu-item index="/discussion"
+        <el-menu-item
+          index="/discussion"
+          v-if="websiteConfig.openPublicDiscussion || isSuperAdmin"
           ><i class="el-icon-s-comment"></i
-          >{{ $t('m.NavBar_Discussion') }}</el-menu-item
+          >{{ $t("m.NavBar_Discussion") }}</el-menu-item
         >
-
         <el-menu-item index="/group"
-          ><i class="fa fa-group" style="margin-right: 5px;width: 24px;text-align: center;"></i
-          >{{ $t('m.NavBar_Group') }}</el-menu-item
+          ><i
+            class="fa fa-group"
+            style="margin-right: 5px; width: 24px; text-align: center"
+          ></i
+          >{{ $t("m.NavBar_Group") }}</el-menu-item
         >
-
         <el-submenu index="about">
           <template slot="title"
-            ><i class="el-icon-info"></i>{{ $t('m.NavBar_About') }}</template
+            ><i class="el-icon-info"></i>{{ $t("m.NavBar_About") }}</template
           >
           <el-menu-item index="/introduction">{{
-            $t('m.NavBar_Introduction')
+            $t("m.NavBar_Introduction")
           }}</el-menu-item>
           <el-menu-item index="/developer">{{
-            $t('m.NavBar_Developer')
+            $t("m.NavBar_Developer")
           }}</el-menu-item>
         </el-submenu>
-
         <template v-if="!isAuthenticated">
           <div class="btn-menu">
             <el-button type="primary" round @click="handleBtnClick('Login')"
-              >{{ $t('m.NavBar_Login') }}
+              >{{ $t("m.NavBar_Login") }}
             </el-button>
             <el-button
               v-if="websiteConfig.register"
@@ -86,7 +89,7 @@
               type="danger"
               @click="handleBtnClick('Register')"
               style="margin-left: 5px"
-              >{{ $t('m.NavBar_Register') }}
+              >{{ $t("m.NavBar_Register") }}
             </el-button>
           </div>
         </template>
@@ -100,22 +103,21 @@
             <span class="el-dropdown-link">
               {{ userInfo.username }}<i class="el-icon-caret-bottom"></i>
             </span>
-
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="/user-home">{{
-                $t('m.NavBar_UserHome')
+                $t("m.NavBar_UserHome")
               }}</el-dropdown-item>
               <el-dropdown-item command="/status?onlyMine=true">{{
-                $t('m.NavBar_Submissions')
+                $t("m.NavBar_Submissions")
               }}</el-dropdown-item>
               <el-dropdown-item command="/setting">{{
-                $t('m.NavBar_Setting')
+                $t("m.NavBar_Setting")
               }}</el-dropdown-item>
               <el-dropdown-item v-if="isAdminRole" command="/admin">{{
-                $t('m.NavBar_Management')
+                $t("m.NavBar_Management")
               }}</el-dropdown-item>
               <el-dropdown-item divided command="/logout">{{
-                $t('m.NavBar_Logout')
+                $t("m.NavBar_Logout")
               }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -137,46 +139,45 @@
               <svg
                 v-if="
                   unreadMessage.comment > 0 ||
-                    unreadMessage.reply > 0 ||
-                    unreadMessage.like > 0 ||
-                    unreadMessage.sys > 0 ||
-                    unreadMessage.mine > 0
+                  unreadMessage.reply > 0 ||
+                  unreadMessage.like > 0 ||
+                  unreadMessage.sys > 0 ||
+                  unreadMessage.mine > 0
                 "
                 width="10"
                 height="10"
-                style="vertical-align: top;margin-left: -11px;margin-top: 3px;"
+                style="vertical-align: top; margin-left: -11px; margin-top: 3px"
               >
-                <circle cx="5" cy="5" r="5" style="fill: red;"></circle>
+                <circle cx="5" cy="5" r="5" style="fill: red"></circle>
               </svg>
             </span>
-
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="/message/discuss">
-                <span>{{ $t('m.DiscussMsg') }}</span>
+                <span>{{ $t("m.DiscussMsg") }}</span>
                 <span class="drop-msg-count" v-if="unreadMessage.comment > 0">
                   <MsgSvg :total="unreadMessage.comment"></MsgSvg>
                 </span>
               </el-dropdown-item>
               <el-dropdown-item command="/message/reply">
-                <span>{{ $t('m.ReplyMsg') }}</span>
+                <span>{{ $t("m.ReplyMsg") }}</span>
                 <span class="drop-msg-count" v-if="unreadMessage.reply > 0">
                   <MsgSvg :total="unreadMessage.reply"></MsgSvg>
                 </span>
               </el-dropdown-item>
               <el-dropdown-item command="/message/like">
-                <span>{{ $t('m.LikeMsg') }}</span>
+                <span>{{ $t("m.LikeMsg") }}</span>
                 <span class="drop-msg-count" v-if="unreadMessage.like > 0">
                   <MsgSvg :total="unreadMessage.like"></MsgSvg>
                 </span>
               </el-dropdown-item>
               <el-dropdown-item command="/message/sys">
-                <span>{{ $t('m.SysMsg') }}</span>
+                <span>{{ $t("m.SysMsg") }}</span>
                 <span class="drop-msg-count" v-if="unreadMessage.sys > 0">
                   <MsgSvg :total="unreadMessage.sys"></MsgSvg>
                 </span>
               </el-dropdown-item>
               <el-dropdown-item command="/message/mine">
-                <span>{{ $t('m.MineMsg') }}</span>
+                <span>{{ $t("m.MineMsg") }}</span>
                 <span class="drop-msg-count" v-if="unreadMessage.mine > 0">
                   <MsgSvg :total="unreadMessage.mine"></MsgSvg>
                 </span>
@@ -186,52 +187,51 @@
         </template>
       </el-menu>
     </div>
-    <div v-else style="top:0px;left:0px;">
+    <div v-else style="top: 0px; left: 0px">
       <mu-appbar class="mobile-nav" color="primary">
         <mu-button icon slot="left" @click="opendrawer = !opendrawer">
           <i class="el-icon-s-unfold"></i>
         </mu-button>
         {{
-          websiteConfig.shortName ? websiteConfig.shortName.toUpperCase() : 'OJ'
+          websiteConfig.shortName ? websiteConfig.shortName : "OJ"
         }}
         <mu-button
           flat
           slot="right"
           @click="handleBtnClick('Login')"
           v-show="!isAuthenticated"
-          >{{ $t('m.NavBar_Login') }}</mu-button
+          >{{ $t("m.NavBar_Login") }}</mu-button
         >
         <mu-button
           flat
           slot="right"
           @click="handleBtnClick('Register')"
           v-show="!isAuthenticated && websiteConfig.register"
-          >{{ $t('m.NavBar_Register') }}</mu-button
+          >{{ $t("m.NavBar_Register") }}</mu-button
         >
-
         <mu-menu slot="right" v-show="isAuthenticated" :open.sync="openmsgmenu">
           <mu-button flat>
             <mu-icon value=":el-icon-message-solid" size="24"></mu-icon>
             <svg
               v-if="
                 unreadMessage.comment > 0 ||
-                  unreadMessage.reply > 0 ||
-                  unreadMessage.like > 0 ||
-                  unreadMessage.sys > 0 ||
-                  unreadMessage.mine > 0
+                unreadMessage.reply > 0 ||
+                unreadMessage.like > 0 ||
+                unreadMessage.sys > 0 ||
+                unreadMessage.mine > 0
               "
               width="10"
               height="10"
-              style="margin-left: -11px;margin-top: -13px;"
+              style="margin-left: -11px; margin-top: -13px"
             >
-              <circle cx="5" cy="5" r="5" style="fill: red;"></circle>
+              <circle cx="5" cy="5" r="5" style="fill: red"></circle>
             </svg>
           </mu-button>
           <mu-list slot="content" @change="handleCommand">
             <mu-list-item button value="/message/discuss">
               <mu-list-item-content>
                 <mu-list-item-title>
-                  {{ $t('m.DiscussMsg') }}
+                  {{ $t("m.DiscussMsg") }}
                   <span class="drop-msg-count" v-if="unreadMessage.comment > 0">
                     <MsgSvg :total="unreadMessage.comment"></MsgSvg>
                   </span>
@@ -242,7 +242,7 @@
             <mu-list-item button value="/message/reply">
               <mu-list-item-content>
                 <mu-list-item-title>
-                  {{ $t('m.ReplyMsg') }}
+                  {{ $t("m.ReplyMsg") }}
                   <span class="drop-msg-count" v-if="unreadMessage.reply > 0">
                     <MsgSvg :total="unreadMessage.reply"></MsgSvg>
                   </span>
@@ -253,7 +253,7 @@
             <mu-list-item button value="/message/like">
               <mu-list-item-content>
                 <mu-list-item-title>
-                  {{ $t('m.LikeMsg') }}
+                  {{ $t("m.LikeMsg") }}
                   <span class="drop-msg-count" v-if="unreadMessage.like > 0">
                     <MsgSvg :total="unreadMessage.like"></MsgSvg>
                   </span>
@@ -264,7 +264,7 @@
             <mu-list-item button value="/message/sys">
               <mu-list-item-content>
                 <mu-list-item-title>
-                  {{ $t('m.SysMsg') }}
+                  {{ $t("m.SysMsg") }}
                   <span class="drop-msg-count" v-if="unreadMessage.sys > 0">
                     <MsgSvg :total="unreadMessage.sys"></MsgSvg>
                   </span>
@@ -272,11 +272,10 @@
               </mu-list-item-content>
             </mu-list-item>
             <mu-divider></mu-divider>
-
             <mu-list-item button value="/message/mine">
               <mu-list-item-content>
                 <mu-list-item-title>
-                  {{ $t('m.MineMsg') }}
+                  {{ $t("m.MineMsg") }}
                   <span class="drop-msg-count" v-if="unreadMessage.mine > 0">
                     <MsgSvg :total="unreadMessage.mine"></MsgSvg>
                   </span>
@@ -285,7 +284,6 @@
             </mu-list-item>
           </mu-list>
         </mu-menu>
-
         <mu-menu
           slot="right"
           v-show="isAuthenticated"
@@ -306,7 +304,7 @@
             <mu-list-item button value="/user-home">
               <mu-list-item-content>
                 <mu-list-item-title>{{
-                  $t('m.NavBar_UserHome')
+                  $t("m.NavBar_UserHome")
                 }}</mu-list-item-title>
               </mu-list-item-content>
             </mu-list-item>
@@ -314,7 +312,7 @@
             <mu-list-item button value="/status?onlyMine=true">
               <mu-list-item-content>
                 <mu-list-item-title>{{
-                  $t('m.NavBar_Submissions')
+                  $t("m.NavBar_Submissions")
                 }}</mu-list-item-title>
               </mu-list-item-content>
             </mu-list-item>
@@ -322,7 +320,7 @@
             <mu-list-item button value="/setting">
               <mu-list-item-content>
                 <mu-list-item-title>{{
-                  $t('m.NavBar_Setting')
+                  $t("m.NavBar_Setting")
                 }}</mu-list-item-title>
               </mu-list-item-content>
             </mu-list-item>
@@ -330,23 +328,21 @@
             <mu-list-item button value="/admin" v-show="isAdminRole">
               <mu-list-item-content>
                 <mu-list-item-title>{{
-                  $t('m.NavBar_Management')
+                  $t("m.NavBar_Management")
                 }}</mu-list-item-title>
               </mu-list-item-content>
             </mu-list-item>
             <mu-divider></mu-divider>
-
             <mu-list-item button value="/logout">
               <mu-list-item-content>
                 <mu-list-item-title>{{
-                  $t('m.NavBar_Logout')
+                  $t("m.NavBar_Logout")
                 }}</mu-list-item-title>
               </mu-list-item-content>
             </mu-list-item>
           </mu-list>
         </mu-menu>
       </mu-appbar>
-
       <mu-drawer :open.sync="opendrawer" :docked="false" :right="false">
         <mu-list toggle-nested>
           <mu-list-item
@@ -358,9 +354,8 @@
             <mu-list-item-action>
               <mu-icon value=":fa fa-home" size="24"></mu-icon>
             </mu-list-item-action>
-            <mu-list-item-title>{{ $t('m.NavBar_Home') }}</mu-list-item-title>
+            <mu-list-item-title>{{ $t("m.NavBar_Home") }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             to="/problem"
@@ -371,10 +366,9 @@
               <mu-icon value=":el-icon-s-grid" size="24"></mu-icon>
             </mu-list-item-action>
             <mu-list-item-title>{{
-              $t('m.NavBar_Problem')
+              $t("m.NavBar_Problem")
             }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             to="/training"
@@ -385,10 +379,9 @@
               <mu-icon value=":el-icon-s-claim" size="24"></mu-icon>
             </mu-list-item-action>
             <mu-list-item-title>{{
-              $t('m.NavBar_Training')
+              $t("m.NavBar_Training")
             }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             to="/contest"
@@ -399,11 +392,11 @@
               <mu-icon value=":el-icon-trophy" size="24"></mu-icon>
             </mu-list-item-action>
             <mu-list-item-title>{{
-              $t('m.NavBar_Contest')
+              $t("m.NavBar_Contest")
             }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
+            v-if="websiteConfig.openPublicJudge || isSuperAdmin"
             button
             to="/status"
             @click="opendrawer = !opendrawer"
@@ -412,9 +405,8 @@
             <mu-list-item-action>
               <mu-icon value=":el-icon-s-marketing" size="24"></mu-icon>
             </mu-list-item-action>
-            <mu-list-item-title>{{ $t('m.NavBar_Status') }}</mu-list-item-title>
+            <mu-list-item-title>{{ $t("m.NavBar_Status") }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             :ripple="false"
@@ -425,9 +417,13 @@
             <mu-list-item-action>
               <mu-icon value=":el-icon-s-data" size="24"></mu-icon>
             </mu-list-item-action>
-            <mu-list-item-title>{{ $t('m.NavBar_Rank') }}</mu-list-item-title>
+            <mu-list-item-title>{{ $t("m.NavBar_Rank") }}</mu-list-item-title>
             <mu-list-item-action>
-              <i class="el-icon-arrow-down"></i>
+              <mu-icon
+                class="toggle-icon"
+                size="24"
+                value=":el-icon-arrow-down"
+              ></mu-icon>
             </mu-list-item-action>
             <mu-list-item
               button
@@ -438,7 +434,7 @@
               active-class="mobile-menu-active"
             >
               <mu-list-item-title>{{
-                $t('m.NavBar_ACM_Rank')
+                $t("m.NavBar_ACM_Rank")
               }}</mu-list-item-title>
             </mu-list-item>
             <mu-list-item
@@ -450,12 +446,12 @@
               active-class="mobile-menu-active"
             >
               <mu-list-item-title>{{
-                $t('m.NavBar_OI_Rank')
+                $t("m.NavBar_OI_Rank")
               }}</mu-list-item-title>
             </mu-list-item>
           </mu-list-item>
-
           <mu-list-item
+            v-if="websiteConfig.openPublicDiscussion || isSuperAdmin"
             button
             to="/discussion"
             @click="opendrawer = !opendrawer"
@@ -465,10 +461,9 @@
               <mu-icon value=":fa fa-comments" size="24"></mu-icon>
             </mu-list-item-action>
             <mu-list-item-title>{{
-              $t('m.NavBar_Discussion')
+              $t("m.NavBar_Discussion")
             }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             to="/group"
@@ -478,11 +473,8 @@
             <mu-list-item-action>
               <mu-icon value=":fa fa-group" size="24"></mu-icon>
             </mu-list-item-action>
-            <mu-list-item-title>{{
-              $t('m.NavBar_Group')
-            }}</mu-list-item-title>
+            <mu-list-item-title>{{ $t("m.NavBar_Group") }}</mu-list-item-title>
           </mu-list-item>
-
           <mu-list-item
             button
             :ripple="false"
@@ -493,9 +485,13 @@
             <mu-list-item-action>
               <mu-icon value=":el-icon-info" size="24"></mu-icon>
             </mu-list-item-action>
-            <mu-list-item-title>{{ $t('m.NavBar_About') }}</mu-list-item-title>
+            <mu-list-item-title>{{ $t("m.NavBar_About") }}</mu-list-item-title>
             <mu-list-item-action>
-              <i class="el-icon-arrow-down"></i>
+              <mu-icon
+                class="toggle-icon"
+                size="24"
+                value=":el-icon-arrow-down"
+              ></mu-icon>
             </mu-list-item-action>
             <mu-list-item
               button
@@ -506,7 +502,7 @@
               active-class="mobile-menu-active"
             >
               <mu-list-item-title>{{
-                $t('m.NavBar_Introduction')
+                $t("m.NavBar_Introduction")
               }}</mu-list-item-title>
             </mu-list-item>
             <mu-list-item
@@ -518,7 +514,7 @@
               active-class="mobile-menu-active"
             >
               <mu-list-item-title>{{
-                $t('m.NavBar_Developer')
+                $t("m.NavBar_Developer")
               }}</mu-list-item-title>
             </mu-list-item>
           </mu-list-item>
@@ -538,13 +534,13 @@
   </div>
 </template>
 <script>
-import Login from '@/components/oj/common/Login';
-import Register from '@/components/oj/common/Register';
-import ResetPwd from '@/components/oj/common/ResetPassword';
-import MsgSvg from '@/components/oj/msg/MsgSvg';
-import { mapGetters, mapActions } from 'vuex';
-import Avatar from 'vue-avatar';
-import api from '@/common/api';
+import Login from "@/components/oj/common/Login";
+import Register from "@/components/oj/common/Register";
+import ResetPwd from "@/components/oj/common/ResetPassword";
+import MsgSvg from "@/components/oj/msg/MsgSvg";
+import { mapGetters, mapActions } from "vuex";
+import Avatar from "vue-avatar";
+import api from "@/common/api";
 export default {
   components: {
     Login,
@@ -575,15 +571,14 @@ export default {
       opendrawer: false,
       openusermenu: false,
       openmsgmenu: false,
-      openSideMenu: '',
-      imgUrl: require('@/assets/logo.png'),
-
+      openSideMenu: "",
+      imgUrl: require("@/assets/logo.png"),
       avatarStyle:
-        'display: inline-flex;width: 30px;height: 30px;border-radius: 50%;align-items: center;justify-content: center;text-align: center;user-select: none;',
+        "display: inline-flex;width: 30px;height: 30px;border-radius: 50%;align-items: center;justify-content: center;text-align: center;user-select: none;",
     };
   },
   methods: {
-    ...mapActions(['changeModalStatus', 'getWebsiteConfig']),
+    ...mapActions(["changeModalStatus", "getWebsiteConfig"]),
     page_width() {
       let screenWidth = window.screen.width;
       if (screenWidth < 1050) {
@@ -601,51 +596,51 @@ export default {
     },
     handleRoute(route) {
       //电脑端导航栏路由跳转事件
-      if (route && route.split('/')[1] != 'admin') {
+      if (route && route.split("/")[1] != "admin") {
         this.$router.push(route);
       } else {
-        window.open('/admin/');
+        window.open("/admin/");
       }
     },
     handleCommand(route) {
       // 移动端导航栏路由跳转事件
       this.openusermenu = false;
       this.openmsgmenu = false;
-      if (route && route.split('/')[1] != 'admin') {
+      if (route && route.split("/")[1] != "admin") {
         this.$router.push(route);
       } else {
-        window.open('/admin/');
+        window.open("/admin/");
       }
     },
     getUnreadMsgCount() {
       api.getUnreadMsgCount().then((res) => {
         let data = res.data.data;
-        this.$store.dispatch('updateUnreadMessageCount', data);
+        this.$store.dispatch("updateUnreadMessageCount", data);
         let sumMsg =
           data.comment + data.reply + data.like + data.mine + data.sys;
         if (sumMsg > 0) {
-          if (this.webLanguage == 'zh-CN') {
+          if (this.webLanguage == "zh-CN") {
             this.$notify.info({
-              title: '未读消息',
+              title: "未读消息",
               message:
-                '亲爱的【' +
+                "亲爱的【" +
                 this.userInfo.username +
-                '】，您有最新的' +
+                "】，您有最新的" +
                 sumMsg +
-                '条未读消息，请注意查看！',
-              position: 'bottom-right',
+                "条未读消息，请注意查看！",
+              position: "bottom-right",
               duration: 30000,
             });
           } else {
             this.$notify.info({
-              title: 'Unread Message',
+              title: "Unread Message",
               message:
-                'Dear【' +
+                "Dear【" +
                 this.userInfo.username +
-                '】, you have the latest ' +
+                "】, you have the latest " +
                 sumMsg +
-                ' unread messages. Please check them!',
-              position: 'bottom-right',
+                " unread messages. Please check them!",
+              position: "bottom-right",
               duration: 30000,
             });
           }
@@ -653,25 +648,28 @@ export default {
       });
     },
     changeLanguage() {
-      this.$store.commit('changeWebLanguage', { language: this.webLanguage == 'zh-CN' ? 'en-US' : 'zh-CN' });
+      this.$store.commit("changeWebLanguage", {
+        language: this.webLanguage == "zh-CN" ? "en-US" : "zh-CN",
+      });
     },
   },
   computed: {
     ...mapGetters([
-      'modalStatus',
-      'userInfo',
-      'isAuthenticated',
-      'isAdminRole',
-      'token',
-      'websiteConfig',
-      'unreadMessage',
-      'webLanguage',
+      "modalStatus",
+      "userInfo",
+      "isAuthenticated",
+      "isAdminRole",
+      "token",
+      "websiteConfig",
+      "unreadMessage",
+      "webLanguage",
+      "isSuperAdmin",
     ]),
     avatar() {
       return this.$store.getters.userInfo.avatar;
     },
     activeMenuName() {
-      return '/' + this.$route.path.split('/')[1];
+      return "/" + this.$route.path.split("/")[1];
     },
     modalVisible: {
       get() {
@@ -684,13 +682,13 @@ export default {
     title: {
       get() {
         let ojName = this.websiteConfig.shortName
-          ? this.websiteConfig.shortName.toUpperCase()
-          : 'OJ';
-        if (this.modalStatus.mode == 'ResetPwd') {
-          return this.$i18n.t('m.Dialog_Reset_Password') + ' - ' + ojName;
+          ? this.websiteConfig.shortName
+          : "OJ";
+        if (this.modalStatus.mode == "ResetPwd") {
+          return this.$i18n.t("m.Dialog_Reset_Password") + " - " + ojName;
         } else {
           return (
-            this.$i18n.t('m.Dialog_' + this.modalStatus.mode) + ' - ' + ojName
+            this.$i18n.t("m.Dialog_" + this.modalStatus.mode) + " - " + ojName
           );
         }
       },
@@ -733,7 +731,6 @@ export default {
   height: auto;
   width: 100%;
 }
-
 #drawer {
   position: fixed;
   left: 0px;
@@ -743,7 +740,6 @@ export default {
   box-shadow: 00px 0px 00px rgb(255, 255, 255), 0px 0px 10px rgb(255, 255, 255),
     0px 0px 0px rgb(255, 255, 255), 1px 1px 0px rgb(218, 218, 218);
 }
-
 .logo {
   margin-left: 2%;
   margin-right: 2%;

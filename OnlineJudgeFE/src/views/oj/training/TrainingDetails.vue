@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
         <el-card shadow class="training-header">
           <div slot="header">
             <span class="panel-title">{{ training.title }}</span>
@@ -22,7 +22,7 @@
               </el-tooltip>
             </div>
             <div class="count">
-              {{ training.acCount + ' / ' + training.problemCount }}
+              {{ training.acCount + " / " + training.problemCount }}
             </div>
           </template>
         </el-card>
@@ -33,24 +33,28 @@
         <el-tab-pane name="TrainingDetails" lazy>
           <span slot="label"
             ><i class="el-icon-s-home"></i>&nbsp;{{
-              $t('m.Training_Introduction')
+              $t("m.Training_Introduction")
             }}</span
           >
           <el-row :gutter="20">
-            <el-col :sm="24" :md="7" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col
+              :sm="24"
+              :md="7"
+              style="margin-top: 10px; margin-bottom: 10px"
+            >
               <el-card
                 v-if="trainingPasswordFormVisible"
                 class="password-form-card"
               >
                 <div slot="header">
-                  <span class="panel-title" style="color: #e6a23c;"
+                  <span class="panel-title" style="color: #e6a23c"
                     ><i class="el-icon-warning">
-                      {{ $t('m.Password_Required') }}</i
+                      {{ $t("m.Password_Required") }}</i
                     ></span
                   >
                 </div>
                 <h3>
-                  {{ $t('m.To_Enter_Training_Need_Password') }}
+                  {{ $t("m.To_Enter_Training_Need_Password") }}
                 </h3>
                 <el-form>
                   <el-input
@@ -58,14 +62,14 @@
                     type="password"
                     :placeholder="$t('m.Enter_the_training_password')"
                     @keydown.enter.native="checkPassword"
-                    style="width:70%"
+                    style="width: 70%"
                   />
                   <el-button
                     type="primary"
                     @click="checkPassword"
                     :loading="btnLoading"
-                    style="margin:5px"
-                    >{{ $t('m.OK') }}</el-button
+                    style="margin: 5px"
+                    >{{ $t("m.OK") }}</el-button
                   >
                 </el-form>
               </el-card>
@@ -73,7 +77,7 @@
                 <div class="info-rows">
                   <div>
                     <span>
-                      <span>{{ $t('m.Training_Number') }}</span>
+                      <span>{{ $t("m.Training_Number") }}</span>
                     </span>
                     <span>
                       <span>{{ training.rank }}</span>
@@ -81,20 +85,22 @@
                   </div>
                   <div>
                     <span>
-                      <span>{{ $t('m.Training_Auth') }}</span>
+                      <span>{{ $t("m.Training_Auth") }}</span>
                     </span>
                     <span>
                       <el-tag
                         :type="TRAINING_TYPE[training.auth].color"
                         effect="dark"
                       >
-                        {{ $t('m.Training_' + TRAINING_TYPE[training.auth].name) }}
+                        {{
+                          $t("m.Training_" + TRAINING_TYPE[training.auth].name)
+                        }}
                       </el-tag>
                     </span>
                   </div>
                   <div>
                     <span>
-                      <span>{{ $t('m.Training_Category') }}</span>
+                      <span>{{ $t("m.Training_Category") }}</span>
                     </span>
                     <span>
                       <span
@@ -103,9 +109,9 @@
                           class="category-item"
                           :style="
                             'color: #fff;background-color: ' +
-                              training.categoryName +
-                              ';background-color: ' +
-                              training.categoryColor
+                            training.categoryName +
+                            ';background-color: ' +
+                            training.categoryColor
                           "
                           >{{ training.categoryName }}</el-tag
                         ></span
@@ -115,7 +121,7 @@
 
                   <div>
                     <span>
-                      <span>{{ $t('m.Training_Total_Problems') }}</span>
+                      <span>{{ $t("m.Training_Total_Problems") }}</span>
                     </span>
                     <span>
                       <span>{{ training.problemCount }}</span>
@@ -123,7 +129,7 @@
                   </div>
                   <div>
                     <span>
-                      <span>{{ $t('m.Author') }}</span>
+                      <span>{{ $t("m.Author") }}</span>
                     </span>
                     <span>
                       <span
@@ -137,7 +143,7 @@
                   </div>
                   <div>
                     <span>
-                      <span>{{ $t('m.Recent_Update') }}</span>
+                      <span>{{ $t("m.Recent_Update") }}</span>
                     </span>
                     <span>
                       <span>{{ training.gmtModified | localtime }}</span>
@@ -146,11 +152,15 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :sm="24" :md="17" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col
+              :sm="24"
+              :md="17"
+              style="margin-top: 10px; margin-bottom: 10px"
+            >
               <el-card>
                 <div slot="header">
                   <span class="panel-title">{{
-                    $t('m.Training_Introduction')
+                    $t("m.Training_Introduction")
                   }}</span>
                 </div>
                 <div
@@ -171,7 +181,7 @@
         >
           <span slot="label"
             ><i class="fa fa-list" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Problem_List')
+              $t("m.Problem_List")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -189,7 +199,7 @@
         >
           <span slot="label"
             ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Record_List')
+              $t("m.Record_List")
             }}</span
           >
           <transition name="el-fade-in-linear">
@@ -202,37 +212,37 @@
 </template>
 
 <script>
-import { TRAINING_TYPE } from '@/common/constants';
-import { mapState, mapGetters, mapActions } from 'vuex';
-import api from '@/common/api';
+import { TRAINING_TYPE } from "@/common/constants";
+import { mapState, mapGetters, mapActions } from "vuex";
+import api from "@/common/api";
 export default {
   data() {
     return {
-      route_name: 'TrainingDetails',
+      route_name: "TrainingDetails",
       TRAINING_TYPE: {},
-      trainingPassword: '',
+      trainingPassword: "",
       btnLoading: false,
       customColors: [
-        { color: '#909399', percentage: 20 },
-        { color: '#f56c6c', percentage: 40 },
-        { color: '#e6a23c', percentage: 60 },
-        { color: '#1989fa', percentage: 80 },
-        { color: '#67c23a', percentage: 100 },
+        { color: "#909399", percentage: 20 },
+        { color: "#f56c6c", percentage: 40 },
+        { color: "#e6a23c", percentage: 60 },
+        { color: "#1989fa", percentage: 80 },
+        { color: "#67c23a", percentage: 100 },
       ],
     };
   },
   created() {
     this.route_name = this.$route.name;
-    if (this.route_name == 'TrainingProblemDetails') {
-      this.route_name = 'TrainingProblemList';
+    if (this.route_name == "TrainingProblemDetails") {
+      this.route_name = "TrainingProblemList";
     }
     this.TRAINING_TYPE = Object.assign({}, TRAINING_TYPE);
-    this.$store.dispatch('getTraining').then((res) => {
+    this.$store.dispatch("getTraining").then((res) => {
       this.changeDomTitle({ title: res.data.data.title });
     });
   },
   methods: {
-    ...mapActions(['changeDomTitle']),
+    ...mapActions(["changeDomTitle"]),
     tabClick(tab) {
       let name = tab.name;
       if (name !== this.$route.name) {
@@ -240,15 +250,15 @@ export default {
       }
     },
     checkPassword() {
-      if (this.trainingPassword === '') {
-        this.$msg.warning(this.$i18n.t('m.Enter_the_training_password'));
+      if (this.trainingPassword === "") {
+        this.$msg.warning(this.$i18n.t("m.Enter_the_training_password"));
         return;
       }
       this.btnLoading = true;
-      api.registerTraining(this.training.id + '', this.trainingPassword).then(
+      api.registerTraining(this.training.id + "", this.trainingPassword).then(
         (res) => {
-          this.$msg.success(this.$i18n.t('m.Register_training_successfully'));
-          this.$store.commit('trainingIntoAccess', { intoAccess: true });
+          this.$msg.success(this.$i18n.t("m.Register_training_successfully"));
+          this.$store.commit("trainingIntoAccess", { intoAccess: true });
           this.btnLoading = false;
         },
         (res) => {
@@ -258,7 +268,7 @@ export default {
     },
     goUserHome(username) {
       this.$router.push({
-        name: 'UserHome',
+        name: "UserHome",
         query: { username: username },
       });
     },
@@ -280,10 +290,10 @@ export default {
       training: (state) => state.training.training,
     }),
     ...mapGetters([
-      'trainingPasswordFormVisible',
-      'trainingMenuDisabled',
-      'isPrivateTraining',
-      'isAuthenticated',
+      "trainingPasswordFormVisible",
+      "trainingMenuDisabled",
+      "isPrivateTraining",
+      "isAuthenticated",
     ]),
     descriptionHtml() {
       if (this.training.description) {
@@ -294,14 +304,14 @@ export default {
   watch: {
     $route(newVal) {
       this.route_name = newVal.name;
-      if (newVal.name == 'TrainingProblemDetails') {
-        this.route_name = 'TrainingProblemList';
+      if (newVal.name == "TrainingProblemDetails") {
+        this.route_name = "TrainingProblemList";
       }
       this.changeDomTitle({ title: this.training.title });
     },
   },
   beforeDestroy() {
-    this.$store.commit('clearTraining');
+    this.$store.commit("clearTraining");
   },
 };
 </script>

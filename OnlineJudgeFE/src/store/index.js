@@ -15,18 +15,21 @@ const rootState = {
     mode: 'Login', // or 'register',
     visible: false
   },
-  websiteConfig:{
-    recordName:'© 2020-2021',
-    projectName:'OJ',
-    shortName:'OJ',
-    recordUrl:'#',
-    projectUrl:'#'
+  websiteConfig: {
+    recordName: '© 2021~2022',
+    projectName: 'OJ',
+    shortName: 'OJ',
+    recordUrl: '#',
+    projectUrl: '#',
+    openPublicDiscussion: true,
+    openGroupDiscussion: true,
+    openContestComment: true
   },
   registerTimeOut: 60,
   emailTimeOut: 90,
   mobileTimeOut: 90,
   resetTimeOut: 90,
-  language:storage.get('Web_Language') || 'zh-CN',
+  language: storage.get('Web_Language') || 'zh-CN',
 }
 
 const rootGetters = {
@@ -45,10 +48,10 @@ const rootGetters = {
   'resetTimeOut'(state) {
     return state.resetTimeOut
   },
-  'websiteConfig' (state) {
+  'websiteConfig'(state) {
     return state.websiteConfig
   },
-  'webLanguage'(state){
+  'webLanguage'(state) {
     return state.language
   }
 }
@@ -83,44 +86,44 @@ const rootMutations = {
     }
   },
   startTimeOut(state, { name }) { // 注册邮件和重置邮件倒计时
-    if (state.resetTimeOut == 0 ) {
+    if (state.resetTimeOut == 0) {
       state.resetTimeOut = 90
-      return;
+      return
     }
-    if (state.emailTimeOut == 0 ) {
+    if (state.emailTimeOut == 0) {
       state.emailTimeOut = 90
-      return;
+      return
     }
-    if (state.mobileTimeOut == 0 ) {
+    if (state.mobileTimeOut == 0) {
       state.mobileTimeOut = 90
-      return;
+      return
     }
-    if (state.registerTimeOut == 0 ) {
+    if (state.registerTimeOut == 0) {
       state.registerTimeOut = 60
-      return;
+      return
     }
     if (name == 'resetTimeOut') {
-      state.resetTimeOut--;
+      state.resetTimeOut--
     }
     if (name == 'emailTimeOut') {
-      state.emailTimeOut--;
+      state.emailTimeOut--
     }
     if (name == 'mobileTimeOut') {
-      state.mobileTimeOut--;
+      state.mobileTimeOut--
     }
     if (name == 'registerTimeOut') {
-      state.registerTimeOut--;
+      state.registerTimeOut--
     }
-    setTimeout(() => {this.commit('startTimeOut', { name: name }) }, 1000);
+    setTimeout(() => { this.commit('startTimeOut', { name: name }) }, 1000)
   },
   changeWebsiteConfig(state, payload) {
     state.websiteConfig = payload.websiteConfig
   },
-  changeWebLanguage (state, {language}) {
+  changeWebLanguage(state, { language }) {
     if (language) {
       state.language = language
       i18n.locale = language
-      moment.locale(language);
+      moment.locale(language)
     }
     storage.set('Web_Language', language)
   }
@@ -144,14 +147,14 @@ const rootActions = {
   startTimeOut({ commit }, payload) {
     commit('startTimeOut', payload)
   },
-  changeDomTitle ({commit, state}, payload) {
+  changeDomTitle({ commit, state }, payload) {
     if (payload && payload.title) {
-      window.document.title = payload.title + ' - ' + (state.websiteConfig.shortName+'').toUpperCase()
+      window.document.title = payload.title + ' - ' + (state.websiteConfig.shortName + '')
     } else {
-      window.document.title = state.route.meta.title + ' - '+(state.websiteConfig.shortName+'').toUpperCase()
+      window.document.title = state.route.meta.title + ' - ' + (state.websiteConfig.shortName + '')
     }
   },
-  getWebsiteConfig ({commit}) {
+  getWebsiteConfig({ commit }) {
     api.getWebsiteConfig().then(res => {
       commit('changeWebsiteConfig', {
         websiteConfig: res.data.data

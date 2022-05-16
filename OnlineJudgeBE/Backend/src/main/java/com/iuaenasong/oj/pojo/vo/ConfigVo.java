@@ -155,4 +155,43 @@ public class ConfigVo {
     @Value("${oj.spoj.account.password:}")
     private List<String> spojPasswordList;
 
+    @Value("${oj.switch.discussion.public:true}")
+    private Boolean openPublicDiscussion;
+
+    @Value("${oj.switch.discussion.group:true}")
+    private Boolean openGroupDiscussion;
+
+    @Value("${oj.switch.comment.contest:true}")
+    private Boolean openContestComment;
+
+    @Value("${oj.switch.judge.public:true}")
+    private Boolean openPublicJudge;
+
+    @Value("${oj.switch.judge.group:true}")
+    private Boolean openGroupJudge;
+
+    @Value("${oj.switch.judge.contest:true}")
+    private Boolean openContestJudge;
+
+    @Value("${oj.switch.judge.submit-interval:8}")
+    private Integer defaultSubmitInterval;
+
+    @Value("${oj.switch.group.create-daily:2}")
+    private Integer defaultCreateGroupDailyLimit;
+
+    @Value("${oj.switch.group.create-total:5}")
+    private Integer defaultCreateGroupLimit;
+
+    @Value("${oj.switch.group.ac-initial-value:20}")
+    private Integer defaultCreateGroupACInitValue;
+
+    @Value("${oj.switch.discussion.create-daily:5}")
+    private Integer defaultCreateDiscussionDailyLimit;
+
+    @Value("${oj.switch.discussion.ac-initial-value:10}")
+    private Integer defaultCreateDiscussionACInitValue;
+
+    @Value("${oj.switch.comment.ac-initial-value:10}")
+    private Integer defaultCreateCommentACInitValue;
+
 }

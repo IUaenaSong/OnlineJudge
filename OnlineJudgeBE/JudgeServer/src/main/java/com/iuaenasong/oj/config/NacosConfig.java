@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import com.iuaenasong.oj.util.IpUtils;
+import com.iuaenasong.oj.utils.IpUtils;
 
 import java.util.HashMap;
 

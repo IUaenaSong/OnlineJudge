@@ -6,8 +6,12 @@
 
 package com.iuaenasong.oj.manager.oj;
 
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import com.iuaenasong.oj.dao.problem.ProblemEntityService;
+import com.iuaenasong.oj.exception.AccessException;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
+import com.iuaenasong.oj.pojo.vo.ConfigVo;
+import com.iuaenasong.oj.validator.AccessValidator;
 import com.iuaenasong.oj.validator.GroupValidator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -64,6 +68,12 @@ public class DiscussionManager {
 
     @Autowired
     private GroupValidator groupValidator;
+
+    @Autowired
+    private AccessValidator accessValidator;
+
+    @Autowired
+    private ConfigVo configVo;
 
     public IPage<Discussion> getDiscussionList(Integer limit,
                                                Integer currentPage,
@@ -124,7 +134,7 @@ public class DiscussionManager {
         return discussionEntityService.page(iPage, discussionQueryWrapper);
     }
 
-    public DiscussionVo getDiscussion(Integer did) throws StatusNotFoundException, StatusFailException, StatusForbiddenException {
+    public DiscussionVo getDiscussion(Integer did) throws StatusNotFoundException, StatusFailException, StatusForbiddenException, AccessException  {
 
         // 获取当前登录的用户
         Session session = SecurityUtils.getSubject().getSession();
@@ -139,9 +149,12 @@ public class DiscussionManager {
         }
 
         if (discussion.getGid() != null) {
+            accessValidator.validateAccess(OJAccessEnum.GROUP_DISCUSSION);
             if (!isRoot && !discussion.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupMember(userRolesVo.getUid(), discussion.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
+        } else {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_DISCUSSION);
         }
 
         String uid = null;
@@ -204,16 +217,16 @@ public class DiscussionManager {
             queryWrapper.eq("uid", userRolesVo.getUid()).select("distinct pid");
             int userAcProblemCount = userAcproblemEntityService.count(queryWrapper);
 
-            if (userAcProblemCount < 10 && userRolesVo.getMobile() == null) {
-                throw new StatusForbiddenException("对不起，您暂时不能评论！请先去绑定手机号或提交题目通过10道以上!");
+            if (userAcProblemCount < configVo.getDefaultCreateDiscussionACInitValue() && userRolesVo.getMobile() == null) {
+                throw new StatusForbiddenException("对不起，您暂时不能评论！请先去绑定手机号或提交题目通过" + configVo.getDefaultCreateDiscussionACInitValue() + "道以上!");
             }
 
             String lockKey = Constants.Account.DISCUSSION_ADD_NUM_LOCK.getCode() + userRolesVo.getUid();
             Integer num = (Integer) redisUtils.get(lockKey);
             if (num == null) {
                 redisUtils.set(lockKey, 1, 3600 * 24);
-            } else if (num >= 5) {
-                throw new StatusForbiddenException("对不起，您今天发帖次数已超过5次，已被限制！");
+            } else if (num >= configVo.getDefaultCreateDiscussionDailyLimit()) {
+                throw new StatusForbiddenException("对不起，您今天发帖次数已超过" + configVo.getDefaultCreateDiscussionDailyLimit() + "次，已被限制！");
             } else {
                 redisUtils.incr(lockKey, 1);
             }

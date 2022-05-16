@@ -3,16 +3,17 @@
     <div class="filter-row">
       <el-row>
         <el-col :span="3">
-          <span class="title">{{ $t('m.Group_Member') }}</span>
+          <span class="title">{{ $t("m.Group_Member") }}</span>
         </el-col>
         <el-col :span="18">
           <el-button
             v-if="isSuperAdmin || isGroupAdmin"
             :type="adminPage ? 'warning' : 'success'"
             size="small"
-            @click="adminPage = !adminPage;"
+            @click="adminPage = !adminPage"
             :icon="adminPage ? 'el-icon-back' : 'el-icon-s-opportunity'"
-          >{{ adminPage ? $t('m.Back') : $t('m.Member_Admin') }}</el-button>
+            >{{ adminPage ? $t("m.Back") : $t("m.Member_Admin") }}</el-button
+          >
         </el-col>
       </el-row>
     </div>
@@ -34,7 +35,7 @@
             ><el-link
               type="primary"
               @click="toUserHome(row.username)"
-              style="font-size: 13px;"
+              style="font-size: 13px"
               >{{ row.username }}</el-link
             >
           </template>
@@ -63,11 +64,7 @@
           :title="$t('m.Member_Auth')"
         >
           <template v-slot="{ row }">
-            <el-select
-              v-model="row.auth"
-              disabled
-              size="small"
-            >
+            <el-select v-model="row.auth" disabled size="small">
               <el-option :label="$t('m.Applying')" :value="1"></el-option>
               <el-option :label="$t('m.Refused')" :value="2"></el-option>
               <el-option :label="$t('m.General_Member')" :value="3"></el-option>
@@ -91,17 +88,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Editor from '@/components/admin/Editor.vue';
-import MemberList from '@/components/oj/group/MemberList';
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Editor from "@/components/admin/Editor.vue";
+import MemberList from "@/components/oj/group/MemberList";
 export default {
-  name: 'GroupMemberList',
+  name: "GroupMemberList",
   components: {
     Pagination,
     Editor,
-    MemberList
+    MemberList,
   },
   data() {
     return {
@@ -130,26 +127,32 @@ export default {
     },
     getGroupMemberList() {
       this.loading = true;
-      api.getGroupMemberList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.memberList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupMemberList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.memberList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     toUserHome(username) {
       this.$router.push({
-        name: 'UserHome',
+        name: "UserHome",
         query: { username: username },
       });
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isSuperAdmin', 'isGroupAdmin']),
+    ...mapGetters(["userInfo", "isSuperAdmin", "isGroupAdmin"]),
   },
 };
 </script>

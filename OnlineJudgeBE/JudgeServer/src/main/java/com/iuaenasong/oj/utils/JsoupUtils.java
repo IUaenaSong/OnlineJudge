@@ -4,7 +4,7 @@
  * @Description
  */
 
-package com.iuaenasong.oj.util;
+package com.iuaenasong.oj.utils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

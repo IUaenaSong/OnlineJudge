@@ -1,9 +1,11 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Training_List') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Training_List")
+          }}</span>
           <div class="filter-row">
             <span>
               <vxe-input
@@ -21,7 +23,7 @@
                 size="small"
                 @click="goCreateTraining"
                 icon="el-icon-plus"
-                >{{ $t('m.Create') }}
+                >{{ $t("m.Create") }}
               </el-button>
             </span>
           </div>
@@ -34,8 +36,13 @@
           stripe
           align="center"
         >
-          <vxe-table-column field="id" width="80" title="ID"> </vxe-table-column>
-          <vxe-table-column field="rank" width="80" :title="$t('m.Order_Number')">
+          <vxe-table-column field="id" width="80" title="ID">
+          </vxe-table-column>
+          <vxe-table-column
+            field="rank"
+            width="80"
+            :title="$t('m.Order_Number')"
+          >
           </vxe-table-column>
           <vxe-table-column
             field="title"
@@ -47,7 +54,7 @@
           <vxe-table-column :title="$t('m.Auth')" width="100">
             <template v-slot="{ row }">
               <el-tag :type="TRAINING_TYPE[row.auth]['color']" effect="dark">
-                {{ $t('m.' + row.auth) }}
+                {{ $t("m." + row.auth) }}
               </el-tag>
             </template>
           </vxe-table-column>
@@ -63,15 +70,17 @@
           </vxe-table-column>
           <vxe-table-column min-width="210" :title="$t('m.Info')">
             <template v-slot="{ row }">
-              <p>{{ $t('m.Created_Time') }}: {{ row.gmtCreate | localtime }}</p>
-              <p>{{ $t('m.Update_Time') }}: {{ row.gmtModified | localtime }}</p>
-              <p>{{ $t('m.Creator') }}: {{ row.author }}</p>
+              <p>{{ $t("m.Created_Time") }}: {{ row.gmtCreate | localtime }}</p>
+              <p>
+                {{ $t("m.Update_Time") }}: {{ row.gmtModified | localtime }}
+              </p>
+              <p>{{ $t("m.Creator") }}: {{ row.author }}</p>
             </template>
           </vxe-table-column>
           <vxe-table-column min-width="150" :title="$t('m.Option')">
             <template v-slot="{ row }">
               <template v-if="isSuperAdmin || userInfo.username == row.author">
-                <div style="margin-bottom:10px">
+                <div style="margin-bottom: 10px">
                   <el-tooltip
                     effect="dark"
                     :content="$t('m.Edit')"
@@ -134,17 +143,17 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { TRAINING_TYPE } from '@/common/constants';
-import { mapGetters } from 'vuex';
+import api from "@/common/api";
+import { TRAINING_TYPE } from "@/common/constants";
+import { mapGetters } from "vuex";
 export default {
-  name: 'TrainingList',
+  name: "TrainingList",
   data() {
     return {
       pageSize: 10,
       total: 0,
       trainingList: [],
-      keyword: '',
+      keyword: "",
       loading: false,
       excludeAdmin: true,
       currentPage: 1,
@@ -159,14 +168,14 @@ export default {
   },
   watch: {
     $route() {
-      let refresh = this.$route.query.refresh == 'true' ? true : false;
+      let refresh = this.$route.query.refresh == "true" ? true : false;
       if (refresh) {
         this.getTrainingList(1);
       }
     },
   },
   computed: {
-    ...mapGetters(['isSuperAdmin', 'userInfo']),
+    ...mapGetters(["isSuperAdmin", "userInfo"]),
   },
   methods: {
     // 切换页码回调
@@ -189,38 +198,42 @@ export default {
     },
     goEdit(trainingID) {
       this.$router.push({
-        name: 'admin-edit-training',
+        name: "admin-edit-training",
         params: { trainingID },
       });
     },
     goTrainingProblemList(trainingID) {
       this.$router.push({
-        name: 'admin-training-problem-list',
+        name: "admin-training-problem-list",
         params: { trainingID },
       });
     },
     deleteTraining(trainingID) {
-      this.$confirm(this.$i18n.t('m.Delete_Training_Tips'), this.$i18n.t('m.Warning'), {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
-      }).then(() => {
+      this.$confirm(
+        this.$i18n.t("m.Delete_Training_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          confirmButtonText: this.$i18n.t("m.OK"),
+          cancelButtonText: this.$i18n.t("m.Cancel"),
+          type: "warning",
+        }
+      ).then(() => {
         api.admin_deleteTraining(trainingID).then((res) => {
-          this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+          this.$msg.success(this.$i18n.t("m.Delete_successfully"));
           this.currentChange(1);
         });
       });
     },
     changeTrainingStatus(trainingID, status, author) {
       api.admin_changeTrainingStatus(trainingID, status, author).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     filterByKeyword() {
       this.currentChange(1);
     },
     goCreateTraining() {
-      this.$router.push({ name: 'admin-create-training' });
+      this.$router.push({ name: "admin-create-training" });
     },
   },
 };

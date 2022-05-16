@@ -1,10 +1,10 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.General_Announcement')
+            $t("m.General_Announcement")
           }}</span>
         </div>
         <div class="create">
@@ -13,7 +13,7 @@
             size="small"
             @click="openAnnouncementDialog(null)"
             icon="el-icon-plus"
-            >{{ $t('m.Create') }}</el-button
+            >{{ $t("m.Create") }}</el-button
           >
         </div>
         <div class="list">
@@ -141,7 +141,7 @@
           <Editor :value.sync="announcement.content"></Editor>
         </el-form-item>
         <div class="visible-box">
-          <span>{{ $t('m.Announcement_visible') }}</span>
+          <span>{{ $t("m.Announcement_visible") }}</span>
           <el-switch
             v-model="announcement.status"
             :active-value="0"
@@ -156,10 +156,10 @@
         <el-button
           type="danger"
           @click.native="showEditAnnouncementDialog = false"
-          >{{ $t('m.Cancel') }}</el-button
+          >{{ $t("m.Cancel") }}</el-button
         >
         <el-button type="primary" @click.native="submitAnnouncement">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -167,17 +167,17 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { mapGetters } from 'vuex';
-import Editor from '@/components/admin/Editor.vue';
+import api from "@/common/api";
+import { mapGetters } from "vuex";
+import Editor from "@/components/admin/Editor.vue";
 export default {
-  name: 'announcement',
+  name: "announcement",
   components: {
     Editor,
   },
   data() {
     return {
-      contestID: '',
+      contestID: "",
       // 显示编辑公告对话框
       showEditAnnouncementDialog: false,
       // 公告列表
@@ -186,18 +186,18 @@ export default {
       pageSize: 15,
       // 总公告数
       total: 0,
-      mode: 'create',
+      mode: "create",
       // 公告 (new | edit) model
 
       announcement: {
         id: null,
-        title: '',
-        content: '',
+        title: "",
+        content: "",
         status: 0,
-        uid: '',
+        uid: "",
       },
       // 对话框标题
-      announcementDialogTitle: 'Edit Announcement',
+      announcementDialogTitle: "Edit Announcement",
       // 是否显示loading
       loading: false,
       // 当前页码
@@ -258,18 +258,18 @@ export default {
       // 暂时解决 文本编辑器显示异常bug
       setTimeout(() => {
         if (document.createEvent) {
-          let event = document.createEvent('HTMLEvents');
-          event.initEvent('resize', true, true);
+          let event = document.createEvent("HTMLEvents");
+          event.initEvent("resize", true, true);
           window.dispatchEvent(event);
         } else if (document.createEventObject) {
-          window.fireEvent('onresize');
+          window.fireEvent("onresize");
         }
       }, 0);
     },
     // 提交编辑
     // 默认传入MouseEvent
     submitAnnouncement(data = undefined) {
-      let funcName = '';
+      let funcName = "";
       if (!data.id) {
         data = this.announcement;
       }
@@ -281,20 +281,20 @@ export default {
         };
         requestData = announcement;
         funcName =
-          this.mode === 'edit'
-            ? 'admin_updateContestAnnouncement'
-            : 'admin_createContestAnnouncement';
+          this.mode === "edit"
+            ? "admin_updateContestAnnouncement"
+            : "admin_createContestAnnouncement";
       } else {
         funcName =
-          this.mode === 'edit'
-            ? 'admin_updateAnnouncement'
-            : 'admin_createAnnouncement';
+          this.mode === "edit"
+            ? "admin_updateAnnouncement"
+            : "admin_createAnnouncement";
         requestData = data;
       }
       api[funcName](requestData)
         .then((res) => {
           this.showEditAnnouncementDialog = false;
-          this.$msg.success(this.$i18n.t('m.Post_successfully'));
+          this.$msg.success(this.$i18n.t("m.Post_successfully"));
           this.init();
         })
         .catch();
@@ -302,20 +302,24 @@ export default {
 
     // 删除公告
     deleteAnnouncement(announcementId) {
-      this.$confirm(this.$i18n.t('m.Delete_Announcement_Tips'), this.$i18n.t('m.Warning'), {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
-      })
+      this.$confirm(
+        this.$i18n.t("m.Delete_Announcement_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          confirmButtonText: this.$i18n.t("m.OK"),
+          cancelButtonText: this.$i18n.t("m.Cancel"),
+          type: "warning",
+        }
+      )
         .then(() => {
           // then 为确定
           this.loading = true;
           let funcName = this.contestID
-            ? 'admin_deleteContestAnnouncement'
-            : 'admin_deleteAnnouncement';
+            ? "admin_deleteContestAnnouncement"
+            : "admin_deleteAnnouncement";
           api[funcName](announcementId).then((res) => {
             this.loading = true;
-            this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+            this.$msg.success(this.$i18n.t("m.Delete_successfully"));
             this.init();
           });
         })
@@ -328,21 +332,21 @@ export default {
     openAnnouncementDialog(row) {
       this.showEditAnnouncementDialog = true;
       if (row !== null) {
-        this.announcementDialogTitle = this.$i18n.t('m.Edit_Announcement');
+        this.announcementDialogTitle = this.$i18n.t("m.Edit_Announcement");
         this.announcement = Object.assign({}, row);
-        this.mode = 'edit';
+        this.mode = "edit";
       } else {
-        this.announcementDialogTitle = this.$i18n.t('m.Create_Announcement');
-        this.announcement.title = '';
+        this.announcementDialogTitle = this.$i18n.t("m.Create_Announcement");
+        this.announcement.title = "";
         this.announcement.status = 0;
-        this.announcement.content = '';
+        this.announcement.content = "";
         this.announcement.uid = this.userInfo.uid;
         this.announcement.username = this.userInfo.username;
-        this.mode = 'create';
+        this.mode = "create";
       }
     },
     handleVisibleSwitch(row) {
-      this.mode = 'edit';
+      this.mode = "edit";
       this.submitAnnouncement({
         id: row.id,
         title: row.title,
@@ -358,7 +362,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(["userInfo"]),
   },
 };
 </script>

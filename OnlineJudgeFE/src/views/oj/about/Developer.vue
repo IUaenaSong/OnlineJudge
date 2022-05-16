@@ -9,58 +9,58 @@
           >
         </h1>
         <p>
-          {{ $t('m.Leader_BackEnd_FrontEnd_Engineer') }} / LengYun
+          {{ $t("m.Leader_BackEnd_FrontEnd_Engineer") }} / LengYun
           <a href="https://github.com/IUaenaSong" class="icon" target="_blank"
             ><i class="fa fa-github"></i>
           </a>
         </p>
         <p class="teal-text">
-          <i class="el-icon-circle-check"></i> {{ $t('m.Open_Source') }}
+          <i class="el-icon-circle-check"></i> {{ $t("m.Open_Source") }}
         </p>
       </paper-card>
     </div>
     <el-row :gutter="20">
-      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px">
         <paper-card type="server">
-          <h1>{{ $t('m.Distributed') }}</h1>
+          <h1>{{ $t("m.Distributed") }}</h1>
           <p>
-            <small>{{ $t('m.Distributed_Desc') }}</small>
+            <small>{{ $t("m.Distributed_Desc") }}</small>
           </p>
           <p class="teal-text">
-            <i class="el-icon-circle-check"></i> {{ $t('m.Available') }}
+            <i class="el-icon-circle-check"></i> {{ $t("m.Available") }}
           </p>
         </paper-card>
       </el-col>
-      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px">
         <paper-card type="server">
-          <h1>{{ $t('m.Customization') }}</h1>
+          <h1>{{ $t("m.Customization") }}</h1>
           <p>
-            <small>{{ $t('m.Customization_Desc') }}</small>
+            <small>{{ $t("m.Customization_Desc") }}</small>
           </p>
           <p class="teal-text">
-            <i class="el-icon-circle-check"></i> {{ $t('m.Available') }}
+            <i class="el-icon-circle-check"></i> {{ $t("m.Available") }}
           </p>
         </paper-card>
       </el-col>
-      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px">
         <paper-card type="server">
-          <h1>{{ $t('m.Security') }}</h1>
+          <h1>{{ $t("m.Security") }}</h1>
           <p>
-            <small>{{ $t('m.Security_Desc') }}</small>
+            <small>{{ $t("m.Security_Desc") }}</small>
           </p>
           <p class="teal-text">
-            <i class="el-icon-circle-check"></i> {{ $t('m.Available') }}
+            <i class="el-icon-circle-check"></i> {{ $t("m.Available") }}
           </p>
         </paper-card>
       </el-col>
-      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :xs="24" :md="12" style="margin-top: 10px; margin-bottom: 10px">
         <paper-card type="server">
-          <h1>{{ $t('m.Diversity') }}</h1>
+          <h1>{{ $t("m.Diversity") }}</h1>
           <p>
-            <small>{{ $t('m.Diversity_Desc') }}</small>
+            <small>{{ $t("m.Diversity_Desc") }}</small>
           </p>
           <p class="teal-text">
-            <i class="el-icon-circle-check"></i> {{ $t('m.Available') }}
+            <i class="el-icon-circle-check"></i> {{ $t("m.Available") }}
           </p>
         </paper-card>
       </el-col>
@@ -70,8 +70,8 @@
 
 <script>
 export default {
-  name: 'Developer'
-}
+  name: "Developer",
+};
 </script>
 
 <style scoped>
@@ -80,7 +80,7 @@ export default {
   margin-top: 80px;
   margin-bottom: 10px;
 }
-paper-card[type='server'] {
+paper-card[type="server"] {
   display: block;
   text-align: center;
   border-radius: 4px;

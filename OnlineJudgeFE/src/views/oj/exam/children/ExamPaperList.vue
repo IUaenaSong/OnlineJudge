@@ -1,17 +1,15 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title"
-            >{{ $t('m.Exam_Paper') }}</span
-          >
-          <span style="float:right;font-size: 20px;">
+          <span class="panel-title">{{ $t("m.Exam_Paper") }}</span>
+          <span style="float: right; font-size: 20px">
             <el-popover trigger="hover" placement="left-start">
               <i class="el-icon-s-tools" slot="reference"></i>
-                <el-button type="primary" size="small" @click="exportDataEvent">{{
-                  $t('m.Download_as_CSV')
-                }}</el-button>
+              <el-button type="primary" size="small" @click="exportDataEvent">{{
+                $t("m.Download_as_CSV")
+              }}</el-button>
             </el-popover>
           </span>
         </div>
@@ -55,7 +53,7 @@
               <span style="font-size: 14px"
                 ><a
                   @click="goExamPaper(row.uid)"
-                  style="color:rgb(87, 163, 243);"
+                  style="color: rgb(87, 163, 243)"
                   >{{ row.score }}</a
                 >
                 <br />
@@ -72,20 +70,31 @@
             <template slot="header">
               <el-tooltip effect="dark" placement="top">
                 <div slot="content">
-                  {{ question.displayId + '. ' + $t('m.' + QUESTION_TYPE_REVERSE[question.type].name + '_Question') }}
+                  {{
+                    question.displayId +
+                    ". " +
+                    $t(
+                      "m." +
+                        QUESTION_TYPE_REVERSE[question.type].name +
+                        "_Question"
+                    )
+                  }}
                   <br />
-                  {{ 'Accepted: ' + question.ac }}
+                  {{ "Accepted: " + question.ac }}
                   <br />
-                  {{ 'Rejected: ' + question.error }}
+                  {{ "Rejected: " + question.error }}
                   <br />
-                  {{ 'Average: ' + (question.average != null ? question.average : 0) }}
+                  {{
+                    "Average: " +
+                    (question.average != null ? question.average : 0)
+                  }}
                 </div>
                 <div>
                   <span>
                     <a
                       @click="goExamQuestion(question.displayId)"
                       class="emphasis"
-                      style="color:#495060;"
+                      style="color: #495060"
                       >{{ question.displayId }}
                     </a>
                     <br />
@@ -99,9 +108,13 @@
                 v-if="row.examQuestionRecordList[question.displayId]"
                 class="submission-hover"
               >
-                <span style="font-size:14px;">
-                  {{ row.examQuestionRecordList[question.displayId].score != null ?
-                  row.examQuestionRecordList[question.displayId].score : 0 }}</span>
+                <span style="font-size: 14px">
+                  {{
+                    row.examQuestionRecordList[question.displayId].score != null
+                      ? row.examQuestionRecordList[question.displayId].score
+                      : 0
+                  }}</span
+                >
               </div>
             </template>
           </vxe-table-column>
@@ -115,18 +128,18 @@
               <template slot="header">
                 <el-tooltip effect="dark" placement="top">
                   <div slot="content">
-                    {{ problem.displayId + '. ' + problem.displayTitle }}
+                    {{ problem.displayId + ". " + problem.displayTitle }}
                     <br />
-                    {{ 'Accepted: ' + problem.ac }}
+                    {{ "Accepted: " + problem.ac }}
                     <br />
-                    {{ 'Rejected: ' + problem.error }}
+                    {{ "Rejected: " + problem.error }}
                   </div>
                   <div>
                     <span>
                       <a
                         @click="goExamProblem(problem.displayId)"
                         class="emphasis"
-                        style="color:#495060;"
+                        style="color: #495060"
                         >{{ problem.displayId }}
                       </a>
                       <br />
@@ -140,7 +153,9 @@
                   v-if="row.examRecordList[problem.displayId]"
                   class="submission-hover"
                 >
-                  <span style="font-size:14px;">{{ row.examRecordList[problem.displayId].score }}</span>
+                  <span style="font-size: 14px">{{
+                    row.examRecordList[problem.displayId].score
+                  }}</span>
                   <br />
                   <span
                     v-if="row.examRecordList[problem.displayId].time != null"
@@ -157,11 +172,11 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
-import { QUESTION_TYPE_REVERSE } from '@/common/constants';
-import api from '@/common/api';
+import { mapGetters, mapState } from "vuex";
+import { QUESTION_TYPE_REVERSE } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'GroupPaperList',
+  name: "GroupPaperList",
   data() {
     return {
       paperList: [],
@@ -169,7 +184,7 @@ export default {
       examID: null,
       loading: true,
       questionList: [],
-    }
+    };
   },
   mounted() {
     this.examID = this.$route.params.examID;
@@ -209,50 +224,50 @@ export default {
       );
     },
     getExamProblemList() {
-      this.$store.dispatch('getExamProblemList');
+      this.$store.dispatch("getExamProblemList");
     },
     goExamPaper(uid) {
       this.$router.push({
-        name: 'ExamPaperDetails',
+        name: "ExamPaperDetails",
         params: {
           paperID: uid,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     goExamProblem(displayId) {
       this.$router.push({
-        name: 'ExamProblemDetails',
+        name: "ExamProblemDetails",
         params: {
           problemID: displayId,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     goExamQuestion(displayId) {
       this.$router.push({
-        name: 'ExamQuestionDetails',
+        name: "ExamQuestionDetails",
         params: {
           questionId: displayId,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     goUserHome(username) {
       this.$router.push({
-        name: 'UserHome',
-        query: { username: username},
+        name: "UserHome",
+        query: { username: username },
       });
     },
-    exportDataEvent () {
-      this.$refs.paper.exportData({ type: 'csv' })
+    exportDataEvent() {
+      this.$refs.paper.exportData({ type: "csv" });
     },
   },
   computed: {
     ...mapState({
       problemList: (state) => state.exam.examProblemList,
     }),
-    ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
+    ...mapGetters(["isAuthenticated", "isSuperAdmin", "isGroupAdmin"]),
   },
   watch: {
     $route() {
@@ -264,7 +279,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeRes;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.net.HttpCookie;
 import java.util.HashMap;

@@ -4,7 +4,7 @@
  * @Description
  */
 
-package com.iuaenasong.oj.util;
+package com.iuaenasong.oj.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

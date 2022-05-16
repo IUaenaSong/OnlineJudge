@@ -53,20 +53,18 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item
-                :label="$t('m.Rank_Score_Type')"
-              >
+              <el-form-item :label="$t('m.Rank_Score_Type')">
                 <el-radio
                   class="radio"
                   v-model="exam.rankScoreType"
                   label="Recent"
-                  >{{ $t('m.Rank_Score_Type_Recent') }}</el-radio
+                  >{{ $t("m.Rank_Score_Type_Recent") }}</el-radio
                 >
                 <el-radio
                   class="radio"
                   v-model="exam.rankScoreType"
                   label="Highest"
-                  >{{ $t('m.Rank_Score_Type_Highest') }}</el-radio
+                  >{{ $t("m.Rank_Score_Type_Highest") }}</el-radio
                 >
               </el-form-item>
             </el-col>
@@ -83,10 +81,7 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item
-                :label="$t('m.Auto_Real_Score')"
-                required
-              >
+              <el-form-item :label="$t('m.Auto_Real_Score')" required>
                 <el-switch
                   v-model="exam.autoRealScore"
                   :active-text="$t('m.Real_Score_After_Exam')"
@@ -101,13 +96,13 @@
               <el-form-item :label="$t('m.Rank_Show_Name')" required>
                 <el-radio-group v-model="exam.rankShowName">
                   <el-radio label="username">{{
-                    $t('m.Show_Username')
+                    $t("m.Show_Username")
                   }}</el-radio>
                   <el-radio label="nickname">{{
-                    $t('m.Show_Nickname')
+                    $t("m.Show_Nickname")
                   }}</el-radio>
                   <el-radio label="realname">{{
-                    $t('m.Show_Realname')
+                    $t("m.Show_Realname")
                   }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -115,9 +110,18 @@
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Exam_Auth')" required>
                 <el-select v-model="exam.auth">
-                  <el-option :label="$t('m.Exam_Public')" :value="0"></el-option>
-                  <el-option :label="$t('m.Exam_Private')" :value="1"></el-option>
-                  <el-option :label="$t('m.Exam_Protected')" :value="2"></el-option>
+                  <el-option
+                    :label="$t('m.Exam_Public')"
+                    :value="0"
+                  ></el-option>
+                  <el-option
+                    :label="$t('m.Exam_Private')"
+                    :value="1"
+                  ></el-option>
+                  <el-option
+                    :label="$t('m.Exam_Protected')"
+                    :value="2"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -162,7 +166,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col :md="6" :xs="24">
-                  <el-form-item :label="$t('m.Start_Number')" prop="number_from">
+                  <el-form-item
+                    :label="$t('m.Start_Number')"
+                    prop="number_from"
+                  >
                     <el-input-number
                       v-model="formRule.number_from"
                       style="width: 100%"
@@ -182,14 +189,16 @@
                   class="userPreview"
                   v-if="formRule.number_from <= formRule.number_to"
                 >
-                  {{ $t('m.The_allowed_account_will_be') }}
-                  {{ formRule.prefix + formRule.number_from + formRule.suffix }},
+                  {{ $t("m.The_allowed_account_will_be") }}
+                  {{
+                    formRule.prefix + formRule.number_from + formRule.suffix
+                  }},
                   <span v-if="formRule.number_from + 1 < formRule.number_to">
                     {{
                       formRule.prefix +
-                        (formRule.number_from + 1) +
-                        formRule.suffix +
-                        '...'
+                      (formRule.number_from + 1) +
+                      formRule.suffix +
+                      "..."
                     }}
                   </span>
                   <span v-if="formRule.number_from + 1 <= formRule.number_to">
@@ -213,7 +222,7 @@
           </el-row>
         </el-form>
         <el-button type="primary" @click.native="submit">{{
-          $t('m.Save')
+          $t("m.Save")
         }}</el-button>
       </el-card>
     </el-col>
@@ -221,60 +230,60 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import time from '@/common/time';
-import moment from 'moment';
-import { mapGetters } from 'vuex';
-import Editor from '@/components/admin/Editor.vue';
+import api from "@/common/api";
+import time from "@/common/time";
+import moment from "moment";
+import { mapGetters } from "vuex";
+import Editor from "@/components/admin/Editor.vue";
 export default {
-  name: 'GroupExam',
+  name: "GroupExam",
   components: {
     Editor,
   },
   props: {
     mode: {
       type: String,
-      default: 'edit'
+      default: "edit",
     },
     title: {
       type: String,
-      default: 'Edit Exam'
+      default: "Edit Exam",
     },
     apiMethod: {
       type: String,
-      default: 'addGroupExam'
+      default: "addGroupExam",
     },
     cid: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
     return {
       disableRuleType: false,
-      durationText: '',
+      durationText: "",
       seal_rank_time: 2,
       exam: {
-        title: '',
-        description: '',
-        startTime: '',
-        endTime: '',
+        title: "",
+        description: "",
+        startTime: "",
+        endTime: "",
         duration: 0,
-        pwd: '',
+        pwd: "",
         realScore: false,
         autoRealScore: true,
         auth: 0,
-        rankShowName: 'username',
+        rankShowName: "username",
         openAccountLimit: false,
-        accountLimitRule: '',
-        rankScoreType: 'Recent',
+        accountLimitRule: "",
+        rankScoreType: "Recent",
       },
       formRule: {
-        prefix: '',
-        suffix: '',
+        prefix: "",
+        suffix: "",
         number_from: 0,
         number_to: 10,
-        extra_account: '',
+        extra_account: "",
       },
     };
   },
@@ -284,102 +293,98 @@ export default {
   watch: {
     $route() {
       this.exam = {
-        title: '',
-        description: '',
-        startTime: '',
-        endTime: '',
+        title: "",
+        description: "",
+        startTime: "",
+        endTime: "",
         duration: 0,
-        pwd: '',
+        pwd: "",
         realScore: false,
         autoRealScore: true,
         auth: 0,
-        rankShowName: 'username',
+        rankShowName: "username",
         openAccountLimit: false,
-        accountLimitRule: '',
-        rankScoreType: 'Recent',
+        accountLimitRule: "",
+        rankScoreType: "Recent",
       };
       this.init();
     },
   },
   methods: {
     init() {
-      if (this.mode === 'edit') {
-        api.getGroupExam(this.cid).then((res) => {
-          let data = res.data.data;
-          this.exam = data;
-          this.changeDuration();
-          if (this.exam.accountLimitRule) {
-            this.formRule = this.changeStrToAccountRule(
-              this.exam.accountLimitRule
-            );
-          }
-        })
-        .catch(() => {});
+      if (this.mode === "edit") {
+        api
+          .getGroupExam(this.cid)
+          .then((res) => {
+            let data = res.data.data;
+            this.exam = data;
+            this.changeDuration();
+            if (this.exam.accountLimitRule) {
+              this.formRule = this.changeStrToAccountRule(
+                this.exam.accountLimitRule
+              );
+            }
+          })
+          .catch(() => {});
       }
     },
     submit() {
       if (!this.exam.title) {
         this.$msg.error(
-          this.$i18n.t('m.Exam_Title') + ' ' + this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Exam_Title") + " " + this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.exam.description) {
         this.$msg.error(
-          this.$i18n.t('m.Exam_Description') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Exam_Description") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.exam.startTime) {
         this.$msg.error(
-          this.$i18n.t('m.Exam_Start_Time') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Exam_Start_Time") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.exam.endTime) {
         this.$msg.error(
-          this.$i18n.t('m.Exam_End_Time') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Exam_End_Time") + " " + this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.exam.duration || this.exam.duration <= 0) {
-        this.$msg.error(this.$i18n.t('m.Exam_Duration_Check'));
+        this.$msg.error(this.$i18n.t("m.Exam_Duration_Check"));
         return;
       }
       if (this.exam.auth != 0 && !this.exam.pwd) {
         this.$msg.error(
-          this.$i18n.t('m.Exam_Password') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Exam_Password") + " " + this.$i18n.t("m.is_required")
         );
         return;
       }
       if (this.exam.openAccountLimit) {
-        this.exam.accountLimitRule = this.changeAccountRuleToStr(
-          this.formRule
-        );
+        this.exam.accountLimitRule = this.changeAccountRuleToStr(this.formRule);
       }
       let data = Object.assign({}, this.exam);
-      if (this.mode === 'add') {
-        data['uid'] = this.userInfo.uid;
-        data['author'] = this.userInfo.username;
-        data['gid'] = this.$route.params.groupID;
+      if (this.mode === "add") {
+        data["uid"] = this.userInfo.uid;
+        data["author"] = this.userInfo.username;
+        data["gid"] = this.$route.params.groupID;
       }
       api[this.apiMethod](data)
         .then((res) => {
-          this.$router.push({ name: 'GroupExamList' });
-          if (this.mode === 'edit') {
+          this.$router.push({ name: "GroupExamList" });
+          if (this.mode === "edit") {
             this.$emit("handleEditPage");
-            this.$msg.success(this.$t('m.Update_Successfully'));
+            this.$msg.success(this.$t("m.Update_Successfully"));
           } else {
             this.$emit("handleCreatePage");
-            this.$msg.success(this.$t('m.Create_Successfully'));
+            this.$msg.success(this.$t("m.Create_Successfully"));
           }
           this.$emit("currentChange", 1);
         })
@@ -390,34 +395,34 @@ export default {
       let end = this.exam.endTime;
       let durationMS = time.durationMs(start, end);
       if (durationMS < 0) {
-        this.durationText = this.$i18n.t('m.Contets_Time_Check');
+        this.durationText = this.$i18n.t("m.Contets_Time_Check");
         this.exam.duration = 0;
         return;
       }
-      if (start != '' && end != '') {
+      if (start != "" && end != "") {
         this.durationText = time.formatSpecificDuration(start, end);
         this.exam.duration = durationMS;
       }
     },
     changeAccountRuleToStr(formRule) {
       let result =
-        '<prefix>' +
+        "<prefix>" +
         formRule.prefix +
-        '</prefix><suffix>' +
+        "</prefix><suffix>" +
         formRule.suffix +
-        '</suffix><start>' +
+        "</suffix><start>" +
         formRule.number_from +
-        '</start><end>' +
+        "</start><end>" +
         formRule.number_to +
-        '</end><extra>' +
+        "</end><extra>" +
         formRule.extra_account +
-        '</extra>';
+        "</extra>";
       return result;
     },
     changeStrToAccountRule(value) {
       let reg =
-        '<prefix>([\\s\\S]*?)</prefix><suffix>([\\s\\S]*?)</suffix><start>([\\s\\S]*?)</start><end>([\\s\\S]*?)</end><extra>([\\s\\S]*?)</extra>';
-      let re = RegExp(reg, 'g');
+        "<prefix>([\\s\\S]*?)</prefix><suffix>([\\s\\S]*?)</suffix><start>([\\s\\S]*?)</start><end>([\\s\\S]*?)</end><extra>([\\s\\S]*?)</extra>";
+      let re = RegExp(reg, "g");
       let tmp = re.exec(value);
       return {
         prefix: tmp[1],
@@ -429,7 +434,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(["userInfo"]),
   },
 };
 </script>

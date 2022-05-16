@@ -27,7 +27,7 @@
         label-width="0px"
         class="demo-ruleForm login-container"
       >
-        <h1 class="title">{{ $t('m.Welcome_to_Login_Admin') }}</h1>
+        <h1 class="title">{{ $t("m.Welcome_to_Login_Admin") }}</h1>
         <el-form-item prop="username">
           <el-input
             type="text"
@@ -52,7 +52,7 @@
             style="width: 100%"
             @click.native.prevent="handleLogin"
             :loading="logining"
-            >{{ $t('m.Login') }}
+            >{{ $t("m.Login") }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -61,28 +61,28 @@
 </template>
 
 <script>
-import api from '@/common/api';
+import api from "@/common/api";
 export default {
   data() {
     return {
       logining: false,
       ruleForm2: {
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       },
       rules2: {
         username: [
           {
             required: true,
-            trigger: 'blur',
-            message: this.$i18n.t('m.Username_Check_Required'),
+            trigger: "blur",
+            message: this.$i18n.t("m.Username_Check_Required"),
           },
         ],
         password: [
           {
             required: true,
-            trigger: 'blur',
-            message: this.$i18n.t('m.Password_Check_Required'),
+            trigger: "blur",
+            message: this.$i18n.t("m.Password_Check_Required"),
           },
         ],
       },
@@ -99,11 +99,11 @@ export default {
             .then(
               (res) => {
                 this.logining = false;
-                const jwt = res.headers['authorization'];
-                this.$store.commit('changeUserToken', jwt);
-                this.$store.dispatch('setUserInfo', res.data.data);
-                this.$msg.success(this.$i18n.t('m.Admin_Login_Success'));
-                this.$router.push({ name: 'admin-dashboard' });
+                const jwt = res.headers["authorization"];
+                this.$store.commit("changeUserToken", jwt);
+                this.$store.dispatch("setUserInfo", res.data.data);
+                this.$msg.success(this.$i18n.t("m.Admin_Login_Success"));
+                this.$router.push({ name: "admin-dashboard" });
               },
               () => {
                 this.logining = false;
@@ -111,7 +111,7 @@ export default {
             );
         } else {
           this.$msg.error(
-            this.$i18n.t('m.Please_check_your_username_or_password')
+            this.$i18n.t("m.Please_check_your_username_or_password")
           );
         }
       });

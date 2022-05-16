@@ -18,7 +18,7 @@ import com.iuaenasong.oj.pojo.entity.judge.ToJudge;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeFactory;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import javax.annotation.Resource;
 
@@ -85,7 +85,6 @@ public class RemoteJudgeContext {
             case "GYM":
             case "CF":
                 if (NumberUtil.isInteger(remoteJudgeDTO.getCompleteProblemId())) {
-                    remoteJudgeDTO.setContestId(ReUtil.get("([0-9]+)[0-9]{2}", remoteJudgeDTO.getCompleteProblemId(), 1));
                     remoteJudgeDTO.setContestId(ReUtil.get("([0-9]+)[0-9]{2}", remoteJudgeDTO.getCompleteProblemId(), 1));
                     remoteJudgeDTO.setProblemNum(ReUtil.get("[0-9]+([0-9]{2})", remoteJudgeDTO.getCompleteProblemId(), 1));
                 } else {

@@ -6,12 +6,14 @@
 
 package com.iuaenasong.oj.remoteJudge.entity;
 
+import com.iuaenasong.oj.pojo.entity.judge.JudgeCase;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,4 +29,6 @@ public class RemoteJudgeRes implements Serializable {
     private Integer memory;
 
     private String errorInfo;
+
+    private List<JudgeCase> judgeCaseList;
 }

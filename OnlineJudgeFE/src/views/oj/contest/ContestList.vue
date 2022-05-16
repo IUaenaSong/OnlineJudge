@@ -1,13 +1,13 @@
 <template>
   <el-row type="flex" justify="space-around">
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow>
         <div slot="header">
           <span class="panel-title"
             >{{
-              query.type === '' ? $t('m.All') : parseContestType(query.type)
+              query.type === "" ? $t("m.All") : parseContestType(query.type)
             }}
-            {{ $t('m.Contests') }}</span
+            {{ $t("m.Contests") }}</span
           >
           <div class="filter-row">
             <span>
@@ -19,15 +19,15 @@
               >
                 <span class="el-dropdown-link">
                   {{
-                    query.type == ''
-                      ? $t('m.Rule')
+                    query.type == ""
+                      ? $t("m.Rule")
                       : parseContestType(query.type)
                   }}
                   <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="">{{
-                    $t('m.All')
+                    $t("m.All")
                   }}</el-dropdown-item>
                   <el-dropdown-item command="0">ACM</el-dropdown-item>
                   <el-dropdown-item command="1">OI</el-dropdown-item>
@@ -44,24 +44,24 @@
               >
                 <span class="el-dropdown-link">
                   {{
-                    query.status === ''
-                      ? $t('m.Status')
-                      : $t('m.' + CONTEST_STATUS_REVERSE[query.status]['name'])
+                    query.status === ""
+                      ? $t("m.Status")
+                      : $t("m." + CONTEST_STATUS_REVERSE[query.status]["name"])
                   }}
                   <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="">{{
-                    $t('m.All')
+                    $t("m.All")
                   }}</el-dropdown-item>
                   <el-dropdown-item command="-1">{{
-                    $t('m.Scheduled')
+                    $t("m.Scheduled")
                   }}</el-dropdown-item>
                   <el-dropdown-item command="0">{{
-                    $t('m.Running')
+                    $t("m.Running")
                   }}</el-dropdown-item>
                   <el-dropdown-item command="1">{{
-                    $t('m.Ended')
+                    $t("m.Ended")
                   }}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -119,14 +119,14 @@
                       <i
                         class="el-icon-lock"
                         size="20"
-                        style="color:#d9534f"
+                        style="color: #d9534f"
                       ></i>
                     </template>
                     <template v-if="contest.auth == 2">
                       <i
                         class="el-icon-lock"
                         size="20"
-                        style="color:#f0ad4e"
+                        style="color: #f0ad4e"
                       ></i>
                     </template>
                   </p>
@@ -162,14 +162,14 @@
                         <el-tooltip
                           :content="
                             $t('m.Contest_Rank') +
-                              '：' +
-                              (contest.oiRankScoreType == 'Recent'
-                                ? $t(
-                                    'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
-                                  )
-                                : $t(
-                                    'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
-                                  ))
+                            '：' +
+                            (contest.oiRankScoreType == 'Recent'
+                              ? $t(
+                                  'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
+                                )
+                              : $t(
+                                  'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
+                                ))
                           "
                           placement="top"
                         >
@@ -198,7 +198,7 @@
                         >
                           {{
                             $t(
-                              'm.' + CONTEST_TYPE_REVERSE[contest.auth]['name']
+                              "m." + CONTEST_TYPE_REVERSE[contest.auth]["name"]
                             )
                           }}
                         </el-tag>
@@ -207,7 +207,7 @@
                     <li v-if="contest.count">
                       <i
                         class="el-icon-user-solid"
-                        style="color:rgb(48, 145, 242);"
+                        style="color: rgb(48, 145, 242)"
                       ></i
                       >x{{ contest.count }}
                     </li>
@@ -245,7 +245,7 @@
                   >
                     <i class="fa fa-circle" aria-hidden="true"></i>
                     {{
-                      $t('m.' + CONTEST_STATUS_REVERSE[contest.status]['name'])
+                      $t("m." + CONTEST_STATUS_REVERSE[contest.status]["name"])
                     }}
                   </el-tag>
                 </el-col>
@@ -265,20 +265,20 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { mapGetters } from 'vuex';
-import utils from '@/common/utils';
-import time from '@/common/time';
+import api from "@/common/api";
+import { mapGetters } from "vuex";
+import utils from "@/common/utils";
+import time from "@/common/time";
 import {
   CONTEST_STATUS_REVERSE,
   CONTEST_TYPE,
   CONTEST_TYPE_REVERSE,
   CONTEST_STATUS,
-} from '@/common/constants';
-import Pagination from '@/components/oj/common/Pagination';
+} from "@/common/constants";
+const Pagination = () => import("@/components/oj/common/Pagination");
 
 export default {
-  name: 'contest-list',
+  name: "contest-list",
   components: {
     Pagination,
   },
@@ -286,19 +286,19 @@ export default {
     return {
       currentPage: 1,
       query: {
-        status: '',
-        keyword: '',
-        type: '',
+        status: "",
+        keyword: "",
+        type: "",
       },
       limit: 10,
       total: 0,
-      rows: '',
+      rows: "",
       contests: [],
       CONTEST_STATUS_REVERSE: {},
       CONTEST_STATUS: {},
       CONTEST_TYPE_REVERSE: {},
-      acmSrc: require('@/assets/acm.jpg'),
-      oiSrc: require('@/assets/oi.jpg'),
+      acmSrc: require("@/assets/acm.jpg"),
+      oiSrc: require("@/assets/oi.jpg"),
       loading: true,
     };
   },
@@ -316,9 +316,9 @@ export default {
   methods: {
     init() {
       let route = this.$route.query;
-      this.query.status = route.status || '';
-      this.query.type = route.type || '';
-      this.query.keyword = route.keyword || '';
+      this.query.status = route.status || "";
+      this.query.type = route.type || "";
+      this.query.keyword = route.keyword || "";
       this.getContestList();
     },
     getContestList() {
@@ -338,16 +338,16 @@ export default {
       let query = Object.assign({}, this.query);
       query.currentPage = this.currentPage;
       this.$router.push({
-        name: 'ContestList',
+        name: "ContestList",
         query: utils.filterEmptyValue(query),
       });
     },
 
     parseContestType(type) {
       if (type == 0) {
-        return 'ACM';
+        return "ACM";
       } else if (type == 1) {
-        return 'OI';
+        return "OI";
       }
     },
     onCurrentPageChange(page) {
@@ -366,11 +366,11 @@ export default {
     },
     toContest(contest) {
       if (!this.isAuthenticated) {
-        this.$msg.warning(this.$i18n.t('m.Please_login_first'));
-        this.$store.dispatch('changeModalStatus', { visible: true });
+        this.$msg.warning(this.$i18n.t("m.Please_login_first"));
+        this.$store.dispatch("changeModalStatus", { visible: true });
       } else {
         this.$router.push({
-          name: 'ContestDetails',
+          name: "ContestDetails",
           params: { contestID: contest.id },
         });
       }
@@ -378,12 +378,12 @@ export default {
     toContestOutsideScoreBoard(cid, type) {
       if (type == 0) {
         this.$router.push({
-          name: 'ACMScoreBoard',
+          name: "ACMScoreBoard",
           params: { contestID: cid },
         });
       } else if (type == 1) {
         this.$router.push({
-          name: 'OIScoreBoard',
+          name: "OIScoreBoard",
           params: { contestID: cid },
         });
       }
@@ -393,13 +393,13 @@ export default {
     },
     getborderColor(contest) {
       return (
-        'border-left: 4px solid ' +
-        CONTEST_STATUS_REVERSE[contest.status]['color']
+        "border-left: 4px solid " +
+        CONTEST_STATUS_REVERSE[contest.status]["color"]
       );
     },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'userInfo']),
+    ...mapGetters(["isAuthenticated", "userInfo"]),
   },
   watch: {
     $route(newVal, oldVal) {

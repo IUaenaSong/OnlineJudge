@@ -3,81 +3,122 @@
     <div class="filter-row">
       <el-row>
         <el-col :span="3">
-          <span class="title">{{ $t('m.Group_Exam') }}</span>
+          <span class="title">{{ $t("m.Group_Exam") }}</span>
         </el-col>
-        <el-col :span="18" v-if="(isSuperAdmin || isGroupAdmin) &&
-          !problemPage && !editProblemPage &&
-          !questionPage && !editQuestionPage ">
+        <el-col
+          :span="18"
+          v-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            !problemPage &&
+            !editProblemPage &&
+            !questionPage &&
+            !editQuestionPage
+          "
+        >
           <el-button
             v-if="!editPage"
             :type="createPage ? 'danger' : 'primary'"
             size="small"
             @click="handleCreatePage"
             :icon="createPage ? 'el-icon-back' : 'el-icon-plus'"
-          >{{ createPage ? $t('m.Back') : $t('m.Create') }}</el-button>
+            >{{ createPage ? $t("m.Back") : $t("m.Create") }}</el-button
+          >
           <el-button
             v-if="editPage && adminPage"
             type="danger"
             size="small"
             @click="handleEditPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
           <el-button
             :type="adminPage ? 'warning' : 'success'"
             size="small"
             @click="handleAdminPage"
             :icon="adminPage ? 'el-icon-back' : 'el-icon-s-opportunity'"
-          >{{ adminPage ? $t('m.Back') : $t('m.Exam_Admin') }}</el-button>
+            >{{ adminPage ? $t("m.Back") : $t("m.Exam_Admin") }}</el-button
+          >
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && problemPage && !editProblemPage && !createProblemPage">
+        <el-col
+          :span="18"
+          v-else-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            problemPage &&
+            !editProblemPage &&
+            !createProblemPage
+          "
+        >
           <el-button
             type="primary"
             size="small"
             @click="handleCreateProblemPage"
             icon="el-icon-plus"
-          >{{ $t('m.Create') }}</el-button>
+            >{{ $t("m.Create") }}</el-button
+          >
           <el-button
             type="primary"
             size="small"
             @click="publicPage = true"
             icon="el-icon-plus"
-          >{{ $t('m.Add_From_Public_Problem') }}</el-button>
+            >{{ $t("m.Add_From_Public_Problem") }}</el-button
+          >
           <el-button
             type="success"
             size="small"
             @click="handleGroupProblemPage"
             icon="el-icon-plus"
-          >{{ $t('m.Add_From_Group_Problem') }}</el-button>
+            >{{ $t("m.Add_From_Group_Problem") }}</el-button
+          >
           <el-button
             type="warning"
             size="small"
             @click="handleProblemPage(null)"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>
+            >{{ $t("m.Back") }}</el-button
+          >
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && questionPage && !editQuestionPage && !createQuestionPage">
+        <el-col
+          :span="18"
+          v-else-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            questionPage &&
+            !editQuestionPage &&
+            !createQuestionPage
+          "
+        >
           <el-button
             type="primary"
             size="small"
             @click="handleCreateQuestionPage"
             icon="el-icon-plus"
-          >{{ $t('m.Create') }}</el-button>
+            >{{ $t("m.Create") }}</el-button
+          >
           <el-button
             type="success"
             size="small"
             @click="groupQuestionPage = true"
             icon="el-icon-plus"
-          >{{ $t('m.Add_From_Group_Question') }}</el-button>
+            >{{ $t("m.Add_From_Group_Question") }}</el-button
+          >
           <el-button
             type="warning"
             size="small"
             @click="handleQuestionPage(null)"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>
+            >{{ $t("m.Back") }}</el-button
+          >
         </el-col>
-        <el-col :span="24" v-if="(isSuperAdmin || isGroupAdmin) && questionPage && !editQuestionPage && !createQuestionPage">
+        <el-col
+          :span="24"
+          v-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            questionPage &&
+            !editQuestionPage &&
+            !createQuestionPage
+          "
+        >
           <section v-if="!editQuestionPage && !editQuestionPage">
-            <b class="question-filter">{{ $t('m.Question_Type') }}</b>
+            <b class="question-filter">{{ $t("m.Question_Type") }}</b>
             <div>
               <el-tag
                 size="medium"
@@ -85,7 +126,9 @@
                 type="primary"
                 :effect="type == 0 ? 'dark' : 'plain'"
                 @click="filterByType(0)"
-              > {{ $t('m.All') }} </el-tag>
+              >
+                {{ $t("m.All") }}
+              </el-tag>
               <el-tag
                 size="medium"
                 class="filter-item"
@@ -94,41 +137,59 @@
                 :effect="type == index ? 'dark' : 'plain'"
                 :key="index"
                 @click="filterByType(index)"
-              > {{ $t('m.' + key.name + '_Question') }} </el-tag>
+              >
+                {{ $t("m." + key.name + "_Question") }}
+              </el-tag>
             </div>
           </section>
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && (editProblemPage || createProblemPage)">
+        <el-col
+          :span="18"
+          v-else-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            (editProblemPage || createProblemPage)
+          "
+        >
           <el-button
             v-if="editProblemPage"
             type="danger"
             size="small"
             @click="handleEditProblemPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
           <el-button
             v-if="createProblemPage"
             type="danger"
             size="small"
             @click="handleCreateProblemPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
         </el-col>
-        <el-col :span="18" v-else-if="(isSuperAdmin || isGroupAdmin) && (editQuestionPage || createQuestionPage)">
+        <el-col
+          :span="18"
+          v-else-if="
+            (isSuperAdmin || isGroupAdmin) &&
+            (editQuestionPage || createQuestionPage)
+          "
+        >
           <el-button
             v-if="editQuestionPage"
             type="danger"
             size="small"
             @click="handleEditQuestionPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
           <el-button
             v-if="createQuestionPage"
             type="danger"
             size="small"
             @click="handleCreateQuestionPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
         </el-col>
       </el-row>
     </div>
@@ -144,36 +205,18 @@
         >
           <el-row type="flex" justify="space-between" align="middle">
             <el-col :xs="10" :sm="4" :md="3" :lg="2">
-              <img
-                class="trophy"
-                :src="examSrc"
-                width="95px"
-              />
+              <img class="trophy" :src="examSrc" width="95px" />
             </el-col>
-            <el-col
-              :xs="10"
-              :sm="16"
-              :md="19"
-              :lg="20"
-              class="exam-main"
-            >
+            <el-col :xs="10" :sm="16" :md="19" :lg="20" class="exam-main">
               <p class="exam-title">
                 <a class="entry" @click.stop="goGroupExam(exam.id)">
                   {{ exam.title }}
                 </a>
                 <template v-if="exam.auth == 1">
-                  <i
-                    class="el-icon-lock"
-                    size="20"
-                    style="color:#d9534f"
-                  ></i>
+                  <i class="el-icon-lock" size="20" style="color: #d9534f"></i>
                 </template>
                 <template v-if="exam.auth == 2">
-                  <i
-                    class="el-icon-lock"
-                    size="20"
-                    style="color:#f0ad4e"
-                  ></i>
+                  <i class="el-icon-lock" size="20" style="color: #f0ad4e"></i>
                 </template>
               </p>
               <ul class="detail">
@@ -195,9 +238,7 @@
                 </li>
                 <li>
                   <el-tooltip
-                    :content="
-                      $t('m.' + EXAM_TYPE_REVERSE[exam.auth].tips)
-                    "
+                    :content="$t('m.' + EXAM_TYPE_REVERSE[exam.auth].tips)"
                     placement="top"
                     effect="light"
                   >
@@ -205,18 +246,14 @@
                       :type="EXAM_TYPE_REVERSE[exam.auth]['color']"
                       effect="plain"
                     >
-                      {{
-                        $t(
-                          'm.' + EXAM_TYPE_REVERSE[exam.auth]['name']
-                        )
-                      }}
+                      {{ $t("m." + EXAM_TYPE_REVERSE[exam.auth]["name"]) }}
                     </el-tag>
                   </el-tooltip>
                 </li>
                 <li v-if="exam.auth != EXAM_TYPE.PUBLIC">
                   <i
                     class="el-icon-user-solid"
-                    style="color:rgb(48, 145, 242);"
+                    style="color: rgb(48, 145, 242)"
                   ></i
                   >x{{ exam.count != null ? exam.count : 0 }}
                 </li>
@@ -232,30 +269,20 @@
                       type="primary"
                       :disabled="exam.status == EXAM_STATUS.SCHEDULED"
                       icon="el-icon-data-analysis"
-                      @click="
-                        goExamOutsideScoreBoard(exam.id, exam.type)
-                      "
+                      @click="goExamOutsideScoreBoard(exam.id, exam.type)"
                     ></el-button>
                   </el-tooltip>
                 </li>
               </ul>
             </el-col>
-            <el-col
-              :xs="4"
-              :sm="4"
-              :md="2"
-              :lg="2"
-              style="text-align: center"
-            >
+            <el-col :xs="4" :sm="4" :md="2" :lg="2" style="text-align: center">
               <el-tag
                 effect="dark"
                 :color="EXAM_STATUS_REVERSE[exam.status]['color']"
                 size="medium"
               >
                 <i class="fa fa-circle" aria-hidden="true"></i>
-                {{
-                  $t('m.' + EXAM_STATUS_REVERSE[exam.status]['name'])
-                }}
+                {{ $t("m." + EXAM_STATUS_REVERSE[exam.status]["name"]) }}
               </el-tag>
             </el-col>
           </el-row>
@@ -364,28 +391,28 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import ExamList from '@/components/oj/group/ExamList'
-import Exam from '@/components/oj/group/Exam'
-import Problem from '@/components/oj/group/Problem'
-import Question from '@/components/oj/group/Question'
-import ProblemList from '@/components/oj/group/ProblemList'
-import QuestionList from '@/components/oj/group/QuestionList'
-import AddPublicProblem from '@/components/oj/group/AddPublicProblem.vue';
-import AddGroupProblem from '@/components/oj/group/AddGroupProblem.vue';
-import AddGroupQuestion from '@/components/oj/group/AddGroupQuestion.vue';
-import api from '@/common/api';
-import time from '@/common/time';
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import ExamList from "@/components/oj/group/ExamList";
+import Exam from "@/components/oj/group/Exam";
+import Problem from "@/components/oj/group/Problem";
+import Question from "@/components/oj/group/Question";
+import ProblemList from "@/components/oj/group/ProblemList";
+import QuestionList from "@/components/oj/group/QuestionList";
+import AddPublicProblem from "@/components/oj/group/AddPublicProblem.vue";
+import AddGroupProblem from "@/components/oj/group/AddGroupProblem.vue";
+import AddGroupQuestion from "@/components/oj/group/AddGroupQuestion.vue";
+import api from "@/common/api";
+import time from "@/common/time";
 import {
   EXAM_STATUS_REVERSE,
   EXAM_TYPE,
   EXAM_TYPE_REVERSE,
   EXAM_STATUS,
   QUESTION_TYPE_REVERSE,
-} from '@/common/constants';
+} from "@/common/constants";
 export default {
-  name: 'GroupExamList',
+  name: "GroupExamList",
   components: {
     Pagination,
     ExamList,
@@ -419,7 +446,7 @@ export default {
       createQuestionPage: false,
       examID: null,
       type: 0,
-      examSrc: require('@/assets/exam.png'),
+      examSrc: require("@/assets/exam.png"),
     };
   },
   mounted() {
@@ -450,20 +477,26 @@ export default {
     },
     getGroupExamList() {
       this.loading = true;
-      api.getGroupExamList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.examList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupExamList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.examList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     goGroupExam(examID) {
       this.$router.push({
-        name: 'ExamDetails',
+        name: "ExamDetails",
         params: {
           examID: examID,
         },
@@ -474,8 +507,7 @@ export default {
     },
     getborderColor(exam) {
       return (
-        'border-left: 4px solid ' +
-        EXAM_STATUS_REVERSE[exam.status]['color']
+        "border-left: 4px solid " + EXAM_STATUS_REVERSE[exam.status]["color"]
       );
     },
     handleCreatePage() {
@@ -519,10 +551,10 @@ export default {
     },
     filterByType(type) {
       this.type = parseInt(type);
-    }
+    },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
+    ...mapGetters(["isAuthenticated", "isSuperAdmin", "isGroupAdmin"]),
   },
 };
 </script>

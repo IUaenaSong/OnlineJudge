@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <vxe-table
           border="inner"
@@ -20,15 +20,25 @@
           >
             <template v-slot="{ row }">
               <template v-if="isGetStatusOk">
-                <span :class="getScoreColor(row.myScore * row.score / row.ioScore, row.score)" v-if="row.myScore != null">{{
-                  row.myScore * row.score / row.ioScore
-                }}</span>
+                <span
+                  :class="
+                    getScoreColor(
+                      (row.myScore * row.score) / row.ioScore,
+                      row.score
+                    )
+                  "
+                  v-if="row.myScore != null"
+                  >{{ (row.myScore * row.score) / row.ioScore }}</span
+                >
                 <el-tooltip
                   :content="JUDGE_STATUS[row.myStatus]['name']"
                   placement="top"
                   v-else-if="row.myStatus == -5"
                 >
-                  <i class="fa fa-question" :style="getIconColor(row.myStatus)"></i>
+                  <i
+                    class="fa fa-question"
+                    :style="getIconColor(row.myStatus)"
+                  ></i>
                 </el-tooltip>
                 <el-tooltip
                   :content="JUDGE_STATUS[row.myStatus]['name']"
@@ -47,7 +57,7 @@
 
           <vxe-table-column field="displayId" width="80" title="#">
             <template v-slot="{ row }">
-              <span style="vertical-align: top;" v-if="row.color">
+              <span style="vertical-align: top" v-if="row.color">
                 <svg
                   t="1633685184463"
                   class="icon"
@@ -85,7 +95,7 @@
               <span v-if="!isExamAdmin">
                 <i
                   class="fa fa-question"
-                  style="font-weight: 600;font-size: 16px;color:#909399"
+                  style="font-weight: 600; font-size: 16px; color: #909399"
                 ></i>
               </span>
               <span v-else>
@@ -98,15 +108,19 @@
               <span v-if="!isExamAdmin">
                 <i
                   class="fa fa-question"
-                  style="font-weight: 600;font-size: 16px;color:#909399"
+                  style="font-weight: 600; font-size: 16px; color: #909399"
                 ></i>
               </span>
               <span v-else>
-                {{ (row.ac + row.error) }}
+                {{ row.ac + row.error }}
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="ACRate" :title="$t('m.AC_Rate')" min-width="120">
+          <vxe-table-column
+            field="ACRate"
+            :title="$t('m.AC_Rate')"
+            min-width="120"
+          >
             <template v-slot="{ row }">
               <span>
                 <el-tooltip
@@ -130,16 +144,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { JUDGE_STATUS } from '@/common/constants';
-import api from '@/common/api';
+import { mapState, mapGetters } from "vuex";
+import { JUDGE_STATUS } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'ExamProblemList',
+  name: "ExamProblemList",
   data() {
     return {
       JUDGE_STATUS: {},
       isGetStatusOk: false,
-      testcolor: 'rgba(0, 206, 209, 1)',
+      testcolor: "rgba(0, 206, 209, 1)",
     };
   },
   mounted() {
@@ -148,7 +162,7 @@ export default {
   },
   methods: {
     getExamProblemList() {
-      this.$store.dispatch('getExamProblemList').then((res) => {
+      this.$store.dispatch("getExamProblemList").then((res) => {
         if (this.isAuthenticated) {
           let isContestProblemList = false; // 为了与比赛题目区分
           let isExamProblemList = true;
@@ -169,10 +183,10 @@ export default {
               .then((res) => {
                 let result = res.data.data;
                 for (let index = 0; index < this.problemList.length; index++) {
-                  this.problemList[index]['myStatus'] =
-                    result[this.problemList[index].pid]['status'];
-                  this.problemList[index]['myScore'] =
-                    result[this.problemList[index].pid]['score'];
+                  this.problemList[index]["myStatus"] =
+                    result[this.problemList[index].pid]["status"];
+                  this.problemList[index]["myScore"] =
+                    result[this.problemList[index].pid]["score"];
                 }
                 this.isGetStatusOk = true;
               });
@@ -182,7 +196,7 @@ export default {
     },
     goExamProblem(event) {
       this.$router.push({
-        name: 'ExamProblemDetails',
+        name: "ExamProblemDetails",
         params: {
           examID: this.$route.params.examID,
           problemID: event.row.displayId,
@@ -197,16 +211,16 @@ export default {
     },
     getIconColor(status) {
       return (
-        'font-weight: 600;font-size: 16px;color:' + JUDGE_STATUS[status].rgb
+        "font-weight: 600;font-size: 16px;color:" + JUDGE_STATUS[status].rgb
       );
     },
     getScoreColor(myScore, score) {
       if (myScore == 0) {
-        return 'el-tag el-tag--small oi-0';
+        return "el-tag el-tag--small oi-0";
       } else if (myScore > 0 && myScore < score) {
-        return 'el-tag el-tag--small oi-between';
+        return "el-tag el-tag--small oi-between";
       } else if (myScore == score) {
-        return 'el-tag el-tag--small oi-100';
+        return "el-tag el-tag--small oi-100";
       }
     },
   },
@@ -214,10 +228,7 @@ export default {
     ...mapState({
       problemList: (state) => state.exam.examProblemList,
     }),
-    ...mapGetters([
-      'isAuthenticated',
-      'isExamAdmin',
-    ]),
+    ...mapGetters(["isAuthenticated", "isExamAdmin"]),
   },
 };
 </script>

@@ -82,13 +82,13 @@
                   class="radio"
                   v-model="contest.oiRankScoreType"
                   label="Recent"
-                  >{{ $t('m.OI_Rank_Score_Type_Recent') }}</el-radio
+                  >{{ $t("m.OI_Rank_Score_Type_Recent") }}</el-radio
                 >
                 <el-radio
                   class="radio"
                   v-model="contest.oiRankScoreType"
                   label="Highest"
-                  >{{ $t('m.OI_Rank_Score_Type_Highest') }}</el-radio
+                  >{{ $t("m.OI_Rank_Score_Type_Highest") }}</el-radio
                 >
               </el-form-item>
             </el-col>
@@ -160,7 +160,10 @@
 
           <el-row :gutter="20">
             <el-col :md="8" :xs="24">
-              <el-form-item :label="$t('m.Contest_Outside_ScoreBoard')" required>
+              <el-form-item
+                :label="$t('m.Contest_Outside_ScoreBoard')"
+                required
+              >
                 <el-switch
                   v-model="contest.openRank"
                   :active-text="$t('m.Open')"
@@ -186,13 +189,13 @@
               <el-form-item :label="$t('m.Rank_Show_Name')" required>
                 <el-radio-group v-model="contest.rankShowName">
                   <el-radio label="username">{{
-                    $t('m.Show_Username')
+                    $t("m.Show_Username")
                   }}</el-radio>
                   <el-radio label="nickname">{{
-                    $t('m.Show_Nickname')
+                    $t("m.Show_Nickname")
                   }}</el-radio>
                   <el-radio label="realname">{{
-                    $t('m.Show_Realname')
+                    $t("m.Show_Realname")
                   }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -209,7 +212,7 @@
                 type="warning"
                 size="medium"
                 @close="removeStarUser(username)"
-                style="margin-right: 7px;margin-top:4px"
+                style="margin-right: 7px; margin-top: 4px"
                 >{{ username }}</el-tag
               >
               <el-input
@@ -287,7 +290,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col :md="6" :xs="24">
-                  <el-form-item :label="$t('m.Start_Number')" prop="number_from">
+                  <el-form-item
+                    :label="$t('m.Start_Number')"
+                    prop="number_from"
+                  >
                     <el-input-number
                       v-model="formRule.number_from"
                       style="width: 100%"
@@ -307,14 +313,16 @@
                   class="userPreview"
                   v-if="formRule.number_from <= formRule.number_to"
                 >
-                  {{ $t('m.The_allowed_account_will_be') }}
-                  {{ formRule.prefix + formRule.number_from + formRule.suffix }},
+                  {{ $t("m.The_allowed_account_will_be") }}
+                  {{
+                    formRule.prefix + formRule.number_from + formRule.suffix
+                  }},
                   <span v-if="formRule.number_from + 1 < formRule.number_to">
                     {{
                       formRule.prefix +
-                        (formRule.number_from + 1) +
-                        formRule.suffix +
-                        '...'
+                      (formRule.number_from + 1) +
+                      formRule.suffix +
+                      "..."
                     }}
                   </span>
                   <span v-if="formRule.number_from + 1 <= formRule.number_to">
@@ -338,7 +346,7 @@
           </el-row>
         </el-form>
         <el-button type="primary" @click.native="submit">{{
-          $t('m.Save')
+          $t("m.Save")
         }}</el-button>
       </el-card>
     </el-col>
@@ -346,66 +354,66 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import time from '@/common/time';
-import moment from 'moment';
-import { mapGetters } from 'vuex';
-import Editor from '@/components/admin/Editor.vue';
+import api from "@/common/api";
+import time from "@/common/time";
+import moment from "moment";
+import { mapGetters } from "vuex";
+import Editor from "@/components/admin/Editor.vue";
 export default {
-  name: 'GroupContest',
+  name: "GroupContest",
   components: {
     Editor,
   },
   props: {
     mode: {
       type: String,
-      default: 'edit'
+      default: "edit",
     },
     title: {
       type: String,
-      default: 'Edit Contest'
+      default: "Edit Contest",
     },
     apiMethod: {
       type: String,
-      default: 'addGroupContest'
+      default: "addGroupContest",
     },
     cid: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
     return {
       disableRuleType: false,
-      durationText: '',
+      durationText: "",
       seal_rank_time: 2,
       contest: {
-        title: '',
-        description: '',
-        startTime: '',
-        endTime: '',
+        title: "",
+        description: "",
+        startTime: "",
+        endTime: "",
         duration: 0,
         type: 0,
-        pwd: '',
+        pwd: "",
         sealRank: false,
-        sealRankTime: '', //封榜时间
+        sealRankTime: "", //封榜时间
         autoRealRank: true,
         auth: 0,
         openPrint: false,
-        rankShowName: 'username',
+        rankShowName: "username",
         openAccountLimit: false,
-        accountLimitRule: '',
+        accountLimitRule: "",
         starAccount: [],
-        oiRankScoreType: 'Recent',
+        oiRankScoreType: "Recent",
       },
       formRule: {
-        prefix: '',
-        suffix: '',
+        prefix: "",
+        suffix: "",
         number_from: 0,
         number_to: 10,
-        extra_account: '',
+        extra_account: "",
       },
-      starUserInput: '',
+      starUserInput: "",
       inputVisible: false,
     };
   },
@@ -415,62 +423,64 @@ export default {
   watch: {
     $route() {
       this.contest = {
-        title: '',
-        description: '',
-        startTime: '',
-        endTime: '',
+        title: "",
+        description: "",
+        startTime: "",
+        endTime: "",
         duration: 0,
         type: 0,
-        pwd: '',
+        pwd: "",
         sealRank: false,
-        sealRankTime: '', //封榜时间
+        sealRankTime: "", //封榜时间
         autoRealRank: true,
         auth: 0,
         openPrint: false,
-        rankShowName: 'username',
+        rankShowName: "username",
         openAccountLimit: false,
-        accountLimitRule: '',
+        accountLimitRule: "",
         starAccount: [],
-        oiRankScoreType: 'Recent',
+        oiRankScoreType: "Recent",
       };
       this.init();
     },
   },
   methods: {
     init() {
-      if (this.mode === 'edit') {
+      if (this.mode === "edit") {
         this.disableRuleType = true;
-        api.getGroupContest(this.cid).then((res) => {
-          let data = res.data.data;
-          this.contest = data;
-          this.changeDuration();
-          // 封榜时间转换
-          let halfHour = moment(this.contest.endTime)
-            .subtract(1800, 'seconds')
-            .toString();
-          let oneHour = moment(this.contest.endTime)
-            .subtract(3600, 'seconds')
-            .toString();
-          let allHour = moment(this.contest.startTime).toString();
-          let sealRankTime = moment(this.contest.sealRankTime).toString();
-          switch (sealRankTime) {
-            case halfHour:
-              this.seal_rank_time = 0;
-              break;
-            case oneHour:
-              this.seal_rank_time = 1;
-              break;
-            case allHour:
-              this.seal_rank_time = 2;
-              break;
-          }
-          if (this.contest.accountLimitRule) {
-            this.formRule = this.changeStrToAccountRule(
-              this.contest.accountLimitRule
-            );
-          }
-        })
-        .catch(() => {});
+        api
+          .getGroupContest(this.cid)
+          .then((res) => {
+            let data = res.data.data;
+            this.contest = data;
+            this.changeDuration();
+            // 封榜时间转换
+            let halfHour = moment(this.contest.endTime)
+              .subtract(1800, "seconds")
+              .toString();
+            let oneHour = moment(this.contest.endTime)
+              .subtract(3600, "seconds")
+              .toString();
+            let allHour = moment(this.contest.startTime).toString();
+            let sealRankTime = moment(this.contest.sealRankTime).toString();
+            switch (sealRankTime) {
+              case halfHour:
+                this.seal_rank_time = 0;
+                break;
+              case oneHour:
+                this.seal_rank_time = 1;
+                break;
+              case allHour:
+                this.seal_rank_time = 2;
+                break;
+            }
+            if (this.contest.accountLimitRule) {
+              this.formRule = this.changeStrToAccountRule(
+                this.contest.accountLimitRule
+              );
+            }
+          })
+          .catch(() => {});
       } else {
         this.disableRuleType = false;
       }
@@ -478,43 +488,43 @@ export default {
     submit() {
       if (!this.contest.title) {
         this.$msg.error(
-          this.$i18n.t('m.Contest_Title') + ' ' + this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Contest_Title") + " " + this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.contest.description) {
         this.$msg.error(
-          this.$i18n.t('m.Contest_Description') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Contest_Description") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.contest.startTime) {
         this.$msg.error(
-          this.$i18n.t('m.Contest_Start_Time') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Contest_Start_Time") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.contest.endTime) {
         this.$msg.error(
-          this.$i18n.t('m.Contest_End_Time') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Contest_End_Time") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
       if (!this.contest.duration || this.contest.duration <= 0) {
-        this.$msg.error(this.$i18n.t('m.Contest_Duration_Check'));
+        this.$msg.error(this.$i18n.t("m.Contest_Duration_Check"));
         return;
       }
       if (this.contest.auth != 0 && !this.contest.pwd) {
         this.$msg.error(
-          this.$i18n.t('m.Contest_Password') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Contest_Password") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
@@ -527,33 +537,33 @@ export default {
         case 0: // 结束前半小时
           this.contest.sealRankTime = moment(this.contest.endTime).subtract(
             1800,
-            'seconds'
+            "seconds"
           );
           break;
         case 1: // 结束前一小时
           this.contest.sealRankTime = moment(this.contest.endTime).subtract(
             3600,
-            'seconds'
+            "seconds"
           );
           break;
         case 2: // 全程
           this.contest.sealRankTime = moment(this.contest.startTime);
       }
       let data = Object.assign({}, this.contest);
-      if (this.mode === 'add') {
-        data['uid'] = this.userInfo.uid;
-        data['author'] = this.userInfo.username;
-        data['gid'] = this.$route.params.groupID;
+      if (this.mode === "add") {
+        data["uid"] = this.userInfo.uid;
+        data["author"] = this.userInfo.username;
+        data["gid"] = this.$route.params.groupID;
       }
       api[this.apiMethod](data)
         .then((res) => {
-          this.$router.push({ name: 'GroupContestList' });
-          if (this.mode === 'edit') {
+          this.$router.push({ name: "GroupContestList" });
+          if (this.mode === "edit") {
             this.$emit("handleEditPage");
-            this.$msg.success(this.$t('m.Update_Successfully'));
+            this.$msg.success(this.$t("m.Update_Successfully"));
           } else {
             this.$emit("handleCreatePage");
-            this.$msg.success(this.$t('m.Create_Successfully'));
+            this.$msg.success(this.$t("m.Create_Successfully"));
           }
           this.$emit("currentChange", 1);
         })
@@ -564,34 +574,34 @@ export default {
       let end = this.contest.endTime;
       let durationMS = time.durationMs(start, end);
       if (durationMS < 0) {
-        this.durationText = this.$i18n.t('m.Contets_Time_Check');
+        this.durationText = this.$i18n.t("m.Contets_Time_Check");
         this.contest.duration = 0;
         return;
       }
-      if (start != '' && end != '') {
+      if (start != "" && end != "") {
         this.durationText = time.formatSpecificDuration(start, end);
         this.contest.duration = durationMS;
       }
     },
     changeAccountRuleToStr(formRule) {
       let result =
-        '<prefix>' +
+        "<prefix>" +
         formRule.prefix +
-        '</prefix><suffix>' +
+        "</prefix><suffix>" +
         formRule.suffix +
-        '</suffix><start>' +
+        "</suffix><start>" +
         formRule.number_from +
-        '</start><end>' +
+        "</start><end>" +
         formRule.number_to +
-        '</end><extra>' +
+        "</end><extra>" +
         formRule.extra_account +
-        '</extra>';
+        "</extra>";
       return result;
     },
     changeStrToAccountRule(value) {
       let reg =
-        '<prefix>([\\s\\S]*?)</prefix><suffix>([\\s\\S]*?)</suffix><start>([\\s\\S]*?)</start><end>([\\s\\S]*?)</end><extra>([\\s\\S]*?)</extra>';
-      let re = RegExp(reg, 'g');
+        "<prefix>([\\s\\S]*?)</prefix><suffix>([\\s\\S]*?)</suffix><start>([\\s\\S]*?)</start><end>([\\s\\S]*?)</end><extra>([\\s\\S]*?)</extra>";
+      let re = RegExp(reg, "g");
       let tmp = re.exec(value);
       return {
         prefix: tmp[1],
@@ -602,18 +612,18 @@ export default {
       };
     },
     addStarUser() {
-      this.starUserInput = this.starUserInput.replace(/(^\s*)|(\s*$)/g, '');
+      this.starUserInput = this.starUserInput.replace(/(^\s*)|(\s*$)/g, "");
       if (this.starUserInput) {
         for (var i = 0; i < this.contest.starAccount.length; i++) {
           if (this.contest.starAccount[i] == this.starUserInput) {
-            this.$msg.warning(this.$i18n.t('m.Add_Star_User_Error'));
-            this.starUserInput = '';
+            this.$msg.warning(this.$i18n.t("m.Add_Star_User_Error"));
+            this.starUserInput = "";
             return;
           }
         }
         this.contest.starAccount.push(this.starUserInput);
         this.inputVisible = false;
-        this.starUserInput = '';
+        this.starUserInput = "";
       }
     },
     removeStarUser(username) {
@@ -639,7 +649,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(["userInfo"]),
   },
 };
 </script>

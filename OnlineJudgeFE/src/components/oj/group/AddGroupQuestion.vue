@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align:center">
+  <div style="text-align: center">
     <vxe-input
       v-model="keyword"
       :placeholder="$t('m.Enter_keyword')"
@@ -7,10 +7,10 @@
       size="medium"
       @search-click="filterByKeyword"
       @keyup.enter.native="filterByKeyword"
-      style="margin-bottom:10px"
+      style="margin-bottom: 10px"
     ></vxe-input>
     <section>
-      <b class="question-filter">{{ $t('m.Question_Type') }}</b>
+      <b class="question-filter">{{ $t("m.Question_Type") }}</b>
       <div>
         <el-tag
           size="medium"
@@ -18,7 +18,9 @@
           type="primary"
           :effect="type == 0 ? 'dark' : 'plain'"
           @click="filterByType(0)"
-        > {{ $t('m.All') }} </el-tag>
+        >
+          {{ $t("m.All") }}
+        </el-tag>
         <el-tag
           size="medium"
           class="filter-item"
@@ -27,7 +29,9 @@
           :effect="type == index ? 'dark' : 'plain'"
           :key="index"
           @click="filterByType(index)"
-        > {{ $t('m.' + key.name + '_Question') }} </el-tag>
+        >
+          {{ $t("m." + key.name + "_Question") }}
+        </el-tag>
       </div>
     </section>
     <vxe-table
@@ -39,7 +43,11 @@
     >
       <vxe-table-column title="ID" min-width="100" field="questionId">
       </vxe-table-column>
-      <vxe-table-column min-width="150" :title="$t('m.Description')" field="description">
+      <vxe-table-column
+        min-width="150"
+        :title="$t('m.Description')"
+        field="description"
+      >
       </vxe-table-column>
       <vxe-table-column
         field="type"
@@ -54,14 +62,24 @@
             class="filter-item"
             :type="QUESTION_TYPE_REVERSE[row.type].color"
             effect="dark"
-          > {{ $t('m.' + QUESTION_TYPE_REVERSE[row.type].name + '_Question') }} </el-tag>
+          >
+            {{ $t("m." + QUESTION_TYPE_REVERSE[row.type].name + "_Question") }}
+          </el-tag>
           <el-tag
             v-if="row.type == 1"
             size="medium"
             type="primary"
             effect="plain"
           >
-            {{ $t('m.' + (row.single ? 'Single_Choice' : 'Indefinite_Multiple_Choice') + '_Question') }}
+            {{
+              $t(
+                "m." +
+                  (row.single
+                    ? "Single_Choice"
+                    : "Indefinite_Multiple_Choice") +
+                  "_Question"
+              )
+            }}
           </el-tag>
         </template>
       </vxe-table-column>
@@ -94,18 +112,18 @@
   </div>
 </template>
 <script>
-import api from '@/common/api';
-import Pagination from '@/components/oj/common/Pagination';
-import { QUESTION_TYPE_REVERSE } from '@/common/constants';
+import api from "@/common/api";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import { QUESTION_TYPE_REVERSE } from "@/common/constants";
 export default {
-  name: 'AddQuestionFromGroup',
+  name: "AddQuestionFromGroup",
   components: {
     Pagination,
   },
   props: {
     examID: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -117,7 +135,7 @@ export default {
       questionList: [],
       contest: {},
       exam: {},
-      keyword: '',
+      keyword: "",
       type: 0,
     };
   },
@@ -125,8 +143,9 @@ export default {
     this.QUESTION_TYPE_REVERSE = Object.assign({}, QUESTION_TYPE_REVERSE);
   },
   mounted() {
-    
-    api.getGroupExam(this.examID).then((res) => {
+    api
+      .getGroupExam(this.examID)
+      .then((res) => {
         this.exam = res.data.data;
         this.init();
       })
@@ -152,7 +171,8 @@ export default {
         eid: this.exam.id,
         queryExisted: false,
       };
-      api.getGroupExamQuestionList(this.currentPage, this.limit, params)
+      api
+        .getGroupExamQuestionList(this.currentPage, this.limit, params)
         .then((res) => {
           this.loading = false;
           this.total = res.data.data.questionList.total;
@@ -164,8 +184,8 @@ export default {
     },
     addGroupQuestion(id, questionId) {
       this.$prompt(
-        this.$i18n.t('m.Enter_The_Question_Display_ID_in_the_Exam'),
-        'Tips'
+        this.$i18n.t("m.Enter_The_Question_Display_ID_in_the_Exam"),
+        "Tips"
       ).then(
         ({ value }) => {
           let data = {
@@ -173,13 +193,15 @@ export default {
             eid: this.examID,
             displayId: value,
           };
-          if (value == null || value == '') {
-            this.$msg.error(this.$t('m.The_Question_Display_ID_in_the_Exam_is_required'));
+          if (value == null || value == "") {
+            this.$msg.error(
+              this.$t("m.The_Question_Display_ID_in_the_Exam_is_required")
+            );
             return;
           }
           api.addGroupExamQuestionFromGroup(data).then(
             (res) => {
-              this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+              this.$msg.success(this.$i18n.t("m.Add_Successfully"));
               this.$emit("currentChangeQuestion");
               this.currentChange(1);
             },
@@ -195,7 +217,7 @@ export default {
     filterByType(type) {
       this.type = parseInt(type);
       this.currentChange(1);
-    }
+    },
   },
 };
 </script>

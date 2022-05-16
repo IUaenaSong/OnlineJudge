@@ -3,12 +3,12 @@
     <el-row :gutter="20">
       <el-col :md="15" :sm="24" :xs="24">
         <el-row>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
             <el-card>
               <div slot="header" class="content-center">
                 <span class="panel-title home-title welcome-title"
-                  >{{ $t('m.Welcome_to')
-                  }}{{ toUpper(websiteConfig.shortName) }}</span
+                  >{{ $t("m.Welcome_to")
+                  }}{{ websiteConfig.shortName }}</span
                 >
               </div>
               <el-carousel
@@ -30,14 +30,14 @@
               </el-carousel>
             </el-card>
           </el-col>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
             <Announcements></Announcements>
           </el-col>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
             <el-card>
               <div slot="header" class="clearfix">
                 <span class="panel-title home-title">{{
-                  $t('m.Other_OJ_Contest')
+                  $t("m.Other_OJ_Contest")
                 }}</span>
               </div>
               <vxe-table
@@ -81,11 +81,15 @@
       </el-col>
       <el-col :md="9" :sm="24" :xs="24">
         <el-row>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;" v-if="contests.length">
+          <el-col
+            :span="24"
+            style="margin-top: 10px; margin-bottom: 10px"
+            v-if="contests.length"
+          >
             <el-card>
               <div slot="header" class="clearfix title content-center">
                 <div class="home-title home-contest">
-                  {{ $t('m.Recent_Contest') }}
+                  {{ $t("m.Recent_Contest") }}
                 </div>
               </div>
               <el-card
@@ -111,7 +115,9 @@
                     >
                       <i class="fa fa-circle" aria-hidden="true"></i>
                       {{
-                        $t('m.' + CONTEST_STATUS_REVERSE[contest.status]['name'])
+                        $t(
+                          "m." + CONTEST_STATUS_REVERSE[contest.status]["name"]
+                        )
                       }}
                     </el-tag>
                   </div>
@@ -123,7 +129,7 @@
                       round
                       @click="goContestList(contest.type)"
                       size="mini"
-                      style="margin-right: 10px;"
+                      style="margin-right: 10px"
                       ><i class="fa fa-trophy"></i>
                       {{ contest.type | parseContestType }}
                     </el-button>
@@ -132,14 +138,14 @@
                     <el-tooltip
                       :content="
                         $t('m.Contest_Rank') +
-                          '：' +
-                          (contest.oiRankScoreType == 'Recent'
-                            ? $t(
-                                'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
-                              )
-                            : $t(
-                                'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
-                              ))
+                        '：' +
+                        (contest.oiRankScoreType == 'Recent'
+                          ? $t(
+                              'm.Based_on_The_Recent_Score_Submitted_Of_Each_Problem'
+                            )
+                          : $t(
+                              'm.Based_on_The_Highest_Score_Submitted_For_Each_Problem'
+                            ))
                       "
                       placement="top"
                     >
@@ -148,14 +154,16 @@
                         round
                         @click="goContestList(contest.type)"
                         size="mini"
-                        style="margin-right: 10px;"
+                        style="margin-right: 10px"
                         ><i class="fa fa-trophy"></i>
                         {{ contest.type | parseContestType }}
                       </el-button>
                     </el-tooltip>
                   </template>
                   <el-tooltip
-                    :content="$t('m.' + CONTEST_TYPE_REVERSE[contest.auth].tips)"
+                    :content="
+                      $t('m.' + CONTEST_TYPE_REVERSE[contest.auth].tips)
+                    "
                     placement="top"
                     effect="light"
                   >
@@ -164,7 +172,9 @@
                       size="medium"
                       effect="plain"
                     >
-                      {{ $t('m.' + CONTEST_TYPE_REVERSE[contest.auth]['name']) }}
+                      {{
+                        $t("m." + CONTEST_TYPE_REVERSE[contest.auth]["name"])
+                      }}
                     </el-tag>
                   </el-tooltip>
                 </div>
@@ -174,10 +184,10 @@
                       type="primary"
                       round
                       size="mini"
-                      style="margin-top: 4px;"
+                      style="margin-top: 4px"
                       ><i class="fa fa-calendar"></i>
                       {{
-                        contest.startTime | localtime((format = 'MM-DD HH:mm'))
+                        contest.startTime | localtime((format = "MM-DD HH:mm"))
                       }}
                     </el-button>
                   </li>
@@ -186,7 +196,7 @@
                       type="success"
                       round
                       size="mini"
-                      style="margin-top: 4px;"
+                      style="margin-top: 4px"
                       ><i class="fa fa-clock-o"></i>
                       {{ getDuration(contest.startTime, contest.endTime) }}
                     </el-button>
@@ -200,7 +210,7 @@
                     >
                       <i
                         class="el-icon-user-solid"
-                        style="color:rgb(48, 145, 242);"
+                        style="color: rgb(48, 145, 242)"
                       ></i
                       >x{{ contest.count }}
                     </el-button>
@@ -209,11 +219,11 @@
               </el-card>
             </el-card>
           </el-col>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
             <el-card>
               <div slot="header" class="clearfix">
                 <span class="panel-title home-title">{{
-                  $t('m.Recent_7_Days_AC_Rank')
+                  $t("m.Recent_7_Days_AC_Rank")
                 }}</span>
               </div>
               <vxe-table
@@ -249,11 +259,15 @@
                     ></avatar>
                     <a
                       @click="goUserHome(row.username, row.uid)"
-                      style="color:#2d8cf0;"
+                      style="color: #2d8cf0"
                       >{{ row.username }}</a
                     >
-                    <span style="margin-left:2px" v-if="row.titleName">
-                      <el-tag effect="dark" size="small" :color="row.titleColor">
+                    <span style="margin-left: 2px" v-if="row.titleName">
+                      <el-tag
+                        effect="dark"
+                        size="small"
+                        :color="row.titleColor"
+                      >
                         {{ row.titleName }}
                       </el-tag>
                     </span>
@@ -269,11 +283,11 @@
               </vxe-table>
             </el-card>
           </el-col>
-          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+          <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
             <el-card>
               <div slot="header" class="clearfix title">
                 <span class="home-title panel-title">
-                  {{ $t('m.Supported_Remote_Online_Judge') }}
+                  {{ $t("m.Supported_Remote_Online_Judge") }}
                 </span>
               </div>
               <el-row :gutter="20">
@@ -290,7 +304,9 @@
                         fit="fill"
                         class="oj-logo"
                         :class="
-                          oj.status ? 'oj-normal ' + oj.name : 'oj-error ' + oj.name
+                          oj.status
+                            ? 'oj-normal ' + oj.name
+                            : 'oj-error ' + oj.name
                         "
                       >
                         <div slot="error" class="image-slot">
@@ -310,17 +326,17 @@
 </template>
 
 <script>
-import time from '@/common/time';
-import api from '@/common/api';
+import time from "@/common/time";
+import api from "@/common/api";
 import {
   CONTEST_STATUS_REVERSE,
   CONTEST_TYPE_REVERSE,
-} from '@/common/constants';
-import { mapState, mapGetters } from 'vuex';
-import Avatar from 'vue-avatar';
-import Announcements from '@/components/oj/common/Announcements.vue';
+} from "@/common/constants";
+import { mapState, mapGetters } from "vuex";
+import Avatar from "vue-avatar";
+import Announcements from "@/components/oj/common/Announcements.vue";
 export default {
-  name: 'home',
+  name: "home",
   components: {
     Announcements,
     Avatar,
@@ -341,48 +357,48 @@ export default {
       },
       carouselImgList: [
         {
-          url: 'https://cdn.jsdelivr.net/gh/HimitZH/CDN/images/home1.jfif',
+          url: "https://cdn.jsdelivr.net/gh/HimitZH/CDN/images/home1.jfif",
         },
         {
-          url: 'https://cdn.jsdelivr.net/gh/HimitZH/CDN/images/home2.jpeg',
+          url: "https://cdn.jsdelivr.net/gh/HimitZH/CDN/images/home2.jpeg",
         },
       ],
-      srcHight: '440px',
+      srcHight: "440px",
       remoteJudgeList: [
         {
-          url: 'http://acm.hdu.edu.cn',
-          name: 'HDU',
-          logo: require('@/assets/hdu-logo.png'),
+          url: "http://acm.hdu.edu.cn",
+          name: "HDU",
+          logo: require("@/assets/hdu-logo.png"),
           status: true,
         },
         {
-          url: 'http://poj.org',
-          name: 'POJ',
-          logo: require('@/assets/poj-logo.png'),
+          url: "http://poj.org",
+          name: "POJ",
+          logo: require("@/assets/poj-logo.png"),
           status: true,
         },
         {
-          url: 'https://codeforces.com',
-          name: 'Codeforces',
-          logo: require('@/assets/codeforces-logo.png'),
+          url: "https://codeforces.com",
+          name: "Codeforces",
+          logo: require("@/assets/codeforces-logo.png"),
           status: true,
         },
         {
-          url: 'https://codeforces.com/gyms',
-          name: 'GYM',
-          logo: require('@/assets/gym-logo.png'),
+          url: "https://codeforces.com/gyms",
+          name: "GYM",
+          logo: require("@/assets/gym-logo.png"),
           status: true,
         },
         {
-          url: 'https://atcoder.jp',
-          name: 'AtCoder',
-          logo: require('@/assets/atcoder-logo.png'),
+          url: "https://atcoder.jp",
+          name: "AtCoder",
+          logo: require("@/assets/atcoder-logo.png"),
           status: true,
         },
         {
-          url: 'https://www.spoj.com',
-          name: 'SPOJ',
-          logo: require('@/assets/spoj-logo.png'),
+          url: "https://www.spoj.com",
+          name: "SPOJ",
+          logo: require("@/assets/spoj-logo.png"),
           status: true,
         },
       ],
@@ -391,9 +407,9 @@ export default {
   mounted() {
     let screenWidth = window.screen.width;
     if (screenWidth < 768) {
-      this.srcHight = '200px';
+      this.srcHight = "200px";
     } else {
-      this.srcHight = '440px';
+      this.srcHight = "440px";
     }
     this.CONTEST_STATUS_REVERSE = Object.assign({}, CONTEST_STATUS_REVERSE);
     this.CONTEST_TYPE_REVERSE = Object.assign({}, CONTEST_TYPE_REVERSE);
@@ -449,18 +465,18 @@ export default {
     },
     goContest(cid) {
       if (!this.isAuthenticated) {
-        this.$msg.warning(this.$i18n.t('m.Please_login_first'));
-        this.$store.dispatch('changeModalStatus', { visible: true });
+        this.$msg.warning(this.$i18n.t("m.Please_login_first"));
+        this.$store.dispatch("changeModalStatus", { visible: true });
       } else {
         this.$router.push({
-          name: 'ContestDetails',
+          name: "ContestDetails",
           params: { contestID: cid },
         });
       }
     },
     goContestList(type) {
       this.$router.push({
-        name: 'ContestList',
+        name: "ContestList",
         query: {
           type,
         },
@@ -472,7 +488,7 @@ export default {
     },
     goUserHome(username, uid) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { uid, username },
       });
     },
@@ -480,17 +496,12 @@ export default {
       return time.formatSpecificDuration(startTime, endTime);
     },
     getRankTagClass(rowIndex) {
-      return 'rank-tag no' + (rowIndex + 1);
-    },
-    toUpper(str) {
-      if (str) {
-        return str.toUpperCase();
-      }
+      return "rank-tag no" + (rowIndex + 1);
     },
   },
   computed: {
-    ...mapState(['websiteConfig']),
-    ...mapGetters(['isAuthenticated']),
+    ...mapState(["websiteConfig"]),
+    ...mapGetters(["isAuthenticated"]),
   },
 };
 </script>
@@ -585,7 +596,7 @@ li {
 .clearfix:before,
 .clearfix:after {
   display: table;
-  content: '';
+  content: "";
 }
 .clearfix:after {
   clear: both;
@@ -593,7 +604,7 @@ li {
 .welcome-title {
   font-weight: 600;
   font-size: 25px;
-  font-family: 'Raleway';
+  font-family: "Raleway";
 }
 .contest-status {
   float: right;

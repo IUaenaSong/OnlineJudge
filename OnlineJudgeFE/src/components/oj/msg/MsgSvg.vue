@@ -1,6 +1,6 @@
 <template>
   <svg width="20" height="20">
-    <circle cx="10" cy="10" r="10" style="fill: red;"></circle>
+    <circle cx="10" cy="10" r="10" style="fill: red"></circle>
     <text x="2" dy="15" style="fill: white" v-if="total >= 10">
       {{ total > 99 ? 99 : total }}
     </text>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'MsgSvg',
+  name: "MsgSvg",
   props: {
     total: {
       required: true,

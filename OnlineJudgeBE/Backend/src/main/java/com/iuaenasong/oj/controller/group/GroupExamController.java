@@ -162,8 +162,6 @@ public class GroupExamController {
                                                 @RequestParam(value = "eid", required = true) Long eid) {
         return groupExamQuestionService.deleteExamQuestion(qid, eid);
     }
-
-
     @PostMapping("/add-exam-question-from-group")
     public CommonResult<Void> addQuestionFromGroup(@RequestBody ExamQuestionDto examQuestionDto) {
         return groupExamQuestionService.addQuestionFromGroup(examQuestionDto);

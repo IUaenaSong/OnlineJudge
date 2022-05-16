@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Admin_Tag') }}</span>
+          <span class="panel-title home-title">{{ $t("m.Admin_Tag") }}</span>
           <div class="filter">
             <span>
               <el-button
@@ -11,7 +11,7 @@
                 size="small"
                 @click="openTagDialog('add', null)"
                 icon="el-icon-plus"
-                >{{ $t('m.Add_Tag') }}
+                >{{ $t("m.Add_Tag") }}
               </el-button>
             </span>
             <span>
@@ -19,7 +19,7 @@
                 v-model="tagOj"
                 @change="getProblemTagList"
                 size="small"
-                style="width: 150px;"
+                style="width: 150px"
               >
                 <el-option
                   :label="$t('m.All_Problem')"
@@ -75,7 +75,7 @@
         </el-form-item>
 
         <el-form-item :label="$t('m.Tag_Attribution')" required="">
-          <el-select v-model="tag.oj" size="small" style="width: 150px;">
+          <el-select v-model="tag.oj" size="small" style="width: 150px">
             <el-option :label="$t('m.My_OJ')" :value="'ME'"></el-option>
             <el-option
               :label="remoteOj.name"
@@ -86,12 +86,12 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item style="text-align:center">
+        <el-form-item style="text-align: center">
           <el-button
             type="primary"
             @click="upsertTag"
             :loading="upsertTagLoading"
-            >{{ $t('m.' + upsertTagBtn) }}
+            >{{ $t("m." + upsertTagBtn) }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -99,24 +99,24 @@
   </el-row>
 </template>
 <script>
-import api from '@/common/api';
-import { REMOTE_OJ } from '@/common/constants';
+import api from "@/common/api";
+import { REMOTE_OJ } from "@/common/constants";
 export default {
   data() {
     return {
-      tagOj: 'ME',
+      tagOj: "ME",
       REMOTE_OJ: {},
       getTagListLoading: false,
       tagList: [],
       addTagDialogVisible: false,
-      upsertTitle: 'Add_Tag',
-      upsertTagBtn: 'To_Add',
+      upsertTitle: "Add_Tag",
+      upsertTagBtn: "To_Add",
       upsertTagLoading: false,
       tag: {
         id: null,
         name: null,
         color: null,
-        oj: 'ME',
+        oj: "ME",
       },
     };
   },
@@ -139,14 +139,18 @@ export default {
     },
 
     deleteTag(tag) {
-      this.$confirm(this.$i18n.t('m.Delete_Tag_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Delete_Tag_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .admin_deleteTag(tag.id)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.tagList.splice(this.tagList.indexOf(tag), 1);
             })
             .catch(() => {});
@@ -155,9 +159,9 @@ export default {
       );
     },
     openTagDialog(action, tag) {
-      if (action == 'add') {
-        this.upsertTitle = 'Add_Tag';
-        this.upsertTagBtn = 'To_Add';
+      if (action == "add") {
+        this.upsertTitle = "Add_Tag";
+        this.upsertTagBtn = "To_Add";
         this.tag = {
           id: null,
           name: null,
@@ -165,8 +169,8 @@ export default {
           oj: this.tagOj,
         };
       } else {
-        this.upsertTitle = 'Update_Tag';
-        this.upsertTagBtn = 'To_Update';
+        this.upsertTitle = "Update_Tag";
+        this.upsertTagBtn = "To_Update";
         this.tag = Object.assign({}, tag);
       }
       this.addTagDialogVisible = true;
@@ -178,7 +182,7 @@ export default {
         api.admin_updateTag(this.tag).then(
           (res) => {
             this.upsertTagLoading = false;
-            this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Update_Successfully"));
             this.tagList.push(res.data.data);
             this.addTagDialogVisible = false;
             this.getProblemTagList();
@@ -192,7 +196,7 @@ export default {
         api.admin_addTag(this.tag).then(
           (res) => {
             this.upsertTagLoading = false;
-            this.$msg.success(this.$i18n.t('m.Add_Successfully'));
+            this.$msg.success(this.$i18n.t("m.Add_Successfully"));
             this.tagList.push(res.data.data);
             this.addTagDialogVisible = false;
           },

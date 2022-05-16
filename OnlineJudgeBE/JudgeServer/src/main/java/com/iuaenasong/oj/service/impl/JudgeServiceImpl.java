@@ -19,7 +19,7 @@ import com.iuaenasong.oj.pojo.entity.judge.ToJudge;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
 import com.iuaenasong.oj.remoteJudge.RemoteJudgeContext;
 import com.iuaenasong.oj.service.JudgeService;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import javax.annotation.Resource;
 import java.util.HashMap;

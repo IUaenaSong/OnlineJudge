@@ -2,10 +2,10 @@
   <div>
     <div class="container">
       <el-row>
-        <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+        <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
           <el-card shadow="always" body-style="{backgroud-color:gray}">
-            <h2 style="text-align: center;">
-              {{ $t('m.Set_New_Password') }}
+            <h2 style="text-align: center">
+              {{ $t("m.Set_New_Password") }}
             </h2>
             <el-form
               :model="formResetPassword"
@@ -42,7 +42,7 @@
                 @click="handleResetPwd"
                 :loading="btnLoading"
               >
-                {{ $t('m.Set_New_Password') }}
+                {{ $t("m.Set_New_Password") }}
               </el-button>
             </div>
           </el-card>
@@ -52,15 +52,15 @@
   </div>
 </template>
 <script>
-import api from '@/common/api';
-import { mapActions } from 'vuex';
+import api from "@/common/api";
+import { mapActions } from "vuex";
 export default {
   data() {
     const CheckUsernameNotExist = (rule, value, callback) => {
       api.checkUsernameOrEmail(value, undefined).then(
         (res) => {
           if (res.data.data.username === false) {
-            callback(new Error(this.$i18n.t('m.The_username_does_not_exists')));
+            callback(new Error(this.$i18n.t("m.The_username_does_not_exists")));
           } else {
             callback();
           }
@@ -69,57 +69,57 @@ export default {
       );
     };
     const CheckPassword = (rule, value, callback) => {
-      if (this.formResetPassword.password !== '') {
+      if (this.formResetPassword.password !== "") {
         // 对第二个密码框再次验证
-        this.$refs.formResetPassword.validateField('passwordAgain');
+        this.$refs.formResetPassword.validateField("passwordAgain");
       }
       callback();
     };
 
     const CheckAgainPassword = (rule, value, callback) => {
       if (value !== this.formResetPassword.password) {
-        callback(new Error(this.$i18n.t('m.Password_does_not_match')));
+        callback(new Error(this.$i18n.t("m.Password_does_not_match")));
       }
       callback();
     };
     return {
       btnLoading: false,
       formResetPassword: {
-        username: '',
-        password: '',
-        passwordAgain: '',
-        code: '',
+        username: "",
+        password: "",
+        passwordAgain: "",
+        code: "",
       },
       rules: {
         username: [
           {
             required: true,
-            message: this.$i18n.t('m.Username_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Username_Check_Required"),
+            trigger: "blur",
           },
-          { validator: CheckUsernameNotExist, trigger: 'blur' },
+          { validator: CheckUsernameNotExist, trigger: "blur" },
         ],
         password: [
           {
             required: true,
-            message: this.$i18n.t('m.Password_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Check_Required"),
+            trigger: "blur",
           },
           {
             min: 6,
             max: 20,
-            trigger: 'blur',
-            message: this.$i18n.t('m.Password_Check_Between'),
+            trigger: "blur",
+            message: this.$i18n.t("m.Password_Check_Between"),
           },
-          { validator: CheckPassword, trigger: 'blur' },
+          { validator: CheckPassword, trigger: "blur" },
         ],
         passwordAgain: [
           {
             required: true,
-            message: this.$i18n.t('m.Password_Again_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Again_Check_Required"),
+            trigger: "blur",
           },
-          { validator: CheckAgainPassword, trigger: 'change' },
+          { validator: CheckAgainPassword, trigger: "change" },
         ],
       },
     };
@@ -135,9 +135,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['changeModalStatus']),
+    ...mapActions(["changeModalStatus"]),
     handleResetPwd() {
-      this.$refs['formResetPassword'].validate((valid) => {
+      this.$refs["formResetPassword"].validate((valid) => {
         if (valid) {
           this.btnLoading = true;
           let data = Object.assign({}, this.formResetPassword);
@@ -145,12 +145,12 @@ export default {
           api.resetPassword(data).then(
             (res) => {
               this.btnLoading = false;
-              this.$msg.success(this.$i18n.t('m.Your_password_has_been_reset'));
+              this.$msg.success(this.$i18n.t("m.Your_password_has_been_reset"));
               this.$router.replace({
-                path: '/',
+                path: "/",
               });
               this.changeModalStatus({
-                mode: 'Login',
+                mode: "Login",
                 visible: true,
               });
             },

@@ -40,4 +40,8 @@ public interface ConfigService {
 
     public CommonResult<Void> setDBAndRedisConfig(DBAndRedisConfigDto dbAndRedisConfigDto);
 
+    public CommonResult<SwitchConfigDto> getSwitchConfig();
+
+    public CommonResult<Void> setSwitchConfig(SwitchConfigDto config);
+
 }

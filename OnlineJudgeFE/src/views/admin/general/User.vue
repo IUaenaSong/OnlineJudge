@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.General_User') }}</span>
+          <span class="panel-title home-title">{{ $t("m.General_User") }}</span>
           <div class="filter-row">
             <span>
               <el-button
@@ -11,7 +11,7 @@
                 icon="el-icon-delete-solid"
                 @click="deleteUsers(null)"
                 size="small"
-                >{{ $t('m.Delete') }}
+                >{{ $t("m.Delete") }}
               </el-button>
             </span>
             <span>
@@ -55,7 +55,7 @@
           >
             <template v-slot="{ row }">
               <span>{{ row.username }}</span>
-              <span style="margin-left:2px">
+              <span style="margin-left: 2px">
                 <el-tag
                   effect="dark"
                   size="small"
@@ -104,10 +104,10 @@
           >
             <template v-slot="{ row }">
               <el-tag effect="dark" color="#19be6b" v-if="row.status == 0">{{
-                $t('m.Normal')
+                $t("m.Normal")
               }}</el-tag>
               <el-tag effect="dark" color="#ed3f14" v-else>{{
-                $t('m.Disable')
+                $t("m.Disable")
               }}</el-tag>
             </template>
           </vxe-table-column>
@@ -157,17 +157,17 @@
         </div>
       </el-card>
     </el-col>
-  <!-- 导入csv用户数据 -->
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <!-- 导入csv用户数据 -->
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Import_User') }}</span>
+          <span class="panel-title home-title">{{ $t("m.Import_User") }}</span>
         </div>
-        <p>1. {{ $t('m.Import_User_Tips1') }}</p>
-        <p>2. {{ $t('m.Import_User_Tips2') }}</p>
-        <p>3. {{ $t('m.Import_User_Tips3') }}</p>
-        <p>4. {{ $t('m.Import_User_Tips4') }}</p>
-        <p>5. {{ $t('m.Import_User_Tips5') }}</p>
+        <p>1. {{ $t("m.Import_User_Tips1") }}</p>
+        <p>2. {{ $t("m.Import_User_Tips2") }}</p>
+        <p>3. {{ $t("m.Import_User_Tips3") }}</p>
+        <p>4. {{ $t("m.Import_User_Tips4") }}</p>
+        <p>5. {{ $t("m.Import_User_Tips5") }}</p>
         <el-upload
           v-if="!uploadUsers.length"
           action=""
@@ -176,7 +176,7 @@
           :before-upload="handleUsersCSV"
         >
           <el-button size="small" icon="el-icon-folder-opened" type="primary">{{
-            $t('m.Choose_File')
+            $t("m.Choose_File")
           }}</el-button>
         </el-upload>
         <template v-else>
@@ -259,14 +259,14 @@
               size="small"
               icon="el-icon-upload"
               @click="handleUsersUpload"
-              >{{ $t('m.Upload_All') }}
+              >{{ $t("m.Upload_All") }}
             </el-button>
             <el-button
               type="danger"
               size="small"
               icon="el-icon-delete"
               @click="handleResetData"
-              >{{ $t('m.Clear_All') }}
+              >{{ $t("m.Clear_All") }}
             </el-button>
             <el-pagination
               v-if="total"
@@ -281,11 +281,13 @@
         </template>
       </el-card>
     </el-col>
-  <!--生成用户数据-->
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <!--生成用户数据-->
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Generate_User') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Generate_User")
+          }}</span>
         </div>
         <el-form
           :model="formGenerateUser"
@@ -346,17 +348,17 @@
               :loading="loadingGenerate"
               size="small"
             >
-              {{ $t('m.Generate_and_Export') }}
+              {{ $t("m.Generate_and_Export") }}
             </el-button>
             <span
               class="userPreview"
               v-if="formGenerateUser.number_from <= formGenerateUser.number_to"
             >
-              {{ $t('m.The_usernames_will_be') }}
+              {{ $t("m.The_usernames_will_be") }}
               {{
                 formGenerateUser.prefix +
-                  formGenerateUser.number_from +
-                  formGenerateUser.suffix
+                formGenerateUser.number_from +
+                formGenerateUser.suffix
               }},
               <span
                 v-if="
@@ -365,9 +367,9 @@
               >
                 {{
                   formGenerateUser.prefix +
-                    (formGenerateUser.number_from + 1) +
-                    formGenerateUser.suffix +
-                    '...'
+                  (formGenerateUser.number_from + 1) +
+                  formGenerateUser.suffix +
+                  "..."
                 }}
               </span>
               <span
@@ -377,8 +379,8 @@
               >
                 {{
                   formGenerateUser.prefix +
-                    formGenerateUser.number_to +
-                    formGenerateUser.suffix
+                  formGenerateUser.number_to +
+                  formGenerateUser.suffix
                 }}
               </span>
             </span>
@@ -516,10 +518,10 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="danger" @click.native="showUserDialog = false">{{
-          $t('m.Cancel')
+          $t("m.Cancel")
         }}</el-button>
         <el-button type="primary" @click.native="saveUser">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -527,18 +529,18 @@
 </template>
 
 <script>
-import papa from 'papaparse'; // csv插件
-import api from '@/common/api';
-import utils from '@/common/utils';
+import papa from "papaparse"; // csv插件
+import api from "@/common/api";
+import utils from "@/common/utils";
 export default {
-  name: 'User',
+  name: "User",
   data() {
     const CheckTogtFrom = (rule, value, callback) => {
       if (value < this.formGenerateUser.number_from) {
         callback(
           new Error(
             this.$i18n.t(
-              'm.The_end_number_cannot_be_less_than_the_start_number'
+              "m.The_end_number_cannot_be_less_than_the_start_number"
             )
           )
         );
@@ -550,7 +552,7 @@ export default {
         callback(
           new Error(
             this.$i18n.t(
-              'm.Please_select_6_to_25_characters_for_password_length'
+              "m.Please_select_6_to_25_characters_for_password_length"
             )
           )
         );
@@ -564,7 +566,7 @@ export default {
             res.data.data.username === true &&
             value != this.selectUser.username
           ) {
-            callback(new Error(this.$i18n.t('m.The_username_already_exists')));
+            callback(new Error(this.$i18n.t("m.The_username_already_exists")));
           } else {
             callback();
           }
@@ -576,7 +578,7 @@ export default {
       api.checkUsernameOrEmail(undefined, value).then(
         (res) => {
           if (res.data.data.email === true && value != this.selectUser.email) {
-            callback(new Error(this.$i18n.t('m.The_email_already_exists')));
+            callback(new Error(this.$i18n.t("m.The_email_already_exists")));
           } else {
             callback();
           }
@@ -596,54 +598,54 @@ export default {
       uploadUsersCurrentPage: 1,
       uploadUsersPageSize: 15,
       // 搜索关键字
-      keyword: '',
+      keyword: "",
       // 是否显示用户对话框
       showUserDialog: false,
       onlyAdmin: false,
 
       // 当前用户model
       selectUser: {
-        uid: '',
-        username: '',
-        realname: '',
-        email: '',
-        password: '',
+        uid: "",
+        username: "",
+        realname: "",
+        email: "",
+        password: "",
         type: 1002,
         status: 0,
         setNewPwd: false,
-        titleName: '',
-        titleColor: '',
+        titleName: "",
+        titleColor: "",
       },
       updateUserRules: {
         username: [
-          { required: true, message: 'Username is required', trigger: 'blur' },
+          { required: true, message: "Username is required", trigger: "blur" },
           {
             validator: CheckUsernameNotExist,
-            trigger: 'blur',
-            message: this.$i18n.t('m.The_username_already_exists'),
+            trigger: "blur",
+            message: this.$i18n.t("m.The_username_already_exists"),
           },
           {
             max: 255,
-            message: this.$i18n.t('m.Username_Check_Max'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Username_Check_Max"),
+            trigger: "blur",
           },
         ],
         realname: [
           {
             max: 255,
-            trigger: 'blur',
+            trigger: "blur",
           },
         ],
         email: [
           {
-            type: 'email',
-            message: this.$i18n.t('m.Email_Check_Format'),
-            trigger: 'blur',
+            type: "email",
+            message: this.$i18n.t("m.Email_Check_Format"),
+            trigger: "blur",
           },
           {
             validator: CheckEmailNotExist,
-            message: this.$i18n.t('m.The_email_already_exists'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.The_email_already_exists"),
+            trigger: "blur",
           },
         ],
       },
@@ -653,8 +655,8 @@ export default {
       currentPage: 1,
       selectedUsers: [],
       formGenerateUser: {
-        prefix: '',
-        suffix: '',
+        prefix: "",
+        suffix: "",
         number_from: 0,
         number_to: 10,
         password_length: 6,
@@ -663,30 +665,30 @@ export default {
         number_from: [
           {
             required: true,
-            message: this.$i18n.t('m.Start_Number_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Start_Number_Required"),
+            trigger: "blur",
           },
         ],
         number_to: [
           {
             required: true,
-            message: this.$i18n.t('m.End_Number_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.End_Number_Required"),
+            trigger: "blur",
           },
-          { validator: CheckTogtFrom, trigger: 'blur' },
+          { validator: CheckTogtFrom, trigger: "blur" },
         ],
         password_length: [
           {
             required: true,
-            message: this.$i18n.t('m.Password_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Check_Required"),
+            trigger: "blur",
           },
           {
-            type: 'number',
-            message: this.$i18n.t('m.Password_Length_Checked'),
-            trigger: 'blur',
+            type: "number",
+            message: this.$i18n.t("m.Password_Length_Checked"),
+            trigger: "blur",
           },
-          { validator: CheckPwdLength, trigger: 'blur' },
+          { validator: CheckPwdLength, trigger: "blur" },
         ],
       },
     };
@@ -706,13 +708,13 @@ export default {
     },
     // 提交修改用户的信息
     saveUser() {
-      this.$refs['updateUser'].validate((valid) => {
+      this.$refs["updateUser"].validate((valid) => {
         if (valid) {
           api
             .admin_editUser(this.selectUser)
             .then((res) => {
               // 更新列表
-              this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+              this.$msg.success(this.$i18n.t("m.Update_Successfully"));
               this.getUserList(this.currentPage);
             })
             .then(() => {
@@ -729,7 +731,7 @@ export default {
       this.currentChange(1);
     },
     getRole(roles) {
-      return roles[0]['id'];
+      return roles[0]["id"];
     },
     // 打开用户对话框
     openUserDialog(row) {
@@ -739,7 +741,7 @@ export default {
       this.selectUser.realname = row.realname;
       this.selectUser.email = row.email;
       this.selectUser.setNewPwd = false;
-      this.selectUser.password = '';
+      this.selectUser.password = "";
       this.selectUser.type = this.getRole(row.roles);
       this.selectUser.status = row.status;
       this.selectUser.titleName = row.titleName;
@@ -766,16 +768,20 @@ export default {
         ids = this.selectedUsers;
       }
       if (ids.length > 0) {
-        this.$confirm(this.$i18n.t('m.Delete_User_Tips'), this.$i18n.t('m.Warning'), {
-          confirmButtonText: this.$i18n.t('m.OK'),
-          cancelButtonText: this.$i18n.t('m.Cancel'),
-          type: 'warning',
-        }).then(
+        this.$confirm(
+          this.$i18n.t("m.Delete_User_Tips"),
+          this.$i18n.t("m.Warning"),
+          {
+            confirmButtonText: this.$i18n.t("m.OK"),
+            cancelButtonText: this.$i18n.t("m.Cancel"),
+            type: "warning",
+          }
+        ).then(
           () => {
             api
               .admin_deleteUsers(ids)
               .then((res) => {
-                this.$msg.success(this.$i18n.$t('m.Delete_successfully'));
+                this.$msg.success(this.$i18n.$t("m.Delete_successfully"));
                 this.selectedUsers = [];
                 this.getUserList(this.currentPage);
               })
@@ -788,7 +794,7 @@ export default {
         );
       } else {
         this.$msg.warning(
-          this.$i18n.t('m.The_number_of_users_selected_cannot_be_empty')
+          this.$i18n.t("m.The_number_of_users_selected_cannot_be_empty")
         );
       }
     },
@@ -809,9 +815,9 @@ export default {
       }
     },
     generateUser() {
-      this.$refs['formGenerateUser'].validate((valid) => {
+      this.$refs["formGenerateUser"].validate((valid) => {
         if (!valid) {
-          this.$msg.error(this.$i18n.t('m.Error_Please_check_your_choice'));
+          this.$msg.error(this.$i18n.t("m.Error_Please_check_your_choice"));
           return;
         }
         this.loadingGenerate = true;
@@ -820,9 +826,12 @@ export default {
           .admin_generateUser(data)
           .then((res) => {
             this.loadingGenerate = false;
-            let url = '/api/file/generate-user-excel?key=' + res.data.data.key;
+            let url = "/api/file/generate-user-excel?key=" + res.data.data.key;
             utils.downloadFile(url).then(() => {
-              this.$alert(this.$i18n.t('m.Generate_User_Success'), this.$i18n.t('m.Tips'));
+              this.$alert(
+                this.$i18n.t("m.Generate_User_Success"),
+                this.$i18n.t("m.Tips")
+              );
             });
             this.getUserList(1);
           })
@@ -840,7 +849,7 @@ export default {
           let delta = results.data.length - data.length;
           if (delta > 0) {
             this.$msg.warning(
-              delta + this.$i18n.t('m.Generate_Skipped_Reason')
+              delta + this.$i18n.t("m.Generate_Skipped_Reason")
             );
           }
           this.uploadUsersCurrentPage = 1;
@@ -858,7 +867,7 @@ export default {
         .then((res) => {
           this.getUserList(1);
           this.handleResetData();
-          this.$msg.success(this.$i18n.t('m.Upload_Users_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Upload_Users_Successfully"));
         })
         .catch(() => {});
     },

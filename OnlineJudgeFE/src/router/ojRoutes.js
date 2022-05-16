@@ -1,59 +1,58 @@
-import Home from '@/views/oj/Home.vue'
-import SetNewPassword from "@/views/oj/user/SetNewPassword.vue"
-import UserHome from "@/views/oj/user/UserHome.vue"
-import Setting from "@/views/oj/user/Setting.vue"
-import ProblemList from "@/views/oj/problem/ProblemList.vue"
-import Logout from "@/views/oj/user/Logout.vue"
-import SubmissionList from "@/views/oj/status/SubmissionList.vue"
-import SubmissionDetails from "@/views/oj/status/SubmissionDetails.vue"
-import ContestList from "@/views/oj/contest/ContestList.vue"
-import ProblemDetails from "@/views/oj/problem/ProblemDetails.vue"
-import QuestionDetails from '@/views/oj/question/QuestionDetails.vue'
-import ACMRank from "@/views/oj/rank/ACMRank.vue"
-import OIRank from "@/views/oj/rank/OIRank.vue"
-import ContestDetails from "@/views/oj/contest/ContestDetails.vue"
-import ExamDetails from '@/views/oj/exam/ExamDetails.vue'
-import ACMScoreBoard from "@/views/oj/contest/outside/ACMScoreBoard.vue"
-import OIScoreBoard from "@/views/oj/contest/outside/OIScoreBoard.vue"
-import ContestProblemList from "@/views/oj/contest/children/ContestProblemList.vue"
-import ContestRank from "@/views/oj/contest/children/ContestRank.vue"
-import ACMInfoAdmin from "@/views/oj/contest/children/ACMInfoAdmin.vue"
-import Announcements from "@/components/oj/common/Announcements.vue"
-import ContestComment from "@/views/oj/contest/children/ContestComment.vue"
-import ContestPrint from "@/views/oj/contest/children/ContestPrint.vue"
-import ContestAdminPrint from "@/views/oj/contest/children/ContestAdminPrint.vue"
-import ContestRejudgeAdmin from "@/views/oj/contest/children/ContestRejudgeAdmin.vue"
-import ExamProblemList from "@/views/oj/exam/children/ExamProblemList.vue"
-import ExamQuestionList from "@/views/oj/exam/children/ExamQuestionList.vue"
-import ExamPaperList from "@/views/oj/exam/children/ExamPaperList.vue"
-import ExamPaperDetails from "@/views/oj/exam/children/ExamPaperDetails.vue"
-import ExamRejudgeAdmin from '@/views/oj/exam/children/ExamRejudgeAdmin.vue'
-import DiscussionList from "@/views/oj/discussion/DiscussionList.vue"
-import DiscussionDetails from "@/views/oj/discussion/DiscussionDetails.vue"
-import Introduction from "@/views/oj/about/Introduction.vue"
-import Developer from "@/views/oj/about/Developer.vue"
-import Message from "@/views/oj/message/Message.vue"
-import UserMsg from "@/views/oj/message/UserMsg.vue"
-import SysMsg from "@/views/oj/message/SysMsg.vue"
-import TrainingList from "@/views/oj/training/TrainingList.vue"
-import TrainingDetails from "@/views/oj/training/TrainingDetails.vue"
-import TrainingProblemList from "@/views/oj/training/TrainingProblemList.vue"
-import TrainingRank from "@/views/oj/training/TrainingRank.vue"
-import GroupList from '@/views/oj/group/GroupList.vue'
-import GroupDetails from '@/views/oj/group/GroupDetails.vue'
-import GroupAnnouncementList from '@/views/oj/group/children/GroupAnnouncementList.vue'
-import GroupProblemList from '@/views/oj/group/children/GroupProblemList.vue'
-import GroupQuestionList from '@/views/oj/group/children/GroupQuestionList.vue'
-import GroupQuestionDetails from '@/views/oj/question/QuestionDetails.vue'
-import GroupTrainingList from '@/views/oj/group/children/GroupTrainingList.vue'
-import GroupContestList from '@/views/oj/group/children/GroupContestList.vue'
-import GroupExamList from '@/views/oj/group/children/GroupExamList.vue'
-import GroupRank from '@/views/oj/group/children/GroupRank.vue'
-import GroupDiscussionList from '@/views/oj/group/children/GroupDiscussionList.vue'
-import GroupMemberList from '@/views/oj/group/children/GroupMemberList.vue'
-import GroupSetting from '@/views/oj/group/children/GroupSetting.vue'
-import NotFound from "@/views/404.vue"
-
+const Home = () => import('@/views/oj/Home.vue')
+const SetNewPassword = () => import('@/views/oj/user/SetNewPassword.vue')
+const UserHome = () => import('@/views/oj/user/UserHome.vue')
+const Setting = () => import('@/views/oj/user/Setting.vue')
+const ProblemList = () => import('@/views/oj/problem/ProblemList.vue')
+const Logout = () => import('@/views/oj/user/Logout.vue')
+const SubmissionList = () => import('@/views/oj/status/SubmissionList.vue')
+const SubmissionDetails = () => import('@/views/oj/status/SubmissionDetails.vue')
+const ContestList = () => import('@/views/oj/contest/ContestList.vue')
+const ProblemDetails = () => import('@/views/oj/problem/ProblemDetails.vue')
+const QuestionDetails = () => import('@/views/oj/question/QuestionDetails.vue')
+const ACMRank = () => import('@/views/oj/rank/ACMRank.vue')
+const OIRank = () => import('@/views/oj/rank/OIRank.vue')
+const ContestDetails = () => import('@/views/oj/contest/ContestDetails.vue')
+const ExamDetails = () => import('@/views/oj/exam/ExamDetails.vue')
+const ACMScoreBoard = () => import('@/views/oj/contest/outside/ACMScoreBoard.vue')
+const OIScoreBoard = () => import('@/views/oj/contest/outside/OIScoreBoard.vue')
+const ContestProblemList = () => import('@/views/oj/contest/children/ContestProblemList.vue')
+const ContestRank = () => import('@/views/oj/contest/children/ContestRank.vue')
+const ACMInfoAdmin = () => import('@/views/oj/contest/children/ACMInfoAdmin.vue')
+const Announcements = () => import('@/components/oj/common/Announcements.vue')
+const ContestComment = () => import('@/views/oj/contest/children/ContestComment.vue')
+const ContestPrint = () => import('@/views/oj/contest/children/ContestPrint.vue')
+const ContestAdminPrint = () => import('@/views/oj/contest/children/ContestAdminPrint.vue')
+const ContestRejudgeAdmin = () => import('@/views/oj/contest/children/ContestRejudgeAdmin.vue')
+const ExamProblemList = () => import('@/views/oj/exam/children/ExamProblemList.vue')
+const ExamQuestionList = () => import('@/views/oj/exam/children/ExamQuestionList.vue')
+const ExamPaperList = () => import('@/views/oj/exam/children/ExamPaperList.vue')
+const ExamPaperDetails = () => import('@/views/oj/exam/children/ExamPaperDetails.vue')
+const ExamRejudgeAdmin = () => import('@/views/oj/exam/children/ExamRejudgeAdmin.vue')
+const DiscussionList = () => import('@/views/oj/discussion/DiscussionList.vue')
+const DiscussionDetails = () => import('@/views/oj/discussion/DiscussionDetails.vue')
+const Introduction = () => import('@/views/oj/about/Introduction.vue')
+const Developer = () => import('@/views/oj/about/Developer.vue')
+const Message = () => import('@/views/oj/message/Message.vue')
+const UserMsg = () => import('@/views/oj/message/UserMsg.vue')
+const SysMsg = () => import('@/views/oj/message/SysMsg.vue')
+const TrainingList = () => import('@/views/oj/training/TrainingList.vue')
+const TrainingDetails = () => import('@/views/oj/training/TrainingDetails.vue')
+const TrainingProblemList = () => import('@/views/oj/training/TrainingProblemList.vue')
+const TrainingRank = () => import('@/views/oj/training/TrainingRank.vue')
+const GroupList = () => import('@/views/oj/group/GroupList.vue')
+const GroupDetails = () => import('@/views/oj/group/GroupDetails.vue')
+const GroupAnnouncementList = () => import('@/views/oj/group/children/GroupAnnouncementList.vue')
+const GroupProblemList = () => import('@/views/oj/group/children/GroupProblemList.vue')
+const GroupQuestionList = () => import('@/views/oj/group/children/GroupQuestionList.vue')
+const GroupQuestionDetails = () => import('@/views/oj/question/QuestionDetails.vue')
+const GroupTrainingList = () => import('@/views/oj/group/children/GroupTrainingList.vue')
+const GroupContestList = () => import('@/views/oj/group/children/GroupContestList.vue')
+const GroupExamList = () => import('@/views/oj/group/children/GroupExamList.vue')
+const GroupRank = () => import('@/views/oj/group/children/GroupRank.vue')
+const GroupDiscussionList = () => import('@/views/oj/group/children/GroupDiscussionList.vue')
+const GroupMemberList = () => import('@/views/oj/group/children/GroupMemberList.vue')
+const GroupSetting = () => import('@/views/oj/group/children/GroupSetting.vue')
+const NotFound = () => import('@/views/404.vue')
 const ojRoutes = [
   {
     path: '/',
@@ -83,8 +82,7 @@ const ojRoutes = [
     path: '/problem/:problemID/discussion',
     name: 'ProblemDiscussion',
     component: DiscussionList,
-    meta: { title: 'Problem Discussion' }
-    
+    meta: { title: 'Problem Discussion', access: 'discussion' }
   },
   {
     path: '/training',
@@ -146,13 +144,13 @@ const ojRoutes = [
         path: 'submission',
         name: 'ContestSubmissionList',
         component: SubmissionList,
-        meta: { title: 'Contest Submission' }
+        meta: { title: 'Contest Submission', access: 'contestJudge' }
       },
       {
         path: 'submission/:submitID',
         name: 'ContestSubmissionDetails',
         component: SubmissionDetails,
-        meta: { title: 'Contest Submission Details' }
+        meta: { title: 'Contest Submission Details', access: 'contestJudge' }
       },
       {
         path: 'problem',
@@ -182,31 +180,31 @@ const ojRoutes = [
         path: 'ac-info',
         name: 'ContestACInfo',
         component: ACMInfoAdmin,
-        meta: { title: 'Contest AC Info'}
+        meta: { title: 'Contest AC Info' }
       },
       {
         path: 'rejudge',
         name: 'ContestRejudgeAdmin',
         component: ContestRejudgeAdmin,
-        meta: { title: 'Contest Rejudge', requireSuperAdmin:true }
+        meta: { title: 'Contest Rejudge', requireSuperAdmin: true }
       },
       {
         path: 'comment',
         name: 'ContestComment',
         component: ContestComment,
-        meta: { title: 'Contest Comment'}
+        meta: { title: 'Contest Comment', access: 'contestComment' }
       },
       {
         path: 'print',
         name: 'ContestPrint',
         component: ContestPrint,
-        meta: { title: 'Contest Print'}
+        meta: { title: 'Contest Print' }
       },
       {
         path: 'admin-print',
         name: 'ContestAdminPrint',
         component: ContestAdminPrint,
-        meta: { title: 'Contest Admin Print'}
+        meta: { title: 'Contest Admin Print' }
       }
     ]
   },
@@ -220,13 +218,13 @@ const ojRoutes = [
         path: 'submission',
         name: 'ExamSubmissionList',
         component: SubmissionList,
-        meta: { title: 'Exam Submission' }
+        meta: { title: 'Exam Submission', access: 'contestJudge' }
       },
       {
         path: 'submission/:submitID',
         name: 'ExamSubmissionDetails',
         component: SubmissionDetails,
-        meta: { title: 'Exam Submission Details' }
+        meta: { title: 'Exam Submission Details', access: 'contestJudge' }
       },
       {
         path: 'question',
@@ -282,13 +280,13 @@ const ojRoutes = [
     path: '/status',
     name: 'SubmissionList',
     component: SubmissionList,
-    meta: { title: 'Status' }
+    meta: { title: 'Status', access: 'judge' }
   },
   {
     path: '/status/:submitID',
     name: 'SubmissionDetails',
     component: SubmissionDetails,
-    meta: { title: 'Submission Details' }
+    meta: { title: 'Submission Details', access: 'judge' }
   },
   {
     path: '/acm-rank',
@@ -330,25 +328,25 @@ const ojRoutes = [
     path: '/discussion',
     name: 'DiscussionList',
     component: DiscussionList,
-    meta: { title: 'Discussion' }
+    meta: { title: 'Discussion', access: 'discussion' },
   },
   {
     path: '/discussion/:discussionID',
     name: 'DiscussionDetails',
     component: DiscussionDetails,
-    meta: {title: 'Discussion Details'}
+    meta: { title: 'Discussion Details', access: 'discussion' },
   },
   {
     path: '/group',
     name: 'GroupList',
     component: GroupList,
-    meta: {title: 'Group'}
+    meta: { title: 'Group' }
   },
   {
     path: '/group/:groupID',
     name: 'GroupDetails',
     component: GroupDetails,
-    meta: {title: 'Group Details'},
+    meta: { title: 'Group Details' },
     children: [
       {
         path: 'announcement',
@@ -402,7 +400,7 @@ const ojRoutes = [
         path: 'discussion',
         name: 'GroupDiscussionList',
         component: GroupDiscussionList,
-        meta: { title: 'Group Discussion' }
+        meta: { title: 'Group Discussion', access: 'groupDiscussion' }
       },
       {
         path: 'member',
@@ -422,18 +420,18 @@ const ojRoutes = [
     path: '/introduction',
     name: 'Introduction',
     component: Introduction,
-    meta: {title: 'Introduction'}
+    meta: { title: 'Introduction' }
   },
   {
     path: '/developer',
     name: 'Develpoer',
     component: Developer,
-    meta: {title: 'Developer'}
+    meta: { title: 'Developer' }
   },
   {
     path: '/message/',
     name: 'Message',
-    component:Message,
+    component: Message,
     meta: { title: 'Message', requireAuth: true },
     children: [
       {
@@ -458,7 +456,7 @@ const ojRoutes = [
         path: 'sys',
         name: 'SysMsg',
         component: SysMsg,
-        meta: { title: 'System Message', requireAuth: true}
+        meta: { title: 'System Message', requireAuth: true }
       },
       {
         path: 'mine',
@@ -475,5 +473,4 @@ const ojRoutes = [
     meta: { title: '404' }
   }
 ]
-
 export default ojRoutes

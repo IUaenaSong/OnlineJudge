@@ -18,7 +18,7 @@ import com.iuaenasong.oj.pojo.entity.judge.Judge;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
 import com.iuaenasong.oj.service.RemoteJudgeService;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 @Component
 @Slf4j(topic = "oj")
@@ -57,6 +57,7 @@ public class RemoteJudgeToSubmit {
             log.error("[{}] Submit Failed! Begin to return the account to other task!", remoteJudgeDTO.getOj());
             remoteJudgeService.changeAccountStatus(remoteJudgeDTO.getOj(),
                     remoteJudgeDTO.getUsername());
+
             if (RemoteJudgeContext.openCodeforcesFixServer) {
                 if (remoteJudgeDTO.getOj().equals(Constants.RemoteJudge.GYM_JUDGE.getName())
                         || remoteJudgeDTO.getOj().equals(Constants.RemoteJudge.CF_JUDGE.getName())) {

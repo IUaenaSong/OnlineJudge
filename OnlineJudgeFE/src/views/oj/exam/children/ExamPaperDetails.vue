@@ -1,24 +1,19 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title"
-            >{{ $t('m.Paper') }}</span
-          >
+          <span class="panel-title">{{ $t("m.Paper") }}</span>
         </div>
-        <div style="font-size:16px">
-          {{ $t('m.Username') }}：<span>{{ paper.username }}</span>
+        <div style="font-size: 16px">
+          {{ $t("m.Username") }}：<span>{{ paper.username }}</span>
           <br />
-          {{ $t('m.RealName') }}：<span>{{ paper.realname }}</span>
+          {{ $t("m.RealName") }}：<span>{{ paper.realname }}</span>
           <br />
-          {{ $t('m.Score') }}：<span style="color:red">{{ paper.score }}</span>
+          {{ $t("m.Score") }}：<span style="color: red">{{ paper.score }}</span>
         </div>
         <el-form :model="paper" label-position="left">
-          <div
-            v-for="question in questionList"
-            :key="question.displayId"
-          >
+          <div v-for="question in questionList" :key="question.displayId">
             <el-divider />
             <div :padding="10" shadow class="question-detail">
               <div slot="header" class="panel-title">
@@ -27,7 +22,7 @@
                 <div class="question-intr">
                   <template>
                     <span
-                      >{{ $t('m.Question_Type') }}：
+                      >{{ $t("m.Question_Type") }}：
                       <el-tag
                         v-if="QUESTION_TYPE_REVERSE[question.type]"
                         class="filter-item"
@@ -35,7 +30,13 @@
                         :type="QUESTION_TYPE_REVERSE[question.type].color"
                         effect="dark"
                       >
-                        {{ $t('m.' + QUESTION_TYPE_REVERSE[question.type].name + '_Question') }}
+                        {{
+                          $t(
+                            "m." +
+                              QUESTION_TYPE_REVERSE[question.type].name +
+                              "_Question"
+                          )
+                        }}
                       </el-tag>
                       <el-tag
                         v-if="question.type == 1"
@@ -44,20 +45,27 @@
                         type="primary"
                         effect="plain"
                       >
-                        {{ $t('m.' + (question.single ? 'Single_Choice' : 'Indefinite_Multiple_Choice') + '_Question') }}
-                      </el-tag>
-                    </span><br />
+                        {{
+                          $t(
+                            "m." +
+                              (question.single
+                                ? "Single_Choice"
+                                : "Indefinite_Multiple_Choice") +
+                              "_Question"
+                          )
+                        }}
+                      </el-tag> </span
+                    ><br />
                   </template>
                   <template v-if="examID">
-                    <span
-                      >{{ $t('m.Score') }}：{{ question.score }}
-                    </span><br />
+                    <span>{{ $t("m.Score") }}：{{ question.score }} </span
+                    ><br />
                   </template>
                 </div>
               </div>
               <div class="question-content">
                 <template>
-                  <p class="title">{{ $t('m.Question_Description') }}</p>
+                  <p class="title">{{ $t("m.Question_Description") }}</p>
                   <p
                     class="content markdown-body"
                     v-html="$markDown.render(question.description)"
@@ -66,41 +74,80 @@
                   ></p>
                 </template>
                 <template v-if="question.type == 1 && question.single">
-                  <p class="title">{{ $t('m.User_Answer') }}</p>
-                  <p v-if="paper.examQuestionRecordList[question.displayId] != null" class="content">
-                    {{ String.fromCharCode(parseInt(paper.examQuestionRecordList[question.displayId].answer) + 65) }}
+                  <p class="title">{{ $t("m.User_Answer") }}</p>
+                  <p
+                    v-if="
+                      paper.examQuestionRecordList[question.displayId] != null
+                    "
+                    class="content"
+                  >
+                    {{
+                      String.fromCharCode(
+                        parseInt(
+                          paper.examQuestionRecordList[question.displayId]
+                            .answer
+                        ) + 65
+                      )
+                    }}
                   </p>
                 </template>
                 <template v-else-if="question.type == 1 && !question.single">
-                  <p class="title">{{ $t('m.User_Answer') }}</p>
-                  <p v-if="paper.examQuestionRecordList[question.displayId] != null" class="content">
-                    {{ stringToAnswer(paper.examQuestionRecordList[question.displayId].answer) }}
+                  <p class="title">{{ $t("m.User_Answer") }}</p>
+                  <p
+                    v-if="
+                      paper.examQuestionRecordList[question.displayId] != null
+                    "
+                    class="content"
+                  >
+                    {{
+                      stringToAnswer(
+                        paper.examQuestionRecordList[question.displayId].answer
+                      )
+                    }}
                   </p>
                 </template>
                 <template v-else-if="question.type == 2">
-                  <p class="title">{{ $t('m.User_Answer') }}</p>
-                  <p v-if="paper.examQuestionRecordList[question.displayId] != null" class="content">
-                    {{ paper.examQuestionRecordList[question.displayId].answer }}
+                  <p class="title">{{ $t("m.User_Answer") }}</p>
+                  <p
+                    v-if="
+                      paper.examQuestionRecordList[question.displayId] != null
+                    "
+                    class="content"
+                  >
+                    {{
+                      paper.examQuestionRecordList[question.displayId].answer
+                    }}
                   </p>
                 </template>
                 <template v-else>
-                  <p class="title">{{ $t('m.User_Answer') }}</p>
+                  <p class="title">{{ $t("m.User_Answer") }}</p>
                   <p
-                    v-if="paper.examQuestionRecordList[question.displayId] != null"
+                    v-if="
+                      paper.examQuestionRecordList[question.displayId] != null
+                    "
                     class="content markdown-body"
-                    v-html="$markDown.render(paper.examQuestionRecordList[question.displayId].answer)"
+                    v-html="
+                      $markDown.render(
+                        paper.examQuestionRecordList[question.displayId].answer
+                      )
+                    "
                     v-katex
                     v-highlight
-                  >
-                  </p>
+                  ></p>
                 </template>
-                <el-form-item required v-if="paper.examQuestionRecordList[question.displayId] != null">
-                  <span slot="label" class="title">{{ $t('m.Score') }}：
-                  </span>
+                <el-form-item
+                  required
+                  v-if="
+                    paper.examQuestionRecordList[question.displayId] != null
+                  "
+                >
+                  <span slot="label" class="title">{{ $t("m.Score") }}： </span>
                   <el-input
                     :disabled="!isExamAdmin"
-                    style="width:100px"
-                    v-model="paper.examQuestionRecordList[question.displayId].score"
+                    style="width: 100px"
+                    v-model="
+                      paper.examQuestionRecordList[question.displayId].score
+                    "
                     @keyup.enter.native="submitScore"
                   >
                   </el-input>
@@ -108,51 +155,50 @@
               </div>
             </div>
           </div>
-          <div
-            v-for="problem in problemList"
-            :key="problem.displayId"
-          >
+          <div v-for="problem in problemList" :key="problem.displayId">
             <el-divider />
             <div :padding="10" shadow class="question-detail">
               <div slot="header" class="panel-title">
-                <span>{{ problem.displayId + '. ' + problem.displayTitle}}</span
+                <span>{{
+                  problem.displayId + ". " + problem.displayTitle
+                }}</span
                 ><br />
                 <div class="question-intr">
                   <template>
                     <span
-                      >{{ $t('m.Question_Type') }}：
+                      >{{ $t("m.Question_Type") }}：
                       <el-tag
                         class="filter-item"
                         size="medium"
                         type="primary"
                         effect="dark"
                       >
-                        {{ $t('m.Code_Question') }}
-                      </el-tag>
-                    </span><br />
+                        {{ $t("m.Code_Question") }}
+                      </el-tag> </span
+                    ><br />
                   </template>
                   <template>
-                    <span
-                      >{{ $t('m.Score') }}：{{ problem.score }}
-                    </span><br />
+                    <span>{{ $t("m.Score") }}：{{ problem.score }} </span><br />
                   </template>
                 </div>
               </div>
               <div class="question-content">
                 <template>
-                  <p class="title">{{ $t('m.User_Answer') }}</p>
+                  <p class="title">{{ $t("m.User_Answer") }}</p>
                   <Highlight
                     v-if="paper.examRecordList[problem.displayId] != null"
                     :code="paper.examRecordList[problem.displayId].code"
                   ></Highlight>
-                  <br/>
+                  <br />
                 </template>
-                <el-form-item required v-if="paper.examRecordList[problem.displayId] != null">
-                  <span slot="label" class="title">{{ $t('m.Score') }}：
-                  </span>
+                <el-form-item
+                  required
+                  v-if="paper.examRecordList[problem.displayId] != null"
+                >
+                  <span slot="label" class="title">{{ $t("m.Score") }}： </span>
                   <el-input
                     :disabled="!isExamAdmin"
-                    style="width:100px"
+                    style="width: 100px"
                     v-model="paper.examRecordList[problem.displayId].score"
                     @keyup.enter.native="submitScore"
                   >
@@ -163,7 +209,7 @@
           </div>
         </el-form>
         <el-button type="primary" @click="submitScore" v-if="isExamAdmin">
-          {{ $t('m.Submit') }}
+          {{ $t("m.Submit") }}
         </el-button>
       </el-card>
     </el-col>
@@ -171,14 +217,14 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
-import { QUESTION_TYPE_REVERSE } from '@/common/constants';
-import api from '@/common/api';
-import Highlight from '@/components/oj/common/Highlight';
+import { mapGetters, mapState } from "vuex";
+import { QUESTION_TYPE_REVERSE } from "@/common/constants";
+import api from "@/common/api";
+import Highlight from "@/components/oj/common/Highlight";
 export default {
-  name: 'GroupPaperDetails',
+  name: "GroupPaperDetails",
   components: {
-    Highlight
+    Highlight,
   },
   data() {
     return {
@@ -187,7 +233,7 @@ export default {
       examID: null,
       loading: true,
       questionList: [],
-    }
+    };
   },
   mounted() {
     this.examID = this.$route.params.examID;
@@ -204,15 +250,17 @@ export default {
     },
     getExamPaperList() {
       this.loading = true;
-      api.getExamPaperList(this.$route.params.examID, this.$route.params.paperID).then(
-        (res) => {
-          this.paper = res.data.data[0];
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getExamPaperList(this.$route.params.examID, this.$route.params.paperID)
+        .then(
+          (res) => {
+            this.paper = res.data.data[0];
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     getExamQuestionList() {
       this.loading = true;
@@ -227,37 +275,37 @@ export default {
       );
     },
     getExamProblemList() {
-      this.$store.dispatch('getExamProblemList');
+      this.$store.dispatch("getExamProblemList");
     },
     goExamProblem(displayId) {
       this.$router.push({
-        name: 'ExamProblemDetails',
+        name: "ExamProblemDetails",
         params: {
           problemID: displayId,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     goExamQuestion(displayId) {
       this.$router.push({
-        name: 'ExamQuestionDetails',
+        name: "ExamQuestionDetails",
         params: {
           questionId: displayId,
-          examID: this.examID
+          examID: this.examID,
         },
       });
     },
     goUserHome(username) {
       this.$router.push({
-        name: 'UserHome',
-        query: { username: username},
+        name: "UserHome",
+        query: { username: username },
       });
     },
     stringToAnswer(s) {
-      let ans = '';
+      let ans = "";
       for (let i = 0; i < s.length; i++) {
-        if (s[i] == '1') {
-          if (ans.length > 0) ans += ', ';
+        if (s[i] == "1") {
+          if (ans.length > 0) ans += ", ";
           ans += String.fromCharCode(i + 65);
         }
       }
@@ -265,23 +313,23 @@ export default {
     },
     submitScore() {
       api.submitScore(this.paper, this.examID).then((res) => {
-        this.$msg.success(this.$t('m.Submitted_successfully'));
+        this.$msg.success(this.$t("m.Submitted_successfully"));
         this.init();
-      })
-    }
+      });
+    },
   },
   computed: {
     ...mapState({
       problemList: (state) => state.exam.examProblemList,
     }),
-    ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isExamAdmin']),
+    ...mapGetters(["isAuthenticated", "isSuperAdmin", "isExamAdmin"]),
   },
   watch: {
     $route() {
       this.init();
     },
   },
-}
+};
 </script>
 
 <style scoped>

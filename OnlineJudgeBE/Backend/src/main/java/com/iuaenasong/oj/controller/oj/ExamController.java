@@ -7,6 +7,8 @@
 package com.iuaenasong.oj.controller.oj;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.annotation.OJAccess;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import com.iuaenasong.oj.common.result.CommonResult;
 import com.iuaenasong.oj.pojo.dto.RegisterExamDto;
 import com.iuaenasong.oj.pojo.dto.SubmitQuestionDto;
@@ -123,6 +125,7 @@ public class ExamController {
 
     @GetMapping("/get-exam-submission-list")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.CONTEST_JUDGE})
     public CommonResult<IPage<JudgeVo>> getExamSubmissionList(@RequestParam(value = "limit", required = false) Integer limit,
                                                               @RequestParam(value = "currentPage", required = false) Integer currentPage,
                                                               @RequestParam(value = "onlyMine", required = false) Boolean onlyMine,

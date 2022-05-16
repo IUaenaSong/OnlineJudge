@@ -1,12 +1,12 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card shadow="always">
         <div slot="header">
-          <span class="panel-title">{{ $t('m.Admin_Print') }}</span>
+          <span class="panel-title">{{ $t("m.Admin_Print") }}</span>
           <div class="filter-row">
             <span>
-              {{ $t('m.Auto_Refresh') }}(10s)
+              {{ $t("m.Auto_Refresh") }}(10s)
               <el-switch
                 @change="handleAutoRefresh"
                 v-model="autoRefresh"
@@ -19,7 +19,7 @@
                 size="small"
                 icon="el-icon-refresh"
                 :loading="btnLoading"
-                >{{ $t('m.Refresh') }}</el-button
+                >{{ $t("m.Refresh") }}</el-button
               >
             </span>
           </div>
@@ -41,7 +41,7 @@
               <span
                 ><a
                   @click="getUserTotalSubmit(row.username)"
-                  style="color:rgb(87, 163, 243);"
+                  style="color: rgb(87, 163, 243)"
                   >{{ row.username }}</a
                 >
               </span>
@@ -61,17 +61,25 @@
               <span>{{ row.gmtCreate | localtime }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="status" :title="$t('m.Status')" min-width="150">
+          <vxe-table-column
+            field="status"
+            :title="$t('m.Status')"
+            min-width="150"
+          >
             <template v-slot="{ row }">
               <el-tag effect="dark" color="#19be6b" v-if="row.status == 1">{{
-                $t('m.Printed')
+                $t("m.Printed")
               }}</el-tag>
               <el-tag effect="dark" color="#f90" v-if="row.status == 0">{{
-                $t('m.Not_Printed')
+                $t("m.Not_Printed")
               }}</el-tag>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="option" :title="$t('m.Option')" min-width="150">
+          <vxe-table-column
+            field="option"
+            :title="$t('m.Option')"
+            min-width="150"
+          >
             <template v-slot="{ row }">
               <el-button
                 type="primary"
@@ -79,7 +87,7 @@
                 icon="el-icon-download"
                 @click="downloadSubmissions(row.id)"
                 round
-                >{{ $t('m.Download') }}</el-button
+                >{{ $t("m.Download") }}</el-button
               >
               <el-button
                 type="success"
@@ -87,7 +95,7 @@
                 icon="el-icon-circle-check"
                 @click="updateStatus(row.id)"
                 round
-                >{{ $t('m.OK') }}</el-button
+                >{{ $t("m.OK") }}</el-button
               >
             </template>
           </vxe-table-column>
@@ -104,14 +112,14 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import utils from "@/common/utils";
+const Pagination = () => import("@/components/oj/common/Pagination");
 
 export default {
-  name: 'Contest-Print-Admin',
+  name: "Contest-Print-Admin",
   components: {
-    Pagination
+    Pagination,
   },
   data() {
     return {
@@ -135,7 +143,7 @@ export default {
         cid: this.contestID,
       };
       api.updateContestPrintStatus(params).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.getContestPrint(1);
       });
     },

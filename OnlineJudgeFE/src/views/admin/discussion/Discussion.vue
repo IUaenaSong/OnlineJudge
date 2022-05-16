@@ -1,10 +1,10 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Discussion_Admin')
+            $t("m.Discussion_Admin")
           }}</span>
           <div class="filter-row">
             <span>
@@ -13,7 +13,7 @@
                 icon="el-icon-delete-solid"
                 @click="deleteDiscussion(null)"
                 size="small"
-                >{{ $t('m.Delete') }}
+                >{{ $t("m.Delete") }}
               </el-button>
             </span>
             <span>
@@ -83,7 +83,11 @@
                 @change="changeDiscussionStatus(row)"
                 size="small"
               >
-                <el-option :label="$t('m.Normal')" :value="0" :key="0"></el-option
+                <el-option
+                  :label="$t('m.Normal')"
+                  :value="0"
+                  :key="0"
+                ></el-option
                 ><el-option
                   :label="$t('m.Disable')"
                   :value="1"
@@ -111,7 +115,11 @@
           </vxe-table-column>
           <vxe-table-column :title="$t('m.Option')" min-width="130">
             <template v-slot="{ row }">
-              <el-tooltip effect="dark" :content="$t('m.Delete')" placement="top">
+              <el-tooltip
+                effect="dark"
+                :content="$t('m.Delete')"
+                placement="top"
+              >
                 <el-button
                   icon="el-icon-delete-solid"
                   size="mini"
@@ -149,11 +157,11 @@
         </div>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Discussion_Report')
+            $t("m.Discussion_Report")
           }}</span>
         </div>
         <vxe-table
@@ -253,16 +261,16 @@
   </el-row>
 </template>
 <script>
-import api from '@/common/api';
+import api from "@/common/api";
 export default {
-  name: 'discussion',
+  name: "discussion",
   data() {
     return {
       pageSize: 10,
       discussionTotal: 0,
       discussionList: [],
       selectedDiscussions: [],
-      keyword: '',
+      keyword: "",
       discussionLoadingTable: false,
       discussionCurrentPage: 1,
 
@@ -323,7 +331,7 @@ export default {
     },
     filterByKeyword() {
       this.discussionCurrentChange(1);
-      this.keyword = '';
+      this.keyword = "";
     },
     // 用户表部分勾选 改变选中的内容
     handleSelectionChange({ records }) {
@@ -346,7 +354,7 @@ export default {
         status: row.status,
       };
       api.admin_updateDiscussion(discussion).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     handleTopSwitch(row) {
@@ -355,7 +363,7 @@ export default {
         topPriority: row.topPriority,
       };
       api.admin_updateDiscussion(discussion).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
 
@@ -365,12 +373,12 @@ export default {
         status: row.status,
       };
       api.admin_updateDiscussionReport(discussionReport).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
 
     toDiscussion(did) {
-      window.open('/discussion/' + did);
+      window.open("/discussion/" + did);
     },
 
     deleteDiscussion(didList) {
@@ -378,14 +386,14 @@ export default {
         didList = this.selectedDiscussions;
       }
       if (didList.length > 0) {
-        this.$confirm(this.$i18n.t('m.Delete_Discussion_Tips'), 'Tips', {
-          type: 'warning',
+        this.$confirm(this.$i18n.t("m.Delete_Discussion_Tips"), "Tips", {
+          type: "warning",
         }).then(
           () => {
             api
               .admin_deleteDiscussion(didList)
               .then((res) => {
-                this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+                this.$msg.success(this.$i18n.t("m.Delete_successfully"));
                 this.selectedDiscussions = [];
                 this.getDiscussionList(this.currentPage);
               })
@@ -398,25 +406,25 @@ export default {
         );
       } else {
         this.$msg.warning(
-          this.$i18n.t('m.The_number_of_discussions_selected_cannot_be_empty')
+          this.$i18n.t("m.The_number_of_discussions_selected_cannot_be_empty")
         );
       }
     },
     openReportDialog(content) {
-      let reg = '#(.*?)# ';
-      let re = RegExp(reg, 'g');
+      let reg = "#(.*?)# ";
+      let re = RegExp(reg, "g");
       let tmp;
-      let showContent = '<strong>' + this.$i18n.t('m.Tags') + '</strong>：';
+      let showContent = "<strong>" + this.$i18n.t("m.Tags") + "</strong>：";
       while ((tmp = re.exec(content))) {
-        showContent += tmp[1] + ' ';
+        showContent += tmp[1] + " ";
       }
       showContent +=
-        '<br><br><strong>' +
-        this.$i18n.t('m.Content') +
-        '</strong>：' +
-        content.replace(/#(.*?)# /g, '');
-      this.$alert(showContent, this.$i18n.t('m.Report_Content'), {
-        confirmButtonText: this.$i18n.t('m.OK'),
+        "<br><br><strong>" +
+        this.$i18n.t("m.Content") +
+        "</strong>：" +
+        content.replace(/#(.*?)# /g, "");
+      this.$alert(showContent, this.$i18n.t("m.Report_Content"), {
+        confirmButtonText: this.$i18n.t("m.OK"),
         dangerouslyUseHTMLString: true,
       });
     },

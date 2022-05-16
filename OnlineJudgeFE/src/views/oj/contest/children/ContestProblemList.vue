@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <vxe-table
           border="inner"
@@ -20,15 +20,20 @@
           >
             <template v-slot="{ row }">
               <template v-if="isGetStatusOk">
-                <span :class="getScoreColor(row.score)" v-if="row.score != null">{{
-                  row.score
-                }}</span>
+                <span
+                  :class="getScoreColor(row.score)"
+                  v-if="row.score != null"
+                  >{{ row.score }}</span
+                >
                 <el-tooltip
                   :content="JUDGE_STATUS[row.myStatus]['name']"
                   placement="top"
                   v-else-if="row.myStatus == -5"
                 >
-                  <i class="fa fa-question" :style="getIconColor(row.myStatus)"></i>
+                  <i
+                    class="fa fa-question"
+                    :style="getIconColor(row.myStatus)"
+                  ></i>
                 </el-tooltip>
                 <el-tooltip
                   :content="JUDGE_STATUS[row.myStatus]['name']"
@@ -74,7 +79,7 @@
           </vxe-table-column>
           <vxe-table-column field="displayId" width="80" title="#">
             <template v-slot="{ row }">
-              <span style="vertical-align: top;" v-if="row.color">
+              <span style="vertical-align: top" v-if="row.color">
                 <svg
                   t="1633685184463"
                   class="icon"
@@ -107,7 +112,7 @@
               <span v-if="!ContestRealTimePermission">
                 <i
                   class="fa fa-question"
-                  style="font-weight: 600;font-size: 16px;color:#909399"
+                  style="font-weight: 600; font-size: 16px; color: #909399"
                 ></i>
               </span>
               <span v-else>
@@ -120,15 +125,19 @@
               <span v-if="!ContestRealTimePermission">
                 <i
                   class="fa fa-question"
-                  style="font-weight: 600;font-size: 16px;color:#909399"
+                  style="font-weight: 600; font-size: 16px; color: #909399"
                 ></i>
               </span>
               <span v-else>
-                {{ (row.ac + row.error) }}
+                {{ row.ac + row.error }}
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="ACRate" :title="$t('m.AC_Rate')" min-width="120">
+          <vxe-table-column
+            field="ACRate"
+            :title="$t('m.AC_Rate')"
+            min-width="120"
+          >
             <template v-slot="{ row }">
               <span>
                 <el-tooltip
@@ -152,17 +161,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { JUDGE_STATUS, RULE_TYPE } from '@/common/constants';
-import api from '@/common/api';
+import { mapState, mapGetters } from "vuex";
+import { JUDGE_STATUS, RULE_TYPE } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'ContestProblemList',
+  name: "ContestProblemList",
   data() {
     return {
       JUDGE_STATUS: {},
       RULE_TYPE: {},
       isGetStatusOk: false,
-      testcolor: 'rgba(0, 206, 209, 1)',
+      testcolor: "rgba(0, 206, 209, 1)",
     };
   },
   mounted() {
@@ -172,7 +181,7 @@ export default {
   },
   methods: {
     getContestProblems() {
-      this.$store.dispatch('getContestProblems').then((res) => {
+      this.$store.dispatch("getContestProblems").then((res) => {
         if (this.isAuthenticated) {
           let isContestProblemList = true;
           let isExamProblemList = false; // 为了与考试题目区分
@@ -193,10 +202,10 @@ export default {
               .then((res) => {
                 let result = res.data.data;
                 for (let index = 0; index < this.problems.length; index++) {
-                  this.problems[index]['myStatus'] =
-                    result[this.problems[index].pid]['status'];
-                  this.problems[index]['score'] =
-                    result[this.problems[index].pid]['score'];
+                  this.problems[index]["myStatus"] =
+                    result[this.problems[index].pid]["status"];
+                  this.problems[index]["score"] =
+                    result[this.problems[index].pid]["score"];
                 }
                 this.isGetStatusOk = true;
               });
@@ -206,7 +215,7 @@ export default {
     },
     goContestProblem(event) {
       this.$router.push({
-        name: 'ContestProblemDetails',
+        name: "ContestProblemDetails",
         params: {
           contestID: this.$route.params.contestID,
           problemID: event.row.displayId,
@@ -221,16 +230,16 @@ export default {
     },
     getIconColor(status) {
       return (
-        'font-weight: 600;font-size: 16px;color:' + JUDGE_STATUS[status].rgb
+        "font-weight: 600;font-size: 16px;color:" + JUDGE_STATUS[status].rgb
       );
     },
     getScoreColor(score) {
       if (score == 0) {
-        return 'el-tag el-tag--small oi-0';
+        return "el-tag el-tag--small oi-0";
       } else if (score > 0 && score < 100) {
-        return 'el-tag el-tag--small oi-between';
+        return "el-tag el-tag--small oi-between";
       } else if (score == 100) {
-        return 'el-tag el-tag--small oi-100';
+        return "el-tag el-tag--small oi-100";
       }
     },
   },
@@ -239,9 +248,9 @@ export default {
       problems: (state) => state.contest.contestProblems,
     }),
     ...mapGetters([
-      'isAuthenticated',
-      'contestRuleType',
-      'ContestRealTimePermission',
+      "isAuthenticated",
+      "contestRuleType",
+      "ContestRealTimePermission",
     ]),
   },
 };

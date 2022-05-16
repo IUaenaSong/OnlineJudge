@@ -12,9 +12,9 @@
         <div class="mundb-footer">
           <el-row>
             <el-col :md="6" :sm="12" :xs="24">
-              <h1>{{ toUpper(websiteConfig.shortName) }}</h1>
+              <h1>{{ websiteConfig.shortName }}</h1>
               <span
-                style="line-height:25px"
+                style="line-height: 25px"
                 v-html="websiteConfig.description"
                 v-katex
                 v-highlight
@@ -25,22 +25,22 @@
               <el-divider></el-divider>
             </el-col>
             <el-col :md="6" :sm="12" :xs="24">
-              <h1>{{ $t('m.Service') }}</h1>
+              <h1>{{ $t("m.Service") }}</h1>
               <p>
-                <a @click="goRoute('/status')">{{ $t('m.Judging_Queue') }}</a>
+                <a @click="goRoute('/status')">{{ $t("m.Judging_Queue") }}</a>
               </p>
               <p>
-                <a @click="goRoute('/developer')">{{ $t('m.System_Info') }}</a>
+                <a @click="goRoute('/developer')">{{ $t("m.System_Info") }}</a>
               </p>
             </el-col>
             <el-col class="hr-none">
               <el-divider></el-divider>
             </el-col>
             <el-col :md="6" :sm="12" :xs="24">
-              <h1>{{ $t('m.Development') }}</h1>
+              <h1>{{ $t("m.Development") }}</h1>
               <p class="mb-1">
                 <a :href="websiteConfig.projectUrl" target="_blank">{{
-                  $t('m.Open_Source')
+                  $t("m.Open_Source")
                 }}</a>
               </p>
               <p class="mb-1"><a @click="goRoute('/#')">API</a></p>
@@ -49,21 +49,21 @@
               <el-divider></el-divider>
             </el-col>
             <el-col :md="6" :sm="12" :xs="24">
-              <h1>{{ $t('m.Support') }}</h1>
+              <h1>{{ $t("m.Support") }}</h1>
               <p>
                 <i class="fa fa-info-circle" aria-hidden="true"></i
-                ><a @click="goRoute('/introduction')"> {{ $t('m.Help') }}</a>
+                ><a @click="goRoute('/introduction')"> {{ $t("m.Help") }}</a>
               </p>
               <p>
                 <i class="fa fa-qq" aria-hidden="true"></i>
-                {{ $t('m.QQ') }} 1078596795
+                {{ $t("m.QQ") }} 1078596795
               </p>
             </el-col>
           </el-row>
         </div>
         <div class="mundb-footer">
           <a
-            style="color:#1E9FFF"
+            style="color: #1e9fff"
             :href="websiteConfig.recordUrl"
             target="_blank"
             >{{ websiteConfig.recordName }}</a
@@ -71,15 +71,15 @@
           Powered by
           <a
             :href="websiteConfig.projectUrl"
-            style="color:#1E9FFF"
+            style="color: #1e9fff"
             target="_blank"
             >{{ websiteConfig.projectName }}</a
           >
-          <span style="margin-left:10px">
+          <span style="margin-left: 10px">
             <el-dropdown @command="changeLanguage" placement="top">
               <span class="el-dropdown-link">
                 <i class="fa fa-globe" aria-hidden="true">
-                  {{ this.webLanguage == 'zh-CN' ? '简体中文' : 'English' }}</i
+                  {{ this.webLanguage == "zh-CN" ? "简体中文" : "English" }}</i
                 ><i class="el-icon-arrow-up el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -102,11 +102,11 @@
 </template>
 
 <script>
-import NavBar from '@/components/oj/common/NavBar';
-import { mapActions, mapState, mapGetters } from 'vuex';
-import { LOGO, MOTTO } from '@/common/logo';
+import NavBar from "@/components/oj/common/NavBar";
+import { mapActions, mapState, mapGetters } from "vuex";
+import { LOGO, MOTTO } from "@/common/logo";
 export default {
-  name: 'app-content',
+  name: "app-content",
   components: {
     NavBar,
   },
@@ -117,19 +117,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['changeDomTitle', 'getWebsiteConfig']),
+    ...mapActions(["changeDomTitle", "getWebsiteConfig"]),
     goRoute(path) {
       this.$router.push({
         path: path,
       });
     },
-    toUpper(str) {
-      if (str) {
-        return str.toUpperCase();
-      }
-    },
     changeLanguage(language) {
-      this.$store.commit('changeWebLanguage', { language: language });
+      this.$store.commit("changeWebLanguage", { language: language });
     },
     handleMobileNav(mobileNav) {
       this.mobileNav = mobileNav;
@@ -138,7 +133,7 @@ export default {
   watch: {
     $route(newVal, oldVal) {
       this.changeDomTitle();
-      if (newVal !== oldVal && newVal.path.split('/')[1] == 'admin') {
+      if (newVal !== oldVal && newVal.path.split("/")[1] == "admin") {
         this.isAdminView = true;
       } else {
         this.isAdminView = false;
@@ -152,17 +147,17 @@ export default {
     },
   },
   computed: {
-    ...mapState(['websiteConfig']),
-    ...mapGetters(['webLanguage']),
+    ...mapState(["websiteConfig"]),
+    ...mapGetters(["webLanguage"]),
   },
   created() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       try {
-        document.body.removeChild(document.getElementById('app-loader'));
+        document.body.removeChild(document.getElementById("app-loader"));
       } catch (e) {}
     });
 
-    if (this.$route.path.split('/')[1] != 'admin') {
+    if (this.$route.path.split("/")[1] != "admin") {
       this.isAdminView = false;
     } else {
       this.isAdminView = true;
@@ -184,8 +179,8 @@ export default {
 }
 body {
   background-color: #eff3f5 !important;
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', '微软雅黑', Arial, sans-serif !important;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important;
   color: #495060 !important;
   font-size: 12px !important;
 }
@@ -263,7 +258,7 @@ a:hover {
 
 .home-title {
   color: #409eff;
-  font-family: 'Raleway';
+  font-family: "Raleway";
 }
 
 .vxe-table {

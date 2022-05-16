@@ -7,6 +7,8 @@
 package com.iuaenasong.oj.controller.oj;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.annotation.OJAccess;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +80,14 @@ public class JudgeController {
     
     @RequestMapping(value = "/check-contest-submissions-status", method = RequestMethod.POST)
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.CONTEST_JUDGE})
     public CommonResult<HashMap<Long, Object>> checkContestJudgeResult(@RequestBody SubmitIdListDto submitIdListDto) {
         return judgeService.checkContestJudgeResult(submitIdListDto);
     }
 
     @RequestMapping(value = "/check-exam-submissions-status", method = RequestMethod.POST)
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.CONTEST_JUDGE})
     public CommonResult<HashMap<Long, Object>> checkExamJudgeResult(@RequestBody SubmitIdListDto submitIdListDto) {
         return judgeService.checkExamJudgeResult(submitIdListDto);
     }

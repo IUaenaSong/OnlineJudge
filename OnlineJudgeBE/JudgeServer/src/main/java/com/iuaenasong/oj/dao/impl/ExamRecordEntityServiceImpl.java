@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iuaenasong.oj.dao.ExamRecordEntityService;
 import com.iuaenasong.oj.mapper.ExamRecordMapper;
 import com.iuaenasong.oj.pojo.entity.exam.ExamRecord;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

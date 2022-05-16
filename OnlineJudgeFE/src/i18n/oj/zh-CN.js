@@ -328,7 +328,7 @@ export const m = {
   The_report_label_and_reason_cannot_be_empty: '举报标签和理由不能都为空',
 
   // 404.vue
-  Page_Not_Found:"页面找不到啦",
+  Page_Not_Found: "页面找不到啦",
   Go_Home: '返回主页',
   Back: '返回',
 
@@ -432,10 +432,10 @@ export const m = {
   Memory_Limit_Exceeded_Description: '您的程序实际使用的内存已超出题目限制。',
   System_Error_Description: '糟糕，判题机系统出了问题。请报告给管理员。',
   Compile_Explanation: '编译说明',
-  Compile_Tips1:"__int64不是ANSI标准定义，只能在VC使用，在 GNU C++ 中应写成 long long 类型， scanf和printf 请使用%lld作为格式",
-  Compile_Tips2:"main() 返回值必须定义为 int ，而不是 void",
-  Compile_Tips3:"i 在循环外失去定义 \"for(int i=0...){...}\"",
-  Compile_Tips4:"itoa 不是ansi标准函数（标准 C/C++ 中无此函数）",
+  Compile_Tips1: "__int64不是ANSI标准定义，只能在VC使用，在 GNU C++ 中应写成 long long 类型， scanf和printf 请使用%lld作为格式",
+  Compile_Tips2: "main() 返回值必须定义为 int ，而不是 void",
+  Compile_Tips3: "i 在循环外失去定义 \"for(int i=0...){...}\"",
+  Compile_Tips4: "itoa 不是ansi标准函数（标准 C/C++ 中无此函数）",
 
   // /views/oj/about/Developer.vue
   Leader_BackEnd_FrontEnd_Engineer: '主导 & 后端 | 前端 开发者',
@@ -524,7 +524,7 @@ export const m = {
   Training_Total_Problems: '总题数',
   Record_List: '记录榜单',
   To_Enter_Training_Need_Password: '请输入该私有训练的密码，方可进入',
-  Enter_the_training_password: '请输入私有训练的密码',  
+  Enter_the_training_password: '请输入私有训练的密码',
   Register_training_successfully: '验证训练密码成功！',
 
   // /views/oj/training/TrainingRank.vue
@@ -688,7 +688,7 @@ export const m = {
 
   // /views/oj/group/GroupSetting.vue
   Add_From_Group_Problem: '从团队题库添加题目',
-  
+
   // /views/oj/group/GroupSetting.vue
   Group_Visible: '在团队列表显示',
   Group_Not_Visible: '在团队列表隐藏',

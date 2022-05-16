@@ -28,11 +28,8 @@
             placement="top"
             effect="light"
           >
-            <el-tag
-              :type="CONTEST_TYPE_REVERSE[row.auth].color"
-              effect="plain"
-            >
-              {{ $t('m.' + CONTEST_TYPE_REVERSE[row.auth].name) }}
+            <el-tag :type="CONTEST_TYPE_REVERSE[row.auth].color" effect="plain">
+              {{ $t("m." + CONTEST_TYPE_REVERSE[row.auth].name) }}
             </el-tag>
           </el-tooltip>
         </template>
@@ -44,7 +41,7 @@
             :color="CONTEST_STATUS_REVERSE[row.status].color"
             size="medium"
           >
-            {{ $t('m.' + CONTEST_STATUS_REVERSE[row.status]['name']) }}
+            {{ $t("m." + CONTEST_STATUS_REVERSE[row.status]["name"]) }}
           </el-tag>
         </template>
       </vxe-table-column>
@@ -60,10 +57,10 @@
       </vxe-table-column>
       <vxe-table-column min-width="210" :title="$t('m.Info')">
         <template v-slot="{ row }">
-          <p>{{ $t('m.Start_Time') }}: {{ row.startTime | localtime }}</p>
-          <p>{{ $t('m.End_Time') }}: {{ row.endTime | localtime }}</p>
-          <p>{{ $t('m.Created_Time') }}: {{ row.gmtCreate | localtime }}</p>
-          <p>{{ $t('m.Creator') }}: {{ row.author }}</p>
+          <p>{{ $t("m.Start_Time") }}: {{ row.startTime | localtime }}</p>
+          <p>{{ $t("m.End_Time") }}: {{ row.endTime | localtime }}</p>
+          <p>{{ $t("m.Created_Time") }}: {{ row.gmtCreate | localtime }}</p>
+          <p>{{ $t("m.Creator") }}: {{ row.author }}</p>
         </template>
       </vxe-table-column>
       <vxe-table-column min-width="150" :title="$t('m.Option')">
@@ -170,13 +167,13 @@
         v-model="excludeAdmin"
         :active-text="$t('m.Exclude_admin_submissions')"
       ></el-switch>
-      <el-radio-group v-model="splitType" style="margin-top:10px">
-        <el-radio label="user">{{ $t('m.SplitType_User') }}</el-radio>
-        <el-radio label="problem">{{ $t('m.SplitType_Problem') }}</el-radio>
+      <el-radio-group v-model="splitType" style="margin-top: 10px">
+        <el-radio label="user">{{ $t("m.SplitType_User") }}</el-radio>
+        <el-radio label="problem">{{ $t("m.SplitType_Problem") }}</el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="downloadSubmissions">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -184,22 +181,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import utils from '@/common/utils';
-import Contest from '@/components/oj/group/Contest'
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import utils from "@/common/utils";
+import Contest from "@/components/oj/group/Contest";
 import {
   CONTEST_STATUS_REVERSE,
   CONTEST_TYPE,
   CONTEST_TYPE_REVERSE,
   CONTEST_STATUS,
-} from '@/common/constants';
+} from "@/common/constants";
 export default {
-  name: 'GroupContestList',
+  name: "GroupContestList",
   components: {
     Pagination,
-    Contest
+    Contest,
   },
   data() {
     return {
@@ -208,12 +205,12 @@ export default {
       limit: 10,
       contestList: [],
       loading: false,
-      routeName: '',
+      routeName: "",
       cid: null,
       editPage: false,
       downloadDialogVisible: false,
       excludeAdmin: true,
-      splitType: 'user',
+      splitType: "user",
     };
   },
   mounted() {
@@ -242,16 +239,22 @@ export default {
     },
     getAdminContestList() {
       this.loading = true;
-      api.getGroupAdminContestList(this.currentPage, this.limit, this.$route.params.groupID).then(
-        (res) => {
-          this.contestList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupAdminContestList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.contestList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     openDownloadOptions(contestID) {
       this.downloadDialogVisible = true;
@@ -275,18 +278,24 @@ export default {
     },
     changeContestVisible(cid, visible) {
       api.changeGroupContestVisible(cid, visible).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.$emit("currentChange", 1);
         this.currentChange(1);
       });
     },
     deleteContest(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Contest_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
-          api.deleteGroupContest(id, this.$route.params.groupID)
+      this.$confirm(
+        this.$i18n.t("m.Delete_Contest_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
+          api
+            .deleteGroupContest(id, this.$route.params.groupID)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChange", 1);
               this.currentChange(1);
             })
@@ -297,7 +306,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['isGroupRoot', 'userInfo']),
+    ...mapGetters(["isGroupRoot", "userInfo"]),
   },
 };
 </script>

@@ -6,6 +6,7 @@
 
 package com.iuaenasong.oj.service.oj.impl;
 
+import com.iuaenasong.oj.exception.AccessException;
 import com.iuaenasong.oj.pojo.vo.ReplyVo;
 import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.common.exception.StatusFailException;
@@ -33,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
     public CommonResult<CommentListVo> getComments(Long cid, Integer did, Integer limit, Integer currentPage) {
         try {
             return CommonResult.successResponse(commentManager.getComments(cid, did, limit, currentPage));
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e ) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -44,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
             return CommonResult.successResponse(commentManager.addComment(comment));
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
             return CommonResult.successResponse();
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -75,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
     public CommonResult<List<ReplyVo>> getAllReply(Integer commentId, Long cid) {
         try {
             return CommonResult.successResponse(commentManager.getAllReply(commentId, cid));
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FAIL);
@@ -88,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
             return CommonResult.successResponse(commentManager.addReply(replyDto));
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -100,7 +101,7 @@ public class CommentServiceImpl implements CommentService {
             return CommonResult.successResponse();
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }

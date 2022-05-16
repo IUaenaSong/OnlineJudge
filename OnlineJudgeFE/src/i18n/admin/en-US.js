@@ -17,6 +17,7 @@ export const m = {
   Auth_Admin: 'Auth Admin',
   Announcement_Admin: 'Announcement',
   System_Config: 'System Config',
+  System_Switch: 'System Switch',
   Problem_Admin: 'Problem',
   Problem_List: 'Problem List',
   Create_Problem: 'Create Problem',
@@ -72,7 +73,7 @@ export const m = {
   Import_User: 'Import User',
   Import_User_Tips1: 'The imported user data only supports user data in CSV format.',
   Import_User_Tips2: 'There are seven columns of data: username, password, email, realname and gender. The username and password cannot be empty, others can be enmpty, otherwise the data in this row may fail to be imported.',
-  Import_User_Tips3:'The first line does not need to write the seven column names ("username", "password", "email","realname","gender","nickname","school").',
+  Import_User_Tips3: 'The first line does not need to write the seven column names ("username", "password", "email","realname","gender","nickname","school").',
   Import_User_Tips4: 'If the gender is male, please use "male" or "0", if the gender is female, please use "female" or "1". If it is not filled in, it is assumed to be "secrecy".',
   Import_User_Tips5: 'Please import the file saved as UTF-8 code, otherwise Chinese may be garbled.',
   Choose_File: 'Choose File',
@@ -207,6 +208,27 @@ export const m = {
   The_Problem_Display_ID_in_the_Exam_is_required: 'The Problem Display ID in the Exam is required',
   Balloon_Color: 'Balloon Color',
   Update_Balloon_Color_Successfully: 'Update the Balloon color of the problem successfully!',
+
+  // /views/admin/general/SysSwitch.vue
+  Judge_Config: 'Judge Config',
+  Open_Public_Judge: 'Open Public Judge',
+  Open_Group_Judge: 'Open Group Judge',
+  Open_Contest_Judge: 'Open Contest Judge',
+  Non_Contest_Submission_Frequency: 'Non Contest Submission Frequency(s)',
+  Discussion_Config: 'Discussion Config',
+  Open_Public_Discussion: 'Open Public Discussion',
+  Open_Group_Discussion: 'Open Group Discussion',
+  Open_Contest_Comment: 'Open Contest Comment',
+  Number_of_AC_required_for_ordinary_users_to_post: 'Users can create discussion (Required AC)',
+  Number_of_posts_that_users_can_create_per_day: 'Number of Users can create discussion per day',
+  Number_of_AC_required_for_Comment_of_ordinary_users: 'Users can comment (Required AC)',
+  Group_Config: 'Group Config',
+  Number_of_Groups_that_users_can_create_per_day: 'Number of Users can create group per day',
+  Total_number_of_groups_that_ordinary_users_can_create: 'Total number of Users can create group',
+  Number_of_AC_required_for_ordinary_users_to_create_group: 'Users can create group (Required AC)',
+  Account_Config: 'Account Config',
+  Account: 'Account',
+  Add_Account: 'Add Account',
 
   // /views/admin/problem/Problem.vue
   Problem_Display_ID: 'Problem Display ID',
@@ -346,7 +368,7 @@ export const m = {
   Exclude_admin_submissions: 'Exclude admin submissions',
   SplitType_User: 'Split folders by username',
   SplitType_Problem: 'Split folders by problem id',
-  Delete_Contest_Tips: 'This operation will delete the contest and its submission, discussion, announcement, record and other data. Do you want to continue?',  
+  Delete_Contest_Tips: 'This operation will delete the contest and its submission, discussion, announcement, record and other data. Do you want to continue?',
 
   // /views/admin/contest/Contest.vue
   Contest_Title: 'Contest Title',

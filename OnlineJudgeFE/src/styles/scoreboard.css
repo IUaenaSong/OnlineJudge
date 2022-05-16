@@ -5,11 +5,13 @@
   font-size: 13.5px;
   font-weight: 550;
 }
+
 .contest-school {
   font-size: 12px;
   font-weight: normal;
   color: dimgrey;
 }
+
 .contest-rank-flag {
   margin-right: 20px !important;
   background-color: rgb(255, 193, 10);
@@ -21,9 +23,11 @@
 .bg-female {
   background-color: rgb(255, 153, 203);
 }
+
 .bg-star {
   background-color: #ffffcc;
 }
+
 .bg-concerned {
   background-color: lightyellow;
 }
@@ -46,12 +50,15 @@
 .first-ac {
   background-color: #1daa1d;
 }
+
 .ac {
   background-color: #60e760;
 }
+
 .wa {
   background-color: #e87272;
 }
+
 .try {
   background-color: #6666ff;
 }
@@ -60,25 +67,31 @@
   background-color: #19be6b !important;
   color: #fff !important;
 }
+
 .status-red {
   background-color: #ed3f14 !important;
   color: #fff !important;
 }
+
 .status-yellow {
   background-color: #f90 !important;
   color: #fff !important;
 }
+
 .status-blue {
   background-color: #2d8cf0 !important;
   color: #fff !important;
 }
+
 .status-gray {
   background-color: #909399 !important;
   color: #fff !important;
 }
+
 .own-submit-row {
   background: rgb(230, 255, 223) !important;
 }
+
 .submission-hover:hover {
   cursor: pointer;
 }

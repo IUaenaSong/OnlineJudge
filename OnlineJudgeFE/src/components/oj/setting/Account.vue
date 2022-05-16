@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :sm="24" :md="8" :lg="8">
         <div class="left">
-          <p class="section-title">{{ $t('m.Change_Password') }}</p>
+          <p class="section-title">{{ $t("m.Change_Password") }}</p>
           <el-form
             class="setting-content"
             ref="formPassword"
@@ -34,7 +34,7 @@
               slot="reference"
               :loading="loading.btnPassword"
               :disabled="disabled.btnPassword"
-              >{{ $t('m.Update_Password') }}</el-button
+              >{{ $t("m.Update_Password") }}</el-button
             >
             <slide-verify
               :l="42"
@@ -68,14 +68,14 @@
           :description="visible.passwordAlert.description"
           :closable="false"
           effect="dark"
-          style="margin-top:15px"
+          style="margin-top: 15px"
           show-icon
         >
         </el-alert>
       </el-col>
       <el-col :sm="24" :md="8" :lg="8">
         <div class="right">
-          <p class="section-title">{{ $t('m.Change_Email') }}</p>
+          <p class="section-title">{{ $t("m.Change_Email") }}</p>
           <el-form
             class="setting-content"
             ref="formEmail"
@@ -127,7 +127,7 @@
               slot="reference"
               :loading="loading.btnEmail"
               :disabled="disabled.btnEmail"
-              >{{ $t('m.Update_Email') }}</el-button
+              >{{ $t("m.Update_Email") }}</el-button
             >
             <slide-verify
               :l="42"
@@ -161,14 +161,14 @@
           :description="visible.emailAlert.description"
           :closable="false"
           effect="dark"
-          style="margin-top:15px"
+          style="margin-top: 15px"
           show-icon
         >
         </el-alert>
       </el-col>
       <el-col :sm="24" :md="8" :lg="8">
         <div class="right">
-          <p class="section-title">{{ $t('m.Change_Mobile') }}</p>
+          <p class="section-title">{{ $t("m.Change_Mobile") }}</p>
           <el-form
             class="setting-content"
             ref="formMobile"
@@ -200,7 +200,9 @@
                   @click.native="sendChangeMobile"
                   :loading="btnMobileLoading"
                 >
-                  <span v-show="btnMobileLoading">{{ mobileCountdownNum }}</span>
+                  <span v-show="btnMobileLoading">{{
+                    mobileCountdownNum
+                  }}</span>
                 </el-button>
               </el-input>
             </el-form-item>
@@ -223,7 +225,7 @@
               slot="reference"
               :loading="loading.btnMobile"
               :disabled="disabled.btnMobile"
-              >{{ $t('m.Update_Mobile') }}</el-button
+              >{{ $t("m.Update_Mobile") }}</el-button
             >
             <slide-verify
               :l="42"
@@ -257,7 +259,7 @@
           :description="visible.mobileAlert.description"
           :closable="false"
           effect="dark"
-          style="margin-top:15px"
+          style="margin-top: 15px"
           show-icon
         >
         </el-alert>
@@ -267,65 +269,65 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import api from '@/common/api';
-import 'element-ui/lib/theme-chalk/display.css';
+import { mapGetters, mapActions } from "vuex";
+import api from "@/common/api";
+import "element-ui/lib/theme-chalk/display.css";
 export default {
   data() {
     const oldPasswordCheck = [
       {
         required: true,
-        trigger: 'blur',
-        message: this.$i18n.t('m.Password_Check_Required'),
+        trigger: "blur",
+        message: this.$i18n.t("m.Password_Check_Required"),
       },
       {
-        trigger: 'blur',
+        trigger: "blur",
         min: 6,
         max: 20,
-        message: this.$i18n.t('m.Password_Check_Between'),
+        message: this.$i18n.t("m.Password_Check_Between"),
       },
     ];
     const CheckAgainPassword = (rule, value, callback) => {
       if (value !== this.formPassword.newPassword) {
-        callback(new Error(this.$i18n.t('m.Password_does_not_match')));
+        callback(new Error(this.$i18n.t("m.Password_does_not_match")));
       }
       callback();
     };
     const CheckNewPassword = (rule, value, callback) => {
-      if (this.formPassword.oldPassword !== '') {
+      if (this.formPassword.oldPassword !== "") {
         if (this.formPassword.oldPassword === this.formPassword.newPassword) {
           callback(
-            new Error(this.$i18n.t('m.The_new_password_does_not_change'))
+            new Error(this.$i18n.t("m.The_new_password_does_not_change"))
           );
         } else {
           // 对第二个密码框再次验证
-          this.$refs.formPassword.validateField('again_password');
+          this.$refs.formPassword.validateField("again_password");
         }
       }
       callback();
     };
     const CheckEmail = (rule, value, callback) => {
-      if (this.formEmail.oldEmail !== '') {
+      if (this.formEmail.oldEmail !== "") {
         if (this.formEmail.oldEmail === this.formEmail.newEmail) {
-          callback(new Error(this.$i18n.t('m.The_new_email_does_not_change')));
+          callback(new Error(this.$i18n.t("m.The_new_email_does_not_change")));
         }
       }
       callback();
     };
     const CheckMobile = (rule, value, callback) => {
-      if (this.formMobile.oldMobile !== '') {
+      if (this.formMobile.oldMobile !== "") {
         if (this.formMobile.oldMobile === this.formMobile.newMobile) {
-          callback(new Error(this.$i18n.t('m.The_new_mobile_does_not_change')));
+          callback(new Error(this.$i18n.t("m.The_new_mobile_does_not_change")));
         }
       }
       callback();
     };
     const IsMobile = (rule, value, callback) => {
       if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(value)) {
-        callback(new Error(this.$i18n.t('m.Mobile_Check_Format')));
+        callback(new Error(this.$i18n.t("m.Mobile_Check_Format")));
       }
       callback();
-    }
+    };
     return {
       btnEmailLoading: false,
       btnMobileLoading: false,
@@ -343,75 +345,75 @@ export default {
       },
       verify: {
         passwordSuccess: false,
-        passwordMsg: '',
+        passwordMsg: "",
         emailSuccess: false,
-        emailMsg: '',
+        emailMsg: "",
         mobileSuccess: false,
-        mobileMsg: '',
+        mobileMsg: "",
       },
       visible: {
         passwordAlert: {
-          type: 'success',
+          type: "success",
           show: false,
-          title: '',
-          description: '',
+          title: "",
+          description: "",
         },
         emailAlert: {
-          type: 'success',
+          type: "success",
           show: false,
-          title: '',
-          description: '',
+          title: "",
+          description: "",
         },
         mobileAlert: {
-          type: 'success',
+          type: "success",
           show: false,
-          title: '',
-          description: '',
+          title: "",
+          description: "",
         },
         passwordSlideBlock: false,
         emailSlideBlock: false,
         mobileSlideBlock: false,
       },
       formPassword: {
-        oldPassword: '',
-        newPassword: '',
-        againPassword: '',
+        oldPassword: "",
+        newPassword: "",
+        againPassword: "",
       },
       formEmail: {
-        password: '',
-        oldEmail: '',
-        newEmail: '',
-        code: '',
+        password: "",
+        oldEmail: "",
+        newEmail: "",
+        code: "",
       },
       formMobile: {
-        password: '',
-        oldMobile: '',
-        newMobile: '',
-        code: '',
+        password: "",
+        oldMobile: "",
+        newMobile: "",
+        code: "",
       },
       rulePassword: {
         oldPassword: oldPasswordCheck,
         newPassword: [
           {
             required: true,
-            trigger: 'blur',
-            message: this.$i18n.t('m.Password_Check_Required'),
+            trigger: "blur",
+            message: this.$i18n.t("m.Password_Check_Required"),
           },
           {
-            trigger: 'blur',
+            trigger: "blur",
             min: 6,
             max: 20,
-            message: this.$i18n.t('m.Password_Check_Between'),
+            message: this.$i18n.t("m.Password_Check_Between"),
           },
-          { validator: CheckNewPassword, trigger: 'blur' },
+          { validator: CheckNewPassword, trigger: "blur" },
         ],
         againPassword: [
           {
             required: true,
-            trigger: 'blur',
-            message: this.$i18n.t('m.Password_Again_Check_Required'),
+            trigger: "blur",
+            message: this.$i18n.t("m.Password_Again_Check_Required"),
           },
-          { validator: CheckAgainPassword, trigger: 'blur' },
+          { validator: CheckAgainPassword, trigger: "blur" },
         ],
       },
       ruleEmail: {
@@ -419,27 +421,27 @@ export default {
         newEmail: [
           {
             required: true,
-            message: this.$i18n.t('m.Email_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Email_Check_Required"),
+            trigger: "blur",
           },
           {
-            type: 'email',
-            trigger: 'change',
-            message: this.$i18n.t('m.Email_Check_Format'),
+            type: "email",
+            trigger: "change",
+            message: this.$i18n.t("m.Email_Check_Format"),
           },
-          { validator: CheckEmail, trigger: 'blur' },
+          { validator: CheckEmail, trigger: "blur" },
         ],
         code: [
           {
             required: true,
-            message: this.$i18n.t('m.Code_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Required"),
+            trigger: "blur",
           },
           {
             min: 6,
             max: 6,
-            message: this.$i18n.t('m.Code_Check_Length'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Length"),
+            trigger: "blur",
           },
         ],
       },
@@ -448,41 +450,41 @@ export default {
         newMobile: [
           {
             required: true,
-            message: this.$i18n.t('m.Mobile_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Mobile_Check_Required"),
+            trigger: "blur",
           },
           {
-            trigger: 'change',
-            message: this.$i18n.t('m.Mobile_Check_Format'),
+            trigger: "change",
+            message: this.$i18n.t("m.Mobile_Check_Format"),
             validator: IsMobile,
           },
-          { validator: CheckMobile, trigger: 'blur' },
+          { validator: CheckMobile, trigger: "blur" },
         ],
         code: [
           {
             required: true,
-            message: this.$i18n.t('m.Code_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Required"),
+            trigger: "blur",
           },
           {
             min: 6,
             max: 6,
-            message: this.$i18n.t('m.Code_Check_Length'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Length"),
+            trigger: "blur",
           },
         ],
       },
     };
   },
   mounted() {
-    this.formEmail.oldEmail = this.$store.getters.userInfo.email || '';
-    this.formMobile.oldMobile = this.$store.getters.userInfo.mobile || '';
+    this.formEmail.oldEmail = this.$store.getters.userInfo.email || "";
+    this.formMobile.oldMobile = this.$store.getters.userInfo.mobile || "";
   },
   methods: {
     ...mapActions([
-      'startTimeOut',
-      'changeEmailTimeOut',
-      'changeMobileTimeOut',
+      "startTimeOut",
+      "changeEmailTimeOut",
+      "changeMobileTimeOut",
     ]),
     countDownEmail() {
       let i = this.timeEmail;
@@ -509,7 +511,7 @@ export default {
     changePassword(times) {
       this.verify.passwordSuccess = true;
       let time = (times / 1000).toFixed(1);
-      this.verify.passwordMsg = 'Total time ' + time + 's';
+      this.verify.passwordMsg = "Total time " + time + "s";
       setTimeout(() => {
         this.visible.passwordSlideBlock = false;
         this.verify.passwordSuccess = false;
@@ -517,7 +519,7 @@ export default {
         this.$refs.passwordSlideBlock.reset();
       }, 1000);
 
-      this.$refs['formPassword'].validate((valid) => {
+      this.$refs["formPassword"].validate((valid) => {
         if (valid) {
           this.loading.btnPassword = true;
           let data = Object.assign({}, this.formPassword);
@@ -526,27 +528,27 @@ export default {
             (res) => {
               this.loading.btnPassword = false;
               if (res.data.data.code == 200) {
-                this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+                this.$msg.success(this.$i18n.t("m.Update_Successfully"));
                 this.visible.passwordAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Successfully'),
-                  type: 'success',
+                  title: this.$i18n.t("m.Update_Successfully"),
+                  type: "success",
                   description: res.data.data.msg,
                 };
                 setTimeout(() => {
                   this.visible.passwordAlert = false;
-                  this.$router.push({ name: 'Logout' });
+                  this.$router.push({ name: "Logout" });
                 }, 5000);
               } else {
                 this.$msg.error(res.data.msg);
                 this.visible.passwordAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Failed'),
-                  type: 'warning',
+                  title: this.$i18n.t("m.Update_Failed"),
+                  type: "warning",
                   description: res.data.data.msg,
                 };
                 if (res.data.data.code == 403) {
-                  this.visible.passwordAlert.type = 'error';
+                  this.visible.passwordAlert.type = "error";
                   this.disabled.btnPassword = true;
                 }
               }
@@ -559,21 +561,22 @@ export default {
       });
     },
     sendChangeEmail() {
-      var emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      var emailReg =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!emailReg.test(this.formEmail.newEmail)) {
-        this.$msg.error(this.$i18n.t('m.Email_Check_Format'));
+        this.$msg.error(this.$i18n.t("m.Email_Check_Format"));
         return;
       }
       this.btnEmailLoading = true;
-      this.emailCountdownNum = 'Waiting...';
+      this.emailCountdownNum = "Waiting...";
       if (this.formEmail.newEmail) {
-        this.$msg.info(this.$i18n.t('m.The_system_is_processing'));
+        this.$msg.info(this.$i18n.t("m.The_system_is_processing"));
         api.getChangeEmail(this.formEmail.newEmail).then(
           (res) => {
             if (res.data.msg != null) {
-              this.$msg.success(this.$i18n.t('m.Change_Send_Email_Msg'),10000);
+              this.$msg.success(this.$i18n.t("m.Change_Send_Email_Msg"), 10000);
               this.countDownEmail();
-              this.startTimeOut({ name: 'emailTimeOut' });
+              this.startTimeOut({ name: "emailTimeOut" });
             }
           },
           (res) => {
@@ -586,19 +589,22 @@ export default {
     sendChangeMobile() {
       var mobileReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
       if (!mobileReg.test(this.formMobile.newMobile)) {
-        this.$msg.error(this.$i18n.t('m.Mobile_Check_Format'));
+        this.$msg.error(this.$i18n.t("m.Mobile_Check_Format"));
         return;
       }
       this.btnMobileLoading = true;
-      this.mobileCountdownNum = 'Waiting...';
+      this.mobileCountdownNum = "Waiting...";
       if (this.formMobile.newMobile) {
-        this.$msg.info(this.$i18n.t('m.The_system_is_processing'));
+        this.$msg.info(this.$i18n.t("m.The_system_is_processing"));
         api.getChangeMobile(this.formMobile.newMobile).then(
           (res) => {
             if (res.data.msg != null) {
-              this.$msg.success(this.$i18n.t('m.Change_Send_Mobile_Msg'),10000);
+              this.$msg.success(
+                this.$i18n.t("m.Change_Send_Mobile_Msg"),
+                10000
+              );
               this.countDownMobile();
-              this.startTimeOut({ name: 'mobileTimeOut' });
+              this.startTimeOut({ name: "mobileTimeOut" });
             }
           },
           (res) => {
@@ -611,14 +617,14 @@ export default {
     changeEmail(times) {
       this.verify.emailSuccess = true;
       let time = (times / 1000).toFixed(1);
-      this.verify.emailMsg = 'Total time ' + time + 's';
+      this.verify.emailMsg = "Total time " + time + "s";
       setTimeout(() => {
         this.visible.emailSlideBlock = false;
         this.verify.emailSuccess = false;
         // 无论后续成不成功，验证码滑动都要刷新
         this.$refs.emailSlideBlock.reset();
       }, 1000);
-      this.$refs['formEmail'].validate((valid) => {
+      this.$refs["formEmail"].validate((valid) => {
         if (valid) {
           this.loading.btnEmail = true;
           let data = Object.assign({}, this.formEmail);
@@ -626,27 +632,27 @@ export default {
             (res) => {
               this.loading.btnEmail = false;
               if (res.data.data.code == 200) {
-                this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+                this.$msg.success(this.$i18n.t("m.Update_Successfully"));
                 this.visible.emailAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Successfully'),
-                  type: 'success',
+                  title: this.$i18n.t("m.Update_Successfully"),
+                  type: "success",
                   description: res.data.data.msg,
                 };
                 // 更新本地缓存
-                this.$store.dispatch('setUserInfo', res.data.data.userInfo);
-                this.$refs['formEmail'].resetFields();
+                this.$store.dispatch("setUserInfo", res.data.data.userInfo);
+                this.$refs["formEmail"].resetFields();
                 this.formEmail.oldEmail = res.data.data.userInfo.email;
               } else {
                 this.$msg.error(res.data.msg);
                 this.visible.emailAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Failed'),
-                  type: 'warning',
+                  title: this.$i18n.t("m.Update_Failed"),
+                  type: "warning",
                   description: res.data.data.msg,
                 };
                 if (res.data.data.code == 403) {
-                  this.visible.emailAlert.type = 'error';
+                  this.visible.emailAlert.type = "error";
                   this.disabled.btnEmail = true;
                 }
               }
@@ -661,14 +667,14 @@ export default {
     changeMobile(times) {
       this.verify.mobileSuccess = true;
       let time = (times / 1000).toFixed(1);
-      this.verify.mobileMsg = 'Total time ' + time + 's';
+      this.verify.mobileMsg = "Total time " + time + "s";
       setTimeout(() => {
         this.visible.mobileSlideBlock = false;
         this.verify.mobileSuccess = false;
         // 无论后续成不成功，验证码滑动都要刷新
         this.$refs.mobileSlideBlock.reset();
       }, 1000);
-      this.$refs['formMobile'].validate((valid) => {
+      this.$refs["formMobile"].validate((valid) => {
         if (valid) {
           this.loading.btnMobile = true;
           let data = Object.assign({}, this.formMobile);
@@ -676,27 +682,27 @@ export default {
             (res) => {
               this.loading.btnMobile = false;
               if (res.data.data.code == 200) {
-                this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+                this.$msg.success(this.$i18n.t("m.Update_Successfully"));
                 this.visible.mobileAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Successfully'),
-                  type: 'success',
+                  title: this.$i18n.t("m.Update_Successfully"),
+                  type: "success",
                   description: res.data.data.msg,
                 };
                 // 更新本地缓存
-                this.$store.dispatch('setUserInfo', res.data.data.userInfo);
-                this.$refs['formMobile'].resetFields();
+                this.$store.dispatch("setUserInfo", res.data.data.userInfo);
+                this.$refs["formMobile"].resetFields();
                 this.formMobile.oldMobile = res.data.data.userInfo.mobile;
               } else {
                 this.$msg.error(res.data.msg);
                 this.visible.mobileAlert = {
                   show: true,
-                  title: this.$i18n.t('m.Update_Failed'),
-                  type: 'warning',
+                  title: this.$i18n.t("m.Update_Failed"),
+                  type: "warning",
                   description: res.data.data.msg,
                 };
                 if (res.data.data.code == 403) {
-                  this.visible.mobileAlert.type = 'error';
+                  this.visible.mobileAlert.type = "error";
                   this.disabled.btnMobile = true;
                 }
               }
@@ -709,18 +715,18 @@ export default {
       });
     },
     onAgain(type) {
-      if ((type = 'password')) {
+      if ((type = "password")) {
         this.$refs.passwordSlideBlock.reset();
-      } else if ((type = 'email')) {
+      } else if ((type = "email")) {
         this.$refs.emailSlideBlock.reset();
       } else {
         this.$refs.mobileSlideBlock.reset();
       }
-      this.$msg.warning(this.$i18n.t('m.Guess_robot'));
+      this.$msg.warning(this.$i18n.t("m.Guess_robot"));
     },
   },
   computed: {
-    ...mapGetters(['emailTimeOut', 'mobileTimeOut']),
+    ...mapGetters(["emailTimeOut", "mobileTimeOut"]),
     timeEmail: {
       get() {
         return this.emailTimeOut;

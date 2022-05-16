@@ -17,7 +17,7 @@ import com.iuaenasong.oj.judge.SandboxRun;
 import com.iuaenasong.oj.judge.entity.JudgeDTO;
 import com.iuaenasong.oj.judge.entity.JudgeGlobalDTO;
 import com.iuaenasong.oj.judge.entity.SandBoxRes;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 import java.nio.charset.StandardCharsets;
 

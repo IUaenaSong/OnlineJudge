@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <vxe-table
           border="inner"
@@ -75,14 +75,14 @@
                 v-if="!showTags"
                 :underline="false"
                 @click="showTags = !showTags"
-                >{{ $t('m.Show_Tags') }}</el-link
+                >{{ $t("m.Show_Tags") }}</el-link
               >
               <el-link
                 type="danger"
                 v-else
                 @click="showTags = !showTags"
                 :underline="false"
-                >{{ $t('m.Hide_Tags') }}</el-link
+                >{{ $t("m.Hide_Tags") }}</el-link
               >
             </template>
             <template v-slot="{ row }">
@@ -91,7 +91,7 @@
                   class="el-tag el-tag--small"
                   :style="
                     'margin-right:7px;color:#FFF;background-color:' +
-                      (tag.color ? tag.color : '#409eff')
+                    (tag.color ? tag.color : '#409eff')
                   "
                   v-for="tag in row.tags"
                   :key="tag.id"
@@ -125,17 +125,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import utils from '@/common/utils';
-import { JUDGE_STATUS } from '@/common/constants';
-import api from '@/common/api';
+import { mapState, mapGetters } from "vuex";
+import utils from "@/common/utils";
+import { JUDGE_STATUS } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'TrainingProblemList',
+  name: "TrainingProblemList",
   data() {
     return {
       JUDGE_STATUS: {},
       isGetStatusOk: false,
-      testcolor: 'rgba(0, 206, 209, 1)',
+      testcolor: "rgba(0, 206, 209, 1)",
       showTags: false,
     };
   },
@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     getTrainingProblemList() {
-      this.$store.dispatch('getTrainingProblemList').then((res) => {
+      this.$store.dispatch("getTrainingProblemList").then((res) => {
         if (this.isAuthenticated) {
           // 如果已登录，则需要查询对当前页面题目列表中各个题目的提交情况
           let pidList = [];
@@ -157,8 +157,8 @@ export default {
             api.getUserProblemStatus(pidList, false, false).then((res) => {
               let result = res.data.data;
               for (let index = 0; index < this.problemList.length; index++) {
-                this.problemList[index]['myStatus'] =
-                  result[this.problemList[index].pid]['status'];
+                this.problemList[index]["myStatus"] =
+                  result[this.problemList[index].pid]["status"];
               }
               this.isGetStatusOk = true;
             });
@@ -168,7 +168,7 @@ export default {
     },
     goTrainingProblem(event) {
       this.$router.push({
-        name: 'TrainingProblemDetails',
+        name: "TrainingProblemDetails",
         params: {
           trainingID: this.$route.params.trainingID,
           problemID: event.row.problemId,
@@ -181,7 +181,7 @@ export default {
     },
     getIconColor(status) {
       return (
-        'font-weight: 600;font-size: 16px;color:' + JUDGE_STATUS[status].rgb
+        "font-weight: 600;font-size: 16px;color:" + JUDGE_STATUS[status].rgb
       );
     },
     getLevelColor(difficulty) {
@@ -202,7 +202,7 @@ export default {
       gid: (state) => state.training.training.gid,
       problemList: (state) => state.training.trainingProblemList,
     }),
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(["isAuthenticated"]),
   },
 };
 </script>

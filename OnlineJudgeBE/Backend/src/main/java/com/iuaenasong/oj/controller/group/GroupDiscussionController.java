@@ -6,6 +6,8 @@
 
 package com.iuaenasong.oj.controller.group;
 
+import com.iuaenasong.oj.annotation.OJAccess;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import com.iuaenasong.oj.common.result.CommonResult;
 import com.iuaenasong.oj.pojo.entity.discussion.Discussion;
 import com.iuaenasong.oj.service.group.discussion.GroupDiscussionService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiresAuthentication
 @RequestMapping("/api/group")
+@OJAccess({OJAccessEnum.GROUP_DISCUSSION})
 public class GroupDiscussionController {
 
     @Autowired

@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-alert
         type="success"
         :closable="false"
@@ -11,7 +11,7 @@
         <template slot="title">
           <span
             ><i class="el-icon-s-promotion">
-              {{ $t('m.Message_Center') }}</i
+              {{ $t("m.Message_Center") }}</i
             ></span
           >
         </template>
@@ -19,14 +19,14 @@
       <el-tabs
         tab-position="left"
         type="border-card"
-        style="min-height: 500px;"
+        style="min-height: 500px"
         v-model="route_name"
         @tab-click="handleRouter"
       >
         <el-tab-pane name="DiscussMsg">
           <span slot="label">
-            <span>{{ $t('m.DiscussMsg') }}</span>
-            <span style=" margin-left: 2px;" v-if="unreadMessage.comment > 0">
+            <span>{{ $t("m.DiscussMsg") }}</span>
+            <span style="margin-left: 2px" v-if="unreadMessage.comment > 0">
               <MsgSvg :total="unreadMessage.comment"></MsgSvg>
             </span>
           </span>
@@ -36,8 +36,8 @@
         </el-tab-pane>
         <el-tab-pane name="ReplyMsg">
           <span slot="label">
-            <span>{{ $t('m.ReplyMsg') }}</span>
-            <span style=" margin-left: 2px;" v-if="unreadMessage.reply > 0">
+            <span>{{ $t("m.ReplyMsg") }}</span>
+            <span style="margin-left: 2px" v-if="unreadMessage.reply > 0">
               <MsgSvg :total="unreadMessage.reply"></MsgSvg>
             </span>
           </span>
@@ -47,8 +47,8 @@
         </el-tab-pane>
         <el-tab-pane name="LikeMsg">
           <span slot="label">
-            <span>{{ $t('m.LikeMsg') }}</span>
-            <span style=" margin-left: 2px;" v-if="unreadMessage.like > 0">
+            <span>{{ $t("m.LikeMsg") }}</span>
+            <span style="margin-left: 2px" v-if="unreadMessage.like > 0">
               <MsgSvg :total="unreadMessage.like"></MsgSvg>
             </span>
           </span>
@@ -58,8 +58,8 @@
         </el-tab-pane>
         <el-tab-pane name="SysMsg">
           <span slot="label">
-            <span>{{ $t('m.SysMsg') }}</span>
-            <span style=" margin-left: 2px;" v-if="unreadMessage.sys > 0">
+            <span>{{ $t("m.SysMsg") }}</span>
+            <span style="margin-left: 2px" v-if="unreadMessage.sys > 0">
               <MsgSvg :total="unreadMessage.sys"></MsgSvg>
             </span>
           </span>
@@ -69,8 +69,8 @@
         </el-tab-pane>
         <el-tab-pane name="MineMsg">
           <span slot="label">
-            <span>{{ $t('m.MineMsg') }}</span>
-            <span style=" margin-left: 2px;" v-if="unreadMessage.mine > 0">
+            <span>{{ $t("m.MineMsg") }}</span>
+            <span style="margin-left: 2px" v-if="unreadMessage.mine > 0">
               <MsgSvg :total="unreadMessage.mine"></MsgSvg>
             </span>
           </span>
@@ -84,21 +84,21 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import MsgSvg from '@/components/oj/msg/MsgSvg';
+import { mapGetters } from "vuex";
+import MsgSvg from "@/components/oj/msg/MsgSvg";
 export default {
   components: {
     MsgSvg,
   },
   data() {
     return {
-      route_name: 'DiscussMsg',
+      route_name: "DiscussMsg",
     };
   },
   mounted() {
     this.route_name = this.$route.name;
-    if (this.route_name === 'Message') {
-      this.route_name = 'DiscussMsg';
+    if (this.route_name === "Message") {
+      this.route_name = "DiscussMsg";
     }
     this.$router.push({ name: this.route_name });
   },
@@ -111,7 +111,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['unreadMessage']),
+    ...mapGetters(["unreadMessage"]),
   },
 };
 </script>

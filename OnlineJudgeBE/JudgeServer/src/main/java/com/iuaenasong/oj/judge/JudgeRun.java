@@ -16,9 +16,9 @@ import com.iuaenasong.oj.judge.task.DefaultJudge;
 import com.iuaenasong.oj.judge.task.InteractiveJudge;
 import com.iuaenasong.oj.judge.task.SpecialJudge;
 import com.iuaenasong.oj.pojo.entity.problem.Problem;
-import com.iuaenasong.oj.util.Constants;
-import com.iuaenasong.oj.util.JudgeUtils;
-import com.iuaenasong.oj.util.ThreadPoolUtils;
+import com.iuaenasong.oj.utils.Constants;
+import com.iuaenasong.oj.utils.JudgeUtils;
+import com.iuaenasong.oj.utils.ThreadPoolUtils;
 
 import javax.annotation.Resource;
 import java.io.File;

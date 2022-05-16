@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Contest_List') }}</span>
+          <span class="panel-title home-title">{{ $t("m.Contest_List") }}</span>
           <div class="filter-row">
             <span>
               <vxe-input
@@ -25,7 +25,8 @@
           stripe
           align="center"
         >
-          <vxe-table-column field="id" width="80" title="ID"> </vxe-table-column>
+          <vxe-table-column field="id" width="80" title="ID">
+          </vxe-table-column>
           <vxe-table-column
             field="title"
             min-width="150"
@@ -49,7 +50,7 @@
                   :type="CONTEST_TYPE_REVERSE[row.auth].color"
                   effect="plain"
                 >
-                  {{ $t('m.' + CONTEST_TYPE_REVERSE[row.auth].name) }}
+                  {{ $t("m." + CONTEST_TYPE_REVERSE[row.auth].name) }}
                 </el-tag>
               </el-tooltip>
             </template>
@@ -61,7 +62,7 @@
                 :color="CONTEST_STATUS_REVERSE[row.status].color"
                 size="medium"
               >
-                {{ $t('m.' + CONTEST_STATUS_REVERSE[row.status]['name']) }}
+                {{ $t("m." + CONTEST_STATUS_REVERSE[row.status]["name"]) }}
               </el-tag>
             </template>
           </vxe-table-column>
@@ -77,16 +78,16 @@
           </vxe-table-column>
           <vxe-table-column min-width="210" :title="$t('m.Info')">
             <template v-slot="{ row }">
-              <p>{{ $t('m.Start_Time') }}: {{ row.startTime | localtime }}</p>
-              <p>{{ $t('m.End_Time') }}: {{ row.endTime | localtime }}</p>
-              <p>{{ $t('m.Created_Time') }}: {{ row.gmtCreate | localtime }}</p>
-              <p>{{ $t('m.Creator') }}: {{ row.author }}</p>
+              <p>{{ $t("m.Start_Time") }}: {{ row.startTime | localtime }}</p>
+              <p>{{ $t("m.End_Time") }}: {{ row.endTime | localtime }}</p>
+              <p>{{ $t("m.Created_Time") }}: {{ row.gmtCreate | localtime }}</p>
+              <p>{{ $t("m.Creator") }}: {{ row.author }}</p>
             </template>
           </vxe-table-column>
           <vxe-table-column min-width="150" :title="$t('m.Option')">
             <template v-slot="{ row }">
               <template v-if="isSuperAdmin || userInfo.uid == row.uid">
-                <div style="margin-bottom:10px">
+                <div style="margin-bottom: 10px">
                   <el-tooltip
                     effect="dark"
                     :content="$t('m.Edit')"
@@ -114,7 +115,7 @@
                     </el-button>
                   </el-tooltip>
                 </div>
-                <div style="margin-bottom:10px">
+                <div style="margin-bottom: 10px">
                   <el-tooltip
                     effect="dark"
                     :content="$t('m.View_Contest_Announcement_List')"
@@ -183,13 +184,13 @@
         v-model="excludeAdmin"
         :active-text="$t('m.Exclude_admin_submissions')"
       ></el-switch>
-      <el-radio-group v-model="splitType" style="margin-top:10px">
-        <el-radio label="user">{{ $t('m.SplitType_User') }}</el-radio>
-        <el-radio label="problem">{{ $t('m.SplitType_Problem') }}</el-radio>
+      <el-radio-group v-model="splitType" style="margin-top: 10px">
+        <el-radio label="user">{{ $t("m.SplitType_User") }}</el-radio>
+        <el-radio label="problem">{{ $t("m.SplitType_Problem") }}</el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="downloadSubmissions">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -197,24 +198,24 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
+import api from "@/common/api";
+import utils from "@/common/utils";
 import {
   CONTEST_STATUS_REVERSE,
   CONTEST_TYPE_REVERSE,
-} from '@/common/constants';
-import { mapGetters } from 'vuex';
+} from "@/common/constants";
+import { mapGetters } from "vuex";
 export default {
-  name: 'ContestList',
+  name: "ContestList",
   data() {
     return {
       pageSize: 10,
       total: 0,
       contestList: [],
-      keyword: '',
+      keyword: "",
       loading: false,
       excludeAdmin: true,
-      splitType: 'user',
+      splitType: "user",
       currentPage: 1,
       currentId: 1,
       downloadDialogVisible: false,
@@ -228,14 +229,14 @@ export default {
   },
   watch: {
     $route() {
-      let refresh = this.$route.query.refresh == 'true' ? true : false;
+      let refresh = this.$route.query.refresh == "true" ? true : false;
       if (refresh) {
         this.getContestList(1);
       }
     },
   },
   computed: {
-    ...mapGetters(['isSuperAdmin', 'userInfo']),
+    ...mapGetters(["isSuperAdmin", "userInfo"]),
   },
   methods: {
     // 切换页码回调
@@ -266,35 +267,35 @@ export default {
       this.downloadDialogVisible = false;
     },
     goEdit(contestID) {
-      this.$router.push({ name: 'admin-edit-contest', params: { contestID } });
+      this.$router.push({ name: "admin-edit-contest", params: { contestID } });
     },
     goContestAnnouncement(contestID) {
       this.$router.push({
-        name: 'admin-contest-announcement',
+        name: "admin-contest-announcement",
         params: { contestID },
       });
     },
     goContestProblemList(contestID) {
       this.$router.push({
-        name: 'admin-contest-problem-list',
+        name: "admin-contest-problem-list",
         params: { contestID },
       });
     },
     deleteContest(contestID) {
-      this.$confirm(this.$i18n.t('m.Delete_Contest_Tips'), 'Tips', {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
+      this.$confirm(this.$i18n.t("m.Delete_Contest_Tips"), "Tips", {
+        confirmButtonText: this.$i18n.t("m.OK"),
+        cancelButtonText: this.$i18n.t("m.Cancel"),
+        type: "warning",
       }).then(() => {
         api.admin_deleteContest(contestID).then((res) => {
-          this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+          this.$msg.success(this.$i18n.t("m.Delete_successfully"));
           this.currentChange(1);
         });
       });
     },
     changeContestVisible(contestID, visible, uid) {
       api.admin_changeContestVisible(contestID, visible, uid).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     filterByKeyword() {

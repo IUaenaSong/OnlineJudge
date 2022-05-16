@@ -7,6 +7,8 @@
 package com.iuaenasong.oj.service.oj.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.exception.AccessException;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.common.exception.StatusAccessDeniedException;
 import com.iuaenasong.oj.common.exception.StatusFailException;
@@ -37,7 +39,7 @@ public class JudgeServiceImpl implements JudgeService {
     public CommonResult<Judge> submitProblemJudge(ToJudgeDto judgeDto) {
         try {
             return CommonResult.successResponse(judgeManager.submitProblemJudge(judgeDto));
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         } catch (StatusNotFoundException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.NOT_FOUND);
@@ -54,7 +56,7 @@ public class JudgeServiceImpl implements JudgeService {
             return CommonResult.successResponse(judgeManager.resubmit(submitId));
         } catch (StatusNotFoundException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.NOT_FOUND);
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -67,7 +69,7 @@ public class JudgeServiceImpl implements JudgeService {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.NOT_FOUND);
         } catch (StatusAccessDeniedException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.ACCESS_DENIED);
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
@@ -78,6 +80,8 @@ public class JudgeServiceImpl implements JudgeService {
             return CommonResult.successResponse(judgeManager.getJudgeList(limit, currentPage, onlyMine, searchPid, searchStatus, searchUsername, gid, completeProblemID));
         } catch (StatusAccessDeniedException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.ACCESS_DENIED);
+        } catch (AccessException e) {
+            return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
 
@@ -88,14 +92,18 @@ public class JudgeServiceImpl implements JudgeService {
             return CommonResult.successResponse();
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage());
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }
 
     @Override
     public CommonResult<HashMap<Long, Object>> checkCommonJudgeResult(SubmitIdListDto submitIdListDto) {
-        return CommonResult.successResponse(judgeManager.checkCommonJudgeResult(submitIdListDto));
+        try {
+            return CommonResult.successResponse(judgeManager.checkCommonJudgeResult(submitIdListDto));
+        } catch (AccessException e) {
+            return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
+        }
     }
 
     @Override
@@ -122,7 +130,7 @@ public class JudgeServiceImpl implements JudgeService {
             return CommonResult.successResponse(judgeManager.getALLCaseResult(submitId));
         } catch (StatusNotFoundException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.NOT_FOUND);
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }

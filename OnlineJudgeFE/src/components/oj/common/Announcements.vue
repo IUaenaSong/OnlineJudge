@@ -11,7 +11,7 @@
           size="small"
           icon="el-icon-refresh"
           :loading="btnLoading"
-          >{{ $t('m.Refresh') }}</el-button
+          >{{ $t("m.Refresh") }}</el-button
         >
         <el-button
           v-else
@@ -19,7 +19,7 @@
           icon="el-icon-back"
           @click="goBack"
           size="small"
-          >{{ $t('m.Back') }}</el-button
+          >{{ $t("m.Back") }}</el-button
         >
       </span>
     </div>
@@ -78,11 +78,11 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { addCodeBtn } from '@/common/codeblock';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import { addCodeBtn } from "@/common/codeblock";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'Announcement',
+  name: "Announcement",
   components: {
     Pagination,
   },
@@ -97,7 +97,7 @@ export default {
       total: 0,
       btnLoading: false,
       announcements: [],
-      announcement: '',
+      announcement: "",
       listVisible: true,
     };
   },
@@ -154,15 +154,15 @@ export default {
     },
     goBack() {
       this.listVisible = true;
-      this.announcement = '';
+      this.announcement = "";
     },
   },
   computed: {
     title() {
       if (this.listVisible) {
         return this.isContest
-          ? this.$i18n.t('m.Contest_Announcement')
-          : this.$i18n.t('m.Announcement');
+          ? this.$i18n.t("m.Contest_Announcement")
+          : this.$i18n.t("m.Announcement");
       } else {
         return this.announcement.title;
       }

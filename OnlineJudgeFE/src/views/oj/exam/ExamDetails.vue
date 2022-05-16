@@ -1,14 +1,19 @@
 <template>
   <div class="exam-body">
     <el-row>
-      <el-col :xs="24" :md="24" :lg="24" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col
+        :xs="24"
+        :md="24"
+        :lg="24"
+        style="margin-top: 10px; margin-bottom: 10px"
+      >
         <el-card shadow>
           <div class="exam-title">
             <div slot="header">
               <span class="panel-title">{{ exam.title }}</span>
             </div>
           </div>
-          <el-row style="margin-top: 10px;">
+          <el-row style="margin-top: 10px">
             <el-col :span="12" class="text-align:left">
               <el-tooltip
                 v-if="exam.auth != null && exam.auth != undefined"
@@ -19,15 +24,15 @@
                   :type.sync="EXAM_TYPE_REVERSE[exam.auth]['color']"
                   effect="plain"
                 >
-                  {{ $t('m.' + EXAM_TYPE_REVERSE[exam.auth]['name']) }}
+                  {{ $t("m." + EXAM_TYPE_REVERSE[exam.auth]["name"]) }}
                 </el-tag>
               </el-tooltip>
             </el-col>
-            <el-col :span="12" style="text-align:right">
+            <el-col :span="12" style="text-align: right">
               <el-button size="small" plain v-if="exam.count">
                 <i
                   class="el-icon-user-solid"
-                  style="color:rgb(48, 145, 242);"
+                  style="color: rgb(48, 145, 242)"
                 ></i
                 >x{{ exam.count }}
               </el-button>
@@ -38,13 +43,13 @@
               <el-col :xs="24" :md="12" class="left">
                 <p>
                   <i class="fa fa-hourglass-start" aria-hidden="true"></i>
-                  {{ $t('m.StartAt') }}：{{ exam.startTime | localtime }}
+                  {{ $t("m.StartAt") }}：{{ exam.startTime | localtime }}
                 </p>
               </el-col>
               <el-col :xs="24" :md="12" class="right">
                 <p>
                   <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-                  {{ $t('m.EndAt') }}：{{ exam.endTime | localtime }}
+                  {{ $t("m.EndAt") }}：{{ exam.endTime | localtime }}
                 </p>
               </el-col>
             </el-row>
@@ -57,7 +62,7 @@
             ></el-slider>
           </div>
           <el-row>
-            <el-col :span="24" style="text-align:center">
+            <el-col :span="24" style="text-align: center">
               <el-tag effect="dark" size="medium" :style="countdownColor">
                 <i class="fa fa-circle" aria-hidden="true"></i>
                 {{ examCountdown }}
@@ -69,25 +74,31 @@
     </el-row>
     <div>
       <el-tabs @tab-click="tabClick" v-model="route_name">
-        <el-tab-pane name="ExamDetails" lazy >
+        <el-tab-pane name="ExamDetails" lazy>
           <span slot="label"
-            ><i class="el-icon-s-home"></i>&nbsp;{{ $t('m.Exam_Description') }}</span
+            ><i class="el-icon-s-home"></i>&nbsp;{{
+              $t("m.Exam_Description")
+            }}</span
           >
           <el-row>
-            <el-col :span="24" v-if="examPasswordFormVisible" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col
+              :span="24"
+              v-if="examPasswordFormVisible"
+              style="margin-top: 10px; margin-bottom: 10px"
+            >
               <el-card
                 class="password-form-card"
-                style="text-align:center;margin-bottom:15px"
+                style="text-align: center; margin-bottom: 15px"
               >
                 <div slot="header">
-                  <span class="panel-title" style="color: #e6a23c;"
+                  <span class="panel-title" style="color: #e6a23c"
                     ><i class="el-icon-warning">
-                      {{ $t('m.Password_Required') }}</i
+                      {{ $t("m.Password_Required") }}</i
                     ></span
                   >
                 </div>
                 <p class="password-form-tips">
-                  {{ $t('m.To_Enter_Need_Password') }}
+                  {{ $t("m.To_Enter_Need_Password") }}
                 </p>
                 <el-form>
                   <el-input
@@ -95,18 +106,18 @@
                     type="password"
                     :placeholder="$t('m.Enter_the_exam_password')"
                     @keydown.enter.native="checkPassword"
-                    style="width:70%"
+                    style="width: 70%"
                   />
                   <el-button
                     type="primary"
                     @click="checkPassword"
-                    style="float:right;"
-                    >{{ $t('m.Enter') }}</el-button
+                    style="float: right"
+                    >{{ $t("m.Enter") }}</el-button
                   >
                 </el-form>
               </el-card>
             </el-col>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <el-card class="box-card">
                 <div
                   v-html="descriptionHtml"
@@ -117,45 +128,34 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane
-          name="ExamQuestionList"
-          lazy
-          :disabled="examMenuDisabled"
-        >
+        <el-tab-pane name="ExamQuestionList" lazy :disabled="examMenuDisabled">
           <span slot="label"
             ><i class="el-icon-tickets" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Group_Question')
+              $t("m.Group_Question")
             }}</span
           >
           <transition name="el-fade-in-linear">
-            <router-view
-              v-if="route_name === 'ExamQuestionList'"
-            ></router-view>
+            <router-view v-if="route_name === 'ExamQuestionList'"></router-view>
           </transition>
         </el-tab-pane>
-        <el-tab-pane
-          name="ExamProblemList"
-          lazy
-          :disabled="examMenuDisabled"
-        >
+        <el-tab-pane name="ExamProblemList" lazy :disabled="examMenuDisabled">
           <span slot="label"
             ><i class="fa fa-list" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Problem')
+              $t("m.Problem")
             }}</span
           >
           <transition name="el-fade-in-linear">
-            <router-view
-              v-if="route_name === 'ExamProblemList'"
-            ></router-view>
+            <router-view v-if="route_name === 'ExamProblemList'"></router-view>
           </transition>
         </el-tab-pane>
         <el-tab-pane
+          v-if="websiteConfig.openContestJudge || isSuperAdmin"
           name="ExamSubmissionList"
           lazy
           :disabled="examMenuDisabled"
         >
           <span slot="label"
-            ><i class="el-icon-menu"></i>&nbsp;{{ $t('m.Status') }}</span
+            ><i class="el-icon-menu"></i>&nbsp;{{ $t("m.Status") }}</span
           >
           <transition name="el-fade-in-linear">
             <router-view
@@ -166,21 +166,31 @@
         <el-tab-pane name="ExamPaperList" lazy v-if="isExamAdmin">
           <span slot="label"
             ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Exam_Paper')
+              $t("m.Exam_Paper")
             }}</span
           >
           <transition name="el-fade-in-linear">
             <router-view v-if="route_name === 'ExamPaperList'"></router-view>
           </transition>
         </el-tab-pane>
-        <el-tab-pane name="MyExamPaperDetails" v-if="isAuthenticated && !isExamAdmin && examStatus == EXAM_STATUS.ENDED && examAutoRealScore">
+        <el-tab-pane
+          name="MyExamPaperDetails"
+          v-if="
+            isAuthenticated &&
+            !isExamAdmin &&
+            examStatus == EXAM_STATUS.ENDED &&
+            examAutoRealScore
+          "
+        >
           <span slot="label"
             ><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Exam_Paper')
+              $t("m.Exam_Paper")
             }}</span
           >
           <transition name="el-fade-in-linear">
-            <router-view v-if="route_name === 'MyExamPaperDetails'"></router-view>
+            <router-view
+              v-if="route_name === 'MyExamPaperDetails'"
+            ></router-view>
           </transition>
         </el-tab-pane>
         <el-tab-pane
@@ -191,11 +201,11 @@
         >
           <span slot="label"
             ><i class="el-icon-refresh" aria-hidden="true"></i>&nbsp;{{
-              $t('m.Rejudge')
+              $t("m.Rejudge")
             }}</span
           >
           <el-row>
-            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;"> 
+            <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
               <transition name="el-fade-in-linear">
                 <router-view
                   v-if="route_name === 'ExamRejudgeAdmin'"
@@ -209,51 +219,51 @@
   </div>
 </template>
 <script>
-import time from '@/common/time';
-import moment from 'moment';
-import api from '@/common/api';
-import { mapState, mapGetters, mapActions } from 'vuex';
-import { addCodeBtn } from '@/common/codeblock';
+import time from "@/common/time";
+import moment from "moment";
+import api from "@/common/api";
+import { mapState, mapGetters, mapActions } from "vuex";
+import { addCodeBtn } from "@/common/codeblock";
 import {
   EXAM_STATUS_REVERSE,
   EXAM_STATUS,
   EXAM_TYPE_REVERSE,
   RULE_TYPE,
-} from '@/common/constants';
+} from "@/common/constants";
 export default {
-  name: 'ExamDetails',
+  name: "ExamDetails",
   data() {
     return {
-      route_name: 'examDetails',
+      route_name: "examDetails",
       timer: null,
       EXAM_STATUS: {},
       EXAM_STATUS_REVERSE: {},
       EXAM_TYPE_REVERSE: {},
       RULE_TYPE: {},
       btnLoading: false,
-      examPassword: '',
+      examPassword: "",
     };
   },
   created() {
     this.examID = this.$route.params.examID;
     this.route_name = this.$route.name;
-    if (this.route_name == 'ExamProblemDetails') {
-      this.route_name = 'ExamProblemList';
+    if (this.route_name == "ExamProblemDetails") {
+      this.route_name = "ExamProblemList";
     }
-    if (this.route_name == 'ExamQuestionDetails') {
-      this.route_name = 'ExamQuestionList';
+    if (this.route_name == "ExamQuestionDetails") {
+      this.route_name = "ExamQuestionList";
     }
-    if (this.route_name == 'ExamSubmissionDetails') {
-      this.route_name = 'ExamSubmissionList';
+    if (this.route_name == "ExamSubmissionDetails") {
+      this.route_name = "ExamSubmissionList";
     }
-    if (this.route_name == 'ExamPaperDetails') {
-      this.route_name = 'ExamPaperList';
+    if (this.route_name == "ExamPaperDetails") {
+      this.route_name = "ExamPaperList";
     }
     this.EXAM_TYPE_REVERSE = Object.assign({}, EXAM_TYPE_REVERSE);
     this.EXAM_STATUS = Object.assign({}, EXAM_STATUS);
     this.EXAM_STATUS_REVERSE = Object.assign({}, EXAM_STATUS_REVERSE);
     this.RULE_TYPE = Object.assign({}, RULE_TYPE);
-    this.$store.dispatch('getExam').then((res) => {
+    this.$store.dispatch("getExam").then((res) => {
       this.changeDomTitle({ title: res.data.data.title });
       let data = res.data.data;
       let endTime = moment(data.endTime);
@@ -261,21 +271,20 @@ export default {
       if (endTime.isAfter(moment(data.now))) {
         // 实时更新时间
         this.timer = setInterval(() => {
-          this.$store.commit('nowAdd1s');
+          this.$store.commit("nowAdd1s");
         }, 1000);
       }
-
       this.$nextTick((_) => {
         addCodeBtn();
       });
     });
   },
   methods: {
-    ...mapActions(['changeDomTitle']),
+    ...mapActions(["changeDomTitle"]),
     formatTooltip(val) {
       if (this.exam.status == -1) {
         // 还未开始
-        return '00:00:00';
+        return "00:00:00";
       } else if (this.exam.status == 0) {
         return time.secondFormat(this.examBeginToNowDuration); // 格式化时间
       } else {
@@ -283,15 +292,15 @@ export default {
       }
     },
     checkPassword() {
-      if (this.examPassword === '') {
-        this.$msg.warning(this.$i18n.t('m.Enter_the_exam_password'));
+      if (this.examPassword === "") {
+        this.$msg.warning(this.$i18n.t("m.Enter_the_exam_password"));
         return;
       }
       this.btnLoading = true;
-      api.registerExam(this.examID + '', this.examPassword).then(
+      api.registerExam(this.examID + "", this.examPassword).then(
         (res) => {
-          this.$msg.success(this.$i18n.t('m.Register_exam_successfully'));
-          this.$store.commit('examIntoAccess', { intoAccess: true });
+          this.$msg.success(this.$i18n.t("m.Register_exam_successfully"));
+          this.$store.commit("examIntoAccess", { intoAccess: true });
           this.btnLoading = false;
         },
         (res) => {
@@ -302,10 +311,13 @@ export default {
     tabClick(tab) {
       let name = tab.name;
       if (name !== this.$route.name) {
-        if (name != 'MyExamPaperDetails') {
+        if (name != "MyExamPaperDetails") {
           this.$router.push({ name: name });
         } else {
-          this.$router.push({ name: name, params: {paperID: this.userInfo.uid } });
+          this.$router.push({
+            name: name,
+            params: { paperID: this.userInfo.uid },
+          });
         }
       }
     },
@@ -316,24 +328,25 @@ export default {
       now: (state) => state.exam.now,
     }),
     ...mapGetters([
-      'examMenuDisabled',
-      'examRuleType',
-      'examStatus',
-      'examCountdown',
-      'examBeginToNowDuration',
-      'isExamAdmin',
-      'isSuperAdmin',
-      'ExamRealTimePermission',
-      'examPasswordFormVisible',
-      'userInfo',
-      'examAutoRealScore',
-      'isAuthenticated',
+      "examMenuDisabled",
+      "examRuleType",
+      "examStatus",
+      "examCountdown",
+      "examBeginToNowDuration",
+      "isExamAdmin",
+      "isSuperAdmin",
+      "ExamRealTimePermission",
+      "examPasswordFormVisible",
+      "userInfo",
+      "examAutoRealScore",
+      "isAuthenticated",
+      "websiteConfig",
     ]),
     progressValue: {
-      get: function() {
+      get: function () {
         return this.$store.getters.examProgressValue;
       },
-      set: function() {},
+      set: function () {},
     },
     timeStep() {
       // 时间段平分滑条长度
@@ -341,7 +354,7 @@ export default {
     },
     countdownColor() {
       if (this.examStatus) {
-        return 'color:' + EXAM_STATUS_REVERSE[this.examStatus].color;
+        return "color:" + EXAM_STATUS_REVERSE[this.examStatus].color;
       }
     },
     showAdminHelper() {
@@ -359,17 +372,17 @@ export default {
   watch: {
     $route(newVal) {
       this.route_name = newVal.name;
-      if (newVal.name == 'ExamProblemDetails') {
-        this.route_name = 'ExamProblemList';
+      if (newVal.name == "ExamProblemDetails") {
+        this.route_name = "ExamProblemList";
       }
-      if (newVal.name == 'ExamQuestionDetails') {
-        this.route_name = 'ExamQuestionList';
+      if (newVal.name == "ExamQuestionDetails") {
+        this.route_name = "ExamQuestionList";
       }
-      if (this.route_name == 'ExamSubmissionDetails') {
-        this.route_name = 'ExamSubmissionList';
+      if (this.route_name == "ExamSubmissionDetails") {
+        this.route_name = "ExamSubmissionList";
       }
-      if (this.route_name == 'ExamPaperDetails') {
-        this.route_name = 'ExamPaperList';
+      if (this.route_name == "ExamPaperDetails") {
+        this.route_name = "ExamPaperList";
       }
       this.examID = newVal.params.examID;
       this.changeDomTitle({ title: this.exam.title });
@@ -378,7 +391,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.announceTimer);
-    this.$store.commit('clearExam');
+    this.$store.commit("clearExam");
   },
 };
 </script>

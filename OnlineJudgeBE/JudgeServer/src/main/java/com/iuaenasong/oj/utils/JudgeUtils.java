@@ -4,7 +4,7 @@
  * @Description
  */
 
-package com.iuaenasong.oj.util;
+package com.iuaenasong.oj.utils;
 
 import cn.hutool.json.JSONUtil;
 import org.springframework.util.StringUtils;

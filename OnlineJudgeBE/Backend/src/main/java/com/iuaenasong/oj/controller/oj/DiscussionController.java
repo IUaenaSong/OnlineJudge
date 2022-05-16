@@ -7,6 +7,8 @@
 package com.iuaenasong.oj.controller.oj;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.annotation.OJAccess;
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class DiscussionController {
     private DiscussionService discussionService;
 
     @GetMapping("/get-discussion-list")
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<IPage<Discussion>> getDiscussionList(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
                                                              @RequestParam(value = "currentPage", required = false, defaultValue = "1") Integer currentPage,
                                                              @RequestParam(value = "cid", required = false) Integer categoryId,
@@ -41,6 +44,7 @@ public class DiscussionController {
     }
 
     @GetMapping("/get-discussion-detail")
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<DiscussionVo> getDiscussion(@RequestParam(value = "did", required = true) Integer did) {
         return discussionService.getDiscussion(did);
     }
@@ -48,6 +52,7 @@ public class DiscussionController {
     @PostMapping("/discussion")
     @RequiresPermissions("discussion_add")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<Void> addDiscussion(@RequestBody Discussion discussion) {
         return discussionService.addDiscussion(discussion);
     }
@@ -55,6 +60,7 @@ public class DiscussionController {
     @PutMapping("/discussion")
     @RequiresPermissions("discussion_edit")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<Void> updateDiscussion(@RequestBody Discussion discussion) {
         return discussionService.updateDiscussion(discussion);
     }
@@ -62,12 +68,14 @@ public class DiscussionController {
     @DeleteMapping("/discussion")
     @RequiresPermissions("discussion_del")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<Void> removeDiscussion(@RequestParam("did") Integer did) {
         return discussionService.removeDiscussion(did);
     }
 
     @GetMapping("/discussion-like")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<Void> addDiscussionLike(@RequestParam("did") Integer did,
                                                 @RequestParam("toLike") Boolean toLike) {
         return discussionService.addDiscussionLike(did, toLike);
@@ -80,6 +88,7 @@ public class DiscussionController {
 
     @PostMapping("/discussion-report")
     @RequiresAuthentication
+    @OJAccess({OJAccessEnum.PUBLIC_DISCUSSION})
     public CommonResult<Void> addDiscussionReport(@RequestBody DiscussionReport discussionReport) {
         return discussionService.addDiscussionReport(discussionReport);
     }

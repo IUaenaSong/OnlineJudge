@@ -198,7 +198,7 @@ public class GroupMemberManager {
             throw new StatusNotFoundException("该用户不在团队中！");
         }
 
-        if (!isRoot) {
+        if (!isRoot && !group.getUid().equals(userRolesVo.getUid())) {
             if (groupMember1.getAuth() >= groupMember.getAuth() || groupMemberDto.getAuth() >= groupMember.getAuth()) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }

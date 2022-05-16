@@ -1,7 +1,12 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :xs="24" :md="10" :lg="8" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col
+        :xs="24"
+        :md="10"
+        :lg="8"
+        style="margin-top: 10px; margin-bottom: 10px"
+      >
         <el-card class="admin-info">
           <div slot="header">
             <el-row :gutter="10">
@@ -19,17 +24,17 @@
                 <p>
                   {{
                     isSuperAdmin == true
-                      ? $t('m.Super_Admin')
+                      ? $t("m.Super_Admin")
                       : isProblemAdmin == true
-                      ? $t('m.All_Problem_Admin')
-                      : $t('m.Admin')
+                      ? $t("m.All_Problem_Admin")
+                      : $t("m.Admin")
                   }}
                 </p>
               </el-col>
             </el-row>
           </div>
           <div class="last-info">
-            <p class="last-info-title home-title">{{ $t('m.Last_Login') }}</p>
+            <p class="last-info-title home-title">{{ $t("m.Last_Login") }}</p>
             <el-form label-width="80px" class="last-info-body">
               <el-form-item label="Time:">
                 <span>{{ session.gmtCreate | localtime }}</span>
@@ -47,7 +52,12 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :xs="24" :md="14" :lg="16" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col
+        :xs="24"
+        :md="14"
+        :lg="16"
+        style="margin-top: 10px; margin-bottom: 10px"
+      >
         <div class="info-container">
           <info-card
             color="#909399"
@@ -75,13 +85,13 @@
         <el-card>
           <div slot="header">
             <span class="panel-title home-title">{{
-              $t('m.Backend_System')
+              $t("m.Backend_System")
             }}</span>
           </div>
           <el-row>
             <el-col :xs="24" :md="8">
               <span
-                >{{ $t('m.Server_Number') }}：
+                >{{ $t("m.Server_Number") }}：
                 <el-tag effect="dark" color="#2d8cf0" size="mini">{{
                   generalInfo.backupService.length
                 }}</el-tag>
@@ -89,7 +99,7 @@
             </el-col>
             <el-col :xs="24" :md="8">
               <span
-                >{{ $t('m.Nacos_Status') }}：
+                >{{ $t("m.Nacos_Status") }}：
                 <el-tag
                   effect="dark"
                   color="#19be6b"
@@ -104,18 +114,18 @@
             </el-col>
             <el-col :xs="24" :md="8">
               <span
-                >{{ $t('m.HTTPS_Status') }}：
+                >{{ $t("m.HTTPS_Status") }}：
                 <el-tag
                   :type="https ? 'success' : 'danger'"
                   size="small"
                   effect="dark"
                 >
-                  {{ https ? 'Enabled' : 'Disabled' }}
+                  {{ https ? "Enabled" : "Disabled" }}
                 </el-tag>
               </span>
             </el-col>
           </el-row>
-          <h2 class="home-title">{{ $t('m.Backend_Service') }}</h2>
+          <h2 class="home-title">{{ $t("m.Backend_Service") }}</h2>
           <vxe-table
             stripe
             auto-resize
@@ -124,7 +134,7 @@
           >
             <vxe-table-column :title="$t('m.Name')" min-width="130">
               <template v-slot="{ row }">
-                <span>{{ row['serviceId'] }}</span>
+                <span>{{ row["serviceId"] }}</span>
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -177,10 +187,10 @@
                   effect="dark"
                   color="#19be6b"
                   v-if="row.metadata['nacos.healthy'] == 'true'"
-                  >{{ $t('m.Healthy') }}</el-tag
+                  >{{ $t("m.Healthy") }}</el-tag
                 >
                 <el-tag effect="dark" color="#f90" v-else>{{
-                  $t('m.Unhealthy')
+                  $t("m.Unhealthy")
                 }}</el-tag>
               </template>
             </vxe-table-column>
@@ -189,16 +199,18 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+      <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
         <el-card>
           <div slot="header">
-            <span class="panel-title home-title">{{ $t('m.Judge_Server') }}</span>
+            <span class="panel-title home-title">{{
+              $t("m.Judge_Server")
+            }}</span>
           </div>
           <vxe-table stripe auto-resize :data="judgeInfo" align="center">
             <vxe-table-column type="seq" width="50"></vxe-table-column>
             <vxe-table-column :title="$t('m.Name')" min-width="150">
               <template v-slot="{ row }">
-                <span>{{ row.service['serviceId'] }}</span>
+                <span>{{ row.service["serviceId"] }}</span>
               </template>
             </vxe-table-column>
             <vxe-table-column :title="$t('m.Host')" min-width="80">
@@ -236,7 +248,10 @@
             <vxe-table-column :title="$t('m.Secure')" min-width="80">
               <template v-slot="{ row }">
                 <el-tooltip content="是否触发保护阈值" placement="top">
-                  <el-tag effect="dark" color="#ed3f14" v-if="row.service.secure"
+                  <el-tag
+                    effect="dark"
+                    color="#ed3f14"
+                    v-if="row.service.secure"
                     >True</el-tag
                   >
                   <el-tag effect="dark" color="#2d8cf0" v-else>False</el-tag>
@@ -249,10 +264,10 @@
                   effect="dark"
                   color="#19be6b"
                   v-if="row.service.metadata['nacos.healthy'] == 'true'"
-                  >{{ $t('m.Healthy') }}</el-tag
+                  >{{ $t("m.Healthy") }}</el-tag
                 >
                 <el-tag effect="dark" color="#f90" v-else>{{
-                  $t('m.Unhealthy')
+                  $t("m.Unhealthy")
                 }}</el-tag>
               </template>
             </vxe-table-column>
@@ -264,13 +279,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import browserDetector from 'browser-detect';
-import InfoCard from '@/components/admin/infoCard.vue';
-import api from '@/common/api';
+import { mapGetters } from "vuex";
+import browserDetector from "browser-detect";
+import InfoCard from "@/components/admin/infoCard.vue";
+import api from "@/common/api";
 
 export default {
-  name: 'dashboard',
+  name: "dashboard",
   components: {
     InfoCard,
   },
@@ -283,8 +298,8 @@ export default {
       },
       generalInfo: {
         backupCores: 0,
-        backupPercentCpuLoad: '0%',
-        backupPercentMemoryLoad: '0%',
+        backupPercentCpuLoad: "0%",
+        backupPercentMemoryLoad: "0%",
         backupService: [],
         nacos: {},
       },
@@ -329,15 +344,12 @@ export default {
       api.admin_getGeneralSystemInfo().then(
         (res) => {
           this.generalInfo = res.data.data;
-          this.generalInfo.backupService[0][
-            'backupCores'
-          ] = this.generalInfo.backupCores;
-          this.generalInfo.backupService[0][
-            'backupPercentCpuLoad'
-          ] = this.generalInfo.backupPercentCpuLoad;
-          this.generalInfo.backupService[0][
-            'backupPercentMemoryLoad'
-          ] = this.generalInfo.backupPercentMemoryLoad;
+          this.generalInfo.backupService[0]["backupCores"] =
+            this.generalInfo.backupCores;
+          this.generalInfo.backupService[0]["backupPercentCpuLoad"] =
+            this.generalInfo.backupPercentCpuLoad;
+          this.generalInfo.backupService[0]["backupPercentMemoryLoad"] =
+            this.generalInfo.backupPercentMemoryLoad;
         },
         () => {
           clearInterval(this.intervalId);
@@ -346,21 +358,21 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isSuperAdmin', 'isProblemAdmin']),
+    ...mapGetters(["userInfo", "isSuperAdmin", "isProblemAdmin"]),
     https() {
-      return document.URL.slice(0, 5) === 'https';
+      return document.URL.slice(0, 5) === "https";
     },
     browser() {
       let b = browserDetector(this.session.userAgent);
       if (b.name && b.version) {
-        return b.name + ' ' + b.version;
+        return b.name + " " + b.version;
       } else {
-        return 'Unknown';
+        return "Unknown";
       }
     },
     os() {
       let b = browserDetector(this.session.userAgent);
-      return b.os ? b.os : 'Unknown';
+      return b.os ? b.os : "Unknown";
     },
   },
   beforeRouteLeave(to, from, next) {

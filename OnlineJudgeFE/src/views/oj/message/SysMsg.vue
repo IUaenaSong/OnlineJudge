@@ -1,11 +1,11 @@
 <template>
   <div class="msg-wrap" v-loading="loading">
     <h3 class="msg-list-header">
-      <span class="ft">{{ $t('m.' + route_name) }}</span>
+      <span class="ft">{{ $t("m." + route_name) }}</span>
       <span class="fr"
-        >{{ $t('m.Msg_Total') + ' ' + total + ' ' + $t('m.Msg_Messages') }}
+        >{{ $t("m.Msg_Total") + " " + total + " " + $t("m.Msg_Messages") }}
         <span class="clear-all" @click="deleteMsg()">{{
-          $t('m.Clean_All')
+          $t("m.Clean_All")
         }}</span></span
       >
     </h3>
@@ -42,7 +42,7 @@
             >
             <span class="extra delete"
               ><i class="el-icon-delete" @click="deleteMsg(item.id)">
-                {{ $t('m.Delete') }}</i
+                {{ $t("m.Delete") }}</i
               ></span
             >
           </div>
@@ -71,8 +71,8 @@
   </div>
 </template>
 <script>
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
 export default {
   components: { Pagination },
   data() {
@@ -81,7 +81,7 @@ export default {
       loading: false,
       total: 0,
       query: { limit: 8, currentPage: 1 },
-      route_name: 'SysMsg',
+      route_name: "SysMsg",
     };
   },
   created() {
@@ -122,18 +122,18 @@ export default {
     },
     getInfoByUsername(uid, username) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { uid, username },
       });
     },
     deleteMsg(id = undefined) {
-      this.$confirm(this.$i18n.t('m.Delete_Msg_Tips'), 'Tips', {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
+      this.$confirm(this.$i18n.t("m.Delete_Msg_Tips"), "Tips", {
+        confirmButtonText: this.$i18n.t("m.OK"),
+        cancelButtonText: this.$i18n.t("m.Cancel"),
+        type: "warning",
       }).then(() => {
         api.cleanMsg(this.route_name, id).then((res) => {
-          this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+          this.$msg.success(this.$i18n.t("m.Delete_successfully"));
           this.getMsgList();
         });
       });
@@ -141,18 +141,18 @@ export default {
     substractUnreadMsgNum() {
       let countName;
       switch (this.route_name) {
-        case 'SysMsg':
-          countName = 'sys';
+        case "SysMsg":
+          countName = "sys";
           break;
-        case 'MineMsg':
-          countName = 'mine';
+        case "MineMsg":
+          countName = "mine";
           break;
       }
       let needSubstractMsg = {
         name: countName,
         num: this.limit,
       };
-      this.$store.dispatch('substractUnreadMessageCount', needSubstractMsg);
+      this.$store.dispatch("substractUnreadMessageCount", needSubstractMsg);
     },
   },
 };

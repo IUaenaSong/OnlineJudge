@@ -122,4 +122,19 @@ public class ConfigServiceImpl implements ConfigService {
             return CommonResult.errorResponse(e.getMessage());
         }
     }
+
+    @Override
+    public CommonResult<SwitchConfigDto> getSwitchConfig() {
+        return CommonResult.successResponse(configManager.getSwitchConfig());
+    }
+
+    @Override
+    public CommonResult<Void> setSwitchConfig(SwitchConfigDto config) {
+        try {
+            configManager.setSwitchConfig(config);
+            return CommonResult.successResponse();
+        } catch (StatusFailException e) {
+            return CommonResult.errorResponse(e.getMessage());
+        }
+    }
 }

@@ -7,6 +7,7 @@
 package com.iuaenasong.oj.service.oj.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iuaenasong.oj.exception.AccessException;
 import org.springframework.stereotype.Service;
 import com.iuaenasong.oj.common.exception.StatusFailException;
 import com.iuaenasong.oj.common.exception.StatusForbiddenException;
@@ -46,7 +47,7 @@ public class DiscussionServiceImpl implements DiscussionService {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.NOT_FOUND);
         } catch (StatusFailException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FAIL);
-        } catch (StatusForbiddenException e) {
+        } catch (StatusForbiddenException | AccessException e) {
             return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
         }
     }

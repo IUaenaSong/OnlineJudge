@@ -1,15 +1,13 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Website_Config') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Website_Config")
+          }}</span>
         </div>
-        <el-form
-          label-position="top"
-          ref="form"
-          :model="websiteConfig"
-        >
+        <el-form label-position="top" ref="form" :model="websiteConfig">
           <el-row :gutter="20">
             <el-col :md="8" :xs="24">
               <el-form-item :label="$t('m.Base_Url')" required>
@@ -96,15 +94,15 @@
           type="primary"
           @click.native="saveWebsiteConfig"
           size="small"
-          >{{ $t('m.Save') }}</el-button
+          >{{ $t("m.Save") }}</el-button
         >
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.Home_Rotation_Chart')
+            $t("m.Home_Rotation_Chart")
           }}</span>
         </div>
         <ul class="el-upload-list el-upload-list--picture-card">
@@ -118,7 +116,7 @@
               <img
                 :src="img.url"
                 alt="load faild"
-                style="height:146px;width:146x"
+                style="height: 146px; width: 146x"
                 class="el-upload-list__item-thumbnail"
               /><span class="el-upload-list__item-actions">
                 <span
@@ -152,7 +150,7 @@
           accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,image/jfif,image/webp"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
-          style="display: inline;"
+          style="display: inline"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -164,10 +162,10 @@
         </el-dialog>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.SMTP_Config') }}</span>
+          <span class="panel-title home-title">{{ $t("m.SMTP_Config") }}</span>
         </div>
         <el-form label-position="top" :model="smtp">
           <el-row :gutter="20">
@@ -197,7 +195,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Password')" label-width="80px" required>
+              <el-form-item
+                :label="$t('m.Password')"
+                label-width="80px"
+                required
+              >
                 <el-input
                   v-model="smtp.emailPassword"
                   type="password"
@@ -206,7 +208,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Email_BG')" label-width="80px" required>
+              <el-form-item
+                :label="$t('m.Email_BG')"
+                label-width="80px"
+                required
+              >
                 <el-input
                   v-model="smtp.emailBGImg"
                   :placeholder="$t('m.Email_BG_Desc')"
@@ -221,7 +227,7 @@
           </el-row>
         </el-form>
         <el-button type="primary" @click.native="saveSMTPConfig" size="small">{{
-          $t('m.Save')
+          $t("m.Save")
         }}</el-button>
         <el-button
           type="warning"
@@ -229,14 +235,16 @@
           v-if="savedSMTP"
           :loading="loadingBtnTestSMTP"
           size="small"
-          >{{ $t('m.Send_Test_Email') }}</el-button
+          >{{ $t("m.Send_Test_Email") }}</el-button
         >
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.Mobile_Config') }}</span>
+          <span class="panel-title home-title">{{
+            $t("m.Mobile_Config")
+          }}</span>
         </div>
         <el-form label-position="top" :model="mobile">
           <el-row :gutter="20">
@@ -249,7 +257,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Region_Id')" required label-width="80px">
+              <el-form-item
+                :label="$t('m.Region_Id')"
+                required
+                label-width="80px"
+              >
                 <el-input
                   v-model="mobile.mobileRegionId"
                   :placeholder="$t('m.Region_Id')"
@@ -257,7 +269,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Access_Key_Id')" required label-width="80px">
+              <el-form-item
+                :label="$t('m.Access_Key_Id')"
+                required
+                label-width="80px"
+              >
                 <el-input
                   v-model="mobile.mobileAccessKeyId"
                   :placeholder="$t('m.Access_Key_Id')"
@@ -274,7 +290,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Sign_Name')" required label-width="80px">
+              <el-form-item
+                :label="$t('m.Sign_Name')"
+                required
+                label-width="80px"
+              >
                 <el-input
                   v-model="mobile.mobileSignName"
                   :placeholder="$t('m.Sign_Name')"
@@ -282,7 +302,11 @@
               </el-form-item>
             </el-col>
             <el-col :md="12" :xs="24">
-              <el-form-item :label="$t('m.Template_Code')" required label-width="80px">
+              <el-form-item
+                :label="$t('m.Template_Code')"
+                required
+                label-width="80px"
+              >
                 <el-input
                   v-model="mobile.mobileTemplateCode"
                   :placeholder="$t('m.Template_Code')"
@@ -291,23 +315,27 @@
             </el-col>
           </el-row>
         </el-form>
-        <el-button type="primary" @click.native="saveMobileConfig" size="small">{{
-          $t('m.Save')
-        }}</el-button>
+        <el-button
+          type="primary"
+          @click.native="saveMobileConfig"
+          size="small"
+          >{{ $t("m.Save") }}</el-button
+        >
         <el-button
           type="warning"
           @click.native="testMobileConfig"
           v-if="savedMobile"
           :loading="loadingBtnTestMobile"
           size="small"
-          >{{ $t('m.Send_Test_Message') }}</el-button>
+          >{{ $t("m.Send_Test_Message") }}</el-button
+        >
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{
-            $t('m.DataSource_Config')
+            $t("m.DataSource_Config")
           }}</span>
         </div>
         <el-form label-position="top" :model="databaseConfig">
@@ -406,7 +434,7 @@
           type="primary"
           @click.native="saveDataBaseConfig"
           size="small"
-          >{{ $t('m.Save') }}</el-button
+          >{{ $t("m.Save") }}</el-button
         >
       </el-card>
     </el-col>
@@ -414,10 +442,10 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
+import api from "@/common/api";
+import utils from "@/common/utils";
 export default {
-  name: 'SystemConfig',
+  name: "SystemConfig",
   data() {
     return {
       initSMTP: false,
@@ -427,24 +455,24 @@ export default {
       loadingBtnTestSMTP: false,
       loadingBtnTestMobile: false,
       smtp: {
-        emailHost: 'smtp.example.com',
-        emailPassword: '',
+        emailHost: "smtp.example.com",
+        emailPassword: "",
         emailPort: 587,
-        emailBGImg: '',
-        emailUsername: 'email@example.com',
+        emailBGImg: "",
+        emailUsername: "email@example.com",
         emailSsl: true,
       },
       mobile: {
-        mobileDomain: 'dysmsapi.aliyuncs.com',
-        mobileRegionId: 'cn-hangzhou',
-        mobileAccessKeyId: '',
-        mobileSecret: '',
-        mobileSignName: 'Online Judge',
-        mobileTemplateCode: '',
+        mobileDomain: "dysmsapi.aliyuncs.com",
+        mobileRegionId: "cn-hangzhou",
+        mobileAccessKeyId: "",
+        mobileSecret: "",
+        mobileSignName: "Online Judge",
+        mobileTemplateCode: "",
       },
       websiteConfig: {},
       databaseConfig: {},
-      dialogImageUrl: '',
+      dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
       carouselImgList: [],
@@ -456,7 +484,7 @@ export default {
         this.smtp = res.data.data;
       } else {
         this.initSMTP = true;
-        this.$msg.warning('No STMP Config');
+        this.$msg.warning("No STMP Config");
       }
     });
 
@@ -465,7 +493,7 @@ export default {
         this.mobile = res.data.data;
       } else {
         this.initMobile = true;
-        this.$msg.warning('No Mobile Config');
+        this.$msg.warning("No Mobile Config");
       }
     });
 
@@ -493,7 +521,7 @@ export default {
         id = file.response.data.id;
       }
       api.admin_deleteHomeCarousel(id).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+        this.$msg.success(this.$i18n.t("m.Delete_successfully"));
         if (index != undefined) {
           this.carouselImgList.splice(index, 1);
         }
@@ -509,7 +537,7 @@ export default {
     saveSMTPConfig() {
       api.admin_editSMTPConfig(this.smtp).then(
         (res) => {
-          this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Update_Successfully"));
           this.savedSMTP = true;
         },
         () => {
@@ -518,15 +546,16 @@ export default {
       );
     },
     testSMTPConfig() {
-      this.$prompt(this.$i18n.t('m.Please_input_your_email'), '', {
-        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: this.$i18n.t('m.Email_Check_Format'),
+      this.$prompt(this.$i18n.t("m.Please_input_your_email"), "", {
+        inputPattern:
+          /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: this.$i18n.t("m.Email_Check_Format"),
       })
         .then(({ value }) => {
           this.loadingBtnTestSMTP = true;
           api.admin_testSMTPConfig(value).then(
             (res) => {
-              this.$msg.success(this.$i18n.t('m.Post_successfully'));
+              this.$msg.success(this.$i18n.t("m.Post_successfully"));
               this.loadingBtnTestSMTP = false;
             },
             () => {
@@ -539,7 +568,7 @@ export default {
     saveMobileConfig() {
       api.admin_editMobileConfig(this.mobile).then(
         (res) => {
-          this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Update_Successfully"));
           this.savedMobile = true;
         },
         () => {
@@ -548,15 +577,15 @@ export default {
       );
     },
     testMobileConfig() {
-      this.$prompt(this.$i18n.t('m.Please_input_your_mobile'), '', {
+      this.$prompt(this.$i18n.t("m.Please_input_your_mobile"), "", {
         inputPattern: /^[1][3,4,5,6,7,8,9][0-9]{9}$/,
-        inputErrorMessage: this.$i18n.t('m.Mobile_Check_Format'),
+        inputErrorMessage: this.$i18n.t("m.Mobile_Check_Format"),
       })
         .then(({ value }) => {
           this.loadingBtnTestMobile = true;
           api.admin_testMobileConfig(value).then(
             (res) => {
-              this.$msg.success(this.$i18n.t('m.Post_successfully'));
+              this.$msg.success(this.$i18n.t("m.Post_successfully"));
               this.loadingBtnTestMobile = false;
             },
             () => {
@@ -568,18 +597,18 @@ export default {
     },
     saveWebsiteConfig() {
       for (var key in this.websiteConfig) {
-        if (key == 'register') {
+        if (key == "register") {
           continue;
         } else {
-          if (!this.websiteConfig[key].replace(/(^\s*)|(\s*$)/g, '')) {
-            this.websiteConfig[key] = 'None';
+          if (!this.websiteConfig[key].replace(/(^\s*)|(\s*$)/g, "")) {
+            this.websiteConfig[key] = "None";
           }
         }
       }
       api
         .admin_editWebsiteConfig(this.websiteConfig)
         .then((res) => {
-          this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         })
         .catch(() => {});
     },
@@ -587,7 +616,7 @@ export default {
       api
         .admin_editDataBaseConfig(this.databaseConfig)
         .then((res) => {
-          this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+          this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         })
         .catch(() => {});
     },

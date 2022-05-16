@@ -14,6 +14,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.expression.AccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -142,6 +143,11 @@ public class GlobalExceptionAdvice {
         return CommonResult.errorResponse(message, ResultStatus.FAIL);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessException.class)
+    public CommonResult<Void> handleAccessException(AccessException e) {
+        return CommonResult.errorResponse(e.getMessage(), ResultStatus.FORBIDDEN);
+    }
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)

@@ -3,7 +3,7 @@
     <div class="filter-row">
       <el-row>
         <el-col :span="3">
-          <span class="title">{{ $t('m.Group_Question') }}</span>
+          <span class="title">{{ $t("m.Group_Question") }}</span>
         </el-col>
         <el-col :span="18" v-if="isSuperAdmin || isGroupAdmin">
           <el-button
@@ -12,25 +12,28 @@
             size="small"
             @click="handleCreatePage"
             :icon="createPage ? 'el-icon-back' : 'el-icon-plus'"
-          >{{ createPage ? $t('m.Back') : $t('m.Create') }}</el-button>
+            >{{ createPage ? $t("m.Back") : $t("m.Create") }}</el-button
+          >
           <el-button
             v-if="editPage && adminPage"
             type="danger"
             size="small"
             @click="handleEditPage"
             icon="el-icon-back"
-          >{{ $t('m.Back') }}</el-button>`
+            >{{ $t("m.Back") }}</el-button
+          >`
           <el-button
             :type="adminPage ? 'warning' : 'success'"
             size="small"
             @click="handleAdminPage"
             :icon="adminPage ? 'el-icon-back' : 'el-icon-s-opportunity'"
-          >{{ adminPage ? $t('m.Back') : $t('m.Question_Admin') }}</el-button>
+            >{{ adminPage ? $t("m.Back") : $t("m.Question_Admin") }}</el-button
+          >
         </el-col>
       </el-row>
     </div>
     <section v-if="!createPage && !editPage">
-      <b class="question-filter">{{ $t('m.Question_Type') }}</b>
+      <b class="question-filter">{{ $t("m.Question_Type") }}</b>
       <div>
         <el-tag
           size="medium"
@@ -38,7 +41,9 @@
           type="primary"
           :effect="type == 0 ? 'dark' : 'plain'"
           @click="filterByType(0)"
-        > {{ $t('m.All') }} </el-tag>
+        >
+          {{ $t("m.All") }}
+        </el-tag>
         <el-tag
           size="medium"
           class="filter-item"
@@ -47,7 +52,9 @@
           :effect="type == index ? 'dark' : 'plain'"
           :key="index"
           @click="filterByType(index)"
-        > {{ $t('m.' + key.name + '_Question') }} </el-tag>
+        >
+          {{ $t("m." + key.name + "_Question") }}
+        </el-tag>
       </div>
     </section>
     <div v-if="!adminPage && !createPage">
@@ -88,14 +95,26 @@
               class="filter-item"
               :type="QUESTION_TYPE_REVERSE[row.type].color"
               effect="dark"
-            > {{ $t('m.' + QUESTION_TYPE_REVERSE[row.type].name + '_Question') }} </el-tag>
+            >
+              {{
+                $t("m." + QUESTION_TYPE_REVERSE[row.type].name + "_Question")
+              }}
+            </el-tag>
             <el-tag
               v-if="row.type == 1"
               size="medium"
               type="primary"
               effect="plain"
             >
-              {{ $t('m.' + (row.single ? 'Single_Choice' : 'Indefinite_Multiple_Choice') + '_Question') }}
+              {{
+                $t(
+                  "m." +
+                    (row.single
+                      ? "Single_Choice"
+                      : "Indefinite_Multiple_Choice") +
+                    "_Question"
+                )
+              }}
             </el-tag>
           </template>
         </vxe-table-column>
@@ -129,14 +148,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import QuestionList from '@/components/oj/group/QuestionList';
-import Question from '@/components/oj/group/Question';
-import { QUESTION_TYPE_REVERSE } from '@/common/constants';
-import api from '@/common/api';
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import QuestionList from "@/components/oj/group/QuestionList";
+import Question from "@/components/oj/group/Question";
+import { QUESTION_TYPE_REVERSE } from "@/common/constants";
+import api from "@/common/api";
 export default {
-  name: 'GroupQuestionList',
+  name: "GroupQuestionList",
   components: {
     Pagination,
     Question,
@@ -149,23 +168,23 @@ export default {
       limit: 10,
       questionList: [],
       type: 0,
-      title: '',
-      apiMethod: '',
+      title: "",
+      apiMethod: "",
       loading: false,
-      routeName: '',
+      routeName: "",
       adminPage: false,
       createPage: false,
       editPage: false,
-    }
+    };
   },
   mounted() {
     this.routeName = this.$route.name;
-    if (this.routeName === 'GroupQuestionList') {
-      this.title = this.$t('m.Create_Question');
-      this.apiMethod = 'addGroupQuestion'
-    } else if (this.routeName === 'GroupExamQuestionList') {
-      this.title = this.$t('m.Create_Exam_Question');
-      this.apiMethod = 'addGroupExamQuestion'
+    if (this.routeName === "GroupQuestionList") {
+      this.title = this.$t("m.Create_Question");
+      this.apiMethod = "addGroupQuestion";
+    } else if (this.routeName === "GroupExamQuestionList") {
+      this.title = this.$t("m.Create_Exam_Question");
+      this.apiMethod = "addGroupExamQuestion";
     }
     this.init();
   },
@@ -186,20 +205,27 @@ export default {
     },
     getGroupQuestionList() {
       this.loading = true;
-      api.getGroupQuestionList(this.currentPage, this.limit, this.type, this.$route.params.groupID).then(
-        (res) => {
-          this.questionList = res.data.data.records;
-          this.total = res.data.data.total;
-          this.loading = false;
-        },
-        (err) => {
-          this.loading = false;
-        }
-      );
+      api
+        .getGroupQuestionList(
+          this.currentPage,
+          this.limit,
+          this.type,
+          this.$route.params.groupID
+        )
+        .then(
+          (res) => {
+            this.questionList = res.data.data.records;
+            this.total = res.data.data.total;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
     },
     goGroupQuestion(event) {
       this.$router.push({
-        name: 'GroupQuestionDetails',
+        name: "GroupQuestionDetails",
         params: {
           questionId: event.row.questionId,
         },
@@ -220,12 +246,12 @@ export default {
     filterByType(type) {
       this.type = parseInt(type);
       this.currentChange(1);
-    }
+    },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'isSuperAdmin', 'isGroupAdmin']),
+    ...mapGetters(["isAuthenticated", "isSuperAdmin", "isGroupAdmin"]),
   },
-}
+};
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <div class="filter-row">
       <el-row>
         <el-col :span="3">
-          <span class="title">{{ $t('m.Group_Announcement') }}</span>
+          <span class="title">{{ $t("m.Group_Announcement") }}</span>
         </el-col>
         <el-col :span="18">
           <el-button
@@ -11,38 +11,35 @@
             size="small"
             @click="handleCreatePage"
             icon="el-icon-plus"
-          >{{ $t('m.Create') }}</el-button>
+            >{{ $t("m.Create") }}</el-button
+          >
         </el-col>
       </el-row>
     </div>
-    <AnnouncementList ref="announcementList">
-    </AnnouncementList>
+    <AnnouncementList ref="announcementList"> </AnnouncementList>
   </el-card>
 </template>
 
 <script>
-import AnnouncementList from '@/components/oj/group/AnnouncementList.vue';
+import AnnouncementList from "@/components/oj/group/AnnouncementList.vue";
 export default {
-  name: 'GroupAnnouncementList',
+  name: "GroupAnnouncementList",
   components: {
-    AnnouncementList
+    AnnouncementList,
   },
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {
     this.init();
   },
   methods: {
-    init() {
-    },
+    init() {},
     handleCreatePage() {
       this.$refs.announcementList.openAnnouncementDialog(null);
     },
   },
-  computed: {
-  },
+  computed: {},
 };
 </script>
 

@@ -6,12 +6,14 @@
 
 package com.iuaenasong.oj.manager.oj;
 
+import com.iuaenasong.oj.annotation.OJAccessEnum;
 import com.iuaenasong.oj.dao.exam.ExamEntityService;
 import com.iuaenasong.oj.dao.exam.ExamRecordEntityService;
+import com.iuaenasong.oj.exception.AccessException;
 import com.iuaenasong.oj.pojo.entity.exam.Exam;
 import com.iuaenasong.oj.pojo.entity.exam.ExamRecord;
-import com.iuaenasong.oj.validator.ExamValidator;
-import com.iuaenasong.oj.validator.GroupValidator;
+import com.iuaenasong.oj.pojo.vo.ConfigVo;
+import com.iuaenasong.oj.validator.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -50,8 +52,6 @@ import com.iuaenasong.oj.dao.user.UserAcproblemEntityService;
 import com.iuaenasong.oj.utils.Constants;
 import com.iuaenasong.oj.utils.IpUtils;
 import com.iuaenasong.oj.utils.RedisUtils;
-import com.iuaenasong.oj.validator.ContestValidator;
-import com.iuaenasong.oj.validator.JudgeValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -106,10 +106,14 @@ public class JudgeManager {
     @Autowired
     private GroupValidator groupValidator;
 
+    @Autowired
+    private ConfigVo configVo;
+
+    @Autowired
+    private AccessValidator accessValidator;
     
     @Transactional(rollbackFor = Exception.class)
-    public Judge submitProblemJudge(ToJudgeDto judgeDto) throws StatusForbiddenException, StatusFailException, StatusNotFoundException, StatusAccessDeniedException {
-
+    public Judge submitProblemJudge(ToJudgeDto judgeDto) throws StatusForbiddenException, StatusFailException, StatusNotFoundException, StatusAccessDeniedException, AccessException {
         judgeValidator.validateSubmissionInfo(judgeDto);
 
         // 需要获取一下该token对应用户的数据
@@ -122,13 +126,13 @@ public class JudgeManager {
 
         boolean isTrainingSubmission = judgeDto.getTid() != null && judgeDto.getTid() != 0;
 
-        if (!isContestSubmission) { // 非比赛提交限制8秒提交一次
+        if (!isContestSubmission && configVo.getDefaultSubmitInterval() > 0) { // 非比赛提交有限制限制
             String lockKey = Constants.Account.SUBMIT_NON_CONTEST_LOCK.getCode() + userRolesVo.getUid();
             long count = redisUtils.incr(lockKey, 1);
             if (count > 1) {
                 throw new StatusForbiddenException("对不起，您的提交频率过快，请稍后再尝试！");
             }
-            redisUtils.expire(lockKey, 8);
+            redisUtils.expire(lockKey, configVo.getDefaultSubmitInterval());
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
@@ -149,10 +153,13 @@ public class JudgeManager {
 
         // 如果比赛id不等于0，则说明为比赛提交
         if (isContestSubmission) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             beforeDispatchInitManager.initContestSubmission(judgeDto.getCid(), judgeDto.getPid(), userRolesVo, judge);
         } else if (isExamSubmission) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             beforeDispatchInitManager.initExamSubmission(judgeDto.getEid(), judgeDto.getPid(), userRolesVo, judge);
         } else if (isTrainingSubmission) {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
             beforeDispatchInitManager.initTrainingSubmission(judgeDto.getTid(), judgeDto.getPid(), userRolesVo, judge);
         } else { // 如果不是比赛提交和训练提交
             beforeDispatchInitManager.initCommonSubmission(judgeDto.getPid(), judge);
@@ -168,9 +175,8 @@ public class JudgeManager {
         return judge;
     }
 
-    
     @Transactional(rollbackFor = Exception.class)
-    public Judge resubmit(Long submitId) throws StatusNotFoundException, StatusForbiddenException {
+    public Judge resubmit(Long submitId) throws StatusNotFoundException, StatusForbiddenException, AccessException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -183,14 +189,15 @@ public class JudgeManager {
 
         Problem problem = problemEntityService.getById(judge.getPid());
 
-        if (!problem.getIsPublic()) {
-            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
+        if (!judge.getIsPublic()) {
+            accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
+            if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), judge.getGid())) {
                 throw new StatusForbiddenException("对不起，您无权限操作！");
             }
         }
-
         // 如果是非比赛题目
         if (judge.getCid() != 0) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             if (problem.getIsRemote()) {
                 // 将对应比赛记录设置成默认值
                 UpdateWrapper<ContestRecord> updateWrapper = new UpdateWrapper<>();
@@ -199,8 +206,8 @@ public class JudgeManager {
             } else {
                 throw new StatusNotFoundException("错误！非vJudge题目在比赛过程无权限重新提交");
             }
-
         } else if (judge.getEid() != 0) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             if (problem.getIsRemote()) {
                 // 将对应考试记录设置成默认值
                 UpdateWrapper<ExamRecord> updateWrapper = new UpdateWrapper<>();
@@ -209,10 +216,10 @@ public class JudgeManager {
             } else {
                 throw new StatusNotFoundException("错误！非vJudge题目在比赛过程无权限重新提交");
             }
-
         } else {
             // 重判前，需要将该题目对应记录表一并更新
             // 如果该题已经是AC通过状态，更新该题目的用户ac做题表 user_acproblem
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
             if (judge.getStatus().intValue() == Constants.Judge.STATUS_ACCEPTED.getStatus().intValue()) {
                 QueryWrapper<UserAcproblem> userAcproblemQueryWrapper = new QueryWrapper<>();
                 userAcproblemQueryWrapper.eq("submit_id", judge.getSubmitId());
@@ -253,7 +260,7 @@ public class JudgeManager {
     }
 
     
-    public SubmissionInfoVo getSubmission(Long submitId) throws StatusNotFoundException, StatusAccessDeniedException, StatusForbiddenException {
+    public SubmissionInfoVo getSubmission(Long submitId) throws StatusNotFoundException, StatusAccessDeniedException, StatusForbiddenException, AccessException {
 
         Judge judge = judgeEntityService.getById(submitId);
         if (judge == null) {
@@ -278,6 +285,7 @@ public class JudgeManager {
         SubmissionInfoVo submissionInfoVo = new SubmissionInfoVo();
 
         if (judge.getCid() != 0) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             if (userRolesVo == null) {
                 throw new StatusAccessDeniedException("请先登录！");
             }
@@ -302,6 +310,7 @@ public class JudgeManager {
                 }
             }
         } else if (judge.getEid() != 0) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             if (userRolesVo == null) {
                 throw new StatusAccessDeniedException("请先登录！");
             }
@@ -334,12 +343,15 @@ public class JudgeManager {
         } else {
             Problem problem = problemEntityService.getById(judge.getPid());
             if (!judge.getIsPublic()) {
+                accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
                 if (userRolesVo == null) {
                     throw new StatusAccessDeniedException("请先登录！");
                 }
                 if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), problem.getGid())) {
                     throw new StatusForbiddenException("对不起，您无权限操作！");
                 }
+            } else {
+                accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
             }
             boolean isProblemAdmin = SecurityUtils.getSubject().hasRole("problem_admin");// 是否为题目管理员
             if (!judge.getShare() && !isRoot && !isProblemAdmin) {
@@ -370,7 +382,7 @@ public class JudgeManager {
     }
 
     
-    public void updateSubmission(Judge judge) throws StatusForbiddenException, StatusFailException {
+    public void updateSubmission(Judge judge) throws StatusForbiddenException, StatusFailException, AccessException {
 
         // 需要获取一下该token对应用户的数据
         Session session = SecurityUtils.getSubject().getSession();
@@ -385,7 +397,14 @@ public class JudgeManager {
         }
         Judge judgeInfo = judgeEntityService.getById(judge.getSubmitId());
         if (judgeInfo.getCid() != 0 || judgeInfo.getEid() != 0) { // 如果是比赛提交，不可分享！
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             throw new StatusForbiddenException("对不起，您不能分享比赛题目的提交代码！");
+        }
+
+        if (!judge.getIsPublic()) {
+            accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
+        } else {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
         }
         judgeInfo.setShare(judge.getShare());
         boolean isOk = judgeEntityService.updateById(judgeInfo);
@@ -402,7 +421,7 @@ public class JudgeManager {
                                        Integer searchStatus,
                                        String searchUsername,
                                        Long gid,
-                                       Boolean completeProblemID) throws StatusAccessDeniedException {
+                                       Boolean completeProblemID) throws StatusAccessDeniedException, AccessException {
         Session session = SecurityUtils.getSubject().getSession();
         UserRolesVo userRolesVo = (UserRolesVo) session.getAttribute("userInfo");
 
@@ -428,9 +447,13 @@ public class JudgeManager {
         }
 
         if (gid != null) {
+            accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
             if (!isRoot && !groupValidator.isGroupMember(userRolesVo.getUid(), gid)) {
                 gid = null;
             }
+        }
+        else {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
         }
 
         return judgeEntityService.getCommonJudgeList(limit,
@@ -443,8 +466,7 @@ public class JudgeManager {
                 completeProblemID);
     }
 
-    
-    public HashMap<Long, Object> checkCommonJudgeResult(SubmitIdListDto submitIdListDto) {
+    public HashMap<Long, Object> checkCommonJudgeResult(SubmitIdListDto submitIdListDto) throws AccessException {
 
         List<Long> submitIds = submitIdListDto.getSubmitIds();
 
@@ -459,6 +481,11 @@ public class JudgeManager {
         List<Judge> judgeList = judgeEntityService.list(queryWrapper);
         HashMap<Long, Object> result = new HashMap<>();
         for (Judge judge : judgeList) {
+            if (!judge.getIsPublic()) {
+                accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
+            } else {
+                accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
+            }
             judge.setCode(null);
             judge.setErrorMessage(null);
             judge.setVjudgeUsername(null);
@@ -567,7 +594,7 @@ public class JudgeManager {
     }
     
     @GetMapping("/get-all-case-result")
-    public List<JudgeCase> getALLCaseResult(Long submitId) throws StatusNotFoundException, StatusForbiddenException {
+    public List<JudgeCase> getALLCaseResult(Long submitId) throws StatusNotFoundException, StatusForbiddenException, AccessException {
 
         Judge judge = judgeEntityService.getById(submitId);
 
@@ -587,6 +614,7 @@ public class JudgeManager {
         boolean isRoot = SecurityUtils.getSubject().hasRole("root"); // 是否为超级管理员
 
         if (judge.getCid() != 0 && userRolesVo != null && !isRoot) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             Contest contest = contestEntityService.getById(judge.getCid());
             // 如果不是比赛管理员 比赛封榜不能看
             if (!contest.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), contest.getGid())) {
@@ -601,9 +629,8 @@ public class JudgeManager {
                     return null;
                 }
             }
-        }
-
-        if (judge.getEid() != 0 && userRolesVo != null && !isRoot) {
+        } else if (judge.getEid() != 0 && userRolesVo != null && !isRoot) {
+            accessValidator.validateAccess(OJAccessEnum.CONTEST_JUDGE);
             Exam exam = examEntityService.getById(judge.getEid());
             // 如果不是比赛管理员 比赛封榜不能看
             if (!exam.getUid().equals(userRolesVo.getUid()) && !groupValidator.isGroupRoot(userRolesVo.getUid(), exam.getGid())) {
@@ -617,6 +644,10 @@ public class JudgeManager {
                     return null;
                 }
             }
+        } else if (!judge.getIsPublic()) {
+            accessValidator.validateAccess(OJAccessEnum.GROUP_JUDGE);
+        } else if (judge.getIsPublic()) {
+            accessValidator.validateAccess(OJAccessEnum.PUBLIC_JUDGE);
         }
 
         QueryWrapper<JudgeCase> wrapper = new QueryWrapper<>();
@@ -628,8 +659,10 @@ public class JudgeManager {
                 && !SecurityUtils.getSubject().hasRole("problem_admin")) {
             wrapper.select("time", "memory", "score", "status", "user_output");
         }
-        wrapper.eq("submit_id", submitId)
-                .last("order by length(input_data) asc,input_data asc");
+        wrapper.eq("submit_id", submitId);
+        if (!problem.getIsRemote()) {
+            wrapper.last("order by length(input_data) asc,input_data asc");
+        }
 
         // 当前所有测试点只支持 空间 时间 状态码 IO得分 和错误信息提示查看而已
         return judgeCaseEntityService.list(wrapper);

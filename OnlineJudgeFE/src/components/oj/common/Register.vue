@@ -62,24 +62,24 @@
         @click="handleRegister()"
         :loading="btnRegisterLoading"
       >
-        {{ $t('m.Register_Btn') }}
+        {{ $t("m.Register_Btn") }}
       </el-button>
       <el-link type="primary" @click="switchMode('Login')">{{
-        $t('m.Register_Already_Registed')
+        $t("m.Register_Already_Registed")
       }}</el-link>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import api from '@/common/api';
+import { mapGetters, mapActions } from "vuex";
+import api from "@/common/api";
 export default {
   data() {
     const CheckUsernameNotExist = (rule, value, callback) => {
       api.checkUsernameOrEmail(value, undefined).then(
         (res) => {
           if (res.data.data.username === true) {
-            callback(new Error(this.$i18n.t('m.The_username_already_exists')));
+            callback(new Error(this.$i18n.t("m.The_username_already_exists")));
           } else {
             callback();
           }
@@ -91,7 +91,7 @@ export default {
       api.checkUsernameOrEmail(undefined, value).then(
         (res) => {
           if (res.data.data.email === true) {
-            callback(new Error(this.$i18n.t('m.The_email_already_exists')));
+            callback(new Error(this.$i18n.t("m.The_email_already_exists")));
           } else {
             callback();
           }
@@ -100,16 +100,16 @@ export default {
       );
     };
     const CheckPassword = (rule, value, callback) => {
-      if (this.registerForm.password !== '') {
+      if (this.registerForm.password !== "") {
         // 对第二个密码框再次验证
-        this.$refs.registerForm.validateField('passwordAgain');
+        this.$refs.registerForm.validateField("passwordAgain");
       }
       callback();
     };
 
     const CheckAgainPassword = (rule, value, callback) => {
       if (value !== this.registerForm.password) {
-        callback(new Error(this.$i18n.t('m.Password_does_not_match')));
+        callback(new Error(this.$i18n.t("m.Password_does_not_match")));
       }
       callback();
     };
@@ -118,82 +118,82 @@ export default {
       btnEmailLoading: false,
       countdownNum: null,
       registerForm: {
-        username: '',
-        password: '',
-        passwordAgain: '',
-        email: '',
-        code: '',
+        username: "",
+        password: "",
+        passwordAgain: "",
+        email: "",
+        code: "",
       },
       sendEmailError: false,
       rules: {
         username: [
           {
             required: true,
-            message: this.$i18n.t('m.Username_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Username_Check_Required"),
+            trigger: "blur",
           },
           {
             validator: CheckUsernameNotExist,
-            trigger: 'blur',
-            message: this.$i18n.t('m.The_username_already_exists'),
+            trigger: "blur",
+            message: this.$i18n.t("m.The_username_already_exists"),
           },
           {
             max: 20,
-            message: this.$i18n.t('m.Username_Check_Max'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Username_Check_Max"),
+            trigger: "blur",
           },
         ],
 
         email: [
           {
             required: true,
-            message: this.$i18n.t('m.Email_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Email_Check_Required"),
+            trigger: "blur",
           },
           {
-            type: 'email',
-            message: this.$i18n.t('m.Email_Check_Format'),
-            trigger: 'blur',
+            type: "email",
+            message: this.$i18n.t("m.Email_Check_Format"),
+            trigger: "blur",
           },
           {
             validator: CheckEmailNotExist,
-            message: this.$i18n.t('m.The_email_already_exists'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.The_email_already_exists"),
+            trigger: "blur",
           },
         ],
         password: [
           {
             required: true,
-            message: this.$i18n.t('m.Password_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Check_Required"),
+            trigger: "blur",
           },
           {
             min: 6,
             max: 20,
-            message: this.$i18n.t('m.Password_Check_Between'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Check_Between"),
+            trigger: "blur",
           },
-          { validator: CheckPassword, trigger: 'blur' },
+          { validator: CheckPassword, trigger: "blur" },
         ],
         passwordAgain: [
           {
             required: true,
-            message: this.$i18n.t('m.Password_Again_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Password_Again_Check_Required"),
+            trigger: "blur",
           },
-          { validator: CheckAgainPassword, trigger: 'change' },
+          { validator: CheckAgainPassword, trigger: "change" },
         ],
         code: [
           {
             required: true,
-            message: this.$i18n.t('m.Code_Check_Required'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Required"),
+            trigger: "blur",
           },
           {
             min: 6,
             max: 6,
-            message: this.$i18n.t('m.Code_Check_Length'),
-            trigger: 'blur',
+            message: this.$i18n.t("m.Code_Check_Length"),
+            trigger: "blur",
           },
         ],
       },
@@ -201,9 +201,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'changeModalStatus',
-      'startTimeOut',
-      'changeRegisterTimeOut',
+      "changeModalStatus",
+      "startTimeOut",
+      "changeRegisterTimeOut",
     ]),
     switchMode(mode) {
       this.changeModalStatus({
@@ -223,21 +223,25 @@ export default {
       }, 1000);
     },
     sendRegisterEmail() {
-      var emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      var emailReg =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!emailReg.test(this.registerForm.email)) {
-        this.$msg.error(this.$i18n.t('m.Email_Check_Format'));
+        this.$msg.error(this.$i18n.t("m.Email_Check_Format"));
         return;
       }
       this.btnEmailLoading = true;
-      this.countdownNum = 'Waiting...';
+      this.countdownNum = "Waiting...";
       if (this.registerForm.email) {
-        this.$msg.info(this.$i18n.t('m.The_system_is_processing'));
+        this.$msg.info(this.$i18n.t("m.The_system_is_processing"));
         api.getRegisterEmail(this.registerForm.email).then(
           (res) => {
             if (res.data.msg != null) {
-              this.$msg.success(this.$i18n.t('m.Register_Send_Email_Msg'),10000);
+              this.$msg.success(
+                this.$i18n.t("m.Register_Send_Email_Msg"),
+                10000
+              );
               this.countDown();
-              this.startTimeOut({ name: 'registerTimeOut' });
+              this.startTimeOut({ name: "registerTimeOut" });
             }
           },
           (res) => {
@@ -248,20 +252,20 @@ export default {
       }
     },
     handleRegister() {
-      this.$refs['registerForm'].validate((valid) => {
+      this.$refs["registerForm"].validate((valid) => {
         if (valid) {
           const _this = this;
           let formData = Object.assign({}, this.registerForm);
-          delete formData['passwordAgain'];
+          delete formData["passwordAgain"];
           this.btnRegisterLoading = true;
           api.register(formData).then(
             (res) => {
-              this.$msg.success(this.$i18n.t('m.Thanks_for_registering'));
-              this.switchMode('Login');
+              this.$msg.success(this.$i18n.t("m.Thanks_for_registering"));
+              this.switchMode("Login");
               this.btnRegisterLoading = false;
             },
             (res) => {
-              this.registerForm.code = '';
+              this.registerForm.code = "";
               this.btnRegisterLoading = false;
             }
           );
@@ -270,7 +274,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['registerTimeOut', 'modalStatus']),
+    ...mapGetters(["registerTimeOut", "modalStatus"]),
     time: {
       get() {
         return this.registerTimeOut;

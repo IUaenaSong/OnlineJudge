@@ -15,6 +15,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -401,7 +402,10 @@ public class ProblemEntityServiceImpl extends ServiceImpl<ProblemMapper, Problem
             }
             // 设置oi总分数，根据每个测试点的加和
             if (problem.getType().intValue() == Constants.Contest.TYPE_OI.getCode()) {
-                problem.setIoScore(sumScore);
+                UpdateWrapper<Problem> problemUpdateWrapper = new UpdateWrapper<>();
+                problemUpdateWrapper.eq("id", pid)
+                        .set("io_score", sumScore);
+                problemMapper.update(null, problemUpdateWrapper);
             }
             addCasesToProblemResult = problemCaseEntityService.saveOrUpdateBatch(problemCases);
             // 获取代理bean对象执行异步方法===》根据测试文件初始info
@@ -410,10 +414,19 @@ public class ProblemEntityServiceImpl extends ServiceImpl<ProblemMapper, Problem
         } else {
             // oi题目需要求取平均值，给每个测试点初始oi的score值，默认总分100分
             if (problem.getType().intValue() == Constants.Contest.TYPE_OI.getCode()) {
-                problem.setIoScore(100);
-                final int averScore = 100 / problemDto.getSamples().size();
-                problemDto.getSamples().forEach(problemCase -> problemCase.setPid(pid).setScore(averScore)); // 设置好新题目的pid及分数
+                int sumScore = 0;
+                for (ProblemCase problemCase : problemDto.getSamples()) {
+                    // 设置好新题目的pid和累加总分数
+                    problemCase.setPid(pid);
+                    if (problemCase.getScore() != null) {
+                        sumScore += problemCase.getScore();
+                    }
+                }
                 addCasesToProblemResult = problemCaseEntityService.saveOrUpdateBatch(problemDto.getSamples());
+                UpdateWrapper<Problem> problemUpdateWrapper = new UpdateWrapper<>();
+                problemUpdateWrapper.eq("id", pid)
+                        .set("io_score", sumScore);
+                problemMapper.update(null, problemUpdateWrapper);
             } else {
                 problemDto.getSamples().forEach(problemCase -> problemCase.setPid(pid)); // 设置好新题目的pid
                 addCasesToProblemResult = problemCaseEntityService.saveOrUpdateBatch(problemDto.getSamples());
@@ -426,12 +439,13 @@ public class ProblemEntityServiceImpl extends ServiceImpl<ProblemMapper, Problem
         if (problemDto.getTags() != null) {
             for (Tag tag : problemDto.getTags()) {
                 if (tag.getId() == null) { //id为空 表示为原tag表中不存在的 插入后可以获取到对应的tagId
-                    tag.setOj("ME");
-                    try {
+                    Tag existedTag = tagEntityService.getOne(new QueryWrapper<Tag>().eq("name", tag.getName())
+                            .eq("oj", "ME"), false);
+                    if (existedTag == null) {
+                        tag.setOj("ME");
                         tagEntityService.save(tag);
-                    } catch (Exception ignored) {
-                        tag = tagEntityService.getOne(new QueryWrapper<Tag>().eq("name", tag.getName())
-                                .eq("oj", "ME"), false);
+                    } else {
+                        tag = existedTag;
                     }
                 }
                 problemTagList.add(new ProblemTag().setTid(tag.getId()).setPid(pid));

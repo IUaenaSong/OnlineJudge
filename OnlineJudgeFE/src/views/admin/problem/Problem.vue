@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
           <span class="panel-title home-title">{{ title }}</span>
@@ -199,7 +199,7 @@
                   :key="tag.name"
                   size="small"
                   @close="closeTag(tag.name)"
-                  style="margin-right: 7px;margin-top:4px"
+                  style="margin-right: 7px; margin-top: 4px"
                   >{{ tag.name }}</el-tag
                 >
                 <!-- 输入时建议，回车，选择，光标消失触发更新 -->
@@ -256,10 +256,10 @@
 
           <div>
             <div class="panel-title home-title">
-              {{ $t('m.Problem_Examples') }}
+              {{ $t("m.Problem_Examples") }}
               <el-popover placement="right" trigger="hover">
                 <p>
-                  {{ $t('m.Problem_Examples_Desc') }}
+                  {{ $t("m.Problem_Examples_Desc") }}
                 </p>
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
@@ -281,7 +281,7 @@
                   slot="header"
                   @click="deleteExample(index)"
                 >
-                  {{ $t('m.Delete') }}
+                  {{ $t("m.Delete") }}
                 </el-button>
                 <el-row :gutter="20">
                   <el-col :xs="24" :md="12">
@@ -318,16 +318,16 @@
               @click="addExample()"
               icon="el-icon-plus"
               type="small"
-              >{{ $t('m.Add_Example') }}
+              >{{ $t("m.Add_Example") }}
             </el-button>
           </div>
 
           <template v-if="!problem.isRemote">
             <div class="panel-title home-title">
-              {{ $t('m.Judge_Extra_File') }}
+              {{ $t("m.Judge_Extra_File") }}
               <el-popover placement="right" trigger="hover">
-                <p>{{ $t('m.Judge_Extra_File_Tips1') }}</p>
-                <p>{{ $t('m.Judge_Extra_File_Tips2') }}</p>
+                <p>{{ $t("m.Judge_Extra_File_Tips1") }}</p>
+                <p>{{ $t("m.Judge_Extra_File_Tips2") }}</p>
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
             </div>
@@ -336,7 +336,7 @@
               <el-col :md="12" :xs="24">
                 <el-form-item>
                   <el-checkbox v-model="addUserExtraFile">{{
-                    $t('m.User_Program')
+                    $t("m.User_Program")
                   }}</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="addUserExtraFile">
@@ -351,7 +351,7 @@
               <el-col :md="12" :xs="24">
                 <el-form-item>
                   <el-checkbox v-model="addJudgeExtraFile">{{
-                    $t('m.SPJ_Or_Interactive_Program')
+                    $t("m.SPJ_Or_Interactive_Program")
                   }}</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="addJudgeExtraFile">
@@ -368,21 +368,26 @@
 
           <template v-if="!problem.isRemote">
             <div class="panel-title home-title">
-              {{ $t('m.Judge_Mode') }}
+              {{ $t("m.Judge_Mode") }}
               <el-popover placement="right" trigger="hover">
-                <p>1. {{ $t('m.General_Judge_Mode_Tips') }}</p>
-                <p>2. {{ $t('m.Special_Judge_Mode_Tips') }}</p>
-                <p>3. {{ $t('m.Interactive_Judge_Mode_Tips') }}</p>
+                <p>1. {{ $t("m.General_Judge_Mode_Tips") }}</p>
+                <p>2. {{ $t("m.Special_Judge_Mode_Tips") }}</p>
+                <p>3. {{ $t("m.Interactive_Judge_Mode_Tips") }}</p>
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
             </div>
             <el-form-item label="" :error="error.spj">
               <el-col :span="24">
-                <el-radio-group v-model="problem.judgeMode" @change="switchMode">
-                  <el-radio label="default">{{ $t('m.General_Judge') }}</el-radio>
-                  <el-radio label="spj">{{ $t('m.Special_Judge') }}</el-radio>
+                <el-radio-group
+                  v-model="problem.judgeMode"
+                  @change="switchMode"
+                >
+                  <el-radio label="default">{{
+                    $t("m.General_Judge")
+                  }}</el-radio>
+                  <el-radio label="spj">{{ $t("m.Special_Judge") }}</el-radio>
                   <el-radio label="interactive">{{
-                    $t('m.Interactive_Judge')
+                    $t("m.Interactive_Judge")
                   }}</el-radio>
                 </el-radio-group>
               </el-col>
@@ -396,11 +401,11 @@
                 "
               >
                 <template slot="header">
-                  <span style="margin-right:5px;"
+                  <span style="margin-right: 5px"
                     >{{
-                      problem.judgeMode == 'spj'
-                        ? $t('m.SPJ_Language')
-                        : $t('m.Interactive_Language')
+                      problem.judgeMode == "spj"
+                        ? $t("m.SPJ_Language")
+                        : $t("m.Interactive_Language")
                     }}：</span
                   >
                   <el-radio-group v-model="problem.spjLanguage">
@@ -421,8 +426,8 @@
                     icon="el-icon-folder-checked"
                     @click="compileSPJ"
                     :loading="loadingCompile"
-                    style="margin-left:10px"
-                    >{{ $t('m.Compile') }}
+                    style="margin-left: 10px"
+                    >{{ $t("m.Compile") }}
                   </el-button>
                 </template>
                 <code-mirror
@@ -433,7 +438,7 @@
             </el-form-item>
           </template>
 
-          <div class="panel-title home-title">{{ $t('m.Code_Template') }}</div>
+          <div class="panel-title home-title">{{ $t("m.Code_Template") }}</div>
           <el-form-item>
             <el-row>
               <el-col
@@ -453,9 +458,9 @@
 
           <el-row :gutter="20" v-if="!problem.isRemote">
             <div class="panel-title home-title">
-              {{ $t('m.Judge_Samples') }}
+              {{ $t("m.Judge_Samples") }}
               <el-popover placement="right" trigger="hover">
-                <p>{{ $t('m.Sample_Tips') }}</p>
+                <p>{{ $t("m.Sample_Tips") }}</p>
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
             </div>
@@ -482,7 +487,7 @@
                       size="small"
                       type="primary"
                       icon="el-icon-upload"
-                      >{{ $t('m.Choose_File') }}</el-button
+                      >{{ $t("m.Choose_File") }}</el-button
                     >
                   </el-upload>
                 </el-form-item>
@@ -543,7 +548,7 @@
                     slot="header"
                     @click="deleteSample(index)"
                   >
-                    {{ $t('m.Delete') }}
+                    {{ $t("m.Delete") }}
                   </el-button>
                   <el-row :gutter="20">
                     <el-col :xs="24" :md="12">
@@ -589,7 +594,7 @@
                   @click="addSample()"
                   icon="el-icon-plus"
                   type="small"
-                  >{{ $t('m.Add_Sample') }}
+                  >{{ $t("m.Add_Sample") }}
                 </el-button>
               </div>
             </div>
@@ -616,7 +621,6 @@
 
           <el-form-item
             :label="$t('m.Publish_the_Judging_Result_of_Test_Data')"
-            v-if="!problem.isRemote"
           >
             <el-switch
               v-model="problem.openCaseResult"
@@ -627,7 +631,7 @@
           </el-form-item>
 
           <el-button type="primary" @click.native="submit()" size="small">{{
-            $t('m.Save')
+            $t("m.Save")
           }}</el-button>
         </el-form>
       </el-card>
@@ -636,16 +640,16 @@
 </template>
 
 <script>
-import utils from '@/common/utils';
-import { mapGetters } from 'vuex';
-import api from '@/common/api';
-import { PROBLEM_LEVEL } from '@/common/constants';
-import Editor from '@/components/admin/Editor.vue';
-import Accordion from '@/components/admin/Accordion.vue';
-import AddExtraFile from '@/components/admin/AddExtraFile.vue';
-import CodeMirror from '@/components/admin/CodeMirror.vue';
+import utils from "@/common/utils";
+import { mapGetters } from "vuex";
+import api from "@/common/api";
+import { PROBLEM_LEVEL } from "@/common/constants";
+import Editor from "@/components/admin/Editor.vue";
+import Accordion from "@/components/admin/Accordion.vue";
+import AddExtraFile from "@/components/admin/AddExtraFile.vue";
+import CodeMirror from "@/components/admin/CodeMirror.vue";
 export default {
-  name: 'Problem',
+  name: "Problem",
   components: {
     Accordion,
     AddExtraFile,
@@ -657,23 +661,23 @@ export default {
       rules: {
         title: {
           required: true,
-          message: 'Title is required',
-          trigger: 'blur',
+          message: "Title is required",
+          trigger: "blur",
         },
         input_description: {
           required: true,
-          message: 'Input Description is required',
-          trigger: 'blur',
+          message: "Input Description is required",
+          trigger: "blur",
         },
         output_description: {
           required: true,
-          message: 'Output Description is required',
-          trigger: 'blur',
+          message: "Output Description is required",
+          trigger: "blur",
         },
       },
-      backPath: '',
+      backPath: "",
       loadingCompile: false,
-      mode: '', // 该题目是编辑或者创建
+      mode: "", // 该题目是编辑或者创建
       contest: {},
       codeTemplate: {},
       pid: null, // 题目id，如果为创建模式则为null
@@ -686,11 +690,11 @@ export default {
       }, // 比赛题目的相关属性
       problem: {
         id: null,
-        title: '',
-        problemId: '',
-        description: '',
-        input: '',
-        output: '',
+        title: "",
+        problemId: "",
+        description: "",
+        input: "",
+        output: "",
         timeLimit: 1000,
         memoryLimit: 256,
         stackLimit: 128,
@@ -698,20 +702,20 @@ export default {
         auth: 1,
         codeShare: true,
         examples: [], // 题面上的样例输入输出
-        spjLanguage: '',
-        spjCode: '',
+        spjLanguage: "",
+        spjCode: "",
         spjCompileOk: false,
-        uploadTestcaseDir: '',
+        uploadTestcaseDir: "",
         testCaseScore: [],
         isRemote: false,
         isUploadCase: true,
         type: 0,
-        hint: '',
-        source: '',
+        hint: "",
+        source: "",
         cid: null,
-        judgeMode: 'default',
-        userExtraFile: '',
-        judgeExtraFile: '',
+        judgeMode: "default",
+        userExtraFile: "",
+        judgeExtraFile: "",
       },
       problemTags: [], //指定问题的标签列表
       problemLanguages: [], //指定问题的编程语言列表
@@ -724,23 +728,23 @@ export default {
       allTags: [],
       allTagsTmp: [],
       inputVisible: false,
-      tagInput: '',
-      title: '',
-      spjMode: '',
+      tagInput: "",
+      title: "",
+      spjMode: "",
       disableRuleType: false,
-      routeName: '',
-      uploadTestcaseDir: '',
-      uploadFileUrl: '',
+      routeName: "",
+      uploadTestcaseDir: "",
+      uploadFileUrl: "",
       error: {
-        tags: '',
-        spj: '',
-        languages: '',
-        testCase: '',
+        tags: "",
+        spj: "",
+        languages: "",
+        testCase: "",
       },
       PROBLEM_LEVEL: {},
       spjRecord: {
-        spjCode: '',
-        spjLanguage: '',
+        spjCode: "",
+        spjLanguage: "",
       },
       addUserExtraFile: false,
       addJudgeExtraFile: false,
@@ -752,17 +756,17 @@ export default {
     this.PROBLEM_LEVEL = Object.assign({}, PROBLEM_LEVEL);
     this.routeName = this.$route.name;
     let contestID = this.$route.params.contestID;
-    this.uploadFileUrl = '/api/file/upload-testcase-zip';
+    this.uploadFileUrl = "/api/file/upload-testcase-zip";
     if (
-      this.routeName === 'admin-edit-problem' ||
-      this.routeName === 'admin-edit-contest-problem'
+      this.routeName === "admin-edit-problem" ||
+      this.routeName === "admin-edit-contest-problem"
     ) {
-      this.mode = 'edit';
+      this.mode = "edit";
     } else {
-      this.mode = 'add';
+      this.mode = "add";
     }
     api
-      .admin_getAllProblemTagList('ALL')
+      .admin_getAllProblemTagList("ALL")
       .then((res) => {
         this.allTags = res.data.data;
         for (let tag of res.data.data) {
@@ -780,11 +784,11 @@ export default {
       }
       this.problem = this.reProblem = {
         id: null,
-        problemId: '',
-        title: '',
-        description: '',
-        input: '',
-        output: '',
+        problemId: "",
+        title: "",
+        description: "",
+        input: "",
+        output: "",
         timeLimit: 1000,
         memoryLimit: 256,
         stackLimit: 128,
@@ -792,18 +796,18 @@ export default {
         auth: 1,
         codeShare: true,
         examples: [],
-        spjLanguage: '',
-        spjCode: '',
+        spjLanguage: "",
+        spjCode: "",
         spjCompileOk: false,
         isUploadCase: true,
-        uploadTestcaseDir: '',
+        uploadTestcaseDir: "",
         testCaseScore: [],
         contestProblem: {},
         type: 0,
-        hint: '',
-        source: '',
+        hint: "",
+        source: "",
         cid: null,
-        judgeMode: 'default',
+        judgeMode: "default",
         userExtraFile: null,
         judgeExtraFile: null,
       };
@@ -818,7 +822,7 @@ export default {
           this.contest = res.data.data;
         });
       }
-      this.problem.spjLanguage = 'C';
+      this.problem.spjLanguage = "C";
       this.init();
     });
   },
@@ -826,12 +830,12 @@ export default {
     $route() {
       this.routeName = this.$route.name;
       if (
-        this.routeName === 'admin-edit-problem' ||
-        this.routeName === 'admin-edit-contest-problem'
+        this.routeName === "admin-edit-problem" ||
+        this.routeName === "admin-edit-contest-problem"
       ) {
-        this.mode = 'edit';
+        this.mode = "edit";
       } else {
-        this.mode = 'add';
+        this.mode = "add";
       }
       this.$refs.form.resetFields();
       this.problem = this.reProblem;
@@ -881,38 +885,38 @@ export default {
       this.codeTemplate = data;
     },
 
-    'problem.spjLanguage'(newVal) {
+    "problem.spjLanguage"(newVal) {
       if (this.allSpjLanguage.length) {
         this.spjMode = this.allSpjLanguage.find((item) => {
           return item.name == this.problem.spjLanguage && item.isSpj == true;
-        })['contentType'];
+        })["contentType"];
       }
     },
   },
   methods: {
     init() {
-      if (this.mode === 'edit') {
+      if (this.mode === "edit") {
         this.pid = this.$route.params.problemId;
         this.backPath = this.$route.query.back;
-        this.title = this.$i18n.t('m.Edit_Problem');
+        this.title = this.$i18n.t("m.Edit_Problem");
         let funcName = {
-          'admin-edit-problem': 'admin_getProblem',
-          'admin-edit-contest-problem': 'admin_getContestProblem',
+          "admin-edit-problem": "admin_getProblem",
+          "admin-edit-contest-problem": "admin_getContestProblem",
         }[this.routeName];
         api[funcName](this.pid).then((problemRes) => {
           let data = problemRes.data.data;
           data.spjCompileOk = false;
-          data.uploadTestcaseDir = '';
+          data.uploadTestcaseDir = "";
           data.testCaseScore = [];
           if (!data.spjCode) {
-            data.spjCode = '';
+            data.spjCode = "";
           }
-          data.spjLanguage = data.spjLanguage || 'C';
+          data.spjLanguage = data.spjLanguage || "C";
           this.spjRecord.spjLanguage = data.spjLanguage;
           this.spjRecord.spjCode = data.spjCode;
           this.problem = data;
-          this.problem['examples'] = utils.stringToExamples(data.examples);
-          this.problem['examples'][0]['isOpen'] = true;
+          this.problem["examples"] = utils.stringToExamples(data.examples);
+          this.problem["examples"][0]["isOpen"] = true;
           this.testCaseUploaded = true;
           if (this.problem.userExtraFile) {
             this.addUserExtraFile = true;
@@ -929,11 +933,11 @@ export default {
                 this.problem.testCaseScore = res.data.data;
               } else {
                 this.problemSamples = res.data.data;
-                this.problemSamples[0]['isOpen'] = true;
+                this.problemSamples[0]["isOpen"] = true;
               }
             });
         });
-        if (funcName === 'admin_getContestProblem') {
+        if (funcName === "admin_getContestProblem") {
           api
             .admin_getContestProblemInfo(this.pid, this.contestID)
             .then((res) => {
@@ -948,7 +952,7 @@ export default {
       } else {
         this.addExample();
         this.testCaseUploaded = false;
-        this.title = this.$i18n.t('m.Create_Problem');
+        this.title = this.$i18n.t("m.Create_Problem");
         for (let item of this.allLanguage) {
           this.problemLanguages.push(item.name);
         }
@@ -969,37 +973,37 @@ export default {
     },
 
     switchMode(mode) {
-      let modeName = 'General_Judge';
-      let modeTips = 'General_Judge_Mode_Tips';
-      if (mode == 'spj') {
-        modeName = 'Special_Judge';
-        modeTips = 'Special_Judge_Mode_Tips';
-      } else if (mode == 'interactive') {
-        modeName = 'Interactive_Judge';
-        modeTips = 'Interactive_Judge_Mode_Tips';
+      let modeName = "General_Judge";
+      let modeTips = "General_Judge_Mode_Tips";
+      if (mode == "spj") {
+        modeName = "Special_Judge";
+        modeTips = "Special_Judge_Mode_Tips";
+      } else if (mode == "interactive") {
+        modeName = "Interactive_Judge";
+        modeTips = "Interactive_Judge_Mode_Tips";
       }
       const h = this.$createElement;
       this.$msgbox({
-        title: this.$i18n.t('m.' + modeName),
-        message: h('div', null, [
+        title: this.$i18n.t("m." + modeName),
+        message: h("div", null, [
           h(
-            'p',
-            { style: 'text-align: center;font-weight:bolder;color:red' },
-            this.$i18n.t('m.Change_Judge_Mode')
+            "p",
+            { style: "text-align: center;font-weight:bolder;color:red" },
+            this.$i18n.t("m.Change_Judge_Mode")
           ),
-          h('br', null, null),
+          h("br", null, null),
           h(
-            'p',
-            { style: 'font-weight:bolder' },
-            this.$i18n.t('m.' + modeTips)
+            "p",
+            { style: "font-weight:bolder" },
+            this.$i18n.t("m." + modeTips)
           ),
         ]),
       });
     },
     querySearch(queryString, cb) {
-      var ojName = 'ME';
+      var ojName = "ME";
       if (this.problem.isRemote) {
-        ojName = this.problem.problemId.split('-')[0];
+        ojName = this.problem.problemId.split("-")[0];
       }
       var restaurants = this.allTagsTmp.filter((item) => item.oj == ojName);
       var results = queryString
@@ -1020,8 +1024,8 @@ export default {
     selectTag(item) {
       for (var i = 0; i < this.problemTags.length; i++) {
         if (this.problemTags[i].name == item.value) {
-          this.$msg.warning(this.$i18n.t('m.Add_Tag_Error'));
-          this.tagInput = '';
+          this.$msg.warning(this.$i18n.t("m.Add_Tag_Error"));
+          this.tagInput = "";
           return;
         }
       }
@@ -1034,14 +1038,14 @@ export default {
       if (this.tagInput) {
         for (var i = 0; i < this.problemTags.length; i++) {
           if (this.problemTags[i].name == this.tagInput) {
-            this.$msg.warning(this.$i18n.t('m.Add_Tag_Error'));
-            this.tagInput = '';
+            this.$msg.warning(this.$i18n.t("m.Add_Tag_Error"));
+            this.tagInput = "";
             return;
           }
         }
         this.problemTags.push(newTag);
         this.inputVisible = false;
-        this.tagInput = '';
+        this.tagInput = "";
       }
     },
 
@@ -1054,7 +1058,7 @@ export default {
     },
 
     deleteFile(type, name) {
-      if (type == 'user') {
+      if (type == "user") {
         this.$delete(this.userExtraFile, name);
       } else {
         this.$delete(this.judgeExtraFile, name);
@@ -1062,7 +1066,7 @@ export default {
     },
 
     upsertFile(type, name, oldname, content) {
-      if (type == 'user') {
+      if (type == "user") {
         if (oldname && oldname != name) {
           this.$delete(this.userExtraFile, oldname);
         }
@@ -1098,25 +1102,25 @@ export default {
 
     // 添加题目样例
     addExample() {
-      this.problem.examples.push({ input: '', output: '', isOpen: true });
+      this.problem.examples.push({ input: "", output: "", isOpen: true });
     },
     changeExampleVisible(index, isOpen) {
-      this.problem.examples[index]['isOpen'] = isOpen;
+      this.problem.examples[index]["isOpen"] = isOpen;
     },
     // 添加判题机的测试样例
     addSample() {
-      if (this.mode === 'edit') {
+      if (this.mode === "edit") {
         this.problemSamples.push({
-          input: '',
-          output: '',
+          input: "",
+          output: "",
           score: this.problem.type == 0 ? null : 0,
           pid: this.pid,
           isOpen: true,
         });
       } else {
         this.problemSamples.push({
-          input: '',
-          output: '',
+          input: "",
+          output: "",
           score: this.problem.type == 0 ? null : 0,
           pid: this.pid,
           isOpen: true,
@@ -1132,7 +1136,7 @@ export default {
       this.problemSamples.splice(index, 1);
     },
     changeSampleVisible(index, isOpen) {
-      this.problemSamples[index]['isOpen'] = isOpen;
+      this.problemSamples[index]["isOpen"] = isOpen;
     },
     uploadSucceeded(response) {
       if (response.status != 200) {
@@ -1140,7 +1144,7 @@ export default {
         this.testCaseUploaded = false;
         return;
       }
-      this.$msg.success(this.$i18n.t('m.Upload_Testcase_Successfully'));
+      this.$msg.success(this.$i18n.t("m.Upload_Testcase_Successfully"));
       let fileList = response.data.fileList;
       let averSorce = parseInt(100 / fileList.length);
       let add_1_num = 100 - averSorce * fileList.length;
@@ -1153,7 +1157,7 @@ export default {
           }
         }
         if (!fileList[i].output) {
-          fileList[i].output = '-';
+          fileList[i].output = "-";
         }
         fileList[i].pid = this.problem.id;
       }
@@ -1162,7 +1166,7 @@ export default {
       this.problem.uploadTestcaseDir = response.data.fileListDir;
     },
     uploadFailed() {
-      this.$msg.error(this.$i18n.t('m.Upload_Testcase_Failed'));
+      this.$msg.error(this.$i18n.t("m.Upload_Testcase_Failed"));
     },
 
     compileSPJ() {
@@ -1173,28 +1177,28 @@ export default {
         extraFiles: this.judgeExtraFile,
       };
       this.loadingCompile = true;
-      let apiMethodName = 'compileSPJ';
-      if (this.problem.judgeMode == 'interactive') {
-        apiMethodName = 'compileInteractive';
+      let apiMethodName = "compileSPJ";
+      if (this.problem.judgeMode == "interactive") {
+        apiMethodName = "compileInteractive";
       }
       api[apiMethodName](data).then(
         (res) => {
           this.loadingCompile = false;
           this.problem.spjCompileOk = true;
-          this.error.spj = '';
-          this.$msg.success(this.$i18n.t('m.Compiled_Successfully'));
+          this.error.spj = "";
+          this.$msg.success(this.$i18n.t("m.Compiled_Successfully"));
         },
         (err) => {
           this.loadingCompile = false;
           this.problem.spjCompileOk = false;
           const h = this.$createElement;
           this.$msgbox({
-            title: 'Compile Error',
-            type: 'error',
-            message: h('pre', err.data.msg),
+            title: "Compile Error",
+            type: "error",
+            message: h("pre", err.data.msg),
             showCancelButton: false,
             closeOnClickModal: false,
-            customClass: 'dialog-compile-error',
+            customClass: "dialog-compile-error",
           });
         }
       );
@@ -1203,9 +1207,9 @@ export default {
     submit() {
       if (!this.problem.problemId) {
         this.$msg.error(
-          this.$i18n.t('m.Problem_Display_ID') +
-            ' ' +
-            this.$i18n.t('m.is_required')
+          this.$i18n.t("m.Problem_Display_ID") +
+            " " +
+            this.$i18n.t("m.is_required")
         );
         return;
       }
@@ -1213,17 +1217,17 @@ export default {
       if (this.contestID) {
         if (!this.contestProblem.displayId) {
           this.$msg.error(
-            this.$i18n.t('m.Contest_Display_ID') +
-              ' ' +
-              this.$i18n.t('m.is_required')
+            this.$i18n.t("m.Contest_Display_ID") +
+              " " +
+              this.$i18n.t("m.is_required")
           );
           return;
         }
         if (!this.contestProblem.displayTitle) {
           this.$msg.error(
-            this.$i18n.t('m.Contest_Display_Title') +
-              ' ' +
-              this.$i18n.t('m.is_required')
+            this.$i18n.t("m.Contest_Display_Title") +
+              " " +
+              this.$i18n.t("m.is_required")
           );
           return;
         }
@@ -1234,9 +1238,9 @@ export default {
         if (!this.problem.isUploadCase) {
           if (!this.problemSamples.length) {
             this.$msg.error(
-              this.$i18n.t('m.Judge_Samples') +
-                ' ' +
-                this.$i18n.t('m.is_required')
+              this.$i18n.t("m.Judge_Samples") +
+                " " +
+                this.$i18n.t("m.is_required")
             );
             return;
           }
@@ -1244,11 +1248,11 @@ export default {
           for (let sample of this.problemSamples) {
             if (!sample.input && !sample.output) {
               this.$msg.error(
-                this.$i18n.t('m.Sample_Input') +
-                  ' or ' +
-                  this.$i18n.t('m.Sample_Output') +
-                  ' ' +
-                  this.$i18n.t('m.is_required')
+                this.$i18n.t("m.Sample_Input") +
+                  " or " +
+                  this.$i18n.t("m.Sample_Output") +
+                  " " +
+                  this.$i18n.t("m.is_required")
               );
               return;
             }
@@ -1257,27 +1261,27 @@ export default {
           // 同时是oi题目，则对应的每个测试样例的io得分不能为空或小于0
           if (this.problem.type == 1) {
             for (let i = 0; i < this.problemSamples.length; i++) {
-              if (this.problemSamples[i].score == '') {
+              if (this.problemSamples[i].score == "") {
                 this.$msg.error(
-                  this.$i18n.t('m.Problem_Sample') +
+                  this.$i18n.t("m.Problem_Sample") +
                     (i + 1) +
-                    ' ' +
-                    this.$i18n.t('m.Score_must_be_an_integer')
+                    " " +
+                    this.$i18n.t("m.Score_must_be_an_integer")
                 );
                 return;
               }
               try {
                 if (parseInt(this.problemSamples[i].score) < 0) {
                   this.$msg.error(
-                    this.$i18n.t('m.Problem_Sample') +
+                    this.$i18n.t("m.Problem_Sample") +
                       (i + 1) +
-                      ' ' +
-                      this.$i18n.t('m.Score_must_be_greater_than_or_equal_to_0')
+                      " " +
+                      this.$i18n.t("m.Score_must_be_greater_than_or_equal_to_0")
                   );
                   return;
                 }
               } catch (e) {
-                this.$msg.error(this.$i18n.t('m.Score_must_be_an_integer'));
+                this.$msg.error(this.$i18n.t("m.Score_must_be_an_integer"));
                 return;
               }
             }
@@ -1288,9 +1292,9 @@ export default {
           // 两种情况：create模式是需要校验是否上传成功了，edit模式获取题目数据已经默认为true了，若是edit又重新上传数据，需要校验
           if (!this.testCaseUploaded) {
             this.error.testCase =
-              this.$i18n.t('m.Judge_Samples') +
-              ' ' +
-              this.$i18n.t('m.is_required');
+              this.$i18n.t("m.Judge_Samples") +
+              " " +
+              this.$i18n.t("m.is_required");
             this.$msg.error(this.error.testCase);
             return;
           }
@@ -1298,27 +1302,27 @@ export default {
           // 如果是oi题目，需要检查上传的数据的得分
           if (this.problem.type == 1) {
             for (let i = 0; i < this.problemSamples.length; i++) {
-              if (this.problemSamples[i].score == '') {
+              if (this.problemSamples[i].score == "") {
                 this.$msg.error(
-                  this.$i18n.t('m.Problem_Sample') +
+                  this.$i18n.t("m.Problem_Sample") +
                     (i + 1) +
-                    ' ' +
-                    this.$i18n.t('m.Score_must_be_an_integer')
+                    " " +
+                    this.$i18n.t("m.Score_must_be_an_integer")
                 );
                 return;
               }
               try {
                 if (parseInt(this.problemSamples[i].score) < 0) {
                   this.$msg.error(
-                    this.$i18n.t('m.Problem_Sample') +
+                    this.$i18n.t("m.Problem_Sample") +
                       (i + 1) +
-                      ' ' +
-                      this.$i18n.t('m.Score_must_be_greater_than_or_equal_to_0')
+                      " " +
+                      this.$i18n.t("m.Score_must_be_greater_than_or_equal_to_0")
                   );
                   return;
                 }
               } catch (e) {
-                this.$msg.error(this.$i18n.t('m.Score_must_be_an_integer'));
+                this.$msg.error(this.$i18n.t("m.Score_must_be_an_integer"));
                 return;
               }
             }
@@ -1329,16 +1333,16 @@ export default {
         this.spjRecord.spjLanguage != this.problem.spjLanguage ||
         this.spjRecord.spjCode != this.problem.spjCode;
       if (!this.problem.isRemote) {
-        if (this.problem.judgeMode != 'default') {
+        if (this.problem.judgeMode != "default") {
           if (!this.problem.spjCode) {
             this.error.spj =
-              this.$i18n.t('m.Spj_Or_Interactive_Code') +
-              ' ' +
-              this.$i18n.t('m.is_required');
+              this.$i18n.t("m.Spj_Or_Interactive_Code") +
+              " " +
+              this.$i18n.t("m.is_required");
             this.$msg.error(this.error.spj);
           } else if (!this.problem.spjCompileOk && isChangeModeCode) {
             this.error.spj = this.$i18n.t(
-              'm.Spj_Or_Interactive_Code_not_Compile_Success'
+              "m.Spj_Or_Interactive_Code_not_Compile_Success"
             );
           }
           if (this.error.spj) {
@@ -1350,35 +1354,35 @@ export default {
 
       if (!this.problemLanguages.length) {
         this.error.languages =
-          this.$i18n.t('m.Language') + ' ' + this.$i18n.t('m.is_required');
+          this.$i18n.t("m.Language") + " " + this.$i18n.t("m.is_required");
         this.$msg.error(this.error.languages);
         return;
       }
 
       let funcName = {
-        'admin-create-problem': 'admin_createProblem',
-        'admin-edit-problem': 'admin_editProblem',
-        'admin-create-contest-problem': 'admin_createContestProblem',
-        'admin-edit-contest-problem': 'admin_editContestProblem',
+        "admin-create-problem": "admin_createProblem",
+        "admin-edit-problem": "admin_editProblem",
+        "admin-create-contest-problem": "admin_createContestProblem",
+        "admin-edit-contest-problem": "admin_editContestProblem",
       }[this.routeName];
       // edit contest problem 时, contest_id会被后来的请求覆盖掉
-      if (funcName === 'editContestProblem') {
+      if (funcName === "editContestProblem") {
         this.problem.cid = this.contest.id;
       }
       if (
-        funcName === 'admin_createProblem' ||
-        funcName === 'admin_createContestProblem'
+        funcName === "admin_createProblem" ||
+        funcName === "admin_createContestProblem"
       ) {
         this.problem.author = this.userInfo.username;
       }
 
-      var ojName = 'ME';
+      var ojName = "ME";
       if (this.problem.isRemote) {
-        ojName = this.problem.problemId.split('-')[0];
+        ojName = this.problem.problemId.split("-")[0];
       }
 
       let problemTagList = [];
-      if(this.problemTags.length>0){
+      if (this.problemTags.length > 0) {
         problemTagList = Object.assign([], this.problemTags);
         for (let i = 0; i < problemTagList.length; i++) {
           //避免后台插入违反唯一性
@@ -1412,14 +1416,14 @@ export default {
       }
       let problemDto = {}; // 上传给后台的数据
       if (!this.problem.isRemote) {
-        if (this.problem.judgeMode != 'default') {
+        if (this.problem.judgeMode != "default") {
           if (isChangeModeCode) {
-            problemDto['changeModeCode'] = true;
+            problemDto["changeModeCode"] = true;
           }
         } else {
           // 原本是spj或交互，但现在关闭了
           if (!this.spjRecord.spjCode) {
-            problemDto['changeModeCode'] = true;
+            problemDto["changeModeCode"] = true;
             this.problem.spjCode = null;
             this.problem.spjLanguage = null;
           }
@@ -1441,49 +1445,49 @@ export default {
         }
       }
 
-      problemDto['problem'] = Object.assign({}, this.problem); // 深克隆
+      problemDto["problem"] = Object.assign({}, this.problem); // 深克隆
       problemDto.problem.examples = utils.examplesToString(
         this.problem.examples
       ); // 需要转换格式
 
-      problemDto['codeTemplates'] = this.problemCodeTemplate;
-      problemDto['tags'] = problemTagList;
-      problemDto['languages'] = problemLanguageList;
-      problemDto['isUploadTestCase'] = this.problem.isUploadCase;
-      problemDto['uploadTestcaseDir'] = this.problem.uploadTestcaseDir;
-      problemDto['judgeMode'] = this.problem.judgeMode;
+      problemDto["codeTemplates"] = this.problemCodeTemplate;
+      problemDto["tags"] = problemTagList;
+      problemDto["languages"] = problemLanguageList;
+      problemDto["isUploadTestCase"] = this.problem.isUploadCase;
+      problemDto["uploadTestcaseDir"] = this.problem.uploadTestcaseDir;
+      problemDto["judgeMode"] = this.problem.judgeMode;
 
       // 如果选择上传文件，则使用上传后的结果
       if (this.problem.isUploadCase) {
-        problemDto['samples'] = this.problem.testCaseScore;
+        problemDto["samples"] = this.problem.testCaseScore;
       } else {
-        problemDto['samples'] = this.problemSamples;
+        problemDto["samples"] = this.problemSamples;
       }
 
       api[funcName](problemDto)
         .then((res) => {
           if (
-            this.routeName === 'admin-create-contest-problem' ||
-            this.routeName === 'admin-edit-contest-problem'
+            this.routeName === "admin-create-contest-problem" ||
+            this.routeName === "admin-edit-contest-problem"
           ) {
             if (res.data.data) {
               // 新增题目操作 需要使用返回来的pid
-              this.contestProblem['pid'] = res.data.data.pid;
-              this.contestProblem['cid'] = this.$route.params.contestID;
+              this.contestProblem["pid"] = res.data.data.pid;
+              this.contestProblem["cid"] = this.$route.params.contestID;
             }
             api.admin_setContestProblemInfo(this.contestProblem).then((res) => {
-              this.$msg.success(this.$t('m.Save_Successfully'));
+              this.$msg.success(this.$t("m.Save_Successfully"));
               this.$router.push({
-                name: 'admin-contest-problem-list',
+                name: "admin-contest-problem-list",
                 params: { contestID: this.$route.params.contestID },
               });
             });
           } else {
-            this.$msg.success(this.$t('m.Save_Successfully'));
+            this.$msg.success(this.$t("m.Save_Successfully"));
             if (this.backPath) {
               this.$router.push({ path: this.backPath });
             } else {
-              this.$router.push({ name: 'admin-problem-list' });
+              this.$router.push({ name: "admin-problem-list" });
             }
           }
         })
@@ -1491,7 +1495,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(["userInfo"]),
   },
 };
 </script>

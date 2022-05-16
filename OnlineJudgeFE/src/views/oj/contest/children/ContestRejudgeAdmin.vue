@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="always">
     <div slot="header">
-      <span class="panel-title">{{ $t('m.Contest_Rejudge') }}</span>
+      <span class="panel-title">{{ $t("m.Contest_Rejudge") }}</span>
     </div>
     <vxe-table
       border="inner"
@@ -26,13 +26,9 @@
       </vxe-table-column>
       <vxe-table-column field="ac" :title="$t('m.AC')" min-width="80">
       </vxe-table-column>
-      <vxe-table-column
-        field="total"
-        :title="$t('m.Total')"
-        min-width="80"
-      >
+      <vxe-table-column field="total" :title="$t('m.Total')" min-width="80">
         <template v-slot="{ row }">
-          <span>{{row.ac + row.error}}</span>
+          <span>{{ row.ac + row.error }}</span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="option" :title="$t('m.Option')" min-width="150">
@@ -44,7 +40,7 @@
             icon="el-icon-refresh-right"
             @click="rejudgeProblem(row)"
             round
-            >{{ $t('m.Rejudge_All') }}</el-button
+            >{{ $t("m.Rejudge_All") }}</el-button
           >
         </template>
       </vxe-table-column>
@@ -52,11 +48,11 @@
   </el-card>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
-import api from '@/common/api';
+import { mapState, mapActions } from "vuex";
+import api from "@/common/api";
 
 export default {
-  name: 'Contest-Rejudge-Admin',
+  name: "Contest-Rejudge-Admin",
   data() {
     return {
       btnLoading: false,
@@ -69,12 +65,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getContestProblems']),
+    ...mapActions(["getContestProblems"]),
     rejudgeProblem(row) {
-      this.$confirm(this.$i18n.t('m.Contest_Rejudge_Tips'), 'Tips', {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
+      this.$confirm(this.$i18n.t("m.Contest_Rejudge_Tips"), "Tips", {
+        confirmButtonText: this.$i18n.t("m.OK"),
+        cancelButtonText: this.$i18n.t("m.Cancel"),
+        type: "warning",
       }).then(
         () => {
           let params = {
@@ -85,7 +81,7 @@ export default {
           api
             .ContestRejudgeProblem(params)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Rejudge_successfully'));
+              this.$msg.success(this.$i18n.t("m.Rejudge_successfully"));
               this.btnLoading = false;
             })
             .catch(() => {

@@ -186,7 +186,7 @@ export const m = {
   Pick_a_random_question: 'Pick a random question',
   Touch_Get_Status: 'Please touch or hover the mouse to the designated problem line to view the submission status',
   Good_luck_to_you: 'Good luck to you!',
-  
+
   // /views/oj/problem/Problem.vue
   Problem_Description: 'Problem Description',
   My_Submission: 'My Submission',
@@ -295,7 +295,7 @@ export const m = {
   OI_Ranklist: 'OI Ranklist',
 
   // /views/oj/discussion/discussionList.vue
-  Go_to_problem:"Go to Problem",
+  Go_to_problem: "Go to Problem",
   Release_Time: 'Release Time',
   Likes: 'Likes',
   Like_Successfully: 'Like Successfully',
@@ -325,9 +325,9 @@ export const m = {
   Liked: 'Liked',
   Report_Reason: 'Report Reason',
   The_report_label_and_reason_cannot_be_empty: 'The report label and reason cannot be empty.',
-  
+
   // 404.vue
-  Page_Not_Found:"Sorry, the page can't be found",
+  Page_Not_Found: "Sorry, the page can't be found",
   Go_Home: 'Go Home',
   Back: 'Back',
 
@@ -431,10 +431,10 @@ export const m = {
   Memory_Limit_Exceeded_Description: 'The memory your program actually used has exceeded limit.',
   System_Error_Description: 'Oops, something has gone wrong with the judger. Please report this to administrator.',
   Compile_Explanation: 'Compile Explanation',
-  Compile_Tips1:"`__int64` is not defined by ANSI standard and can only be used in `VC`. It should be written as `long long` type in `GNU C++`. For `scanf` and `printf`, please use `%lld` as the format.",
-  Compile_Tips2:"The return value of `main()` must be defined as `int`, not `void`",
-  Compile_Tips3:"`i` lost definition outside the loop,\"for(int i=0...){...}\"",
-  Compile_Tips4:"`itoa` is not an ANSI standard function (not available in standard `C/C++`)",
+  Compile_Tips1: "`__int64` is not defined by ANSI standard and can only be used in `VC`. It should be written as `long long` type in `GNU C++`. For `scanf` and `printf`, please use `%lld` as the format.",
+  Compile_Tips2: "The return value of `main()` must be defined as `int`, not `void`",
+  Compile_Tips3: "`i` lost definition outside the loop,\"for(int i=0...){...}\"",
+  Compile_Tips4: "`itoa` is not an ANSI standard function (not available in standard `C/C++`)",
 
   // /views/oj/about/Developer.vue
   Leader_BackEnd_FrontEnd_Engineer: 'Leader & BackEnd | FrontEnd Engineer',
@@ -464,9 +464,9 @@ export const m = {
 
   // /components/oj/comment/Comment.vue
   Announcement_of_contest_Q_and_A_area: 'Announcement of Contest Q & A Area',
-  Announcement_of_contest_Q_and_A_area_tips1:"Please don't ask questions irrelevant to the contest. No irrigation!",
+  Announcement_of_contest_Q_and_A_area_tips1: "Please don't ask questions irrelevant to the contest. No irrigation!",
   Announcement_of_contest_Q_and_A_area_tips2: 'During the contest, only the comments of yourself and the contest administrator can be seen!',
-  Announcement_of_contest_Q_and_A_area_tips3:"The contest administrator's comments cannot be replied. The comments return to normal at the end of the contest!",
+  Announcement_of_contest_Q_and_A_area_tips3: "The contest administrator's comments cannot be replied. The comments return to normal at the end of the contest!",
   Come_and_write_down_your_comments: 'Come and write down your comments',
   Inline_Code: 'Inline Code',
   Code_Block: 'Code Block',
@@ -481,7 +481,7 @@ export const m = {
   Reply_Total: 'Total',
   Replies: 'replies',
   Click_Show_All: 'Click to Show All',
-  Pick_up:"Pick up",
+  Pick_up: "Pick up",
   Load_More: 'Load More',
   Delete_Comment_Tips: 'This operation will delete the comment and all its replies. Do you want to continue?',
   Delete_Reply_Tips: 'This operation will delete the reply. Do you want to continue?',

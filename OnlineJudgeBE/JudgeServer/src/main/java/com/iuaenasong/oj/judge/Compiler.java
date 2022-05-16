@@ -12,12 +12,11 @@ import org.springframework.util.StringUtils;
 import com.iuaenasong.oj.common.exception.CompileError;
 import com.iuaenasong.oj.common.exception.SubmitError;
 import com.iuaenasong.oj.common.exception.SystemError;
-import com.iuaenasong.oj.util.Constants;
-import com.iuaenasong.oj.util.JudgeUtils;
+import com.iuaenasong.oj.utils.Constants;
+import com.iuaenasong.oj.utils.JudgeUtils;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 

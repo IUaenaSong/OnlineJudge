@@ -9,7 +9,7 @@ const state = {
 }
 
 const getters = {
-  group: state=> state.group || {},
+  group: state => state.group || {},
   isGroupOwner: (state, getters, _, rootGetters) => {
     return rootGetters.isAuthenticated && state.group.uid == getters.userInfo.uid
   },
@@ -33,12 +33,12 @@ const getters = {
     return !state.intoAccess
   },
   userAuth: (state, getters) => {
-    return state.auth;
+    return state.auth
   },
 }
 
 const mutations = {
-  changeGroup (state, payload) {
+  changeGroup(state, payload) {
     state.group = payload.group
   },
   changeGroupAuth(state, payload) {
@@ -47,7 +47,7 @@ const mutations = {
   changeGroupIntoAccess(state, payload) {
     state.intoAccess = payload.intoAccess
   },
-  clearGroup (state) {
+  clearGroup(state) {
     state.group = {}
     state.auth = 0
     state.intoAccess = false
@@ -55,17 +55,17 @@ const mutations = {
 }
 
 const actions = {
-  setGroup ({commit}, group) {
+  setGroup({ commit }, group) {
     commit('changeGroup', {
       group: group
     })
   },
-  getGroup ({commit, rootState, dispatch}) {
+  getGroup({ commit, rootState, dispatch }) {
     return new Promise((resolve, reject) => {
       api.getGroup(rootState.route.params.groupID).then((res) => {
         resolve(res)
         let group = res.data.data
-        commit('changeGroup', {group: group})
+        commit('changeGroup', { group: group })
         dispatch('getGroupAccess')
         dispatch('getGroupAuth')
       }, err => {
@@ -73,18 +73,18 @@ const actions = {
       })
     })
   },
-  getGroupAccess ({commit, rootState}) {
+  getGroupAccess({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getGroupAccess(rootState.route.params.groupID).then(res => {
-        commit('changeGroupIntoAccess', {intoAccess: res.data.data.access})
+        commit('changeGroupIntoAccess', { intoAccess: res.data.data.access })
         resolve(res)
       }).catch()
     })
   },
-  getGroupAuth ({commit, rootState}) {
+  getGroupAuth({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getGroupAuth(rootState.route.params.groupID).then(res => {
-        commit('changeGroupAuth', {auth: res.data.data})
+        commit('changeGroupAuth', { auth: res.data.data })
         resolve(res)
       }).catch()
     })

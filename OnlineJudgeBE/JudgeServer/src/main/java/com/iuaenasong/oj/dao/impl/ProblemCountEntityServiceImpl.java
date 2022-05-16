@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iuaenasong.oj.mapper.ProblemCountMapper;
 import com.iuaenasong.oj.pojo.entity.problem.ProblemCount;
 import com.iuaenasong.oj.dao.ProblemCountEntityService;
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
 
 @Service
 public class ProblemCountEntityServiceImpl extends ServiceImpl<ProblemCountMapper, ProblemCount> implements ProblemCountEntityService {

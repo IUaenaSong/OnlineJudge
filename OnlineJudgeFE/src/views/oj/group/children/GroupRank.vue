@@ -2,7 +2,7 @@
   <el-card>
     <el-row>
       <el-col>
-        <div style="text-align: center;">
+        <div style="text-align: center">
           <span>
             <el-input
               :placeholder="$t('m.Rank_Search_Placeholder')"
@@ -25,7 +25,8 @@
             :inactive-value="0"
             :active-text="$t('m.Group_ACM_Rank_Type')"
             :inactive-text="$t('m.Group_OI_Rank_Type')"
-            @change="filterByType">
+            @change="filterByType"
+          >
           </el-switch>
         </div>
       </el-col>
@@ -37,7 +38,7 @@
           highlight-hover-row
           :seq-config="{ seqMethod }"
           auto-resize
-          style="font-weight: 500;"
+          style="font-weight: 500"
         >
           <vxe-table-column type="seq" min-width="50"></vxe-table-column>
           <vxe-table-column
@@ -58,10 +59,10 @@
               ></avatar>
               <a
                 @click="getInfoByUsername(row.uid, row.username)"
-                style="color:#2d8cf0;"
+                style="color: #2d8cf0"
                 >{{ row.username }}</a
               >
-              <span style="margin-left:2px" v-if="row.titleName">
+              <span style="margin-left: 2px" v-if="row.titleName">
                 <el-tag effect="dark" size="small" :color="row.titleColor">
                   {{ row.titleName }}
                 </el-tag>
@@ -89,13 +90,17 @@
               <span>
                 <a
                   @click="goUserACStatus(row.username)"
-                  style="color:rgb(87, 163, 243);"
+                  style="color: rgb(87, 163, 243)"
                   >{{ row.ac }}</a
                 >
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column :title="$t('m.Total')" min-width="100" field="total">
+          <vxe-table-column
+            :title="$t('m.Total')"
+            min-width="100"
+            field="total"
+          >
           </vxe-table-column>
           <vxe-table-column :title="$t('m.Score')" min-width="80">
             <template v-slot="{ row }">
@@ -123,13 +128,13 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
-import { mapGetters } from 'vuex';
-import Avatar from 'vue-avatar';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import utils from "@/common/utils";
+import { mapGetters } from "vuex";
+import Avatar from "vue-avatar";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'GroupRank',
+  name: "GroupRank",
   components: {
     Pagination,
     Avatar,
@@ -139,7 +144,7 @@ export default {
       total: 0,
       currentPage: 1,
       limit: 10,
-      keyword: '',
+      keyword: "",
       type: 0,
       rankList: [],
       loading: false,
@@ -170,7 +175,13 @@ export default {
     getGroupRankList() {
       this.loading = true;
       api
-        .getGroupRankList(this.currentPage, this.limit, this.$route.params.groupID, this.type, this.keyword)
+        .getGroupRankList(
+          this.currentPage,
+          this.limit,
+          this.$route.params.groupID,
+          this.type,
+          this.keyword
+        )
         .then((res) => {
           this.total = res.data.data.total;
           this.rankList = res.data.data.records;
@@ -185,13 +196,13 @@ export default {
     },
     getInfoByUsername(uid, username) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { uid, username },
       });
     },
     goUserACStatus(username) {
       this.$router.push({
-        path: '/status',
+        path: "/status",
         query: { username, status: 0, gid: this.$route.params.groupID },
       });
     },
@@ -199,13 +210,13 @@ export default {
       return utils.getACRate(ac, total);
     },
     nicknameColor(nickname) {
-      let typeArr = ['', 'success', 'info', 'danger', 'warning'];
+      let typeArr = ["", "success", "info", "danger", "warning"];
       let index = nickname.length % 5;
       return typeArr[index];
     },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'userInfo']),
+    ...mapGetters(["isAuthenticated", "userInfo"]),
   },
   watch: {
     $route(newVal, oldVal) {
@@ -213,24 +224,24 @@ export default {
         this.init();
       }
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-.swtich-type{
-    float: right;
+.swtich-type {
+  float: right;
 }
 @media screen and (max-width: 768px) {
   /deep/.el-card__body {
     padding: 0 !important;
   }
-  .swtich-type{
-    margin-top:10px;
+  .swtich-type {
+    margin-top: 10px;
     margin-bottom: 10px;
-    float:none;
+    float: none;
     text-align: center;
-  } 
+  }
 }
 @media screen and (min-width: 768px) {
   .el-input-group {

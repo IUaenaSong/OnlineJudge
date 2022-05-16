@@ -8,6 +8,7 @@ package com.iuaenasong.oj.remoteJudge;
 
 import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.iuaenasong.oj.dao.JudgeCaseEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,8 +22,10 @@ import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeDTO;
 import com.iuaenasong.oj.remoteJudge.entity.RemoteJudgeRes;
 import com.iuaenasong.oj.remoteJudge.task.RemoteJudgeStrategy;
 
-import com.iuaenasong.oj.util.Constants;
+import com.iuaenasong.oj.utils.Constants;
+import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,6 +42,9 @@ public class RemoteJudgeGetResult {
 
     @Autowired
     private RemoteJudgeService remoteJudgeService;
+
+    @Resource
+    private JudgeCaseEntityService judgeCaseEntityService;
 
     @Value("${oj-judge-server.name}")
     private String name;
@@ -91,6 +97,11 @@ public class RemoteJudgeGetResult {
                         log.error("The Error of getting the `remote judge` result:", e);
                     }
                     return;
+                }
+
+                // 保留各个测试点的结果数据
+                if (!CollectionUtils.isEmpty(remoteJudgeRes.getJudgeCaseList())) {
+                    judgeCaseEntityService.saveBatch(remoteJudgeRes.getJudgeCaseList());
                 }
 
                 Integer status = remoteJudgeRes.getStatus();
@@ -192,7 +203,6 @@ public class RemoteJudgeGetResult {
                     // 写回数据库
                     judgeEntityService.updateById(judge);
                 }
-
             }
         };
         ScheduledFuture<?> beeperHandle = scheduler.scheduleWithFixedDelay(

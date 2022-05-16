@@ -1,17 +1,17 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card :padding="10">
         <div slot="header">
-          <span class="panel-title">{{ $t('m.ACM_Ranklist') }}</span>
+          <span class="panel-title">{{ $t("m.ACM_Ranklist") }}</span>
         </div>
         <div class="echarts">
           <ECharts :options="options" ref="chart" :autoresize="true"></ECharts>
         </div>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
-      <el-card :padding="10" style="text-align: center;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
+      <el-card :padding="10" style="text-align: center">
         <el-input
           :placeholder="$t('m.Rank_Search_Placeholder')"
           v-model="searchUser"
@@ -26,7 +26,7 @@
         </el-input>
       </el-card>
     </el-col>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <vxe-table
         :data="dataRank"
         :loading="loadingTable"
@@ -34,7 +34,7 @@
         highlight-hover-row
         :seq-config="{ seqMethod }"
         auto-resize
-        style="font-weight: 500;"
+        style="font-weight: 500"
       >
         <vxe-table-column type="seq" min-width="50"></vxe-table-column>
         <vxe-table-column
@@ -55,10 +55,10 @@
             ></avatar>
             <a
               @click="getInfoByUsername(row.uid, row.username)"
-              style="color:#2d8cf0;"
+              style="color: #2d8cf0"
               >{{ row.username }}</a
             >
-            <span style="margin-left:2px" v-if="row.titleName">
+            <span style="margin-left: 2px" v-if="row.titleName">
               <el-tag effect="dark" size="small" :color="row.titleColor">
                 {{ row.titleName }}
               </el-tag>
@@ -86,7 +86,7 @@
             <span>
               <a
                 @click="goUserACStatus(row.username)"
-                style="color:rgb(87, 163, 243);"
+                style="color: rgb(87, 163, 243)"
                 >{{ row.ac }}</a
               >
             </span>
@@ -132,14 +132,14 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import utils from '@/common/utils';
-import { RULE_TYPE } from '@/common/constants';
-import { mapGetters } from 'vuex';
-import Avatar from 'vue-avatar';
-import Pagination from '@/components/oj/common/Pagination';
+import api from "@/common/api";
+import utils from "@/common/utils";
+import { RULE_TYPE } from "@/common/constants";
+import { mapGetters } from "vuex";
+import Avatar from "vue-avatar";
+const Pagination = () => import("@/components/oj/common/Pagination");
 export default {
-  name: 'acm-rank',
+  name: "acm-rank",
   components: {
     Pagination,
     Avatar,
@@ -155,43 +155,43 @@ export default {
       dataRank: [],
       options: {
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
         },
         legend: {
-          data: ['AC', 'Total'],
+          data: ["AC", "Total"],
         },
         grid: {
-          x: '3%',
-          x2: '3%',
-          left: '8%',
-          right: '8%',
+          x: "3%",
+          x2: "3%",
+          left: "8%",
+          right: "8%",
         },
         toolbox: {
           show: true,
           feature: {
             dataView: { show: true, readOnly: true },
-            magicType: { show: true, type: ['line', 'bar', 'stack'] },
+            magicType: { show: true, type: ["line", "bar", "stack"] },
             saveAsImage: { show: true },
           },
-          right: '8%',
-          top: '5%',
+          right: "8%",
+          top: "5%",
         },
         calculable: true,
         xAxis: [
           {
-            type: 'category',
-            data: ['root'],
+            type: "category",
+            data: ["root"],
             axisLabel: {
               interval: 0,
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'center',
+              align: "center",
               formatter: (value, index) => {
                 if (this.screenWidth < 768) {
                   if (this.isAuthenticated && this.userInfo.username == value) {
                     return utils.breakLongWords(value, 14);
                   } else {
-                    return '';
+                    return "";
                   }
                 } else {
                   return utils.breakLongWords(value, 14);
@@ -202,36 +202,36 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value',
+            type: "value",
             axisLabel: {
               rotate: 50,
               textStyle: {
-                fontSize: '12em',
+                fontSize: "12em",
               },
             },
           },
         ],
         series: [
           {
-            name: this.$i18n.t('m.AC'),
-            type: 'bar',
+            name: this.$i18n.t("m.AC"),
+            type: "bar",
             data: [0],
             itemStyle: {
-              color: '#91c7ae',
+              color: "#91c7ae",
             },
             markPoint: {
-              data: [{ type: 'max', name: 'max' }],
+              data: [{ type: "max", name: "max" }],
             },
           },
           {
-            name: this.$i18n.t('m.Total'),
-            type: 'bar',
+            name: this.$i18n.t("m.Total"),
+            type: "bar",
             data: [0],
             itemStyle: {
-              color: '#6ab0b8',
+              color: "#6ab0b8",
             },
             markPoint: {
-              data: [{ type: 'max', name: 'max' }],
+              data: [{ type: "max", name: "max" }],
             },
           },
         ],
@@ -253,7 +253,7 @@ export default {
   methods: {
     getRankData(page) {
       let bar = this.$refs.chart;
-      bar.showLoading({ maskColor: 'rgba(250, 250, 250, 0.8)' });
+      bar.showLoading({ maskColor: "rgba(250, 250, 250, 0.8)" });
       this.loadingTable = true;
       api
         .getUserRank(page, this.limit, RULE_TYPE.ACM, this.searchUser)
@@ -287,13 +287,13 @@ export default {
     },
     getInfoByUsername(uid, username) {
       this.$router.push({
-        path: '/user-home',
+        path: "/user-home",
         query: { uid, username },
       });
     },
     goUserACStatus(username) {
       this.$router.push({
-        path: '/status',
+        path: "/status",
         query: { username, status: 0 },
       });
     },
@@ -301,13 +301,13 @@ export default {
       return utils.getACRate(ac, total);
     },
     nicknameColor(nickname) {
-      let typeArr = ['', 'success', 'info', 'danger', 'warning'];
+      let typeArr = ["", "success", "info", "danger", "warning"];
       let index = nickname.length % 5;
       return typeArr[index];
     },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'userInfo']),
+    ...mapGetters(["isAuthenticated", "userInfo"]),
   },
 };
 </script>

@@ -1,11 +1,11 @@
 <template>
   <el-row>
-    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px;">
+    <el-col :span="24" style="margin-top: 10px; margin-bottom: 10px">
       <el-card>
         <div slot="header">
-          <span class="panel-title home-title">{{ $t('m.SysNotice') }}</span>
-          <div style="font-size:13px;margin-top: 5px;color: red;">
-            {{ $t('m.Push_System_Notification_Every_Hour') }}
+          <span class="panel-title home-title">{{ $t("m.SysNotice") }}</span>
+          <div style="font-size: 13px; margin-top: 5px; color: red">
+            {{ $t("m.Push_System_Notification_Every_Hour") }}
           </div>
         </div>
         <div class="create">
@@ -14,7 +14,7 @@
             size="small"
             @click="openNoticeDialog(null)"
             icon="el-icon-plus"
-            >{{ $t('m.Create') }}</el-button
+            >{{ $t("m.Create") }}</el-button
           >
         </div>
         <div class="list">
@@ -131,26 +131,26 @@
           <Editor :value.sync="notice.content"></Editor>
         </el-form-item>
         <div class="visible-box">
-          <span>{{ $t('m.Notice_Recipient') }}</span>
+          <span>{{ $t("m.Notice_Recipient") }}</span>
           <span>
             <el-radio v-model="notice.type" label="All">{{
-              $t('m.All_User')
+              $t("m.All_User")
             }}</el-radio>
             <el-radio v-model="notice.type" label="Single" disabled>{{
-              $t('m.Designated_User')
+              $t("m.Designated_User")
             }}</el-radio>
             <el-radio v-model="notice.type" label="Admin" disabled>{{
-              $t('m.All_Admin')
+              $t("m.All_Admin")
             }}</el-radio>
           </span>
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="danger" @click.native="showEditNoticeDialog = false">{{
-          $t('m.Cancel')
+          $t("m.Cancel")
         }}</el-button>
         <el-button type="primary" @click.native="submitNotice">{{
-          $t('m.OK')
+          $t("m.OK")
         }}</el-button>
       </span>
     </el-dialog>
@@ -158,17 +158,17 @@
 </template>
 
 <script>
-import api from '@/common/api';
-import { mapGetters } from 'vuex';
-import Editor from '@/components/admin/Editor.vue';
+import api from "@/common/api";
+import { mapGetters } from "vuex";
+import Editor from "@/components/admin/Editor.vue";
 export default {
-  name: 'notice',
+  name: "notice",
   components: {
     Editor,
   },
   data() {
     return {
-      contestID: '',
+      contestID: "",
       // 显示编辑通知对话框
       showEditNoticeDialog: false,
       // 通知列表
@@ -177,18 +177,18 @@ export default {
       pageSize: 10,
       // 总通知数
       total: 0,
-      mode: 'create',
+      mode: "create",
       // 通知 (new | edit) model
 
       notice: {
         id: null,
-        title: '',
-        content: '',
-        type: '',
-        adminId: '',
+        title: "",
+        content: "",
+        type: "",
+        adminId: "",
       },
       // 对话框标题
-      noticeDialogTitle: 'Edit Notice',
+      noticeDialogTitle: "Edit Notice",
       // 是否显示loading
       loading: false,
       // 当前页码
@@ -214,7 +214,7 @@ export default {
 
     getNoticeList(page) {
       this.loading = true;
-      api.admin_getNoticeList(page, this.pageSize, 'All').then(
+      api.admin_getNoticeList(page, this.pageSize, "All").then(
         (res) => {
           this.loading = false;
           this.total = res.data.data.total;
@@ -231,11 +231,11 @@ export default {
       // 暂时解决 文本编辑器显示异常bug
       setTimeout(() => {
         if (document.createEvent) {
-          let event = document.createEvent('HTMLEvents');
-          event.initEvent('resize', true, true);
+          let event = document.createEvent("HTMLEvents");
+          event.initEvent("resize", true, true);
           window.dispatchEvent(event);
         } else if (document.createEventObject) {
-          window.fireEvent('onresize');
+          window.fireEvent("onresize");
         }
       }, 0);
     },
@@ -246,13 +246,13 @@ export default {
         data = this.notice;
       }
       let funcName =
-        this.mode === 'edit' ? 'admin_updateNotice' : 'admin_createNotice';
+        this.mode === "edit" ? "admin_updateNotice" : "admin_createNotice";
       let requestData = data;
 
       api[funcName](requestData)
         .then((res) => {
           this.showEditNoticeDialog = false;
-          this.$msg.success(this.$i18n.t('m.Post_successfully'));
+          this.$msg.success(this.$i18n.t("m.Post_successfully"));
           this.init();
         })
         .catch();
@@ -260,18 +260,22 @@ export default {
 
     // 删除通知
     deleteNotice(noticeId) {
-      this.$confirm(this.$i18n.t('m.Delete_Notice_Tips'), this.$i18n.t('m.Warning'), {
-        confirmButtonText: this.$i18n.t('m.OK'),
-        cancelButtonText: this.$i18n.t('m.Cancel'),
-        type: 'warning',
-      })
+      this.$confirm(
+        this.$i18n.t("m.Delete_Notice_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          confirmButtonText: this.$i18n.t("m.OK"),
+          cancelButtonText: this.$i18n.t("m.Cancel"),
+          type: "warning",
+        }
+      )
         .then(() => {
           // then 为确定
           this.loading = true;
-          let funcName = 'admin_deleteNotice';
+          let funcName = "admin_deleteNotice";
           api[funcName](noticeId).then((res) => {
             this.loading = true;
-            this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+            this.$msg.success(this.$i18n.t("m.Delete_successfully"));
             this.init();
           });
         })
@@ -284,16 +288,16 @@ export default {
     openNoticeDialog(row) {
       this.showEditNoticeDialog = true;
       if (row !== null) {
-        this.noticeDialogTitle = this.$i18n.t('m.Edit_Notice');
+        this.noticeDialogTitle = this.$i18n.t("m.Edit_Notice");
         this.notice = Object.assign({}, row);
-        this.mode = 'edit';
+        this.mode = "edit";
       } else {
-        this.noticeDialogTitle = this.$i18n.t('m.Create_Notice');
-        this.notice.title = '';
-        this.notice.content = '';
-        this.notice.type = 'All';
+        this.noticeDialogTitle = this.$i18n.t("m.Create_Notice");
+        this.notice.title = "";
+        this.notice.content = "";
+        this.notice.type = "All";
         this.notice.adminId = this.userInfo.uid;
-        this.mode = 'create';
+        this.mode = "create";
       }
     },
   },
@@ -303,7 +307,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(["userInfo"]),
   },
 };
 </script>

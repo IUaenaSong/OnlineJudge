@@ -6,7 +6,7 @@ import utils from '@/common/utils'
 
 Vue.prototype.$http = axios
 
-axios.defaults.timeout = 90000;
+axios.defaults.timeout = 90000
 
 axios.interceptors.request.use(
   config => {
@@ -14,104 +14,104 @@ axios.interceptors.request.use(
     // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
     const token = localStorage.getItem('token')
-    token && (config.headers.Authorization = token);
-    let type = config.url.split("/")[1];
-    if (type === 'admin'){ // 携带请求区别是否为admin
+    token && (config.headers.Authorization = token)
+    let type = config.url.split("/")[1]
+    if (type === 'admin') { // 携带请求区别是否为admin
       config.headers['Url-Type'] = type
-    }else{
+    } else {
       config.headers['Url-Type'] = 'general'
     }
-    return config;
+    return config
   },
   error => {
-    Vue.prototype.$msg.error(error.response.data.msg);
-    return Promise.error(error);
+    Vue.prototype.$msg.error(error.response.data.msg)
+    return Promise.error(error)
   })
 
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
-    if(response.headers['refresh-token']){ // token续约！
-      store.commit('changeUserToken',response.headers['authorization'])
+    if (response.headers['refresh-token']) { // token续约！
+      store.commit('changeUserToken', response.headers['authorization'])
     }
-    if (response.data.status === 200 || response.data.status==undefined) {
-      return Promise.resolve(response);
+    if (response.data.status === 200 || response.data.status == undefined) {
+      return Promise.resolve(response)
     } else {
-      Vue.prototype.$msg.error(response.data.msg);
-      return Promise.reject(response);
+      Vue.prototype.$msg.error(response.data.msg)
+      return Promise.reject(response)
     }
 
   },
   // 服务器状态码不是200的情况
   error => {
     if (error.response) {
-      if(error.response.headers['refresh-token']){ // token续约！！
-        store.commit('changeUserToken',error.response.headers['authorization'])
+      if (error.response.headers['refresh-token']) { // token续约！！
+        store.commit('changeUserToken', error.response.headers['authorization'])
       }
-      if(error.response.data instanceof Blob){ // 如果是文件操作的返回，由后续进行处理
-        return Promise.resolve(error.response);
+      if (error.response.data instanceof Blob) { // 如果是文件操作的返回，由后续进行处理
+        return Promise.resolve(error.response)
       }
       switch (error.response.status) {
         // 401: 未登录 token过期
         // 未登录则跳转登录页面，并携带当前页面的路径
         // 在登录成功后返回当前页面，这一步需要在登录页操作。
         case 401:
-          if(error.response.data.msg){
-            Vue.prototype.$msg.error(error.response.data.msg);
+          if (error.response.data.msg) {
+            Vue.prototype.$msg.error(error.response.data.msg)
           }
-          if(error.response.config.headers['Url-Type'] === 'admin'){
+          if (error.response.config.headers['Url-Type'] === 'admin') {
             router.push("/api/admin/login")
-          }else{
-            store.commit('changeModalStatus', { mode: 'Login', visible: true });
+          } else {
+            store.commit('changeModalStatus', { mode: 'Login', visible: true })
           }
-          store.commit('clearUserInfoAndToken');
-          break;
+          store.commit('clearUserInfoAndToken')
+          break
         // 403
         // 无权限访问或操作的请求
         case 403:
-          if(error.response.data.msg){
-            Vue.prototype.$msg.error(error.response.data.msg);
+          if (error.response.data.msg) {
+            Vue.prototype.$msg.error(error.response.data.msg)
           }
-          break;
+          break
         // 404请求不存在
         case 404:
-          Vue.prototype.$msg.error('查询错误，找不到要请求的资源！');
-          break;
+          Vue.prototype.$msg.error('查询错误，找不到要请求的资源！')
+          break
         // 其他错误，直接抛出错误提示
         default:
-          if(error.response.data){
-            if(error.response.data.msg){
-              Vue.prototype.$msg.error(error.response.data.msg);
-            }else{
-              Vue.prototype.$msg.error("服务器错误，请重新刷新！");
+          if (error.response.data) {
+            if (error.response.data.msg) {
+              Vue.prototype.$msg.error(error.response.data.msg)
+            } else {
+              Vue.prototype.$msg.error("服务器错误，请重新刷新！")
             }
           }
-          break;
+          break
       }
-      return Promise.reject(error);
+      return Promise.reject(error)
     } else { //处理断网，请求没响应
-      Vue.prototype.$msg.error( '与服务器链接出现异常，请稍后再尝试！');
-      return Promise.reject(error);
+      Vue.prototype.$msg.error('与服务器链接出现异常，请稍后再尝试！')
+      return Promise.reject(error)
     }
   }
-);
+)
 
 // 处理oj前台的请求
 const ojApi = {
   // Home页的请求
-  getWebsiteConfig(){
+  getWebsiteConfig() {
     return ajax('/api/get-website-config', 'get', {
     })
   },
-  getHomeCarousel(){
+  getHomeCarousel() {
     return ajax('/api/home-carousel', 'get', {
     })
   },
-  getRecentContests(){
+  getRecentContests() {
     return ajax('/api/get-recent-contest', 'get', {
     })
   },
-  getRecentOtherContests(){
+  getRecentOtherContests() {
     return ajax('/api/get-recent-other-contest', 'get', {
     })
   },
@@ -124,7 +124,7 @@ const ojApi = {
       params
     })
   },
-  getRecent7ACRank(){
+  getRecent7ACRank() {
     return ajax('/api/get-recent-seven-ac-rank', 'get', {
     })
   },
@@ -153,7 +153,7 @@ const ojApi = {
     })
   },
   // 获取验证码
-  getCaptcha(){
+  getCaptcha() {
     return ajax('/api/captcha', 'get')
   },
   // 注册
@@ -167,30 +167,30 @@ const ojApi = {
   },
 
   // 账户的相关操作
-  applyResetPassword (data) {
+  applyResetPassword(data) {
     return ajax('/api/apply-reset-password', 'post', {
       data
     })
   },
-  resetPassword (data) {
+  resetPassword(data) {
     return ajax('/api/reset-password', 'post', {
       data
     })
   },
   // Problem List页的相关请求
-  getProblemTagList (oj) {
-    return ajax('/api/get-all-problem-tags', 'get',{
-      params:{
+  getProblemTagList(oj) {
+    return ajax('/api/get-all-problem-tags', 'get', {
+      params: {
         oj
       }
     })
   },
-  getProblemList (limit, searchParams) {
+  getProblemList(limit, searchParams) {
     let params = {
       limit
     }
     Object.keys(searchParams).forEach((element) => {
-      if (searchParams[element]!==''&&searchParams[element]!==null&&searchParams[element]!==undefined) {
+      if (searchParams[element] !== '' && searchParams[element] !== null && searchParams[element] !== undefined) {
         params[element] = searchParams[element]
       }
     })
@@ -200,9 +200,9 @@ const ojApi = {
   },
 
   // 查询当前登录用户对题目的提交状态
-  getUserProblemStatus(pidList,isContestProblemList,isExamProblemList,cid,eid){
-    return ajax("/api/get-user-problem-status",'post',{
-      data:{
+  getUserProblemStatus(pidList, isContestProblemList, isExamProblemList, cid, eid) {
+    return ajax("/api/get-user-problem-status", 'post', {
+      data: {
         pidList,
         isContestProblemList,
         isExamProblemList,
@@ -212,36 +212,36 @@ const ojApi = {
     })
   },
   // 随机来一题
-  pickone () {
+  pickone() {
     return ajax('/api/get-random-problem', 'get')
   },
 
   // Problem详情页的相关请求
-  getProblem(problemId){
-    return ajax('/api/get-problem-detail','get',{
-      params:{
+  getProblem(problemId) {
+    return ajax('/api/get-problem-detail', 'get', {
+      params: {
         problemId
       }
     })
   },
 
   // 获取题目代码模板
-  getProblemCodeTemplate(pid){
-    return ajax('/api/get-problem-code-template','get',{
-      params:{
+  getProblemCodeTemplate(pid) {
+    return ajax('/api/get-problem-code-template', 'get', {
+      params: {
         pid
       }
     })
   },
 
   // 提交评测模块
-  submitCode (data) {
+  submitCode(data) {
     return ajax('/api/submit-problem-judge', 'post', {
       data
     })
   },
   // 获取单个提交的信息
-  getSubmission (submitId) {
+  getSubmission(submitId) {
     return ajax('/api/get-submission-detail', 'get', {
       params: {
         submitId
@@ -250,7 +250,7 @@ const ojApi = {
   },
 
   // 获取单个提交的全部测试点详情
-  getAllCaseResult (submitId) {
+  getAllCaseResult(submitId) {
     return ajax('/api/get-all-case-result', 'get', {
       params: {
         submitId,
@@ -258,33 +258,33 @@ const ojApi = {
     })
   },
   // 远程虚拟判题失败进行重新提交
-  reSubmitRemoteJudge(submitId){
-    return ajax("/api/resubmit",'get',{
-      params:{
+  reSubmitRemoteJudge(submitId) {
+    return ajax("/api/resubmit", 'get', {
+      params: {
         submitId,
       }
     })
   },
   // 更新提交详情
-  updateSubmission(data){
+  updateSubmission(data) {
     return ajax('/api/submission', 'put', {
-     data
+      data
     })
   },
-  getSubmissionList (limit, params) {
+  getSubmissionList(limit, params) {
     params.limit = limit
     return ajax('/api/get-submission-list', 'get', {
       params
     })
   },
-  checkSubmissonsStatus(submitIds,cid){
+  checkSubmissonsStatus(submitIds, cid) {
     return ajax('/api/check-submissions-status', 'post', {
-      data:{submitIds,cid:0,eid:0}
+      data: { submitIds, cid: 0, eid: 0 }
     })
   },
-  checkContestSubmissonsStatus(submitIds,cid){
+  checkContestSubmissonsStatus(submitIds, cid) {
     return ajax('/api/check-contest-submissions-status', 'post', {
-      data:{submitIds, cid, eid: 0}
+      data: { submitIds, cid, eid: 0 }
     })
   },
 
@@ -305,63 +305,63 @@ const ojApi = {
   // ------------------------------------训练模块的请求---------------------------------------------
 
   // 获取训练分类列表
-  getTrainingCategoryList(){
+  getTrainingCategoryList() {
     return ajax('/api/get-training-category', 'get')
   },
 
   // 获取训练列表
-  getTrainingList(currentPage,limit,query){
+  getTrainingList(currentPage, limit, query) {
     let params = {
       currentPage,
       limit
     }
-    if(query!==undefined){
+    if (query !== undefined) {
       Object.keys(query).forEach((element) => {
         if (query[element]) {
           params[element] = query[element]
         }
       })
     }
-    return ajax('/api/get-training-list','get',{
+    return ajax('/api/get-training-list', 'get', {
       params: params
     })
   },
 
   // 获取训练详情
-  getTraining(tid){
-    return ajax('/api/get-training-detail','get',{
-      params: {tid}
+  getTraining(tid) {
+    return ajax('/api/get-training-detail', 'get', {
+      params: { tid }
     })
   },
-   // 注册私有训练
-  registerTraining(tid, password){
-    return ajax('/api/register-training','post',{
-      data:{
+  // 注册私有训练
+  registerTraining(tid, password) {
+    return ajax('/api/register-training', 'post', {
+      data: {
         tid,
         password
       }
     })
   },
   // 获取注册训练权限
-  getTrainingAccess(tid){
-    return ajax('/api/get-training-access','get',{
-      params: {tid}
+  getTrainingAccess(tid) {
+    return ajax('/api/get-training-access', 'get', {
+      params: { tid }
     })
   },
   // 获取训练题目列表
-  getTrainingProblemList(tid){
-    return ajax('/api/get-training-problem-list','get',{
-      params: {tid}
+  getTrainingProblemList(tid) {
+    return ajax('/api/get-training-problem-list', 'get', {
+      params: { tid }
     })
   },
   // 获取训练题目详情
-  getTrainingProblem(displayId,cid){
-    return ajax('/api/get-training-problem-details','get',{
-      params: {displayId,cid}
+  getTrainingProblem(displayId, cid) {
+    return ajax('/api/get-training-problem-details', 'get', {
+      params: { displayId, cid }
     })
   },
   // 获取训练记录榜单
-  getTrainingRank(params){
+  getTrainingRank(params) {
     return ajax('/api/get-training-rank', 'get', {
       params
     })
@@ -370,84 +370,84 @@ const ojApi = {
   // ------------------------------------------------------------------------------------------------
 
   // 比赛列表页的请求
-  getContestList(currentPage,limit,query){
+  getContestList(currentPage, limit, query) {
     let params = {
       currentPage,
       limit
     }
-    if(query!==undefined){
+    if (query !== undefined) {
       Object.keys(query).forEach((element) => {
         if (query[element]) {
           params[element] = query[element]
         }
       })
     }
-    return ajax('/api/get-contest-list','get',{
+    return ajax('/api/get-contest-list', 'get', {
       params: params
     })
   },
 
   // 比赛详情的请求
-  getContest(cid){
-    return ajax('/api/get-contest-info','get',{
-      params: {cid}
+  getContest(cid) {
+    return ajax('/api/get-contest-info', 'get', {
+      params: { cid }
     })
   },
   // 获取赛外榜单比赛的信息
-  getScoreBoardContestInfo(cid){
-    return ajax('/api/get-contest-outsize-info','get',{
-      params: {cid}
+  getScoreBoardContestInfo(cid) {
+    return ajax('/api/get-contest-outsize-info', 'get', {
+      params: { cid }
     })
   },
   // 提供比赛外榜排名数据
-  getContestOutsideScoreboard(data){
-    return ajax('/api/get-contest-outside-scoreboard','post',{
+  getContestOutsideScoreboard(data) {
+    return ajax('/api/get-contest-outside-scoreboard', 'post', {
       data
     })
   },
   // 注册私有比赛权限
-  registerContest(cid,password){
-    return ajax('/api/register-contest','post',{
-      data:{
+  registerContest(cid, password) {
+    return ajax('/api/register-contest', 'post', {
+      data: {
         cid,
         password
       }
     })
   },
   // 获取注册比赛权限
-  getContestAccess(cid){
-    return ajax('/api/get-contest-access','get',{
-      params: {cid}
+  getContestAccess(cid) {
+    return ajax('/api/get-contest-access', 'get', {
+      params: { cid }
     })
   },
   // 获取比赛题目列表
-  getContestProblemList(cid){
-    return ajax('/api/get-contest-problem','get',{
-      params: {cid}
+  getContestProblemList(cid) {
+    return ajax('/api/get-contest-problem', 'get', {
+      params: { cid }
     })
   },
   // 获取比赛题目详情
-  getContestProblem(displayId,cid){
-    return ajax('/api/get-contest-problem-details','get',{
-      params: {displayId,cid}
+  getContestProblem(displayId, cid) {
+    return ajax('/api/get-contest-problem-details', 'get', {
+      params: { displayId, cid }
     })
   },
   // 获取比赛提交列表
-  getContestSubmissionList (limit, params) {
+  getContestSubmissionList(limit, params) {
     params.limit = limit
     return ajax('/api/contest-submissions', 'get', {
       params
     })
   },
 
-  getContestRank(data){
+  getContestRank(data) {
     return ajax('/api/get-contest-rank', 'post', {
       data
     })
   },
 
   // 获取比赛公告列表
-  getContestAnnouncementList(currentPage,limit,cid){
+  getContestAnnouncementList(currentPage, limit, cid) {
     let params = {
       currentPage,
       limit,
@@ -459,58 +459,58 @@ const ojApi = {
   },
 
   // 获取比赛未阅读公告列表
-  getContestUserNotReadAnnouncement(data){
+  getContestUserNotReadAnnouncement(data) {
     return ajax('/api/get-contest-not-read-announcement', 'post', {
       data
     })
   },
 
   // 获取acm比赛ac信息
-  getACMACInfo(params){
+  getACMACInfo(params) {
     return ajax('/api/get-contest-ac-info', 'get', {
       params
     })
   },
   // 确认ac信息
-  updateACInfoCheckedStatus(data){
+  updateACInfoCheckedStatus(data) {
     return ajax('/api/check-contest-ac-info', 'put', {
       data
     })
   },
 
   // 提交打印文本
-  submitPrintText(data){
+  submitPrintText(data) {
     return ajax('/api/submit-print-text', 'post', {
       data
     })
   },
 
   // 获取比赛打印文本列表
-  getContestPrintList(params){
+  getContestPrintList(params) {
     return ajax('/api/get-contest-print', 'get', {
       params
     })
   },
 
   // 更新比赛打印的状态
-  updateContestPrintStatus(params){
+  updateContestPrintStatus(params) {
     return ajax('/api/check-contest-print-status', 'put', {
       params
     })
   },
 
   // 比赛题目对应的提交重判
-  ContestRejudgeProblem(params){
+  ContestRejudgeProblem(params) {
     return ajax('/api/admin/judge/rejudge-contest-problem', 'get', {
       params
     })
   },
 
   // ACM赛制或OI赛制的排行榜
-  getUserRank(currentPage,limit,type,searchUser){
-    return ajax('/api/get-rank-list','get',{
+  getUserRank(currentPage, limit, type, searchUser) {
+    return ajax('/api/get-rank-list', 'get', {
       params: {
-       currentPage,
+        currentPage,
         limit,
         type,
         searchUser
@@ -523,9 +523,9 @@ const ojApi = {
       params: { eid }
     })
   },
-  registerExam(eid, password){
+  registerExam(eid, password) {
     return ajax('/api/register-exam', 'post', {
-      data:{
+      data: {
         eid,
         password
       }
@@ -564,16 +564,16 @@ const ojApi = {
       params: { displayId, eid }
     })
   },
-  getExamSubmissionList (limit, params) {
+  getExamSubmissionList(limit, params) {
     params.limit = limit
     return ajax('/api/get-exam-submission-list', 'get', {
       params
     })
   },
-  
+
   checkExamSubmissonsStatus(submitIds, eid) {
     return ajax('/api/check-exam-submissions-status', 'post', {
-      data:{submitIds, cid: 0, eid}
+      data: { submitIds, cid: 0, eid }
     })
   },
 
@@ -608,39 +608,39 @@ const ojApi = {
       params: { eid }
     })
   },
-  ExamRejudgeProblem(params){
+  ExamRejudgeProblem(params) {
     return ajax('/api/admin/judge/rejudge-exam-problem', 'get', {
       params
     })
   },
 
   // about页部分请求
-  getAllLanguages(all){
-    return ajax("/api/languages",'get',{
-      params:{
+  getAllLanguages(all) {
+    return ajax("/api/languages", 'get', {
+      params: {
         all
       }
     })
   },
   // userhome页的请求
-  getUserInfo(uid,username){
-    return ajax("/api/get-user-home-info",'get',{
-      params:{uid,username}
+  getUserInfo(uid, username) {
+    return ajax("/api/get-user-home-info", 'get', {
+      params: { uid, username }
     })
   },
   // setting页的请求
-  changePassword(data){
-    return ajax("/api/change-password",'post',{
+  changePassword(data) {
+    return ajax("/api/change-password", 'post', {
       data
     })
   },
-  changeEmail(data){
-    return ajax("/api/change-email",'post',{
+  changeEmail(data) {
+    return ajax("/api/change-email", 'post', {
       data
     })
   },
-  changeMobile(data){
-    return ajax("/api/change-mobile",'post',{
+  changeMobile(data) {
+    return ajax("/api/change-mobile", 'post', {
       data
     })
   },
@@ -660,94 +660,94 @@ const ojApi = {
       params
     })
   },
-  changeUserInfo(data){
-    return ajax("/api/change-userInfo",'post',{
+  changeUserInfo(data) {
+    return ajax("/api/change-userInfo", 'post', {
       data
     })
   },
-  
+
   // 讨论页相关请求
-  getCategoryList(){
-    return ajax("/api/discussion-category",'get')
+  getCategoryList() {
+    return ajax("/api/discussion-category", 'get')
   },
-  
-  getDiscussionList(limit,searchParams){
+
+  getDiscussionList(limit, searchParams) {
     let params = {
       limit
     }
     Object.keys(searchParams).forEach((element) => {
-      if (searchParams[element]!==''&&searchParams[element]!==null&&searchParams[element]!==undefined) {
+      if (searchParams[element] !== '' && searchParams[element] !== null && searchParams[element] !== undefined) {
         params[element] = searchParams[element]
       }
     })
-    return ajax("/api/get-discussion-list",'get',{
+    return ajax("/api/get-discussion-list", 'get', {
       params
     })
   },
 
-  getDiscussion(did){
-    return ajax("/api/get-discussion-detail",'get',{
-      params:{
+  getDiscussion(did) {
+    return ajax("/api/get-discussion-detail", 'get', {
+      params: {
         did
       }
     })
   },
 
-  addDiscussion(data){
-    return ajax("/api/discussion",'post',{
+  addDiscussion(data) {
+    return ajax("/api/discussion", 'post', {
       data
     })
   },
 
-  updateDiscussion(data){
-    return ajax("/api/discussion",'put',{
+  updateDiscussion(data) {
+    return ajax("/api/discussion", 'put', {
       data
     })
   },
 
-  deleteDiscussion(did){
-    return ajax("/api/discussion",'delete',{
-      params:{
+  deleteDiscussion(did) {
+    return ajax("/api/discussion", 'delete', {
+      params: {
         did
       }
     })
   },
 
-  toLikeDiscussion(did,toLike){
-    return ajax("/api/discussion-like",'get',{
-      params:{
+  toLikeDiscussion(did, toLike) {
+    return ajax("/api/discussion-like", 'get', {
+      params: {
         did,
         toLike
       }
     })
   },
-  toReportDiscussion(data){
-    return ajax("/api/discussion-report",'post',{
+  toReportDiscussion(data) {
+    return ajax("/api/discussion-report", 'post', {
       data
     })
   },
 
-  getCommentList(params){
-    return ajax("/api/comments",'get',{
+  getCommentList(params) {
+    return ajax("/api/comments", 'get', {
       params
     })
   },
 
-  addComment(data){
-    return ajax("/api/comment",'post',{
+  addComment(data) {
+    return ajax("/api/comment", 'post', {
       data
     })
   },
 
-  deleteComment(data){
-    return ajax("/api/comment",'delete',{
+  deleteComment(data) {
+    return ajax("/api/comment", 'delete', {
       data
     })
   },
 
-  toLikeComment(cid,toLike,sourceId,sourceType){
-    return ajax("/api/comment-like",'get',{
-      params:{
+  toLikeComment(cid, toLike, sourceId, sourceType) {
+    return ajax("/api/comment-like", 'get', {
+      params: {
         cid,
         toLike,
         sourceId,
@@ -756,21 +756,21 @@ const ojApi = {
     })
   },
 
-  addReply(data){
-    return ajax("/api/reply",'post',{
+  addReply(data) {
+    return ajax("/api/reply", 'post', {
       data
     })
   },
 
-  deleteReply(data){
-    return ajax("/api/reply",'delete',{
+  deleteReply(data) {
+    return ajax("/api/reply", 'delete', {
       data
     })
   },
 
-  getAllReply(commentId,cid){
-    return ajax("/api/reply",'get',{
-      params:{
+  getAllReply(commentId, cid) {
+    return ajax("/api/reply", 'get', {
+      params: {
         commentId,
         cid
       }
@@ -901,7 +901,7 @@ const ojApi = {
     })
   },
 
-  getGroupAdminProblemList(currentPage, limit, gid){
+  getGroupAdminProblemList(currentPage, limit, gid) {
     return ajax('/api/group/get-admin-problem-list', 'get', {
       params: { currentPage, limit, gid }
     })
@@ -930,23 +930,23 @@ const ojApi = {
       params: { pid }
     })
   },
-  
+
   getGroupProblemCases(pid, isUpload) {
     return ajax("/api/group/get-problem-cases", 'get', {
       params: { pid, isUpload }
     })
   },
   getGroupProblemTags(pid) {
-    return ajax('/api/get-problem-tags', 'get',{
-      params:{
+    return ajax('/api/get-problem-tags', 'get', {
+      params: {
         pid
       }
     })
   },
 
-  getGroupProblemTagList (gid) {
-    return ajax('/api/group/get-all-problem-tags', 'get',{
-      params:{
+  getGroupProblemTagList(gid) {
+    return ajax('/api/group/get-all-problem-tags', 'get', {
+      params: {
         gid
       }
     })
@@ -979,7 +979,7 @@ const ojApi = {
     })
   },
 
-  getGroupAdminQuestionList(currentPage, limit, type, gid){
+  getGroupAdminQuestionList(currentPage, limit, type, gid) {
     return ajax('/api/group/get-admin-question-list', 'get', {
       params: { currentPage, limit, type, gid }
     })
@@ -1023,8 +1023,8 @@ const ojApi = {
   },
 
   getGroupAdminTrainingList(currentPage, limit, gid) {
-    return ajax('/api/group/get-admin-training-list','get', {
-      params: {currentPage, limit, gid}
+    return ajax('/api/group/get-admin-training-list', 'get', {
+      params: { currentPage, limit, gid }
     })
   },
 
@@ -1041,7 +1041,7 @@ const ojApi = {
   },
 
   updateGroupTraining(data) {
-    return ajax("/api/group/training",'put',{
+    return ajax("/api/group/training", 'put', {
       data
     })
   },
@@ -1054,7 +1054,7 @@ const ojApi = {
 
   changeGroupTrainingStatus(tid, status) {
     return ajax("/api/group/change-training-status", 'put', {
-      params:{ tid, status }
+      params: { tid, status }
     })
   },
 
@@ -1065,7 +1065,7 @@ const ojApi = {
         params[element] = query[element]
       }
     })
-    return ajax("/api/group/get-training-problem-list",'get',{
+    return ajax("/api/group/get-training-problem-list", 'get', {
       params: params
     })
   },
@@ -1077,8 +1077,8 @@ const ojApi = {
   },
 
   deleteGroupTrainingProblem(pid, tid) {
-    return ajax("/api/group/training-problem",'delete', {
-      params:{ pid, tid }
+    return ajax("/api/group/training-problem", 'delete', {
+      params: { pid, tid }
     })
   },
 
@@ -1090,20 +1090,20 @@ const ojApi = {
 
   addGroupTrainingProblemFromGroup(problemId, tid) {
     return ajax("/api/group/add-training-problem-from-group", 'post', {
-      params:{ problemId, tid }
+      params: { problemId, tid }
     })
   },
 
   //Group Contest
   getGroupContestList(currentPage, limit, gid) {
     return ajax('/api/group/get-contest-list', 'get', {
-      params: {currentPage, limit, gid}
+      params: { currentPage, limit, gid }
     })
   },
 
   getGroupAdminContestList(currentPage, limit, gid) {
-    return ajax('/api/group/get-admin-contest-list','get', {
-      params: {currentPage, limit, gid}
+    return ajax('/api/group/get-admin-contest-list', 'get', {
+      params: { currentPage, limit, gid }
     })
   },
 
@@ -1120,20 +1120,20 @@ const ojApi = {
   },
 
   updateGroupContest(data) {
-    return ajax("/api/group/contest",'put',{
+    return ajax("/api/group/contest", 'put', {
       data
     })
   },
 
   deleteGroupContest(cid) {
     return ajax("/api/group/contest", 'delete', {
-      params:{ cid }
+      params: { cid }
     })
   },
 
   changeGroupContestVisible(cid, visible) {
     return ajax("/api/group/change-contest-visible", 'put', {
-      params:{ cid, visible }
+      params: { cid, visible }
     })
   },
 
@@ -1144,7 +1144,7 @@ const ojApi = {
         params[element] = query[element]
       }
     })
-    return ajax("/api/group/get-contest-problem-list",'get',{
+    return ajax("/api/group/get-contest-problem-list", 'get', {
       params: params
     })
   },
@@ -1157,7 +1157,7 @@ const ojApi = {
 
   getGroupContestProblem(pid, cid) {
     return ajax("/api/group/contest-problem", 'get', {
-      params:{ pid, cid }
+      params: { pid, cid }
     })
   },
 
@@ -1168,8 +1168,8 @@ const ojApi = {
   },
 
   deleteGroupContestProblem(pid, cid) {
-    return ajax("/api/group/contest-problem",'delete', {
-      params:{ pid, cid }
+    return ajax("/api/group/contest-problem", 'delete', {
+      params: { pid, cid }
     })
   },
 
@@ -1181,7 +1181,7 @@ const ojApi = {
 
   addGroupContestProblemFromGroup(problemId, cid, displayId) {
     return ajax("/api/group/add-contest-problem-from-group", 'post', {
-      params:{ problemId, cid, displayId }
+      params: { problemId, cid, displayId }
     })
   },
 
@@ -1212,13 +1212,13 @@ const ojApi = {
   //Group Exam
   getGroupExamList(currentPage, limit, gid) {
     return ajax('/api/group/get-exam-list', 'get', {
-      params: {currentPage, limit, gid}
+      params: { currentPage, limit, gid }
     })
   },
 
   getGroupAdminExamList(currentPage, limit, gid) {
-    return ajax('/api/group/get-admin-exam-list','get', {
-      params: {currentPage, limit, gid}
+    return ajax('/api/group/get-admin-exam-list', 'get', {
+      params: { currentPage, limit, gid }
     })
   },
 
@@ -1235,20 +1235,20 @@ const ojApi = {
   },
 
   updateGroupExam(data) {
-    return ajax("/api/group/exam",'put',{
+    return ajax("/api/group/exam", 'put', {
       data
     })
   },
 
   deleteGroupExam(eid) {
     return ajax("/api/group/exam", 'delete', {
-      params:{ eid }
+      params: { eid }
     })
   },
 
   changeGroupExamVisible(eid, visible) {
     return ajax("/api/group/change-exam-visible", 'put', {
-      params:{ eid, visible }
+      params: { eid, visible }
     })
   },
 
@@ -1259,7 +1259,7 @@ const ojApi = {
         params[element] = query[element]
       }
     })
-    return ajax("/api/group/get-exam-problem-list",'get',{
+    return ajax("/api/group/get-exam-problem-list", 'get', {
       params: params
     })
   },
@@ -1272,7 +1272,7 @@ const ojApi = {
 
   getGroupExamProblem(pid, eid) {
     return ajax("/api/group/exam-problem", 'get', {
-      params:{ pid, eid }
+      params: { pid, eid }
     })
   },
 
@@ -1283,8 +1283,8 @@ const ojApi = {
   },
 
   deleteGroupExamProblem(pid, eid) {
-    return ajax("/api/group/exam-problem",'delete', {
-      params:{ pid, eid }
+    return ajax("/api/group/exam-problem", 'delete', {
+      params: { pid, eid }
     })
   },
 
@@ -1296,7 +1296,7 @@ const ojApi = {
 
   addGroupExamProblemFromGroup(problemId, eid, displayId) {
     return ajax("/api/group/add-exam-problem-from-group", 'post', {
-      params:{ problemId, eid, displayId }
+      params: { problemId, eid, displayId }
     })
   },
 
@@ -1307,7 +1307,7 @@ const ojApi = {
         params[element] = query[element]
       }
     })
-    return ajax("/api/group/get-exam-question-list",'get',{
+    return ajax("/api/group/get-exam-question-list", 'get', {
       params: params
     })
   },
@@ -1320,7 +1320,7 @@ const ojApi = {
 
   getGroupExamQuestion(qid, eid) {
     return ajax("/api/group/exam-question", 'get', {
-      params:{ qid, eid }
+      params: { qid, eid }
     })
   },
 
@@ -1331,8 +1331,8 @@ const ojApi = {
   },
 
   deleteGroupExamQuestion(qid, eid) {
-    return ajax("/api/group/exam-question",'delete', {
-      params:{ qid, eid }
+    return ajax("/api/group/exam-question", 'delete', {
+      params: { qid, eid }
     })
   },
 
@@ -1344,10 +1344,10 @@ const ojApi = {
 
 
   // Group Rank
-  getGroupRankList(currentPage, limit, gid, type, searchUser){
-    return ajax('/api/group/get-rank-list','get', {
+  getGroupRankList(currentPage, limit, gid, type, searchUser) {
+    return ajax('/api/group/get-rank-list', 'get', {
       params: {
-       currentPage,
+        currentPage,
         limit,
         gid,
         type,
@@ -1389,74 +1389,74 @@ const ojApi = {
 
   // 站内消息
 
-  getUnreadMsgCount(){
-    return ajax("/api/msg/unread",'get')
+  getUnreadMsgCount() {
+    return ajax("/api/msg/unread", 'get')
   },
 
-  getMsgList(routerName,searchParams){
-    let params ={};
+  getMsgList(routerName, searchParams) {
+    let params = {}
     Object.keys(searchParams).forEach((element) => {
-      if (searchParams[element]!==''&&searchParams[element]!==null&&searchParams[element]!==undefined) {
+      if (searchParams[element] !== '' && searchParams[element] !== null && searchParams[element] !== undefined) {
         params[element] = searchParams[element]
       }
     })
-    switch(routerName){
+    switch (routerName) {
       case "DiscussMsg":
-        return ajax("/api/msg/comment",'get',{
+        return ajax("/api/msg/comment", 'get', {
           params
-        });
+        })
       case "ReplyMsg":
-        return ajax("/api/msg/reply",'get',{
+        return ajax("/api/msg/reply", 'get', {
           params
-        });
+        })
       case "LikeMsg":
-        return ajax("/api/msg/like",'get',{
+        return ajax("/api/msg/like", 'get', {
           params
-        });
+        })
       case "SysMsg":
-        return ajax("/api/msg/sys",'get',{
+        return ajax("/api/msg/sys", 'get', {
           params
-      });
+        })
       case "MineMsg":
-        return ajax("/api/msg/mine",'get',{
+        return ajax("/api/msg/mine", 'get', {
           params
-      });
+        })
     }
   },
 
-  cleanMsg(routerName,id){
-    let params ={};
-    if(id){
-      params.id=id;
+  cleanMsg(routerName, id) {
+    let params = {}
+    if (id) {
+      params.id = id
     }
-    switch(routerName){
+    switch (routerName) {
       case "DiscussMsg":
-        params.type = 'Discuss';
-        break;
+        params.type = 'Discuss'
+        break
       case "ReplyMsg":
-        params.type = 'Reply';
-        break;
+        params.type = 'Reply'
+        break
       case "LikeMsg":
-        params.type = 'Like';
-        break;
+        params.type = 'Like'
+        break
       case "SysMsg":
-        params.type = 'Sys';
-        break;
+        params.type = 'Sys'
+        break
       case "MineMsg":
-        params.type = 'Mine';
-        break;
+        params.type = 'Mine'
+        break
     }
-    return ajax("/api/msg/clean",'delete',{
+    return ajax("/api/msg/clean", 'delete', {
       params
-    });
+    })
   }
-  
+
 }
 
 // 处理admin后台管理的请求
 const adminApi = {
   // 登录
-  admin_login (username, password) {
+  admin_login(username, password) {
     return ajax('/api/admin/login', 'post', {
       data: {
         username,
@@ -1464,29 +1464,29 @@ const adminApi = {
       }
     })
   },
-  admin_logout () {
+  admin_logout() {
     return ajax('/api/admin/logout', 'get')
   },
-  admin_getDashboardInfo () {
+  admin_getDashboardInfo() {
     return ajax('/api/admin/dashboard/get-dashboard-info', 'get')
   },
-  getSessions (data) {
-    return ajax('/api/admin/dashboard/get-sessions', 'post',{
+  getSessions(data) {
+    return ajax('/api/admin/dashboard/get-sessions', 'post', {
       data
     })
   },
   //获取数据后台服务和nacos相关详情
-  admin_getGeneralSystemInfo(){
-    return ajax('/api/admin/config/get-service-info','get')
+  admin_getGeneralSystemInfo() {
+    return ajax('/api/admin/config/get-service-info', 'get')
   },
 
-  getJudgeServer () {
+  getJudgeServer() {
     return ajax('/api/admin/config/get-judge-service-info', 'get')
   },
 
   // 获取用户列表
-  admin_getUserList (currentPage, limit, keyword, onlyAdmin) {
-    let params = {currentPage, limit}
+  admin_getUserList(currentPage, limit, keyword, onlyAdmin) {
+    let params = { currentPage, limit }
     if (keyword) {
       params.keyword = keyword
     }
@@ -1496,30 +1496,30 @@ const adminApi = {
     })
   },
   // 编辑用户
-  admin_editUser (data) {
+  admin_editUser(data) {
     return ajax('/api/admin/user/edit-user', 'put', {
       data
     })
   },
-  admin_deleteUsers (ids) {
+  admin_deleteUsers(ids) {
     return ajax('/api/admin/user/delete-user', 'delete', {
-      data:{ids}
+      data: { ids }
     })
   },
-  admin_importUsers (users) {
+  admin_importUsers(users) {
     return ajax('/api/admin/user/insert-batch-user', 'post', {
       data: {
         users
       }
     })
   },
-  admin_generateUser (data) {
+  admin_generateUser(data) {
     return ajax('/api/admin/user/generate-user', 'post', {
       data
     })
   },
-  admin_getAuthList (currentPage, limit, keyword) {
-    let params = {currentPage, limit}
+  admin_getAuthList(currentPage, limit, keyword) {
+    let params = { currentPage, limit }
     if (keyword) {
       params.keyword = keyword
     }
@@ -1527,25 +1527,25 @@ const adminApi = {
       params: params
     })
   },
-  admin_createAuth (data) {
+  admin_createAuth(data) {
     return ajax('/api/admin/auth', 'post', {
       data
     })
   },
-  admin_updateAuth (data) {
+  admin_updateAuth(data) {
     return ajax('/api/admin/auth', 'put', {
       data
     })
   },
-  admin_deleteAuth (aid) {
+  admin_deleteAuth(aid) {
     return ajax('/api/admin/auth', 'delete', {
       params: {
         aid
       }
     })
   },
-  admin_getRoleAuthList (currentPage, limit, keyword, rid) {
-    let params = {currentPage, limit, rid}
+  admin_getRoleAuthList(currentPage, limit, keyword, rid) {
+    let params = { currentPage, limit, rid }
     if (keyword) {
       params.keyword = keyword
     }
@@ -1558,7 +1558,7 @@ const adminApi = {
       data
     })
   },
-  admin_deleteRoleAuth (aid, rid) {
+  admin_deleteRoleAuth(aid, rid) {
     return ajax('/api/admin/role/auth', 'delete', {
       params: {
         aid,
@@ -1567,7 +1567,7 @@ const adminApi = {
     })
   },
   // 获取公告列表
-  admin_getAnnouncementList (currentPage, limit) {
+  admin_getAnnouncementList(currentPage, limit) {
     return ajax('/api/admin/announcement', 'get', {
       params: {
         currentPage,
@@ -1576,7 +1576,7 @@ const adminApi = {
     })
   },
   // 删除公告
-  admin_deleteAnnouncement (aid) {
+  admin_deleteAnnouncement(aid) {
     return ajax('/api/admin/announcement', 'delete', {
       params: {
         aid
@@ -1584,20 +1584,20 @@ const adminApi = {
     })
   },
   // 修改公告
-  admin_updateAnnouncement (data) {
+  admin_updateAnnouncement(data) {
     return ajax('/api/admin/announcement', 'put', {
       data
     })
   },
   // 添加公告
-  admin_createAnnouncement (data) {
+  admin_createAnnouncement(data) {
     return ajax('/api/admin/announcement', 'post', {
       data
     })
   },
 
   // 获取公告列表
-  admin_getNoticeList (currentPage, limit,type) {
+  admin_getNoticeList(currentPage, limit, type) {
     return ajax('/api/admin/msg/notice', 'get', {
       params: {
         currentPage,
@@ -1607,7 +1607,7 @@ const adminApi = {
     })
   },
   // 删除公告
-  admin_deleteNotice (id) {
+  admin_deleteNotice(id) {
     return ajax('/api/admin/msg/notice', 'delete', {
       params: {
         id
@@ -1615,93 +1615,104 @@ const adminApi = {
     })
   },
   // 修改公告
-  admin_updateNotice (data) {
+  admin_updateNotice(data) {
     return ajax('/api/admin/msg/notice', 'put', {
       data
     })
   },
   // 添加公告
-  admin_createNotice (data) {
+  admin_createNotice(data) {
     return ajax('/api/admin/msg/notice', 'post', {
       data
     })
   },
 
   // 系统配置
-  admin_getSMTPConfig () {
+  admin_getSMTPConfig() {
     return ajax('/api/admin/config/get-email-config', 'get')
   },
-  admin_getMobileConfig () {
+  admin_getMobileConfig() {
     return ajax('/api/admin/config/get-mobile-config', 'get')
   },
-  admin_editSMTPConfig (data) {
+  admin_editSMTPConfig(data) {
     return ajax('/api/admin/config/set-email-config', 'put', {
       data
     })
   },
-  admin_editMobileConfig (data) {
+  admin_editMobileConfig(data) {
     return ajax('/api/admin/config/set-mobile-config', 'put', {
       data
     })
   },
 
-  admin_deleteHomeCarousel(id){
-    return ajax('/api/admin/config/home-carousel', 'delete',  {
-      params:{
+  admin_deleteHomeCarousel(id) {
+    return ajax('/api/admin/config/home-carousel', 'delete', {
+      params: {
         id
       }
     })
   },
 
-  admin_testSMTPConfig (email) {
+  admin_testSMTPConfig(email) {
     return ajax('/api/admin/config/test-email', 'post', {
       data: {
         email
       }
     })
   },
-  admin_getWebsiteConfig () {
+  admin_getWebsiteConfig() {
     return ajax('/api/admin/config/get-web-config', 'get')
   },
-  admin_editWebsiteConfig (data) {
+  admin_editWebsiteConfig(data) {
     return ajax('/api/admin/config/set-web-config', 'put', {
       data
     })
   },
-  admin_getDataBaseConfig(){
+  admin_getDataBaseConfig() {
     return ajax('/api/admin/config/get-db-and-redis-config', 'get')
   },
-  admin_editDataBaseConfig(data){
+  admin_editDataBaseConfig(data) {
     return ajax('/api/admin/config/set-db-and-redis-config', 'put', {
       data
     })
   },
 
-  getLanguages (pid,all) {
-    return ajax('/api/languages', 'get',{
-      params:{
+  // 系统开关
+  admin_getSwitchConfig() {
+    return ajax('/api/admin/switch/info', 'get')
+  },
+
+  admin_saveSwitchConfig(data) {
+    return ajax('/api/admin/switch/update', 'put', {
+      data
+    })
+  },
+
+  getLanguages(pid, all) {
+    return ajax('/api/languages', 'get', {
+      params: {
         pid,
         all
       }
     })
   },
-  getProblemLanguages (pid) {
-    return ajax('/api/get-problem-languages', 'get',{
+  getProblemLanguages(pid) {
+    return ajax('/api/get-problem-languages', 'get', {
       params: {
         pid: pid
       }
     })
   },
 
-  admin_getProblemList (params) {
+  admin_getProblemList(params) {
     params = utils.filterEmptyValue(params)
     return ajax('/api/admin/problem/get-problem-list', 'get', {
       params
     })
   },
 
-  admin_addRemoteOJProblem(name,problemId){
-    return ajax("/api/admin/problem/import-remote-oj-problem","get",{
+  admin_addRemoteOJProblem(name, problemId) {
+    return ajax("/api/admin/problem/import-remote-oj-problem", "get", {
       params: {
         name,
         problemId
@@ -1709,8 +1720,8 @@ const adminApi = {
     })
   },
 
-  admin_addContestRemoteOJProblem(name,problemId,cid,displayId){
-    return ajax("/api/admin/contest/import-remote-oj-problem","get",{
+  admin_addContestRemoteOJProblem(name, problemId, cid, displayId) {
+    return ajax("/api/admin/contest/import-remote-oj-problem", "get", {
       params: {
         name,
         problemId,
@@ -1720,82 +1731,82 @@ const adminApi = {
     })
   },
 
-  admin_createProblem (data) {
+  admin_createProblem(data) {
     return ajax('/api/admin/problem', 'post', {
       data
     })
   },
-  admin_editProblem (data) {
+  admin_editProblem(data) {
     return ajax('/api/admin/problem', 'put', {
       data
     })
   },
-  admin_deleteProblem (pid) {
+  admin_deleteProblem(pid) {
     return ajax('/api/admin/problem', 'delete', {
       params: {
         pid
       }
     })
   },
-  admin_changeProblemAuth (data) {
+  admin_changeProblemAuth(data) {
     return ajax('/api/admin/problem/change-problem-auth', 'put', {
       data
     })
   },
-  admin_getProblem (pid) {
+  admin_getProblem(pid) {
     return ajax('/api/admin/problem', 'get', {
       params: {
         pid
       }
     })
   },
-  admin_getAllProblemTagList (oj) {
-    return ajax('/api/get-all-problem-tags', 'get',{
+  admin_getAllProblemTagList(oj) {
+    return ajax('/api/get-all-problem-tags', 'get', {
       params: {
         oj
       }
     })
   },
 
-  admin_getProblemTags(pid){
-    return ajax('/api/get-problem-tags', 'get',{
+  admin_getProblemTags(pid) {
+    return ajax('/api/get-problem-tags', 'get', {
       params: {
         pid
       }
     })
   },
-  admin_getProblemCases(pid,isUpload){
-    return ajax('/api/admin/problem/get-problem-cases', 'get',{
+  admin_getProblemCases(pid, isUpload) {
+    return ajax('/api/admin/problem/get-problem-cases', 'get', {
       params: {
         pid,
         isUpload
       }
     })
   },
-  compileSPJ (data) {
+  compileSPJ(data) {
     return ajax('/api/admin/problem/compile-spj', 'post', {
       data
     })
   },
-  compileInteractive(data){
+  compileInteractive(data) {
     return ajax('/api/admin/problem/compile-interactive', 'post', {
       data
     })
   },
 
-  admin_addTag (data) {
+  admin_addTag(data) {
     return ajax('/api/admin/tag', 'post', {
       data
     })
   },
 
-  admin_updateTag (data) {
+  admin_updateTag(data) {
     return ajax('/api/admin/tag', 'put', {
       data
     })
   },
 
-  admin_deleteTag (tid) {
+  admin_deleteTag(tid) {
     return ajax('/api/admin/tag', 'delete', {
       params: {
         tid
@@ -1803,8 +1814,8 @@ const adminApi = {
     })
   },
 
-  admin_getTrainingList (currentPage, limit, keyword) {
-    let params = {currentPage, limit}
+  admin_getTrainingList(currentPage, limit, keyword) {
+    let params = { currentPage, limit }
     if (keyword) {
       params.keyword = keyword
     }
@@ -1812,7 +1823,7 @@ const adminApi = {
       params: params
     })
   },
-  admin_changeTrainingStatus(tid,status,author){
+  admin_changeTrainingStatus(tid, status, author) {
     return ajax('/api/admin/training/change-training-status', 'put', {
       params: {
         tid,
@@ -1829,7 +1840,7 @@ const adminApi = {
     })
   },
 
-  admin_deleteTrainingProblem (pid,tid) {
+  admin_deleteTrainingProblem(pid, tid) {
     return ajax('/api/admin/training/problem', 'delete', {
       params: {
         pid,
@@ -1838,14 +1849,14 @@ const adminApi = {
     })
   },
 
-  admin_addTrainingProblemFromPublic (data) {
+  admin_addTrainingProblemFromPublic(data) {
     return ajax('/api/admin/training/add-problem-from-public', 'post', {
       data
     })
   },
 
-  admin_addTrainingRemoteOJProblem(name,problemId,tid){
-    return ajax("/api/admin/training/import-remote-oj-problem","get",{
+  admin_addTrainingRemoteOJProblem(name, problemId, tid) {
+    return ajax("/api/admin/training/import-remote-oj-problem", "get", {
       params: {
         name,
         problemId,
@@ -1854,30 +1865,30 @@ const adminApi = {
     })
   },
 
-  admin_updateTrainingProblem(data){
+  admin_updateTrainingProblem(data) {
     return ajax('/api/admin/training/problem', 'put', {
       data
     })
   },
 
-  admin_createTraining (data) {
+  admin_createTraining(data) {
     return ajax('/api/admin/training', 'post', {
       data
     })
   },
-  admin_getTraining (tid) {
+  admin_getTraining(tid) {
     return ajax('/api/admin/training', 'get', {
       params: {
         tid
       }
     })
   },
-  admin_editTraining (data) {
+  admin_editTraining(data) {
     return ajax('/api/admin/training', 'put', {
       data
     })
   },
-  admin_deleteTraining(tid){
+  admin_deleteTraining(tid) {
     return ajax('/api/admin/training', 'delete', {
       params: {
         tid
@@ -1891,13 +1902,13 @@ const adminApi = {
     })
   },
 
-  admin_updateCategory (data) {
+  admin_updateCategory(data) {
     return ajax('/api/admin/training/category', 'put', {
       data
     })
   },
 
-  admin_deleteCategory (cid) {
+  admin_deleteCategory(cid) {
     return ajax('/api/admin/training/category', 'delete', {
       params: {
         cid
@@ -1905,7 +1916,7 @@ const adminApi = {
     })
   },
 
-  admin_getContestProblemInfo(pid,cid) {
+  admin_getContestProblemInfo(pid, cid) {
     return ajax('/api/admin/contest/contest-problem', 'get', {
       params: {
         cid,
@@ -1919,31 +1930,31 @@ const adminApi = {
     })
   },
 
-  admin_getContestProblemList (params) {
+  admin_getContestProblemList(params) {
     params = utils.filterEmptyValue(params)
     return ajax('/api/admin/contest/get-problem-list', 'get', {
       params
     })
   },
 
-  admin_getContestProblem (pid) {
+  admin_getContestProblem(pid) {
     return ajax('/api/admin/contest/problem', 'get', {
       params: {
         pid,
       }
     })
   },
-  admin_createContestProblem (data) {
+  admin_createContestProblem(data) {
     return ajax('/api/admin/contest/problem', 'post', {
       data
     })
   },
-  admin_editContestProblem (data) {
+  admin_editContestProblem(data) {
     return ajax('/api/admin/contest/problem', 'put', {
       data
     })
   },
-  admin_deleteContestProblem (pid,cid) {
+  admin_deleteContestProblem(pid, cid) {
     return ajax('/api/admin/contest/problem', 'delete', {
       params: {
         pid,
@@ -1951,43 +1962,43 @@ const adminApi = {
       }
     })
   },
-  admin_addContestProblemFromPublic (data) {
+  admin_addContestProblemFromPublic(data) {
     return ajax('/api/admin/contest/add-problem-from-public', 'post', {
       data
     })
   },
 
-  exportProblems (data) {
+  exportProblems(data) {
     return ajax('export_problem', 'post', {
       data
     })
   },
 
-  admin_createContest (data) {
+  admin_createContest(data) {
     return ajax('/api/admin/contest', 'post', {
       data
     })
   },
-  admin_getContest (cid) {
+  admin_getContest(cid) {
     return ajax('/api/admin/contest', 'get', {
       params: {
         cid
       }
     })
   },
-  admin_editContest (data) {
+  admin_editContest(data) {
     return ajax('/api/admin/contest', 'put', {
       data
     })
   },
-  admin_deleteContest(cid){
+  admin_deleteContest(cid) {
     return ajax('/api/admin/contest', 'delete', {
       params: {
         cid
       }
     })
   },
-  admin_changeContestVisible(cid,visible,uid){
+  admin_changeContestVisible(cid, visible, uid) {
     return ajax('/api/admin/contest/change-contest-visible', 'put', {
       params: {
         cid,
@@ -1996,8 +2007,8 @@ const adminApi = {
       }
     })
   },
-  admin_getContestList (currentPage, limit, keyword) {
-    let params = {currentPage, limit}
+  admin_getContestList(currentPage, limit, keyword) {
+    let params = { currentPage, limit }
     if (keyword) {
       params.keyword = keyword
     }
@@ -2005,7 +2016,7 @@ const adminApi = {
       params: params
     })
   },
-  admin_getContestAnnouncementList (cid,currentPage,limit) {
+  admin_getContestAnnouncementList(cid, currentPage, limit) {
     return ajax('/api/admin/contest/announcement', 'get', {
       params: {
         cid,
@@ -2014,52 +2025,52 @@ const adminApi = {
       }
     })
   },
-  admin_createContestAnnouncement (data) {
+  admin_createContestAnnouncement(data) {
     return ajax('/api/admin/contest/announcement', 'post', {
       data
     })
   },
-  admin_deleteContestAnnouncement (aid) {
+  admin_deleteContestAnnouncement(aid) {
     return ajax('/api/admin/contest/announcement', 'delete', {
       params: {
         aid
       }
     })
   },
-  admin_updateContestAnnouncement (data) {
+  admin_updateContestAnnouncement(data) {
     return ajax('/api/admin/contest/announcement', 'put', {
       data
     })
   },
 
-  admin_updateDiscussion(data){
-    return ajax("/api/admin/discussion",'put',{
+  admin_updateDiscussion(data) {
+    return ajax("/api/admin/discussion", 'put', {
       data
     })
   },
 
-  admin_deleteDiscussion(data){
-    return ajax("/api/admin/discussion",'delete',{
+  admin_deleteDiscussion(data) {
+    return ajax("/api/admin/discussion", 'delete', {
       data
     })
   },
-  admin_getDiscussionReport(currentPage,limit){
-    return ajax("/api/admin/discussion-report",'get',{
-      params:{
+  admin_getDiscussionReport(currentPage, limit) {
+    return ajax("/api/admin/discussion-report", 'get', {
+      params: {
         currentPage,
         limit
       }
     })
   },
-  admin_updateDiscussionReport(data){
-    return ajax("/api/admin/discussion-report",'put',{
+  admin_updateDiscussionReport(data) {
+    return ajax("/api/admin/discussion-report", 'put', {
       data
     })
   }
 }
 
 // 集中导出oj前台的api和admin管理端的api
-let api = Object.assign(ojApi,adminApi)
+let api = Object.assign(ojApi, adminApi)
 export default api
 
 function ajax(url, method, options) {

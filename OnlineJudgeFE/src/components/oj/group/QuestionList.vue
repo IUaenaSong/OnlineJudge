@@ -24,24 +24,20 @@
         align="left"
       >
         <template v-slot="{ row }">
-          <p>
-            {{ $t('m.Original_Display_ID') }}：{{ row.questionId }}
-          </p>
+          <p>{{ $t("m.Original_Display_ID") }}：{{ row.questionId }}</p>
           <p v-if="examQuestionMap[row.id]">
-            {{ $t('m.Exam_Display_ID') }}：{{
-              examQuestionMap[row.id]['displayId']
+            {{ $t("m.Exam_Display_ID") }}：{{
+              examQuestionMap[row.id]["displayId"]
             }}
           </p>
           <p v-if="examQuestionMap[row.id]">
-            {{ $t('m.Score') }}：
+            {{ $t("m.Score") }}：
             <el-input
               v-model="examQuestionMap[row.id].score"
               size="small"
               style="width: 60%"
               @keyup.enter.native="
-                changeExamQuestionScore(
-                  examQuestionMap[row.id]
-                )
+                changeExamQuestionScore(examQuestionMap[row.id])
               "
             >
             </el-input>
@@ -81,16 +77,13 @@
             v-model="row.auth"
             @change="changeQuestionAuth(row.id, row.auth)"
             size="small"
-            :disabled="row.gid != gid || (!isGroupRoot && userInfo.username != row.author)"
+            :disabled="
+              row.gid != gid ||
+              (!isGroupRoot && userInfo.username != row.author)
+            "
           >
-            <el-option
-              :label="$t('m.Public_Question')"
-              :value="1"
-            ></el-option>
-            <el-option
-              :label="$t('m.Private_Question')"
-              :value="2"
-            ></el-option>
+            <el-option :label="$t('m.Public_Question')" :value="1"></el-option>
+            <el-option :label="$t('m.Private_Question')" :value="2"></el-option>
             <el-option
               :label="$t('m.Exam_Question')"
               :value="3"
@@ -105,7 +98,9 @@
             effect="dark"
             :content="$t('m.Edit')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-edit-outline"
@@ -134,7 +129,9 @@
             effect="dark"
             :content="$t('m.Delete')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-delete-solid"
@@ -170,24 +167,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Question from '@/components/oj/group/Question'
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Question from "@/components/oj/group/Question";
 export default {
-  name: 'GroupQuestionList',
+  name: "GroupQuestionList",
   components: {
     Pagination,
-    Question
+    Question,
   },
   props: {
     examID: {
       type: Number,
-      default: null
+      default: null,
     },
     type: {
       type: Number,
-      default: 0
+      default: 0,
     },
   },
   data() {
@@ -211,7 +208,7 @@ export default {
   watch: {
     type(newVal) {
       this.currentChange(1);
-    }
+    },
   },
   methods: {
     init() {
@@ -228,16 +225,23 @@ export default {
     getAdminQuestionList() {
       this.loading = true;
       if (!this.examID) {
-        api.getGroupAdminQuestionList(this.currentPage, this.limit, this.type, this.$route.params.groupID).then(
-          (res) => {
-            this.questionList = res.data.data.records;
-            this.total = res.data.data.total;
-            this.loading = false;
-          },
-          (err) => {
-            this.loading = false;
-          }
-        );
+        api
+          .getGroupAdminQuestionList(
+            this.currentPage,
+            this.limit,
+            this.type,
+            this.$route.params.groupID
+          )
+          .then(
+            (res) => {
+              this.questionList = res.data.data.records;
+              this.total = res.data.data.total;
+              this.loading = false;
+            },
+            (err) => {
+              this.loading = false;
+            }
+          );
       } else {
         let params = {
           eid: this.examID,
@@ -277,24 +281,28 @@ export default {
     },
     changeQuestionAuth(qid, auth) {
       api.changeGroupQuestionAuth(qid, auth).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.$emit("currentChange", 1);
       });
     },
     changeExamQuestionScore(examQuestion) {
       api.updateGroupExamQuestion(examQuestion).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     removeQuestion(qid) {
-      this.$confirm(this.$i18n.t('m.Remove_Exam_Question_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Remove_Exam_Question_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .deleteGroupExamQuestion(qid, this.examID)
             .then((res) => {
-              this.$msg.success(this.$t('m.Remove_Successfully'));
+              this.$msg.success(this.$t("m.Remove_Successfully"));
               this.$emit("currentChangeQuestion");
             })
             .catch(() => {});
@@ -303,12 +311,18 @@ export default {
       );
     },
     deleteQuestion(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Question_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
-          api.deleteGroupQuestion(id, this.$route.params.groupID)
+      this.$confirm(
+        this.$i18n.t("m.Delete_Question_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
+          api
+            .deleteGroupQuestion(id, this.$route.params.groupID)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChange", 1);
               this.currentChange(1);
             })
@@ -319,7 +333,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isGroupRoot'])
+    ...mapGetters(["userInfo", "isGroupRoot"]),
   },
 };
 </script>

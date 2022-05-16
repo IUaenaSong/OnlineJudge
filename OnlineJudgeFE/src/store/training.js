@@ -4,7 +4,7 @@ const state = {
   intoAccess: false, // 训练进入权限
   training: {
     auth: TRAINING_TYPE.Public.name,
-    rankShowName:'username'
+    rankShowName: 'username'
   },
   trainingProblemList: [],
   itemVisible: {
@@ -24,7 +24,7 @@ const getters = {
     if (getters.isTrainingAdmin) return false
 
     if (state.training.auth === TRAINING_TYPE.Private.name) {
-     // 私有训练需要通过验证密码方可查看比赛
+      // 私有训练需要通过验证密码方可查看比赛
       return !state.intoAccess
     }
   },
@@ -34,20 +34,20 @@ const getters = {
   // 是否需要显示密码验证框
   trainingPasswordFormVisible: (state, getters) => {
     // 如果是公开训练，或已注册过，管理员都不用再显示
-    return !state.intoAccess && state.training.auth != TRAINING_TYPE.Public.name && !getters.isTrainingAdmin 
+    return !state.intoAccess && state.training.auth != TRAINING_TYPE.Public.name && !getters.isTrainingAdmin
   }
 }
 
 const mutations = {
-  changeTraining (state, payload) {
+  changeTraining(state, payload) {
     state.training = payload.training
   },
   changeTrainingItemVisible(state, payload) {
-    state.itemVisible = {...state.itemVisible, ...payload}
+    state.itemVisible = { ...state.itemVisible, ...payload }
   },
 
   changeTrainingProblemList(state, payload) {
-    state.trainingProblemList = payload.trainingProblemList;
+    state.trainingProblemList = payload.trainingProblemList
   },
   trainingIntoAccess(state, payload) {
     state.intoAccess = payload.intoAccess
@@ -55,7 +55,7 @@ const mutations = {
   changeGroupTrainingAuth(state, payload) {
     state.groupTrainingAuth = payload.groupTrainingAuth
   },
-  clearTraining (state) {
+  clearTraining(state) {
     state.training = {}
     state.trainingProblemList = []
     state.intoAccess = false
@@ -69,48 +69,48 @@ const mutations = {
 }
 
 const actions = {
-  getTraining ({commit, rootState, dispatch}) {
+  getTraining({ commit, rootState, dispatch }) {
     return new Promise((resolve, reject) => {
       api.getTraining(rootState.route.params.trainingID).then((res) => {
         resolve(res)
         let training = res.data.data
-        commit('changeTraining', {training: training})
+        commit('changeTraining', { training: training })
         if (training.gid) {
-          dispatch('getGroupTrainingAuth', {gid: training.gid})
+          dispatch('getGroupTrainingAuth', { gid: training.gid })
         }
-        if (training.auth ==  TRAINING_TYPE.Private.name) {
-          dispatch('getTrainingAccess',{auth:TRAINING_TYPE.Private.name})
+        if (training.auth == TRAINING_TYPE.Private.name) {
+          dispatch('getTrainingAccess', { auth: TRAINING_TYPE.Private.name })
         }
       }, err => {
         reject(err)
       })
     })
   },
-  getTrainingProblemList ({commit, rootState}) {
+  getTrainingProblemList({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getTrainingProblemList(rootState.route.params.trainingID).then(res => {
         resolve(res)
-        commit('changeTrainingProblemList', {trainingProblemList: res.data.data})
+        commit('changeTrainingProblemList', { trainingProblemList: res.data.data })
       }, (err) => {
-        commit('changeTrainingProblemList', {trainingProblemList: []})
+        commit('changeTrainingProblemList', { trainingProblemList: [] })
         reject(err)
       })
     })
   },
-  getTrainingAccess ({commit, rootState},trainingType) {
+  getTrainingAccess({ commit, rootState }, trainingType) {
     return new Promise((resolve, reject) => {
       api.getTrainingAccess(rootState.route.params.trainingID).then(res => {
-        if(trainingType.auth == TRAINING_TYPE.Private.name){
-          commit('trainingIntoAccess', {intoAccess: res.data.data.access})
+        if (trainingType.auth == TRAINING_TYPE.Private.name) {
+          commit('trainingIntoAccess', { intoAccess: res.data.data.access })
         }
         resolve(res)
       }).catch()
     })
   },
-  getGroupTrainingAuth ({commit, rootState}, gid) {
+  getGroupTrainingAuth({ commit, rootState }, gid) {
     return new Promise((resolve, reject) => {
       api.getGroupAuth(gid.gid).then(res => {
-        commit('changeGroupTrainingAuth', {groupTrainingAuth: res.data.data})
+        commit('changeGroupTrainingAuth', { groupTrainingAuth: res.data.data })
         resolve(res)
       }).catch()
     })

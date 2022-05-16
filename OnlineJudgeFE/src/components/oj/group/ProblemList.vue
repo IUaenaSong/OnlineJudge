@@ -25,9 +25,9 @@
       >
         <template v-slot="{ row }">
           <p v-if="contestID || examID">
-            {{ $t('m.Display_ID') }}：{{ row.problemId }}
+            {{ $t("m.Display_ID") }}：{{ row.problemId }}
           </p>
-          <p v-if="contestID || examID">{{ $t('m.Title') }}：{{ row.title }}</p>
+          <p v-if="contestID || examID">{{ $t("m.Title") }}：{{ row.title }}</p>
           <span v-else>{{ row.problemId }}</span>
         </template>
       </vxe-table-column>
@@ -47,27 +47,21 @@
       >
         <template v-slot="{ row }">
           <p v-if="contestProblemMap[row.id]">
-            {{ $t('m.Display_ID') }}：{{
-              contestProblemMap[row.id]['displayId']
+            {{ $t("m.Display_ID") }}：{{
+              contestProblemMap[row.id]["displayId"]
             }}
           </p>
           <p v-if="contestProblemMap[row.id]">
-            {{ $t('m.Title') }}：{{
-              contestProblemMap[row.id]['displayTitle']
-            }}
+            {{ $t("m.Title") }}：{{ contestProblemMap[row.id]["displayTitle"] }}
           </p>
           <span v-if="contestProblemMap[row.id]">
-            {{ $t('m.Balloon_Color') }}：<el-color-picker
+            {{ $t("m.Balloon_Color") }}：<el-color-picker
               v-model="contestProblemMap[row.id].color"
               show-alpha
               :predefine="predefineColors"
               size="small"
-              style="vertical-align: middle;"
-              @change="
-                changeContestProblemColor(
-                  contestProblemMap[row.id]
-                )
-              "
+              style="vertical-align: middle"
+              @change="changeContestProblemColor(contestProblemMap[row.id])"
             >
             </el-color-picker>
           </span>
@@ -82,25 +76,19 @@
       >
         <template v-slot="{ row }">
           <p v-if="examProblemMap[row.id]">
-            {{ $t('m.Display_ID') }}：{{
-              examProblemMap[row.id]['displayId']
-            }}
+            {{ $t("m.Display_ID") }}：{{ examProblemMap[row.id]["displayId"] }}
           </p>
           <p v-if="examProblemMap[row.id]">
-            {{ $t('m.Title') }}：{{
-              examProblemMap[row.id]['displayTitle']
-            }}
+            {{ $t("m.Title") }}：{{ examProblemMap[row.id]["displayTitle"] }}
           </p>
           <span v-if="examProblemMap[row.id]">
-            {{ $t('m.Score') }}：
+            {{ $t("m.Score") }}：
             <el-input
               v-model="examProblemMap[row.id].score"
               size="small"
               style="width: 60%"
               @keyup.enter.native="
-                changeExamProblemScore(
-                  examProblemMap[row.id]
-                )
+                changeExamProblemScore(examProblemMap[row.id])
               "
             >
             </el-input>
@@ -133,16 +121,13 @@
             v-model="row.auth"
             @change="changeProblemAuth(row.id, row.auth)"
             size="small"
-            :disabled="row.gid != gid || (!isGroupRoot && userInfo.username != row.author)"
+            :disabled="
+              row.gid != gid ||
+              (!isGroupRoot && userInfo.username != row.author)
+            "
           >
-            <el-option
-              :label="$t('m.Public_Problem')"
-              :value="1"
-            ></el-option>
-            <el-option
-              :label="$t('m.Private_Problem')"
-              :value="2"
-            ></el-option>
+            <el-option :label="$t('m.Public_Problem')" :value="1"></el-option>
+            <el-option :label="$t('m.Private_Problem')" :value="2"></el-option>
             <el-option
               :label="$t('m.Contest_Exam_Problem')"
               :value="3"
@@ -157,7 +142,9 @@
             effect="dark"
             :content="$t('m.Edit')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-edit-outline"
@@ -171,7 +158,9 @@
             effect="dark"
             :content="$t('m.Download_Testcase')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-download"
@@ -214,7 +203,9 @@
             effect="dark"
             :content="$t('m.Delete')"
             placement="top"
-            v-if="row.gid == gid && (isGroupRoot || userInfo.username == row.author)"
+            v-if="
+              row.gid == gid && (isGroupRoot || userInfo.username == row.author)
+            "
           >
             <el-button
               icon="el-icon-delete-solid"
@@ -251,25 +242,25 @@
 </template>
 
 <script>
-import utils from '@/common/utils';
-import { mapGetters } from 'vuex';
-import Pagination from '@/components/oj/common/Pagination';
-import api from '@/common/api';
-import Problem from '@/components/oj/group/Problem'
+import utils from "@/common/utils";
+import { mapGetters } from "vuex";
+const Pagination = () => import("@/components/oj/common/Pagination");
+import api from "@/common/api";
+import Problem from "@/components/oj/group/Problem";
 export default {
-  name: 'GroupProblemList',
+  name: "GroupProblemList",
   components: {
     Pagination,
-    Problem
+    Problem,
   },
   props: {
     contestID: {
       type: Number,
-      default: null
+      default: null,
     },
     examID: {
       type: Number,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -293,7 +284,6 @@ export default {
   },
   methods: {
     init() {
-
       this.getAdminProblemList();
     },
     onPageSizeChange(pageSize) {
@@ -310,18 +300,19 @@ export default {
         let params = {
           cid: this.contestID,
         };
-        api.getGroupContestProblemList(this.currentPage, this.limit, params).then(
-          (res) => {
-            this.total = res.data.data.problemList.total;
-            this.problemList = res.data.data.problemList.records;
-            this.contestProblemMap = res.data.data.contestProblemMap;
-            this.loading = false;
-          },
-          (err) => {
-            this.loading = false;
-          }
-        );
-        
+        api
+          .getGroupContestProblemList(this.currentPage, this.limit, params)
+          .then(
+            (res) => {
+              this.total = res.data.data.problemList.total;
+              this.problemList = res.data.data.problemList.records;
+              this.contestProblemMap = res.data.data.contestProblemMap;
+              this.loading = false;
+            },
+            (err) => {
+              this.loading = false;
+            }
+          );
       } else if (this.examID) {
         let params = {
           eid: this.examID,
@@ -337,18 +328,23 @@ export default {
             this.loading = false;
           }
         );
-        
       } else {
-        api.getGroupAdminProblemList(this.currentPage, this.limit, this.$route.params.groupID).then(
-          (res) => {
-            this.problemList = res.data.data.records;
-            this.total = res.data.data.total;
-            this.loading = false;
-          },
-          (err) => {
-            this.loading = false;
-          }
-        );
+        api
+          .getGroupAdminProblemList(
+            this.currentPage,
+            this.limit,
+            this.$route.params.groupID
+          )
+          .then(
+            (res) => {
+              this.problemList = res.data.data.records;
+              this.total = res.data.data.total;
+              this.loading = false;
+            },
+            (err) => {
+              this.loading = false;
+            }
+          );
       }
     },
     handleEditPage() {
@@ -375,29 +371,33 @@ export default {
     },
     changeContestProblemColor(contestProblem) {
       api.updateGroupContestProblem(contestProblem).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     changeExamProblemScore(examProblem) {
       api.updateGroupExamProblem(examProblem).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
       });
     },
     changeProblemAuth(pid, auth) {
       api.changeGroupProblemAuth(pid, auth).then((res) => {
-        this.$msg.success(this.$i18n.t('m.Update_Successfully'));
+        this.$msg.success(this.$i18n.t("m.Update_Successfully"));
         this.$emit("currentChange", 1);
       });
     },
     removeContestProblem(pid) {
-      this.$confirm(this.$i18n.t('m.Remove_Contest_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Remove_Contest_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .deleteGroupContestProblem(pid, this.contestID)
             .then((res) => {
-              this.$msg.success(this.$t('m.Delete_successfully'));
+              this.$msg.success(this.$t("m.Delete_successfully"));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});
@@ -406,14 +406,18 @@ export default {
       );
     },
     removeExamProblem(pid) {
-      this.$confirm(this.$i18n.t('m.Remove_Exam_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(
+      this.$confirm(
+        this.$i18n.t("m.Remove_Exam_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
         () => {
           api
             .deleteGroupExamProblem(pid, this.examID)
             .then((res) => {
-              this.$msg.success(this.$t('m.Delete_successfully'));
+              this.$msg.success(this.$t("m.Delete_successfully"));
               this.$emit("currentChangeProblem");
             })
             .catch(() => {});
@@ -422,18 +426,27 @@ export default {
       );
     },
     downloadTestCase(problemID) {
-      let url = '/api/file/download-testcase?pid=' + problemID;
+      let url = "/api/file/download-testcase?pid=" + problemID;
       utils.downloadFile(url).then(() => {
-        this.$alert(this.$i18n.t('m.Download_Testcase_Success'), this.$i18n.t('m.Tips'));
+        this.$alert(
+          this.$i18n.t("m.Download_Testcase_Success"),
+          this.$i18n.t("m.Tips")
+        );
       });
     },
     deleteProblem(id) {
-      this.$confirm(this.$i18n.t('m.Delete_Problem_Tips'), this.$i18n.t('m.Warning'), {
-        type: 'warning',
-      }).then(() => {
-          api.deleteGroupProblem(id, this.$route.params.groupID)
+      this.$confirm(
+        this.$i18n.t("m.Delete_Problem_Tips"),
+        this.$i18n.t("m.Warning"),
+        {
+          type: "warning",
+        }
+      ).then(
+        () => {
+          api
+            .deleteGroupProblem(id, this.$route.params.groupID)
             .then((res) => {
-              this.$msg.success(this.$i18n.t('m.Delete_successfully'));
+              this.$msg.success(this.$i18n.t("m.Delete_successfully"));
               this.$emit("currentChange", 1);
               this.currentChange(1);
             })
@@ -444,7 +457,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userInfo', 'isGroupRoot'])
+    ...mapGetters(["userInfo", "isGroupRoot"]),
   },
 };
 </script>
